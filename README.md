@@ -98,4 +98,4 @@ This is a simple dashboarding application built using Flask and Bootstrap.  The 
 * [Flask Login](https://flask-login.readthedocs.org/en/latest/)
 * [Flask Script](http://flask-script.readthedocs.org/en/latest/)
 
-maintained by <kimarudg@gmail.com>
+Maintained by <kimarudg@gmail.com>
