@@ -1,21 +1,15 @@
 # Overview
 
-This is a simple dashboarding application built using Flask and Bootstrap.  The application has been tested with Python 2.7. It's ready to deploy with [AWS Elastic Beanstalk](http://aws.amazon.com/elasticbeanstalk/).
+This is a simple dashboarding application built using Flask and Bootstrap.  The application has been tested with Python 2.7.
 
-You can view the applcation at [flaskdashboard.info](http://flaskdashboard.info/) using the following user credentials:
-* **Test User #1**
-  * Email: joe@insights.com
-  * Password: password
-* **Test User #2**
-  * Email: bill@insights.com
-  * Password: password
+
 
 # Installation
 
 1. Clone the repository
 
   ```
-  git clone https://github.com/salimhamed/dashboard.git
+  git clone https://github.com/livinggoods/mapping-tool.git
   ```
 
 2. Create a virtualenv in the project directory
@@ -103,3 +97,5 @@ You can view the applcation at [flaskdashboard.info](http://flaskdashboard.info/
 * [Flask Migrate](https://flask-migrate.readthedocs.org/en/latest/)
 * [Flask Login](https://flask-login.readthedocs.org/en/latest/)
 * [Flask Script](http://flask-script.readthedocs.org/en/latest/)
+
+maintained by <kimarudg@gmail.com>
