@@ -1,0 +1,88 @@
+<div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                          </button>
+                          <h4 class="modal-title" id="myModalLabel">Add a new village</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="x_panel">
+                              <div class="x_title">
+                                <h2>Ensure the required fields are filled out<small>* required</small></h2>
+                                <div class="clearfix"></div>
+                              </div>
+                              <div class="x_content">
+                                <br>
+                                <form class="form-horizontal form-label-left">
+
+                                  <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Location Name</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <input type="text" id="name" class="form-control" placeholder="Location Name is required">
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Parent Location</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <select class="form-control" id="parent">
+                                        <option value="0">None</option>
+                                        {% for location in locations %}
+                                        <option value="{{location.id}}">{{location.name}} - ({{location.country_code}} - {{location.admin_name}})</option>
+                                        {% endfor %}
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Administrative Name</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <input type="text" id="admin_name" class="form-control" placeholder="Eg County, Ward, Parish">
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Country Code</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <input type="text" id="country_code" class="form-control" placeholder="Country Code eg 254, 256">
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                       <style>
+                                          #mapCanvas {
+                                            width: 500px;
+                                            height: 400px;
+                                            float: left;
+                                          }
+                                          #infoPanel {
+                                            float: left;
+                                            margin-left: 10px;
+                                          }
+                                          #infoPanel div {
+                                            margin-bottom: 5px;
+                                          }
+                                       </style>
+                                      <div id="mapCanvas"></div>
+                                      <div id="infoPanel">
+                                        <b>Marker status:</b>
+                                        <div id="markerStatus"><i>Click and drag the marker.</i></div>
+                                        <b>Current position:</b>
+                                        <div id="info"></div>
+                                        <input type="text" id="lat" class="form-control" placeholder="Latitude">
+                                        <input type="text" id="lon" class="form-control" placeholder="Latitude">
+                                        <b>Closest matching address:</b>
+                                        <div id="address"></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                          <button type="button" id="save-village" class="btn btn-primary">Save changes</button>
+                        </div>
+
+                      </div>
+                    </div>

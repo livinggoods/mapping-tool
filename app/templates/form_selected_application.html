@@ -1,0 +1,8 @@
+class SelectedApplication(db.Model):
+    __tablename__ = 'selected_applications'
+
+    id = Column(Integer, primary_key=True)
+    application_id = Column(ForeignKey(u'application.id'), index=True)
+    date_selected = db.Column(db.DateTime(), default=datetime.utcnow)
+
+    application = relationship(u'Application')

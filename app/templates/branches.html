@@ -1,0 +1,312 @@
+{% extends 'base.html' %}
+{% block content %}
+        <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Branches</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+                  <!-- modals -->
+                  <!-- New Village modal -->
+                  <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+                    {% include 'form_branch.html' %}
+                  </div>
+                  <!-- /modals -->
+            </div>
+          <div class="row">
+              <div class="col-md-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2><i class="fa fa-align-left"></i> Branches  <small>{{page.total_branches}} branches in total</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">New Branch</button>
+                      </li>
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="col-md-9 col-sm-12 col-xs-12">
+                      {{clustermap.js}}
+                      {{clustermap.html}}
+
+                    </div>
+
+                    <div class="col-md-3 col-sm-12 col-xs-12">
+                      <div>
+                        <div class="x_title">
+                          <h2>Mapped Branches</h2>
+                          <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                              <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Settings 1</a>
+                                </li>
+                                <li><a href="#">Settings 2</a>
+                                </li>
+                              </ul>
+                            </li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                          </ul>
+                          <div class="clearfix"></div>
+                        </div>
+                        <ul class="list-unstyled top_profiles scroll-view">
+                          {% for branch in branches %}
+                          <li class="media event">
+                            <a class="pull-left border-aero profile_thumb">
+                              <i class="fa fa-user aero"></i>
+                            </a>
+                            <div class="media-body">
+                              <a class="title" href="/branch/{{branch.id}}">{{ branch.name }}</a>
+                              <p><strong>{{ branch.name }}. </strong> {{ branch.name }} </p>
+                              <p> <small>{{ branch.name }}</small>
+                              </p>
+                            </div>
+                          </li>
+                          {% endfor %}
+
+                          <!--<li class="media event">-->
+                            <!--<a class="pull-left border-blue profile_thumb">-->
+                              <!--<i class="fa fa-user blue"></i>-->
+                            <!--</a>-->
+                            <!--<div class="media-body">-->
+                              <!--<a class="title" href="#">Village 3</a>-->
+                              <!--<p><strong>$2300. </strong> Agent Avarage Sales </p>-->
+                              <!--<p> <small>12 Sales Today</small>-->
+                              <!--</p>-->
+                            <!--</div>-->
+                          <!--</li>-->
+                          <!--<li class="media event">-->
+                            <!--<a class="pull-left border-aero profile_thumb">-->
+                              <!--<i class="fa fa-user aero"></i>-->
+                            <!--</a>-->
+                            <!--<div class="media-body">-->
+                              <!--<a class="title" href="#">Village 4</a>-->
+                              <!--<p><strong>$2300. </strong> Agent Avarage Sales </p>-->
+                              <!--<p> <small>12 Sales Today</small>-->
+                              <!--</p>-->
+                            <!--</div>-->
+                          <!--</li>-->
+                          <!--<li class="media event">-->
+                            <!--<a class="pull-left border-green profile_thumb">-->
+                              <!--<i class="fa fa-user green"></i>-->
+                            <!--</a>-->
+                            <!--<div class="media-body">-->
+                              <!--<a class="title" href="#">Village 5</a>-->
+                              <!--<p><strong>$2300. </strong> Agent Avarage Sales </p>-->
+                              <!--<p> <small>12 Sales Today</small>-->
+                              <!--</p>-->
+                            <!--</div>-->
+                          <!--</li>-->
+                        </ul>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+{% endblock %}
+{% block javascript %}
+
+
+<script>
+      $(document).ready(function() {
+        new PNotify({
+          title: "PNotify",
+          type: "info",
+          text: "Welcome. Try hovering over me. You can click things behind me, because I'm non-blocking.",
+          nonblock: {
+              nonblock: true
+          },
+          addclass: 'dark',
+          styling: 'bootstrap3',
+          hide: false,
+          before_close: function(PNotify) {
+            PNotify.update({
+              title: PNotify.options.title + " - Enjoy your Stay",
+              before_close: null
+            });
+
+            PNotify.queueRemove();
+
+            return false;
+          }
+        });
+
+      });
+    </script>
+    <!-- /PNotify -->
+
+    <!-- Custom Notification -->
+    <script>
+      $(document).ready(function() {
+        var cnt = 10;
+
+        TabbedNotification = function(options) {
+          var message = "<div id='ntf" + cnt + "' class='text alert-" + options.type + "' style='display:none'><h2><i class='fa fa-bell'></i> " + options.title +
+            "</h2><div class='close'><a href='javascript:;' class='notification_close'><i class='fa fa-close'></i></a></div><p>" + options.text + "</p></div>";
+
+          if (!document.getElementById('custom_notifications')) {
+            alert('doesnt exists');
+          } else {
+            $('#custom_notifications ul.notifications').append("<li><a id='ntlink" + cnt + "' class='alert-" + options.type + "' href='#ntf" + cnt + "'><i class='fa fa-bell animated shake'></i></a></li>");
+            $('#custom_notifications #notif-group').append(message);
+            cnt++;
+            CustomTabs(options);
+          }
+        };
+
+        CustomTabs = function(options) {
+          $('.tabbed_notifications > div').hide();
+          $('.tabbed_notifications > div:first-of-type').show();
+          $('#custom_notifications').removeClass('dsp_none');
+          $('.notifications a').click(function(e) {
+            e.preventDefault();
+            var $this = $(this),
+              tabbed_notifications = '#' + $this.parents('.notifications').data('tabbed_notifications'),
+              others = $this.closest('li').siblings().children('a'),
+              target = $this.attr('href');
+            others.removeClass('active');
+            $this.addClass('active');
+            $(tabbed_notifications).children('div').hide();
+            $(target).show();
+          });
+        };
+
+        CustomTabs();
+
+        var tabid = idname = '';
+
+        $(document).on('click', '.notification_close', function(e) {
+          idname = $(this).parent().parent().attr("id");
+          tabid = idname.substr(-2);
+          $('#ntf' + tabid).remove();
+          $('#ntlink' + tabid).parent().remove();
+          $('.notifications a').first().addClass('active');
+          $('#notif-group div').first().css('display', 'block');
+        });
+      });
+
+      $('#save-branch').click(function(){
+        data={
+          "name": $('#name').val(),
+          "location_id": $('#location_id').val(),
+          "lat": $('#lat').val(),
+          "lon": $('#lon').val(),
+        }
+        console.log(data);
+         $.ajax({
+          url: '/branches',
+          type: 'POST',
+          datatType: 'json',
+          data: data,
+          success: function(response) {
+            console.log(response);
+          },
+          error: function(xhr) {
+            console.log('error');
+          }
+         });
+      });
+    </script>
+<script type="text/javascript">
+var geocoder = new google.maps.Geocoder();
+
+function geocodePosition(pos) {
+  geocoder.geocode({
+    latLng: pos
+  }, function(responses) {
+    if (responses && responses.length > 0) {
+      updateMarkerAddress(responses[0].formatted_address);
+    } else {
+      updateMarkerAddress('Cannot determine address at this location.');
+    }
+  });
+}
+
+function updateMarkerStatus(str) {
+  document.getElementById('markerStatus').innerHTML = str;
+}
+
+function updateMarkerPosition(latLng) {
+  document.getElementById('info').innerHTML = [
+    latLng.lat(),
+    latLng.lng()
+  ].join(', ');
+  $("#lat").val(latLng.lat());
+  $("#lon").val(latLng.lng());
+}
+
+function updateMarkerAddress(str) {
+  document.getElementById('address').innerHTML = str;
+}
+
+function initialize() {
+  var latLng = new google.maps.LatLng(-1.2728, 36.7901);
+  var marker = new google.maps.Marker({
+    position: latLng,
+    title: 'Drag to add a location',
+    map: map,
+    draggable: true
+  });
+
+  // Update current position info.
+  updateMarkerPosition(latLng);
+  geocodePosition(latLng);
+
+  // Add dragging event listeners.
+  google.maps.event.addListener(marker, 'dragstart', function() {
+    updateMarkerAddress('Dragging...');
+  });
+
+  google.maps.event.addListener(marker, 'drag', function() {
+    updateMarkerStatus('Dragging...');
+    updateMarkerPosition(marker.getPosition());
+  });
+
+  google.maps.event.addListener(marker, 'dragend', function() {
+    updateMarkerStatus('Drag ended');
+    geocodePosition(marker.getPosition());
+  });
+}
+
+// Onload handler to fire off the app.
+google.maps.event.addDomListener(window, 'load', initialize);
+
+$(".bs-example-modal-lg").on("shown.bs.modal", function () {
+  // var latLng = new google.maps.LatLng(-1.2728, 36.7901);
+ // map.setCenter(new google.maps.LatLng(-1.2728, 36.7901));
+ map.setCenter({lat: -1.2728, lng: 36.7901});
+    google.maps.event.trigger(map, "resize");
+});
+</script>
+{% endblock %}

@@ -1,0 +1,25 @@
+# virtualenv
+venv/
+
+# backup files from vim
+**/*.swp
+
+# python byte code files
+**/*.pyc
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# sqlite databases
+**/*.sqlite
+
+# pgql database
+pgdb/
+
+# information and resources
+README_CONF.md
+
+# log files
+logs/**

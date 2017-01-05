@@ -1,0 +1,191 @@
+<div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                          </button>
+                          <h4 class="modal-title" id="myModalLabel">Add a new Application</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="x_panel">
+                              <div class="x_title">
+                                <h2>Ensure the required fields are filled out<small>* required</small></h2>
+                                <div class="clearfix"></div>
+                              </div>
+                              <div class="x_content">
+                                <!-- ========================================================================================= -->
+                                <br>
+                                <form class="form-horizontal form-label-left input_mask">
+                                    <!-- <div class="row"> -->
+                                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="f_name" placeholder="First Name">
+                                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                      </div>
+                                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="m_name" placeholder="Mid Name">
+                                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                      </div>
+
+                                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="l_name" placeholder="Last Name">
+                                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+                                      </div>
+                                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                        <input type="text" class="form-control has-feedback-left" id="phone" placeholder="Phone">
+                                        <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+                                      </div>
+                                  <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Cohort</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <select id="cohort_id" class="form-control" required>
+                                        <option value="">Choose..</option>
+                                        {% for cohort in cohorts %}
+                                        <option value="{{cohort.id}}">{{cohort.cohort_number}}</option>
+                                        {% endfor %}
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                        Male: <input type="radio" class="flat" name="gender" id="genderm" value="m" checked="" required /> Female:
+                                        <input type="radio" class="flat" name="gender" id="genderf" value="f" />
+                                    </div>
+                                  </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">DOB</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <!-- <input type="text" class="form-control" placeholder="Default Input"> -->
+                                        <input id="date_of_birth" class="date-picker form-control" required="required" type="text">
+                                    </div>
+                                  </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Village</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <select id="village_id" class="form-control" required>
+                                        <option value="">Choose..</option>
+                                        {% for village in villages %}
+                                        <option value="{{village.id}}">{{village.name}}</option>
+                                        {% endfor %}
+                                      </select>
+                                    </div>
+                                  </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Landmark</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <input type="text" id="landmark" class="form-control" placeholder="Eg Mwembe Shopping Center">
+                                    </div>
+                                  </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Date Moved</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <input type="text" id="date_moved" class="date-picker form-control" placeholder="month/day/year">
+                                    </div>
+                                  </div>
+                                    <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Referred by</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <select id="referral_id" class="form-control" required>
+                                        <option value="">Choose..</option>
+                                        {% for referee in referrals %}
+                                        <option value="{{referee.id}}">{{referee.name}}</option>
+                                        {% endfor %}
+                                      </select>
+                                    </div>
+                                  </div>
+                                   <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Education</label>
+                                    <div class="col-md-5 col-sm-5 col-xs-5">
+                                      <select id="education_id" class="form-control" required>
+                                        <option value="">Choose..</option>
+                                        {% for education in educations %}
+                                        <option value="{{education.id}}">{{education.name}}</option>
+                                        {% endfor %}
+                                      </select>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+                                      <select id="edu_level_id" class="form-control" required>
+                                        <option value="">Choose..</option>
+                                        {% for level in edu_level %}
+                                        <option value="{{level.id}}">{{level.level_name}}</option>
+                                        {% endfor %}
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                   <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Worked as VHT?</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      Yes: <input type="radio" class="flat" name="vht" value="1" checked="" required /> No:
+                                        <input type="radio" class="flat" name="vht" value="0" />
+                                    </div>
+                                  </div>
+                                   <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Languages</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <input type="text" id="languages" class="form-control" placeholder="Eg English, Luganda, Dholuo">
+                                    </div>
+                                  </div>
+                                   <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Worked With BRAC</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      Yes: <input type="radio" class="flat" name="worked_brac" value="1" /> No:
+                                        <input type="radio" class="flat" name="worked_brac" value="0" checked/>
+                                    </div>
+                                  </div>
+                                   <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">As BRAC CHP?</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      Yes: <input type="radio" class="flat" name="brac_chp" value="1" /> No:
+                                        <input type="radio" class="flat" name="brac_chp" value="0" checked/>
+                                    </div>
+                                  </div>
+                                   <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Community Membership</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <input type="text" id="community_membership" class="form-control" placeholder="E.g Chairman">
+                                    </div>
+                                  </div>
+                                   <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Can Read English</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      Yes: <input type="radio" class="flat" name="read_english" value="1" /> No:
+                                        <input type="radio" class="flat" name="read_english" value="0" checked/>
+                                    </div>
+                                  </div>
+
+                                   <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Maths Score</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <input type="text" id="maths" class="form-control" placeholder="E.g 50">
+                                    </div>
+                                  </div>
+                                   <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">English Score</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <input type="text" id="english" class="form-control" placeholder="E.g 50">
+                                    </div>
+                                  </div>
+                                   <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Self Assessment Score</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <input type="text" id="about" class="form-control" placeholder="E.g 50">
+                                    </div>
+                                  </div>
+
+                                  <div class="ln_solid"></div>
+
+
+                                </form>
+                                <!-- ========================================================================================= -->
+                              </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                          <button type="button" id="save-details" class="btn btn-primary">Save changes</button>
+                        </div>
+
+                      </div>
+                    </div>
