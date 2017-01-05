@@ -23,5 +23,7 @@ README_CONF.md
 
 # log files
 logs/**
-#IDE Files
+
+# IDE Files
+.idea/
 .idea/**
