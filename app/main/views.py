@@ -68,7 +68,8 @@ def application_details(id):
         page = {'title':' '.join([a.l_name, a.m_name, a.f_name]), 'subtitle':'Application details'}
         age = calculate_age(a.date_of_birth)
         qualified = appplication_status(a)
-        return render_template('application.html', qualified=qualified, age=age, page=page, application=a)
+        phones = ApplicationPhone.query.filter_by(application_id=id)
+        return render_template('application.html', phones=phones, qualified=qualified, age=age, page=page, application=a)
     else:
         if request.form.get('action') == 'select':
             # add the application to the selected application
@@ -177,14 +178,21 @@ def applications():
             )
             db.session.add_all([application])
             db.session.commit()
-
-            phone = ApplicationPhone(
-            application_id = application.id,
-            phone = request.form.get('phone').lower()
-            )
-            db.session.add_all([phone])
-            db.session.commit()
-            return jsonify(status='ok', application=application.id, phone=phone.id)
+            phones = request.form.getlist('phone[]')
+            for phone in phones:
+                pid = ApplicationPhone(
+                    application_id = application.id,
+                    phone = phone
+                )
+                db.session.add(pid)
+                db.session.commit()
+            # phone = ApplicationPhone(
+            # application_id = application.id,
+            # phone = request.form.get('phone').lower()
+            # )
+            # db.session.add_all([phone])
+            # db.session.commit()
+            return jsonify(status='ok', phone=phones)
 
 @main.route('/countries', methods=['GET', 'POST'])
 @main.route('/regions', methods=['GET', 'POST'])
