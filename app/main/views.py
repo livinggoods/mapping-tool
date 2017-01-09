@@ -27,28 +27,28 @@ def index():
 def add_mapping_details():
     # Add village,
     # villages = Village.query.order_by(Village.name.asc()).all()
-    villages = Village.query.all()
     locations = Location.query.all()
-    total_villages = len(villages)
+    total_locations = len(locations)
     # distinct
     # create an object with all the locations
     village_marker = []
-    for record in villages:
-        marker = {
-            'lat': record.lat,
-            'lng': record.lon,
-            'icon': icons.dots.blue,
-            'infobox': (
-                "<h2>"+record.name+"</h2>"
-                "<img src='/static/images/logo.png'>"
-                "<br>200 New CHPs"
-                "<br><a href='village/"+str(record.id)+"'>More Details </a>"
-            )
-        }
-        village_marker.append(marker)
+    for record in locations:
+        if record.lat != '' and record.lon != '':
+            marker = {
+                'lat': record.lat,
+                'lng': record.lon,
+                'icon': icons.dots.blue,
+                'infobox': (
+                    "<h2>"+record.name+"</h2>"
+                    "<img src='/static/images/logo.png'>"
+                    "<br>200 New CHPs"
+                    "<br><a href='village/"+str(record.id)+"'>More Details </a>"
+                )
+            }
+            village_marker.append(marker)
     village_maps = Map(
         identifier="villages",
-        lat=-1.2728, # -1.272898, 36.790095
+        lat=-1.2728, # -1.272898, 36.790095 
         lng=36.7901,
         zoom=8,
         style="height:500px;",
@@ -57,9 +57,9 @@ def add_mapping_details():
         cluster_gridsize = 10
         )
 
-    page = {'title': 'Villages', 'total_villages': total_villages}
-    # return jsonify(villages)
-    return render_template('villages.html', page=page, clustermap=village_maps, locations=locations, villages=villages)
+    page = {'title': 'Locations', 'total_villages': total_locations}
+    # return jsonify(markers=village_marker)
+    return render_template('villages.html', page=page, clustermap=village_maps, locations=locations)
 
 @main.route('/application/<int:id>', methods=['GET', 'POST'])
 def application_details(id):
@@ -243,19 +243,42 @@ def branches():
         db.session.commit()
         return jsonify(status='ok', data=request.form)
     else:
-        village_maps = Map(
-            identifier="branch-map",
+        branches = Branch.query.all()
+        branch_markers = []
+        for record in branches:
+            if record.lat != '' and record.lon != '':
+                marker = {
+                    'lat': record.lat,
+                    'lng': record.lon,
+                    'icon': icons.dots.blue,
+                    'infobox': (
+                        "<h2>"+record.name+"</h2>"
+                        "<br>200 New CHPs"
+                        "<br><a href='village/"+str(record.id)+"'>More Details </a>"
+                    )
+                }
+                branch_markers.append(marker)
+        branch_maps = Map(
+            identifier="branchedededededededededede",
             lat=-1.2728, # -1.272898, 36.790095
             lng=36.7901,
-            zoom=4,
+            zoom=8,
             style="height:500px;",
+            markers=branch_markers,
             cluster = True,
             cluster_gridsize = 10
             )
+        inputmap = Map(
+            identifier="view-side",
+            lat=-1.2728, # -1.272898, 36.790095 
+            lng=36.7901,
+            zoom=8,
+            markers=[(-1.2728, 36.7901)]
+        )
         page = {'title': 'Branches', 'subtitle': 'List of branches'}
-        branches = Branch.query.all()
+        
         locations = Location.query.all()
-        return render_template('branches.html', branches=branches, clustermap=village_maps, locations=locations, page=page)
+        return render_template('branches.html', branches=branches, inputmap=inputmap, clustermap=branch_maps, locations=locations, page=page)
 
 @main.route('/cohort', methods=['GET', 'POST'])
 def cohort():
