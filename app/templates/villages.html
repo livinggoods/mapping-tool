@@ -30,9 +30,9 @@
               <div class="col-md-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2><i class="fa fa-align-left"></i> Mapped Villages  <small>{{page.total_villages}} villages in total</small></h2>
+                    <h2><i class="fa fa-align-left"></i> Mapped Locations  <small>{{page.total_locations}} locations in total</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
-                      <li><button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">New Village</button>
+                      <li><button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">New Location</button>
                       </li>
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -60,7 +60,7 @@
                     <div class="col-md-3 col-sm-12 col-xs-12">
                       <div>
                         <div class="x_title">
-                          <h2>Mapped Villages</h2>
+                          <h2>Mapped Locations</h2>
                           <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -79,53 +79,19 @@
                           <div class="clearfix"></div>
                         </div>
                         <ul class="list-unstyled top_profiles scroll-view">
-                          {% for village in villages %}
+                          {% for location in locations %}
                           <li class="media event">
                             <a class="pull-left border-aero profile_thumb">
                               <i class="fa fa-user aero"></i>
                             </a>
                             <div class="media-body">
-                              <a class="title" href="/village/{{village.id}}">{{ village.name }}</a>
-                              <p><strong>{{ village.name }}. </strong> {{ village.name }} </p>
-                              <p> <small>{{ village.name }}</small>
+                              <a class="title" href="/village/{{location.id}}">{{ location.name }}</a>
+                              <p><strong>{{ location.name }}. </strong> {{ location.name }} </p>
+                              <p> <small>{{ location.name }}</small>
                               </p>
                             </div>
                           </li>
                           {% endfor %}
-
-                          <!--<li class="media event">-->
-                            <!--<a class="pull-left border-blue profile_thumb">-->
-                              <!--<i class="fa fa-user blue"></i>-->
-                            <!--</a>-->
-                            <!--<div class="media-body">-->
-                              <!--<a class="title" href="#">Village 3</a>-->
-                              <!--<p><strong>$2300. </strong> Agent Avarage Sales </p>-->
-                              <!--<p> <small>12 Sales Today</small>-->
-                              <!--</p>-->
-                            <!--</div>-->
-                          <!--</li>-->
-                          <!--<li class="media event">-->
-                            <!--<a class="pull-left border-aero profile_thumb">-->
-                              <!--<i class="fa fa-user aero"></i>-->
-                            <!--</a>-->
-                            <!--<div class="media-body">-->
-                              <!--<a class="title" href="#">Village 4</a>-->
-                              <!--<p><strong>$2300. </strong> Agent Avarage Sales </p>-->
-                              <!--<p> <small>12 Sales Today</small>-->
-                              <!--</p>-->
-                            <!--</div>-->
-                          <!--</li>-->
-                          <!--<li class="media event">-->
-                            <!--<a class="pull-left border-green profile_thumb">-->
-                              <!--<i class="fa fa-user green"></i>-->
-                            <!--</a>-->
-                            <!--<div class="media-body">-->
-                              <!--<a class="title" href="#">Village 5</a>-->
-                              <!--<p><strong>$2300. </strong> Agent Avarage Sales </p>-->
-                              <!--<p> <small>12 Sales Today</small>-->
-                              <!--</p>-->
-                            <!--</div>-->
-                          <!--</li>-->
                         </ul>
                       </div>
                     </div>
