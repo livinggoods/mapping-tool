@@ -51,7 +51,7 @@
                     <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                       <thead>
                         <tr>
-                          <th>Action</th>
+                          <!-- <th>Action</th> -->
                           <th>Action</th>
                           <th>Name</th>
                           <th>Date Added</th>
@@ -64,12 +64,12 @@
                       <tbody>
                         {% for application in applications %}
                         <tr>
-                          <td><a href='/application/{{application.application.id}}'>More</a></td>
+                          <!-- <td><a href='/application/{{application.application.id}}'>More</a></td> -->
                           <td>{{application.application.l_name|title}} {{application.application.f_name|title}} {{application.application.l_name|title}}</td>
                           <td>{{application.application.community_membership }}</td>
                           <td>{{application.application.read_english}}</td>
                           <td><button class="btn btn-sm btn-success add-score" id="{{application.id}}">Interview Score</button></td>
-                          <td><a href="interview-score/{{application.id}}" class="btn btn-sm btn-success" id="{{application.id}}">Interview Score</button></td>
+                          <td><a href="interview-score/{{application.id}}" class="btn btn-sm btn-success" id="{{application.id}}">View Interview</button></td>
                         </tr>
                         {% endfor %}
                       </tbody>
