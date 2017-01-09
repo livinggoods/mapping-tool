@@ -52,8 +52,11 @@
                       <thead>
                         <tr>
                           <th>Action</th>
+                          <th>Action</th>
                           <th>Name</th>
                           <th>Date Added</th>
+                          <th>Enter Interview Score</th>
+                          <th>More</th>
                         </tr>
                       </thead>
 
@@ -65,7 +68,8 @@
                           <td>{{application.application.l_name|title}} {{application.application.f_name|title}} {{application.application.l_name|title}}</td>
                           <td>{{application.application.community_membership }}</td>
                           <td>{{application.application.read_english}}</td>
-                          <!-- <td>{{application.application_score}}</td> -->
+                          <td><button class="btn btn-sm btn-success add-score" id="{{application.id}}">Interview Score</button></td>
+                          <td><a href="interview-score/{{application.id}}" class="btn btn-sm btn-success" id="{{application.id}}">Interview Score</button></td>
                         </tr>
                         {% endfor %}
                       </tbody>
@@ -74,8 +78,8 @@
                 </div>
               </div>
             </div>
-            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-              <!-- % include 'form_application.html' % -->
+            <div class="modal fade bs-example-modal-lg" data = "interview-score" tabindex="-1" role="dialog" aria-hidden="true">
+              {% include 'form_interview_score.html' %}
             </div>
           </div>
 {% endblock %}
@@ -166,40 +170,51 @@
       });
     </script>
     <script>
-    $('#save-details').click(function(){
-      data={
-        'f_name': $('#f_name').val(),
-        'm_name': $('#m_name').val(),
-        'l_name': $('#l_name').val(),
-        'email': $('#email').val(),
-        'phone': $('#phone').val(),
-        'gender': $("input:radio[name='gender']:checked").val(),
-        'date_of_birth': $('#date_of_birth').val(),
-        'village_id': $('#village_id').val(),
-        'landmark': $('#landmark').val(),
-        'maths': $('#maths').val(),
-        'english': $('#english').val(),
-        'about': $('#about').val(),
-        'date_moved': $('#date_moved').val(),
-        'referral_id': $('#referral_id').val(),
-        'education_id': $('#education_id').val(),
-        'edu_level_id': $('#edu_level_id').val(),
-        'vht': $("input:radio[name='vht']:checked").val(),
-        'languages': $('#languages').val(),
-        'worked_brac': $("input:radio[name='worked_brac']:checked").val(),
-        'brac_chp': $("input:radio[name='brac_chp']:checked").val(),
-        'community_membership': $('#community_membership').val(),
-        'read_english': $("input:radio[name='read_english']:checked").val(),
+    function findTotal(){
+        var arr = document.getElementsByClassName('form-control calculate');
+        var tot=0;
+        for(var i=0;i<arr.length;i++){
+            if(parseInt(arr[i].value))
+                tot += parseInt(arr[i].value);
+        }
+        console.log(tot);
+        $("#calculated_score").text(tot);
+        $("#interview_total_score").text(tot);
+        // document.getElementById('calculated_score').html = tot;
+    }
 
-      }
+
+    $('.add-score').click(function (){
+      // set global var
+      var appID = $(this).attr('id');
+      $('#selection_id').val(appID);
+      console.log(appID);
+      $('.bs-example-modal-lg').modal('toggle');
+    });
+
+    $('#save-details').click(function(){
+    data = {
+      'selection_id': $('#selection_id').val(),
+      'interview_id': $('#interview_id').val(),
+      'motivation': $('#motivation').val(),
+      'community_work': $('#community_work').val(),
+      'mentality': $('#mentality').val(),
+      'selling': $('#selling').val(),
+      'health': $('#health').val(),
+      'investment': $('#investment').val(),
+      'interpersonal': $('#interpersonal').val(),
+      'commitment': $('#commitment').val(),
+      'interview_total_score': findTotal(),
+    };
       console.log(data);
        $.ajax({
-        url: '/applications',
+        url: '/interview-score',
         type: 'POST',
         datatType: 'json',
         data: data,
         success: function(response) {
           console.log(response);
+          window.location.reload();
         },
         error: function(xhr) {
           console.log('error');
