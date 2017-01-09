@@ -17,23 +17,32 @@
                                 <br>
                                 <form class="form-horizontal form-label-left input_mask">
                                     <!-- <div class="row"> -->
-                                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                      <div class="col-md-4 col-sm-6 col-xs-6 form-group has-feedback">
                                         <input type="text" class="form-control has-feedback-left" id="f_name" placeholder="First Name">
                                         <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                                       </div>
-                                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                      <div class="col-md-4 col-sm-6 col-xs-12 form-group has-feedback">
                                         <input type="text" class="form-control has-feedback-left" id="m_name" placeholder="Mid Name">
                                         <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                                       </div>
 
-                                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                      <div class="col-md-4 col-sm-6 col-xs-12 form-group has-feedback">
                                         <input type="text" class="form-control has-feedback-left" id="l_name" placeholder="Last Name">
                                         <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                                       </div>
-                                      <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
+                                      <!-- <div class="col-md-6 col-sm-6 col-xs-12 form-group has-feedback">
                                         <input type="text" class="form-control has-feedback-left" id="phone" placeholder="Phone">
                                         <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
-                                      </div>
+                                      </div> -->
+
+                                  <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Phone</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <div><input type="text" class="form-control has-feedback-left" name="phone[]" placeholder="Phone">
+                                      <span class="fa fa-phone phone form-control-feedback left" aria-hidden="true"></span></div>
+                                      <i class="fa fa-plus-square" id="add-another" aria-hidden="true"></i>
+                                    </div>
+                                  </div>
                                   <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Cohort</label>
                                     <div class="col-md-9 col-sm-9 col-xs-12">
