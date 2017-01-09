@@ -108,6 +108,11 @@
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
         });
+      $('#add-another').click(function (){
+        var add_phone = $('#add-another');
+        add_phone.before('<div><input type="text" class="form-control has-feedback-left" name="phone[]" placeholder="Add another phone"> \
+        <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span></div>');
+      })
 
         $('#bulk-action').click(function(){
             var val = [];
@@ -204,12 +209,16 @@
     </script>
     <script>
     $('#save-details').click(function(){
+      var phones =[];
+      $('input[name^="phone"]').each(function() {
+        phones.push($(this).val());
+      });
       data={
         'f_name': $('#f_name').val(),
         'm_name': $('#m_name').val(),
         'l_name': $('#l_name').val(),
         'email': $('#email').val(),
-        'phone': $('#phone').val(),
+        'phone': phones,
         'gender': $("input:radio[name='gender']:checked").val(),
         'date_of_birth': $('#date_of_birth').val(),
         'village_id': $('#village_id').val(),
@@ -230,14 +239,13 @@
         'read_english': $("input:radio[name='read_english']:checked").val(),
 
       }
-      console.log(data);
        $.ajax({
         url: '/applications',
         type: 'POST',
         dataType: 'json',
         data: data,
         success: function(response) {
-          console.log(response);
+          window.location.reload();
         },
         error: function(xhr) {
           console.log('error');
