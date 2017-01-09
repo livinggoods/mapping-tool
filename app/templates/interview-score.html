@@ -177,7 +177,7 @@
                             </tr>
                             </tr>
                             <tr>
-                                <td class="details-left">Total</td><td class="details-right"> {{(application.about_you + application.maths + application.english)}}</td>
+                                <td class="details-left">Application Total Score</td><td class="details-right"> {{(application.about_you + application.maths + application.english)}}</td>
                             </tr>
                           </tbody>
                         </table>
@@ -189,7 +189,8 @@
     <div class="col-md-6 col-sm-6 col-xs-12">
       <div class="x_panel">
         <div class="x_title">
-          <h2><i class="fa fa-bars"></i> Interview Scores  <small>Computed totals: {{score.interview_total_score}}</small></h2>
+          <h2><i class="fa fa-bars"></i> Interview Scores  <small>Computed totals: {{(score.motivation + score.community_work +
+            score.mentality + score.selling + score.health + score.investment + score.interpersonal + score.commitment)}}</small></h2>
           <ul class="nav navbar-right panel_toolbox">
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
             </li>
@@ -239,7 +240,8 @@
                                 <td class="details-left">Commitment</td><td class="details-right"> {{(score.commitment)}}</td>
                             </tr>
                             <tr>
-                                <td class="details-left">Total </td><td class="details-right"> {{score.interview_total_score}}</td>
+                                <td class="details-left">Total </td><td class="details-right"> {{(score.motivation + score.community_work +
+                                  score.mentality + score.selling + score.health + score.investment + score.interpersonal + score.commitment)}}</td>
                             </tr>
                           </tbody>
                         </table>
