@@ -35,12 +35,20 @@
                                         </div>
                                       </div>
                                         <div class="form-group">
-                                        Test
-
-
-                                        {{clustermap.js}}
-                                        {{clustermap.html}}
-                                        <div style="display:none">
+                                        <div>
+                                        <style>
+  #mapCanvas {
+    width: 500px;
+    height: 400px;
+    float: left;
+  }
+  #infoPanel {
+    float: left;
+    margin-left: 10px;
+  }
+  #infoPanel div {
+    margin-bottom: 5px;
+  }</style>
                                           <div id="mapCanvas"></div>
                                           <div id="infoPanel">
                                             <b>Marker status:</b>
