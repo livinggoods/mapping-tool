@@ -27,3 +27,7 @@ logs/**
 # IDE Files
 .idea/
 .idea/**
+
+# IDE Files
+.ebextensions/
+.ebextensions/**
