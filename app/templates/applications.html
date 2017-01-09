@@ -66,6 +66,7 @@
                           <th>Gender</th>
                           <th>English</th>
                           <th>Score</th>
+                          <th>View</th>
                         </tr>
                       </thead>
 
@@ -79,6 +80,7 @@
                           <td>{{application.gender}}</td>
                           <td>{{application.read_english}}</td>
                           <td>{{application.application_score}}</td>
+                          <td><a href="/application/{{application.id}}" class="btn btn-success"> More </a></td>
 
                         </tr>
                         {% endfor %}
