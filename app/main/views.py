@@ -88,11 +88,53 @@ def selected_applications():
         return render_template('selected-applications.html', page=page, applications=applications)
     else:
         applications = request.form.getlist('applications[]')
-        app = {}
-        for application_id in applications:
-            app['application'+application_id] = application_id
-        return jsonify(app)
+        app = []
+        if request.form.get('action') == 'select':
+            for application_id in applications:
+                application = SelectedApplication(
+                    application_id = application_id
+                )
+                db.session.add(application)
+                db.session.commit()
+                app.append(application.id)
+            return jsonify(app)
+        else:
+            return jsonify(status='no action selected')
         # return jsonify(details=request.form.getlist('applications[]'))
+
+@main.route('/interview-scores', methods=['POST'])
+def interview_score():
+    selection = request.form.get('selection_id')
+    application = Application.query.filter_by(id=selection).first()
+    app = {}
+    score = InterviewScore(
+        selection_id = selection,
+        cohort_id = application.cohort_id,
+        interview_id = request.form.get('interview_id'),
+        motivation = request.form.get('motivation'),
+        community_work = request.form.get('community_work'),
+        mentality = request.form.get('mentality'),
+        selling = request.form.get('selling'),
+        health = request.form.get('health'),
+        investment = request.form.get('investment'),
+        interpersonal = request.form.get('interpersonal'),
+        commitment = request.form.get('commitment'),
+        interview_total_score = request.form.get('interview_total_score'),
+        user_id = 1, #replace with current_user.id
+    )
+    db.session.add(score)
+    db.session.commit()
+    return jsonify(status=score.id)
+    # return jsonify(details=request.form.getlist('applications[]'))
+
+@main.route('/interview-score/<int:id>')
+def get_interview_score(id):
+    selection = SelectedApplication.query.filter_by(id=id).first()
+    application = selection.application
+    page = {'title': 'applications', 'subtitle': 'manage applications and create new applications'}
+    score = InterviewScore.query.filter_by(selection_id=id).first()
+    return render_template('interview-score.html', page=page, score=score, application=application)
+
 
 @main.route('/applications', methods=['GET', 'POST'])
 def applications():
