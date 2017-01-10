@@ -46,32 +46,43 @@
                                     </div>
                                   </div>
                                   <div class="form-group">
-                                    <div class="col-md-9 col-sm-9 col-xs-12">
-                                       <style>
-                                          #mapCanvas {
-                                            width: 500px;
-                                            height: 400px;
-                                            float: left;
-                                          }
-                                          #infoPanel {
-                                            float: left;
-                                            margin-left: 10px;
-                                          }
-                                          #infoPanel div {
-                                            margin-bottom: 5px;
-                                          }
-                                       </style>
-                                      <div id="mapCanvas"></div>
-                                      <div id="infoPanel">
-                                        <b>Marker status:</b>
-                                        <div id="markerStatus"><i>Click and drag the marker.</i></div>
-                                        <b>Current position:</b>
-                                        <div id="info"></div>
-                                        <input type="text" id="lat" class="form-control" placeholder="Latitude">
-                                        <input type="text" id="lon" class="form-control" placeholder="Latitude">
-                                        <b>Closest matching address:</b>
-                                        <div id="address"></div>
+                                      {{map.js}}
+                                        <div><h5>Drag the marker to get the GPS coordinates</h5></div>
+                                        <div>
+                                          <style>
+                                            #mapCanvas {
+                                              width: 100%;
+                                              height: 400px;
+                                              float: left;
+                                            }
+                                            #infoPanel {
+                                              display: none;
+                                            }
+                                            #infoPanel div {
+                                              display: none;
+                                            }
+                                          </style>
+                                          <div id="mapCanvas"></div>
+                                          <div id="infoPanel">
+                                            <b>Marker status:</b>
+                                            <div id="markerStatus"><i>Click and drag the marker.</i></div>
+                                            <b>Current position:</b>
+                                            <div id="info"></div>
+                                            <b>Closest matching address:</b>
+                                            <div id="address"></div>
+                                          </div>
                                       </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Lat</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <input type="text" id="lat" class="form-control" placeholder="1.3483">
+                                    </div>
+                                  </div>
+                                  <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Lon</label>
+                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                      <input type="text" id="lon" class="form-control" placeholder="Eg 36.1223">
                                     </div>
                                   </div>
                                 </form>

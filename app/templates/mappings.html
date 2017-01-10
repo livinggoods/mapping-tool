@@ -153,8 +153,32 @@
         TableManageButtons.init();
       });
     </script>
+<script>
+$('#save-village').click(function(){
+  data={
+    "name": $('#name').val(),
+    "parent": $('#parent').val(),
+    "admin_name": $('#admin_name').val(),
+    "country_code": $('#country_code').val(),
+    "lat": $('#lat').val(),
+    "lon": $('#lon').val(),
+  }
+   $.ajax({
+    url: '/locations',
+    type: 'POST',
+    datatType: 'json',
+    data: data,
+    success: function(response) {
+      window.location.reload();
+    },
+    error: function(xhr) {
+      console.log('error');
+    }
+   });
+});
+</script>
 <script type="text/javascript">
-var geocoder = new google.maps.Geocoder();
+  var geocoder = new google.maps.Geocoder();
 
 function geocodePosition(pos) {
   geocoder.geocode({
@@ -188,13 +212,13 @@ function updateMarkerAddress(str) {
 function initialize() {
   var latLng = new google.maps.LatLng(-1.2728, 36.7901);
   var map = new google.maps.Map(document.getElementById('mapCanvas'), {
-    zoom: 8,
+    zoom: 7,
     center: latLng,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
   var marker = new google.maps.Marker({
     position: latLng,
-    title: 'Point A',
+    title: 'Drag to add a location',
     map: map,
     draggable: true
   });
@@ -223,28 +247,11 @@ function initialize() {
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 <script>
-$('#save-village').click(function(){
-  data={
-    "name": $('#name').val(),
-    "parent": $('#parent').val(),
-    "admin_name": $('#admin_name').val(),
-    "country_code": $('#country_code').val(),
-    "lat": $('#lat').val(),
-    "lon": $('#lon').val(),
-  }
-  console.log(data);
-   $.ajax({
-    url: '/locations',
-    type: 'POST',
-    datatType: 'json',
-    data: data,
-    success: function(response) {
-      console.log(response);
-    },
-    error: function(xhr) {
-      console.log('error');
-    }
-   });
+$(".bs-example-modal-lg").on("shown.bs.modal", function () {
+  initialize();
+  map.setCenter({lat: -1.2728, lng: 36.7901});
+  google.maps.event.trigger(map, "resize");
+
 });
 </script>
 {% endblock %}

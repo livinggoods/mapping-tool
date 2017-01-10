@@ -85,9 +85,9 @@
                               <i class="fa fa-user aero"></i>
                             </a>
                             <div class="media-body">
-                              <a class="title" href="/branch/{{branch.id}}">{{ branch.name }}</a>
-                              <p><strong>{{ branch.name }}. </strong> {{ branch.name }} </p>
-                              <p> <small>{{ branch.name }}</small>
+                              <a class="title" href="/branch/{{branch.id}}">{{ branch.name | title}}</a>
+                              <p><strong>{{ branch.name| title }}. </strong> {{ branch.name| title }} </p>
+                              <p> <small>{{ branch.name| title }}</small>
                               </p>
                             </div>
                           </li>
@@ -230,7 +230,7 @@
           datatType: 'json',
           data: data,
           success: function(response) {
-            console.log(response);
+            window.location.reload();
           },
           error: function(xhr) {
             console.log('error');
@@ -273,7 +273,7 @@ function updateMarkerAddress(str) {
 function initialize() {
   var latLng = new google.maps.LatLng(-1.2728, 36.7901);
   var map = new google.maps.Map(document.getElementById('mapCanvas'), {
-    zoom: 8,
+    zoom: 7,
     center: latLng,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
@@ -308,10 +308,10 @@ function initialize() {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 $(".bs-example-modal-lg").on("shown.bs.modal", function () {
-  console.log('centering the map');
-  console.log(map);
- map.setCenter({lat: -1.2728, lng: 36.7901});
-    google.maps.event.trigger(map, "resize");
+  initialize();
+  map.setCenter({lat: -1.2728, lng: 36.7901});
+  google.maps.event.trigger(map, "resize");
+
 });
 </script>
 {% endblock %}

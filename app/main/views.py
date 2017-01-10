@@ -22,7 +22,6 @@ def index():
     else:
         return render_template('index.html', page=page)
 
-
 @main.route('/villages')
 def add_mapping_details():
     # Add village,
@@ -128,6 +127,17 @@ def interview_score():
     return jsonify(status=score.id)
     # return jsonify(details=request.form.getlist('applications[]'))
 
+@main.route('/location', methods=['GET', 'POST'])
+def location():
+    page = {'title': 'Home'}
+    if current_user.is_anonymous():
+        # return redirect(url_for('auth.login'))
+        return render_template('location.html', page=page)
+    else:
+        return render_template('location.html', page=page)
+
+
+
 @main.route('/interview-score/<int:id>')
 def get_interview_score(id):
     selection = SelectedApplication.query.filter_by(id=id).first()
@@ -154,27 +164,27 @@ def applications():
         else:
             # save the records
             application = Application(
-            f_name =  request.form.get('f_name').lower() if request.form.get('f_name') != '' else None,
-            m_name = request.form.get('m_name').lower() if request.form.get('m_name') != '' else None,
-            l_name = request.form.get('l_name').lower() if request.form.get('l_name') != '' else None,
+            f_name =  request.form.get('f_name').title() if request.form.get('f_name') != '' else None,
+            m_name = request.form.get('m_name').title() if request.form.get('m_name') != '' else None,
+            l_name = request.form.get('l_name').title() if request.form.get('l_name') != '' else None,
             maths = request.form.get('maths') if request.form.get('maths') != '' else None,
             english = request.form.get('english') if request.form.get('english') != '' else None,
             about_you = request.form.get('about') if request.form.get('about') != '' else None,
-            gender = request.form.get('gender').lower() if request.form.get('gender') != '' else None,
-            date_of_birth = request.form.get('date_of_birth').lower() if request.form.get('date_of_birth') != '' else None,
-            location_id = request.form.get('village_id').lower() if request.form.get('village_id') != '' else None,
-            landmark = request.form.get('landmark').lower() if request.form.get('landmark') != '' else None,
-            date_moved = request.form.get('date_moved').lower() if request.form.get('date_moved') != '' else None,
-            referral_id = request.form.get('referral_id').lower() if request.form.get('referral_id') != '' else None,
-            education_id = request.form.get('education_id').lower() if request.form.get('education_id') != '' else None,
-            edu_level_id = request.form.get('edu_level_id').lower() if request.form.get('edu_level_id') != '' else None,
-            vht = request.form.get('vht').lower() if request.form.get('vht') != '' else None,
-            languages = request.form.get('languages').lower() if request.form.get('languages') != '' else None,
-            worked_brac = request.form.get('worked_brac').lower() if request.form.get('worked_brac') != '' else None,
-            brac_chp = request.form.get('brac_chp').lower() if request.form.get('brac_chp') != '' else None,
+            gender = request.form.get('gender').title() if request.form.get('gender') != '' else None,
+            date_of_birth = request.form.get('date_of_birth').title() if request.form.get('date_of_birth') != '' else None,
+            location_id = request.form.get('village_id').title() if request.form.get('village_id') != '' else None,
+            landmark = request.form.get('landmark').title() if request.form.get('landmark') != '' else None,
+            date_moved = request.form.get('date_moved').title() if request.form.get('date_moved') != '' else None,
+            referral_id = request.form.get('referral_id').title() if request.form.get('referral_id') != '' else None,
+            education_id = request.form.get('education_id').title() if request.form.get('education_id') != '' else None,
+            edu_level_id = request.form.get('edu_level_id').title() if request.form.get('edu_level_id') != '' else None,
+            vht = request.form.get('vht').title() if request.form.get('vht') != '' else None,
+            languages = request.form.get('languages').title() if request.form.get('languages') != '' else None,
+            worked_brac = request.form.get('worked_brac').title() if request.form.get('worked_brac') != '' else None,
+            brac_chp = request.form.get('brac_chp').title() if request.form.get('brac_chp') != '' else None,
             cohort_id = request.form.get('cohort_id') if request.form.get('cohort_id') != '' else None,
-            community_membership = request.form.get('community_membership').lower() if request.form.get('community_membership') != '' else None,
-            read_english = request.form.get('read_english').lower() if request.form.get('read_english') != '' else None,
+            community_membership = request.form.get('community_membership').title() if request.form.get('community_membership') != '' else None,
+            read_english = request.form.get('read_english').title() if request.form.get('read_english') != '' else None,
             )
             db.session.add_all([application])
             db.session.commit()
@@ -188,7 +198,7 @@ def applications():
                 db.session.commit()
             # phone = ApplicationPhone(
             # application_id = application.id,
-            # phone = request.form.get('phone').lower()
+            # phone = request.form.get('phone').title()
             # )
             # db.session.add_all([phone])
             # db.session.commit()
@@ -208,12 +218,12 @@ def create_location():
     if request.method == 'POST':
         parent = request.form.get('parent')  if request.form.get('parent') != '0' else None
         location = Location(
-            name = request.form.get('name').lower(),
+            name = request.form.get('name').title(),
             parent = parent,
             lat = request.form.get('lat'),
             lon = request.form.get('lon'),
             country_code = request.form.get('country_code'),
-            admin_name = request.form.get('admin_name').lower()
+            admin_name = request.form.get('admin_name').title()
         )
         db.session.add(location)
         db.session.commit()
@@ -225,16 +235,22 @@ def create_location():
         else:
             locations = Location.query.filter_by(admin_name=param)
         page = {'title': param, 'subtitle': 'mapped '+param}
-        locations = Location.query.all()
-        # return jsonify(url=request.path.strip('/'))
-        return render_template('mappings.html', page=page, locations=locations)
+        inputmap = Map(
+            identifier="view-side",
+            lat=-1.2728, # -1.272898, 36.790095 
+            lng=36.7901,
+            zoom=8,
+            markers=[(-1.2728, 36.7901)]
+        )
+
+        return render_template('mappings.html', page=page, map=inputmap, locations=locations)
 
 
 @main.route('/branches', methods=['GET', 'POST'])
 def branches():
     if request.method == 'POST':
         branch = Branch(
-            name = request.form.get('name').lower(),
+            name = request.form.get('name').title(),
             location_id  = request.form.get('location_id'),
             lat = request.form.get('lat'),
             lon = request.form.get('lon')
@@ -252,14 +268,14 @@ def branches():
                     'lng': record.lon,
                     'icon': icons.dots.blue,
                     'infobox': (
-                        "<h2>"+record.name+"</h2>"
+                        "<h2>"+record.name.title()+"</h2>"
                         "<br>200 New CHPs"
                         "<br><a href='village/"+str(record.id)+"'>More Details </a>"
                     )
                 }
                 branch_markers.append(marker)
         branch_maps = Map(
-            identifier="branchedededededededededede",
+            identifier="branches",
             lat=-1.2728, # -1.272898, 36.790095
             lng=36.7901,
             zoom=8,
@@ -268,17 +284,10 @@ def branches():
             cluster = True,
             cluster_gridsize = 10
             )
-        inputmap = Map(
-            identifier="view-side",
-            lat=-1.2728, # -1.272898, 36.790095 
-            lng=36.7901,
-            zoom=8,
-            markers=[(-1.2728, 36.7901)]
-        )
         page = {'title': 'Branches', 'subtitle': 'List of branches'}
         
         locations = Location.query.all()
-        return render_template('branches.html', branches=branches, inputmap=inputmap, clustermap=branch_maps, locations=locations, page=page)
+        return render_template('branches.html', branches=branches, clustermap=branch_maps, locations=locations, page=page)
 
 @main.route('/cohort', methods=['GET', 'POST'])
 def cohort():
