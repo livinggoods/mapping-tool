@@ -32,6 +32,7 @@ def unconfirmed():
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    page={'title':'Login', 'subtitle':'Living Goods'}
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.verify_password(form.password.data):
@@ -44,7 +45,7 @@ def login():
             # original URL in the next query string argument
             return redirect(request.args.get('next') or url_for('main.index'))
         flash('Invalid username or password.', 'error')
-    return render_template('auth/login.html', form=form)
+    return render_template('auth/login.html', form=form, page=page)
 
 
 @auth.route('/logout')

@@ -78,12 +78,12 @@ class Chp(db.Model):
     cohort_id = Column(ForeignKey(u'cohort.id'), index=True)
     phone = Column(String(45))
     branch_id = Column(ForeignKey(u'branch.id'), index=True)
-    village_id = Column(ForeignKey(u'village.id'), index=True)
+    location_id = Column(ForeignKey(u'location.id'), index=True)
     chp_id = Column(String(45))
 
     branch = relationship(u'Branch')
     cohort = relationship(u'Cohort')
-    village = relationship(u'Village')
+    location = relationship(u'Location')
 
 class Cohort(db.Model):
     __tablename__ = 'cohort'
