@@ -112,9 +112,11 @@
         });
       $('#add-another').click(function (){
         var add_phone = $('#add-another');
-        add_phone.before('<div><input type="text" class="form-control has-feedback-left" name="phone[]" placeholder="Add another phone"> \
+        $('input[name^="phone"]').removeAttr('autofocus');
+        add_phone.before('<div><input type="text" class="form-control has-feedback-left" name="phone[]" autofocus placeholder="Add another phone"> \
         <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span></div>');
-      })
+        $('input[name^="phone"]').last().focus();
+      });
 
         $('#bulk-action').click(function(){
             var val = [];
