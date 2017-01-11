@@ -67,16 +67,18 @@ def application_details(id):
         page = {'title':' '.join([a.l_name, a.m_name, a.f_name]), 'subtitle':'Application details'}
         age = calculate_age(a.date_of_birth)
         qualified = appplication_status(a)
+        selected_application = SelectedApplication.query.filter_by(application_id=id).first()
+        selected = True if selected_application else False
         phones = ApplicationPhone.query.filter_by(application_id=id)
-        return render_template('application.html', phones=phones, qualified=qualified, age=age, page=page, application=a)
+        return render_template('application.html', phones=phones, selected=selected, qualified=qualified, age=age, page=page, application=a)
     else:
         if request.form.get('action') == 'select':
             # add the application to the selected application
             # the selected application must be alist
-            # for application in request.form.get('applications'):
-            #     selected = SelectedApplication(application_id =application.id)
-            #     db.session.add_all([selected])
-            #     db.session.commit()
+            application = request.form.get('application_id')
+            selected = SelectedApplication(application_id =application)
+            db.session.add(selected)
+            db.session.commit()
             return jsonify(status='ok')
     # fetch application details
 
