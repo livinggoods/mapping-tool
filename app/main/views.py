@@ -6,7 +6,7 @@ from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm
 from .. import db
 from ..models import (Permission, Role, User, Geo, UserType, Village,
-    Location, Education, EducationLevel, Referral, InterviewScore,
+    Location, Education, EducationLevel, Referral, InterviewScore, Chp,
     SelectedApplication, Application, ApplicationPhone, Branch, Cohort)
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
@@ -129,14 +129,25 @@ def interview_score():
     return jsonify(status=score.id)
     # return jsonify(details=request.form.getlist('applications[]'))
 
-@main.route('/location', methods=['GET', 'POST'])
-def location():
-    page = {'title': 'Home'}
+@main.route('/location/<int:id>', methods=['GET', 'POST'])
+def location(id):
+    location  = Location.query.filter_by(id=id).first_or_404()
+    # get the applications
+    applications = Application.query.filter_by(location_id=id)
+    referrals = Referral.query.filter_by(location_id=id)
+    branches = Branch.query.filter_by(location_id=id)
+    chp = Chp.query.filter_by(location_id=id)
+    page = {'title': location.name if location is not None else 'No Village found'}
     if current_user.is_anonymous():
         # return redirect(url_for('auth.login'))
-        return render_template('location.html', page=page)
+        return render_template('location.html', page=page, 
+            applications=applications, refferals=refferals, branches = branches,
+            chp=chp, selected_applications=applications)
+
     else:
-        return render_template('location.html', page=page)
+        return render_template('location.html', page=page, 
+            applications=applications, refferals=refferals, branches = branches,
+            chp=chp, selected_applications=applications)
 
 
 
