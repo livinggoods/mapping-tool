@@ -219,17 +219,14 @@
         <div class="x_content">
           <div class="" role="tabpanel" data-example-id="togglable-tabs">
             <div class="row">
-              {%if qualified %}
-              <div class="col-md-6 col-sm-6 col-xs-6">Select the Application?</div>
-              <div class="col-md-6 col-sm-6 col-xs-6"><button type="button" id="select-application" class="btn btn-primary">Select</button></div>
-                {% else %}
-                  <div class="col-md-6 col-sm-6 col-xs-6">This application does not pass the criteria set</div>
+              {%if selected %}
+                <div class="col-md-6 col-sm-6 col-xs-6">This application is already selected for interview. </div>
+                <div class="col-md-6 col-sm-6 col-xs-6">Inteview</div>
+              {% else %}
+                <div class="col-md-6 col-sm-6 col-xs-6">Select the Application?</div>
+                <div class="col-md-6 col-sm-6 col-xs-6"><button type="button" id="select-application" class="btn btn-primary">Select</button></div>   
                 {% endif%}
                 </div>
-            <div class="row">
-              <div class="col-md-6 col-sm-6 col-xs-6">Invite for Interview</div> <!-- send an sms to invite the person for interview) -->
-              <div class="col-md-6 col-sm-6 col-xs-6"><a href="/application-interview/{{application.id}}" id="conduct-interview" class="btn btn-primary">Interview</a></div>
-            </div>
 
           </div>
         </div>
