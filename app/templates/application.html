@@ -101,11 +101,16 @@
           <ul class="nav navbar-right panel_toolbox">
             <li><div class="btn-group">
               {%if qualified %}
-                <button class="btn btn-sm btn-primary btn-info" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Qualified"><i class="fa fa-check"></i> Qualified</button>
+                  <button class="btn btn-sm btn-primary btn-success" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Qualified"><i class="fa fa-check"></i> Qualified</button>
+                  {%if selected %}
+                   <button class="btn btn-sm btn-primary btn-success" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Selected"><i class="fa fa-check"></i> Selected</button>
+                    {% else %}
+                    <button class="btn btn-sm btn-primary btn-info" id="application-selected" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Not Selected"><i class="fa fa-times"></i> Select</button>
+                  {% endif %}
+
                 {% else %}
                 <button class="btn btn-sm btn-primary btn-warning" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Not qualified"><i class="fa fa-check"></i> Not qualified</button>
                 {% endif%}
-                <button class="btn btn-sm btn-primary btn-success" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Selected"><i class="fa fa-times"></i> Selected</button>
               </div>
             </li>
             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -325,24 +330,29 @@
     </script>
     <script>
     $('#select-application').click(function(){
+      selectApplication();
+      window.location.reload();
+    });$('#application-selected').click(function(){
+      selectApplication();
+    });
+    function selectApplication(){
       data={
         'application_id': {{application.id}},
         'action': 'select'
       }
-      console.log(data);
        $.ajax({
-        url: '/applications',
+        url: '/application/{{application.id}}',
         type: 'POST',
         datatType: 'json',
         data: data,
         success: function(response) {
-          console.log(response);
+          window.location.reload();
         },
         error: function(xhr) {
           console.log('error');
         }
        });
-    });
+    }
     </script>
 {% endblock %}
 {% block additionaljs %}
