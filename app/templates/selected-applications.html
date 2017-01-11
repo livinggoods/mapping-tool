@@ -170,25 +170,10 @@
       });
     </script>
     <script>
-    function findTotal(){
-        var arr = document.getElementsByClassName('form-control calculate');
-        var tot=0;
-        for(var i=0;i<arr.length;i++){
-            if(parseInt(arr[i].value))
-                tot += parseInt(arr[i].value);
-        }
-        console.log(tot);
-        $("#calculated_score").text(tot);
-        $("#interview_total_score").text(tot);
-        // document.getElementById('calculated_score').html = tot;
-    }
-
-
-    $('.add-score').click(function (){
+   $('.add-score').click(function (){
       // set global var
       var appID = $(this).attr('id');
       $('#selection_id').val(appID);
-      console.log(appID);
       $('.bs-example-modal-lg').modal('toggle');
     });
 
@@ -204,11 +189,10 @@
       'investment': $('#investment').val(),
       'interpersonal': $('#interpersonal').val(),
       'commitment': $('#commitment').val(),
-      'interview_total_score': findTotal(),
     };
       console.log(data);
        $.ajax({
-        url: '/interview-score',
+        url: '/interview-scores',
         type: 'POST',
         datatType: 'json',
         data: data,
@@ -221,6 +205,18 @@
         }
        });
     });
+     function findTotal(){
+        var arr = document.getElementsByClassName('form-control calculate');
+        var tot=0;
+        for(var i=0;i<arr.length;i++){
+            if(parseInt(arr[i].value))
+                tot += parseInt(arr[i].value);
+        }
+        console.log(tot);
+        $("#calculated_score").text(tot);
+        $("#interview_total_score").text(tot);
+        // document.getElementById('calculated_score').html = tot;
+    }
     </script>
 {% endblock %}
 {% block additionaljs %}
