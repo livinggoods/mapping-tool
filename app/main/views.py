@@ -160,6 +160,12 @@ def applications():
         return render_template('applications.html', cohorts=cohorts, applications=applications, page=page, villages=villages, referrals= referrals, educations=educations, edu_level=edu_level)
     else:
         if request.form.get('action') == 'select':
+            # add the application to the selected application
+            # the selected application must be alist
+            for application in request.form.get('applications'):
+                selected = SelectedApplication(application_id =application.id)
+                db.session.add_all([selected])
+                db.session.commit()
             return jsonify(status='ok')
         else:
             # save the records
@@ -230,6 +236,7 @@ def create_location():
         return jsonify(status='ok', parent=parent)
     else:
         param = request.path.strip('/')
+        all_locations = Location.query.all()
         if param is None or param == 'locations':
             locations = Location.query.all()
         else:
@@ -243,7 +250,8 @@ def create_location():
             markers=[(-1.2728, 36.7901)]
         )
 
-        return render_template('mappings.html', page=page, map=inputmap, locations=locations)
+        return render_template('mappings.html', page=page, map=inputmap,
+         all_locations=all_locations,  locations=locations)
 
 
 @main.route('/branches', methods=['GET', 'POST'])
