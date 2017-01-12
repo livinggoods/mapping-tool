@@ -747,3 +747,8 @@ def appplication_status(app):
 def calculate_age(born):
     today = date.today()
     return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+def interview_pass(interview):
+  status = False
+  if interview.commitment >1 and interview.total_score > 24 and interview.special_condition == 'No':
+    status = True
+  return status
