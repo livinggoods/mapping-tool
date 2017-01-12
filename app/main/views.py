@@ -68,9 +68,16 @@ def application_details(id):
         age = calculate_age(a.date_of_birth)
         qualified = appplication_status(a)
         selected_application = SelectedApplication.query.filter_by(application_id=id).first()
-        selected = True if selected_application else False
+        # Is there any interview for this application?
+        selected = False
+        taken_interview = False
+        if selected_application:
+          selected = True
+          interview_score = InterviewScore.query.filter_by(selection_id=selected_application.id).first()
+          taken_interview = True if interview_score else False
         phones = ApplicationPhone.query.filter_by(application_id=id)
-        return render_template('application.html', phones=phones, selected=selected, qualified=qualified, age=age, page=page, application=a)
+        return render_template('application.html', phones=phones, taken_interview=taken_interview, 
+          selected=selected, selected_application=selected_application, interview_score=interview_score, qualified=qualified, age=age, page=page, application=a)
     else:
         if request.form.get('action') == 'select':
             # add the application to the selected application
