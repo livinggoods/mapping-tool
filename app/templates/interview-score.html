@@ -3,7 +3,9 @@
 <div class="">
   <div class="page-title">
     <div class="title_left">
-      <h3>{{page.title|title}}</h3>
+      <h3>{{page.title|title}}</h3> 
+      <!-- Add some actions -->
+      <button class="btn btn-sm btn-primary btn-success" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Invite for trainng"><i class="fa fa-check"></i> Invite for training</button> <button class="btn btn-sm btn-primary btn-success" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Invite for trainng"><i class="fa fa-check"></i> Decline</button>
     </div>
 
     <div class="title_right">
@@ -176,26 +178,27 @@
         </div>
         <div class="x_content">
           <div class="" role="tabpanel" data-example-id="togglable-tabs">
-
             <div class="">
-                        <table class="data table table-striped no-margin">
-                          <tbody>
-                            <tr>
-                                <td class="details-left"> Maths</td><td class="details-right"> {{application.maths}}</td>
-                            </tr>
-                            <tr>
-                                <td class="details-left">English </td><td class="details-right"> {{application.english}}</td>
-                            </tr>
-                            <tr>
-                                <td class="details-left">Self opinion</td><td class="details-right"> {{application.about_you}}</td>
-                            </tr>
-                            </tr>
-                            <tr>
-                                <td class="details-left">Total</td><td class="details-right"> {{(application.about_you + application.maths + application.english)}}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+              <table class="data table table-striped no-margin">
+                <tbody>
+                  <tr>
+                      <td class="details-left"> Maths</td><td class="details-right"> {{application.maths}}</td>
+                  </tr>
+                  <tr>
+                      <td class="details-left">English </td><td class="details-right"> {{application.english}}</td>
+                  </tr>
+                  <tr>
+                      <td class="details-left">Self opinion</td><td class="details-right"> {{application.about_you}}</td>
+                  </tr>
+                  </tr>
+                  <tr>
+                      <td class="details-left">Total</td><td class="details-right"> {{(application.about_you + application.maths + application.english)}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <button class="btn btn-sm btn-primary btn-success" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Invite for trainng"><i class="fa fa-check"></i> Invite for training</button>
+            </div>
+
           </div>
         </div>
       </div>
