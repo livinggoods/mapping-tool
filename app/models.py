@@ -144,10 +144,12 @@ class InterviewScore(db.Model):
     interpersonal = Column(Integer)
     commitment = Column(Integer)
     interview_total_score = Column(Integer, server_default=text("'0'"))
+    special_conditions = Column(Integer, server_default=text("'0'"))
     can_join = Column(Integer, server_default=text("'0'"))
     qualify_training = Column(Integer, server_default=text("'0'")) # boolean Yes/No
     invited_training = Column(Integer, server_default=text("'0'")) # 0 = no, 1 = yes
     confirmed_attendance = Column(Integer, server_default=text("'0'")) # 0 = no, 1 = yes
+    comments = Column(db.Text) # 0 = no, 1 = yes
     user_id = Column(ForeignKey(u'users.id'), index=True)
     cohort_id = Column(ForeignKey(u'cohort.id'), index=True, nullable=False)
     cohort = relationship(u'Cohort')
