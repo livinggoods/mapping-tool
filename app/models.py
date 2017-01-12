@@ -199,11 +199,25 @@ class Location(db.Model):
     lat = Column(String(45))
     lon = Column(String(45))
     meta = Column(Text)
-    country_code = Column(String(45))
     admin_name = Column(String(45))
 
     parent1 = relationship(u'Location', remote_side=[id])
 
+
+    @staticmethod
+    def insert_locations():
+        """Update or create all Geos"""
+        locs = [{'name':'Kenya', 'lat':'-0.0236', 'lon':'37.9062'},
+                {'name':'Uganda', 'lat':'1.3733', 'lon':'32.2903'}]
+        for name in locs:
+            loc = Location.query.filter_by(name=name).first()
+            if loc is None:
+                loc = Location(name=name.name, lat=name.lat, lon=name.lon, admin_name='country')
+            db.session.add(loc)
+        db.session.commit()
+
+    def __repr__(self):
+        return '<Location %r>' % self.name
 
 ##############################
 class Permission:
