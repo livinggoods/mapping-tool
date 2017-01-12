@@ -29,7 +29,7 @@
                                           <select id="location" class="form-control" required>
                                             <option value="">Choose..</option>
                                             {% for location in locations %}
-                                            <option value="{{location.id}}">{{location.name}}- ({{location.parent.name}})</option>
+                                            <option value="{{location.id}}">{{location.name}} - {{location.admin_name | title }} {{location.parent.name}}</option>
                                             {% endfor %}
                                           </select>
                                         </div>

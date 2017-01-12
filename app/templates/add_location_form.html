@@ -28,7 +28,7 @@
                                       <select class="form-control" id="parent">
                                         <option value="0">None</option>
                                         {% for location_ in all_locations %}
-                                        <option value="{{location_.id}}">{{location_.name}} - ({{location_.country_code}} - {{location_.admin_name}})</option>
+                                        <option value="{{location_.id}}">{{location_.name}} - {{location_.admin_name | title}})</option>
                                         {% endfor %}
                                       </select>
                                     </div>
