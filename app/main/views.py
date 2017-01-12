@@ -267,7 +267,6 @@ def create_location():
             parent = parent,
             lat = request.form.get('lat'),
             lon = request.form.get('lon'),
-            country_code = request.form.get('country_code'),
             admin_name = request.form.get('admin_name').title()
         )
         db.session.add(location)
