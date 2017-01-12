@@ -26,6 +26,7 @@ class Application(db.Model):
     maths = Column(Integer, server_default=text("'0'"))
     english = Column(Integer, server_default=text("'0'"))
     about_you = Column(Integer, server_default=text("'0'"))
+    total_score = Column(Integer, server_default=text("'0'"))
     gender = Column(String(2))
     date_of_birth = db.Column(db.DateTime())
     landmark = Column(String(45))
