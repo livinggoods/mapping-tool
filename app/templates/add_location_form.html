@@ -36,13 +36,17 @@
                                   <div class="form-group">
                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Administrative Name</label>
                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                      <input type="text" id="admin_name" class="form-control" placeholder="Eg County, Ward, Parish">
-                                    </div>
-                                  </div>
-                                  <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Country Code</label>
-                                    <div class="col-md-9 col-sm-9 col-xs-12">
-                                      <input type="text" id="country_code" class="form-control" placeholder="Country Code eg 254, 256">
+                                      <select class="form-control" id="parent">
+                                        <option value="country">Country</option>
+                                        <option value="region">Region</option>
+                                        <option value="county">County</option>
+                                        <option value="sub-county">Sub-county</option>
+                                        <option value="ward">Ward</option>
+                                        <option value="parish">Parish</option>
+                                        <option value="village">Village</option>
+                                        <option value="location">Location</option>
+                                        <option value="sub-location">Sub-location</option>
+                                      </select>
                                     </div>
                                   </div>
                                   <div class="form-group">
