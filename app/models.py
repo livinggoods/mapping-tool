@@ -210,9 +210,9 @@ class Location(db.Model):
         locs = [{'name':'Kenya', 'lat':'-0.0236', 'lon':'37.9062'},
                 {'name':'Uganda', 'lat':'1.3733', 'lon':'32.2903'}]
         for name in locs:
-            loc = Location.query.filter_by(name=name).first()
+            loc = Location.query.filter_by(name=name.get('name')).first()
             if loc is None:
-                loc = Location(name=name.name, lat=name.lat, lon=name.lon, admin_name='country')
+                loc = Location(name=name.get('name'), lat=name.get('lat'), lon=name.get('lon'), admin_name='country')
             db.session.add(loc)
         db.session.commit()
 
