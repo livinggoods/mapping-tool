@@ -214,6 +214,7 @@ def applications():
             maths = request.form.get('maths') if request.form.get('maths') != '' else None,
             english = request.form.get('english') if request.form.get('english') != '' else None,
             about_you = request.form.get('about') if request.form.get('about') != '' else None,
+            total_score = total,
             gender = request.form.get('gender').title() if request.form.get('gender') != '' else None,
             date_of_birth = request.form.get('date_of_birth').title() if request.form.get('date_of_birth') != '' else None,
             location_id = request.form.get('village_id').title() if request.form.get('village_id') != '' else None,
