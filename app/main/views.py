@@ -204,6 +204,9 @@ def applications():
             return jsonify(status='ok')
         else:
             # save the records
+            total = int(request.form.get('about')) if request.form.get('about') != '' else 0 + \
+              int(request.form.get('english')) if request.form.get('english') != '' else 0 + \
+              int(request.form.get('maths')) if request.form.get('maths') != '' else 0
             application = Application(
             f_name =  request.form.get('f_name').title() if request.form.get('f_name') != '' else None,
             m_name = request.form.get('m_name').title() if request.form.get('m_name') != '' else None,
