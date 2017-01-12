@@ -225,8 +225,13 @@
           <div class="" role="tabpanel" data-example-id="togglable-tabs">
             <div class="row">
               {%if selected %}
+                {% if taken_interview %}
+                  <div class="col-md-6 col-sm-6 col-xs-6">This application is already taken an interview. </div>
+                  <div class="col-md-6 col-sm-6 col-xs-6"><a href="/interview-score/{{selected_application.id}}"class="btn btn-sm btn-success" id="{{application.id}}">View Interview</a></div>
+                {% else %}
                 <div class="col-md-6 col-sm-6 col-xs-6">This application is already selected for interview. </div>
                 <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-sm btn-success add-score" id="{{application.id}}">Enter Interview Score</button></div>
+                {% endif %}
               {% else %}
                 <div class="col-md-6 col-sm-6 col-xs-6">Select the Application?</div>
                 <div class="col-md-6 col-sm-6 col-xs-6"><button type="button" id="select-application" class="btn btn-primary">Select</button></div>   
