@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 from app import create_app, db
-from app.models import User, Role, Geo, UserType
+from app.models import User, Role, Geo, UserType, Location
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 
@@ -41,6 +41,9 @@ def db_rebuild():
     db.reflect()
     db.drop_all()
     db.create_all()
+
+    # insert locations as defined in model
+    Location.insert_locations()
 
     # insert roles as defined in model
     Role.insert_roles()
