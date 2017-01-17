@@ -64,7 +64,7 @@
                           <th>Name</th>
                           <th>Location</th>
                           <th>Gender</th>
-                          <th>Read English</th>
+                          <th>Referred by</th>
                           <th>Score</th>
                           <th>View</th>
                         </tr>
@@ -78,8 +78,8 @@
                           <td>{{application.l_name|title}} {{application.f_name|title}} {{application.l_name|title}}</td>
                           <td>{{application.location.name|title}}</td>
                           <td>{{application.gender}}</td>
-                          <td>{{application.read_english}}</td>
-                          <td>{{application.application_score}}</td>
+                          <td>{{application.referral.name}} ({{application.referral.phone}})</td>
+                          <td>{{application.total_score}}</td>
                           <td><a href="/application/{{application.id}}" class="btn btn-success"> More </a></td>
 
                         </tr>
@@ -239,7 +239,7 @@
         'languages': $('#languages').val(),
         'worked_brac': $("input:radio[name='worked_brac']:checked").val(),
         'brac_chp': $("input:radio[name='brac_chp']:checked").val(),
-        'community_membership': $('#community_membership').val(),
+        'community_membership': $("input:radio[name='community_membership']:checked").val(),
         'read_english': $("input:radio[name='read_english']:checked").val(),
 
       }
