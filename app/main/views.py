@@ -142,10 +142,11 @@ def interview_score():
     selection = request.form.get('selection_id')
     application = Application.query.filter_by(id=selection).first()
     app = {}
-    total = int(request.form.get('motivation')) + int(request.form.get('community_work')) + \
-      int(request.form.get('mentality')) + int(request.form.get('selling')) + \
-      int(request.form.get('health')) + int(request.form.get('investment')) + \
-      int(request.form.get('interpersonal')) + int(request.form.get('commitment')) 
+    total = (int(request.form.get('motivation')) + int(request.form.get('community_work')) +
+      int(request.form.get('mentality')) + int(request.form.get('selling')) +
+      int(request.form.get('health')) + int(request.form.get('investment')) +
+      int(request.form.get('interpersonal')) + int(request.form.get('commitment')))
+
     score = InterviewScore(
         selection_id = selection,
         cohort_id = application.cohort_id,
