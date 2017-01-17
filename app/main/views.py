@@ -188,25 +188,37 @@ def location(id):
 
 
 
-@main.route('/interview-score/<int:id>')
+@main.route('/interview-score/<int:id>', methods=['GET', 'POST'])
 def get_interview_score(id):
-    selection = SelectedApplication.query.filter_by(id=id).first()
-    application = selection.application
-    page = {'title':' '.join([application.l_name, application.m_name, application.f_name]), 'subtitle':'Interview Score'}
-    age = calculate_age(application.date_of_birth)
-    qualified = appplication_status(application)
-    # Is there any interview for this application?
-    selected = False
-    taken_interview = False
-    if selection:
-      selected = True
-      interview_score = InterviewScore.query.filter_by(selection_id=selection.id).first()
-      taken_interview = True if interview_score else False
-    phones = ApplicationPhone.query.filter_by(application_id=application.id)
-    return render_template('interview-score.html', phones=phones, 
-      taken_interview=taken_interview, selected=selected, 
-      selected_application=selection, score=interview_score, interview_score=interview_score,
-      qualified=qualified, age=age, page=page, application=application)
+    if request.method == 'GET':
+      selection = SelectedApplication.query.filter_by(id=id).first()
+      application = selection.application
+      page = {'title':' '.join([application.l_name, application.m_name, application.f_name]), 'subtitle':'Interview Score'}
+      age = calculate_age(application.date_of_birth)
+      qualified = appplication_status(application)
+      # Is there any interview for this application?
+      selected = False
+      taken_interview = False
+      if selection:
+        selected = True
+        interview_score = InterviewScore.query.filter_by(selection_id=selection.id).first()
+        taken_interview = True if interview_score else False
+      phones = ApplicationPhone.query.filter_by(application_id=application.id)
+      return render_template('interview-score.html', phones=phones, 
+        taken_interview=taken_interview, selected=selected, 
+        selected_application=selection, score=interview_score, interview_score=interview_score,
+        qualified=qualified, age=age, page=page, application=application)
+    else:
+      items = {}
+      for param, value in request.form.items():
+        items[param] = value
+        if param == 'select':
+          invited_training = False
+          confirmed_attendance = False
+      # when one is invited for training
+      # mark that application as invited for training
+
+      return jsonify(items)
 
 
 @main.route('/applications', methods=['GET', 'POST'])
