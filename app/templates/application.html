@@ -109,7 +109,7 @@
                   {% endif %}
 
                 {% else %}
-                <button class="btn btn-sm btn-primary btn-warning" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Not qualified"><i class="fa fa-check"></i> Not qualified</button>
+                <button class="btn btn-sm btn-primary btn-warning" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Not qualified"><i class="fa fa-times"></i> Not qualified</button>
                 {% endif%}
               </div>
             </li>
@@ -233,9 +233,14 @@
                 <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-sm btn-success add-score" id="{{application.id}}">Enter Interview Score</button></div>
                 {% endif %}
               {% else %}
+                {% if qualified %}
                 <div class="col-md-6 col-sm-6 col-xs-6">Select the Application?</div>
-                <div class="col-md-6 col-sm-6 col-xs-6"><button type="button" id="select-application" class="btn btn-primary">Select</button></div>   
-                {% endif%}
+                <div class="col-md-6 col-sm-6 col-xs-6"><button type="button" id="select-application" class="btn btn-primary">Select</button></div>
+                {% else %}
+                <div class="col-md-6 col-sm-6 col-xs-6">Not qualified</div>
+                <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-sm btn-primary btn-warning" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Not qualified"><i class="fa fa-times"></i> Not qualified</button></div>
+                {% endif %}
+              {% endif%}
                 </div>
 
           </div>
