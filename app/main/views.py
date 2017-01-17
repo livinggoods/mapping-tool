@@ -752,24 +752,31 @@ def firms(username):
                            filter_user=filter_user, endpoint='main.firms',
                            firms=firms)
 
+@main.route('/csv')
+def test_app():
+  with open('data.csv', 'r') as f:
+    data_numbers = {}
+    districts = {}
+    counties = {}
+    sub_counties = {}
+    for row in csv.reader(f.read().splitlines()):
+      data_numbers[row[3]]= {'county':row[2], 'district':row[1], 'number':row[0]}
+      if row[1] in districts:
+        if row[2] in districts.get(row[1]):
+          districts[row[1]][row[2]].append({'name':row[0], 'number':row[3]})
+        else:
+          districts[row[1]][row[2]] = []
+          districts[row[1]][row[2]].append({'name':row[0], 'number':row[3]})
+      else:
+        districts[row[1]] = {}
+        districts[row[1]][row[2]] = []
+        districts[row[1]][row[2]].append({'name':row[0], 'number':row[3]})
+  return jsonify(districts=districts)
 
-# def appplication_status(application):
-#     status = 'Y'
-#     if application.age < 30 or application.age > 55:
-#         status = 'N'
-#     elif !application.speak_english:
-#         status = 'N'
-#     elif application.residence_years < 2:
-#         status = 'N'
-#     elif application.brac_chp:
-#         status = 'N'
-#     elif application.education < 'primary' or > 'Tertiary':
-#         status = 'N'
-#     elif application.maths = 0 or application.english == 0 or application.about_you == 0:
-#         status = 'N'
-#     elif (application.english + application.maths + application.about_you) < 30:
-#         status = 'N'
-#     return status
+def read_data(file):
+  with open(data, 'r') as f:
+    data = [row for row in csv.reader(f.read().splitlines())]
+  return data
 
 def appplication_status(app):
     status = True
