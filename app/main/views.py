@@ -11,6 +11,8 @@ from ..models import (Permission, Role, User, Geo, UserType, Village,
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
 from datetime import date
+import csv, os
+from ..data import data
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -319,7 +321,7 @@ def create_location():
         if param is None or param == 'locations':
             locations = Location.query.all()
         else:
-            locations = Location.query.filter_by(admin_name=param)
+            locations = Location.query.filter_by(admin_name=param.title())
         page = {'title': param, 'subtitle': 'mapped '+param}
         inputmap = Map(
             identifier="view-side",
@@ -328,7 +330,6 @@ def create_location():
             zoom=8,
             markers=[(-1.2728, 36.7901)]
         )
-
         return render_template('mappings.html', page=page, map=inputmap,
          all_locations=all_locations,  locations=locations)
 
