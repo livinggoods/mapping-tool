@@ -5,7 +5,7 @@
     <div class="title_left">
       <h3>{{page.title|title}}</h3> 
       <!-- Add some actions -->
-      <button class="btn btn-sm btn-primary btn-success" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Invite for trainng"><i class="fa fa-check"></i> Invite for training</button> <button class="btn btn-sm btn-primary btn-success" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Invite for trainng"><i class="fa fa-check"></i> Decline</button>
+      <button class="btn btn-sm btn-primary btn-success" id="application-selected" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Invite for trainng"><i class="fa fa-check"></i> Invite for training</button> <button class="btn btn-sm btn-primary btn-success" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Invite for trainng"><i class="fa fa-check"></i> Decline</button>
     </div>
 
     <div class="title_right">
@@ -418,13 +418,15 @@ $('.add-score').click(function (){
         'application_id': {{application.id}},
         'action': 'select'
       }
+      console.log(data);
        $.ajax({
-        url: '/application/{{application.id}}',
+        url: '/interview-score/{{application.id}}',
         type: 'POST',
         datatType: 'json',
         data: data,
         success: function(response) {
-          window.location.reload();
+          console.log(response);
+          // window.location.reload();
         },
         error: function(xhr) {
           console.log('error');
