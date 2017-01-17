@@ -22,43 +22,43 @@ def index():
     else:
         return render_template('index.html', page=page)
 
-@main.route('/villages')
-def add_mapping_details():
-    # Add village,
-    # villages = Village.query.order_by(Village.name.asc()).all()
-    locations = Location.query.all()
-    total_locations = len(locations)
-    # distinct
-    # create an object with all the locations
-    village_marker = []
-    for record in locations:
-        if record.lat != '' and record.lon != '':
-            marker = {
-                'lat': record.lat,
-                'lng': record.lon,
-                'icon': icons.dots.blue,
-                'infobox': (
-                    "<h2>"+record.name+"</h2>"
-                    "<img src='/static/images/logo.png'>"
-                    "<br>200 New CHPs"
-                    "<br><a href='village/"+str(record.id)+"'>More Details </a>"
-                )
-            }
-            village_marker.append(marker)
-    village_maps = Map(
-        identifier="villages",
-        lat=-1.2728, # -1.272898, 36.790095 
-        lng=36.7901,
-        zoom=8,
-        style="height:500px;",
-        markers=village_marker,
-        cluster = True,
-        cluster_gridsize = 10
-        )
+# @main.route('/villages')
+# def add_mapping_details():
+#     # Add village,
+#     # villages = Village.query.order_by(Village.name.asc()).all()
+#     locations = Location.query.all()
+#     total_locations = len(locations)
+#     # distinct
+#     # create an object with all the locations
+#     village_marker = []
+#     for record in locations:
+#         if record.lat != '' and record.lon != '':
+#             marker = {
+#                 'lat': record.lat,
+#                 'lng': record.lon,
+#                 'icon': icons.dots.blue,
+#                 'infobox': (
+#                     "<h2>"+record.name+"</h2>"
+#                     "<img src='/static/images/logo.png'>"
+#                     "<br>200 New CHPs"
+#                     "<br><a href='village/"+str(record.id)+"'>More Details </a>"
+#                 )
+#             }
+#             village_marker.append(marker)
+#     village_maps = Map(
+#         identifier="villages",
+#         lat=-1.2728, # -1.272898, 36.790095 
+#         lng=36.7901,
+#         zoom=8,
+#         style="height:500px;",
+#         markers=village_marker,
+#         cluster = True,
+#         cluster_gridsize = 10
+#         )
 
-    page = {'title': 'Locations', 'total_villages': total_locations}
-    # return jsonify(markers=village_marker)
-    return render_template('villages.html', page=page, clustermap=village_maps, locations=locations)
+#     page = {'title': 'Locations', 'total_villages': total_locations}
+#     # return jsonify(markers=village_marker)
+#     return render_template('villages.html', page=page, clustermap=village_maps, locations=locations)
 
 @main.route('/application/<int:id>', methods=['GET', 'POST'])
 def application_details(id):
