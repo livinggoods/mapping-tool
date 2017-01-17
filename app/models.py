@@ -9,6 +9,8 @@ from sqlalchemy import func, Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
+from data import data
+
 ##############################
 class Application(db.Model):
     __tablename__ = 'application'
@@ -129,12 +131,8 @@ class InterviewScore(db.Model):
 
     id = Column(Integer, primary_key=True)
     selection_id = Column(ForeignKey(u'selected_applications.id'), index=True)
-    english = Column(Integer)
-    maths = Column(Integer)
     date_added = db.Column(db.DateTime(), default=datetime.utcnow)
     interview_id = Column(ForeignKey(u'interview.id'), index=True)
-    about = Column(Integer)
-    total_score = Column(Integer)
     motivation = Column(Integer)
     community_work = Column(Integer)
     mentality = Column(Integer)
@@ -190,6 +188,24 @@ class Village(db.Model):
 
     location = relationship(u'Location')
 
+class LocationTargets(db.Model):
+    __tablename__ = 'location_targets'
+
+    id = Column(Integer, primary_key=True)
+    location_id = Column(ForeignKey(u'location.id'), nullable=True, index=True)
+    recruitment_id = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
+    chps_needed = Column(Integer, server_default=text("'0'")) #the number of CHPs needed
+
+    location = relationship(u'Location')
+    recruitment = relationship(u'Recruitments')
+
+class Recruitments(db.Model):
+    __tablename__ = 'recruitments'
+
+    id = Column(Integer, primary_key=True)
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+    name = Column(String(65), nullable=True)
+
 class Location(db.Model):
     __tablename__ = 'location'
 
@@ -200,8 +216,11 @@ class Location(db.Model):
     lon = Column(String(45))
     meta = Column(Text)
     admin_name = Column(String(45))
+    code = Column(String(45))
+    polygon = Column(Text)
 
     parent1 = relationship(u'Location', remote_side=[id])
+    chp_target = db.relationship('LocationTargets', backref='target', lazy='dynamic')
 
 
     @staticmethod
@@ -212,9 +231,31 @@ class Location(db.Model):
         for name in locs:
             loc = Location.query.filter_by(name=name.get('name')).first()
             if loc is None:
-                loc = Location(name=name.get('name'), lat=name.get('lat'), lon=name.get('lon'), admin_name='country')
+                loc = Location(name=name.get('name'), lat=name.get('lat'), lon=name.get('lon'), admin_name='Country')
             db.session.add(loc)
         db.session.commit()
+
+        # create locations based on the template given
+        # 
+        # import the  data
+        locations = data.get_locations()
+        for key, value in locations.iteritems():
+            # create district
+            district = Location(name=key, admin_name='District', parent=2)
+            db.session.add(district)
+            db.session.commit()
+            # create county
+            district_id = district.id
+            for k,v in value.iteritems():
+                county = Location(name=k, admin_name='County', parent=district_id)
+                db.session.add(county)
+                db.session.commit()
+                for sub_county in v:
+                    s_county = Location(name=sub_county.get('name'), admin_name='Sub-County', parent=county.id, code=sub_county.get('number'))
+                    db.session.add(s_county)
+                    db.session.commit()
+
+
 
     def __repr__(self):
         return '<Location %r>' % self.name
