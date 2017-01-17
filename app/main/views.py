@@ -70,7 +70,8 @@ def application_details(id):
         selected_application = SelectedApplication.query.filter_by(application_id=id).first()
         # Is there any interview for this application?
         selected = False
-        taken_interview = False
+        taken_interview = None
+        interview_score = False
         if selected_application:
           selected = True
           interview_score = InterviewScore.query.filter_by(selection_id=selected_application.id).first()
@@ -94,6 +95,31 @@ def selected_applications():
     if request.method == 'GET':
         applications = SelectedApplication.query.all()
         page = {'title': 'Selected Applications', 'subtitle':'Applications selected for interview'}
+        return render_template('selected-applications.html', page=page, applications=applications)
+    else:
+        applications = request.form.getlist('applications[]')
+        app = []
+        if request.form.get('action') == 'select':
+            for application_id in applications:
+                application = SelectedApplication(
+                    application_id = application_id
+                )
+                db.session.add(application)
+                db.session.commit()
+                app.append(application.id)
+            return jsonify(app)
+        else:
+            return jsonify(status='no action selected')
+        # return jsonify(details=request.form.getlist('applications[]'))@main.route('/selected-applications', methods=['GET', 'POST'])
+
+@main.route('/trainings', methods=['GET', 'POST'])
+def selected_for_training():
+  # the whole point here is to only show the applications that have been invited for training
+  #  and for each application, show whether the person declined the interview or not
+  # 
+    if request.method == 'GET':
+        applications = SelectedApplication.query.all()
+        page = {'title': 'Training Selections', 'subtitle':'Applications selected for training'}
         return render_template('selected-applications.html', page=page, applications=applications)
     else:
         applications = request.form.getlist('applications[]')
