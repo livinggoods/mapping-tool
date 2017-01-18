@@ -6,7 +6,7 @@ from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm
 from .. import db
 from ..models import (Permission, Role, User, Geo, UserType, Village,
-    Location, Education, EducationLevel, Referral, InterviewScore, Chp,
+    Location, Education, EducationLevel, Referral, InterviewScore, Chp, Recruitments,
     SelectedApplication, Application, ApplicationPhone, Branch, Cohort)
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
