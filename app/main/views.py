@@ -86,7 +86,8 @@ def application_details(id):
             # add the application to the selected application
             # the selected application must be alist
             application = request.form.get('application_id')
-            selected = SelectedApplication(application_id =application)
+            location = request.form.get('location_id')
+            selected = SelectedApplication(application_id =application, location_id=location)
             db.session.add(selected)
             db.session.commit()
             return jsonify(status='ok')
