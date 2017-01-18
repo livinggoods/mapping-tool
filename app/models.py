@@ -151,9 +151,13 @@ class InterviewScore(db.Model):
     user_id = Column(ForeignKey(u'users.id'), index=True)
     cohort_id = Column(ForeignKey(u'cohort.id'), index=True, nullable=False)
     cohort = relationship(u'Cohort')
+    application_id = Column(ForeignKey(u'application.id'), index=True)
+    location_id = Column(ForeignKey(u'location.id'), index=True)
 
     interview = relationship(u'Interview')
+    application = relationship(u'Application')
     selection = relationship(u'SelectedApplication')
+    location = relationship(u'Location')
     user = relationship(u'User')
 
 class Referral(db.Model):
