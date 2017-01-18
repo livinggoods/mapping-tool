@@ -40,15 +40,14 @@ class Application(db.Model):
     community_membership = Column(String(245))
     read_english = Column(Integer, server_default=text("'0'"))
     application_score = Column(Integer, server_default=text("'0'"))
-    cohort_id = Column(ForeignKey(u'cohort.id'), index=True)
-
+    archived = Column(Integer, server_default=text("'0'"))
 
 
     edu_level = relationship(u'EducationLevel')
     education = relationship(u'Education')
     referral = relationship(u'Referral')
     location = relationship(u'Location')
-    cohort = relationship(u'Cohort')
+    recruitment = relationship(u'Recruitments')
 
 class ApplicationPhone(db.Model):
     __tablename__ = 'application_phones'
