@@ -177,18 +177,27 @@ def location(id):
     applications = Application.query.filter_by(location_id=id)
     referrals = Referral.query.filter_by(location_id=id)
     branches = Branch.query.filter_by(location_id=id)
+    # interviews = InterviewScore.query.filter_by(location_id=id)
     chp = Chp.query.filter_by(location_id=id)
-    page = {'title': location.name if location is not None else 'No Village found'}
-    if current_user.is_anonymous():
-        # return redirect(url_for('auth.login'))
-        return render_template('location.html', page=page, 
-            applications=applications, refferals=refferals, branches = branches,
-            chp=chp, selected_applications=applications)
+    selected_applications = SelectedApplication.query.filter_by(location_id=id)
+    total_chp = chp.count()
+    page = {'title': location.name.title() if location is not None else 'No Village found',
+          'subtitle':location.admin_name.title() if location is not None else ''
+        }
+    return render_template('location.html', page=page, total_applications = applications.count(),
+            # interviews = interview_pass.count(),
+            applications=applications, refferals=refferals, chps=total_chp, branches = branches,
+            chp=chp, selected_applications=selected_applications)
+    # if current_user.is_anonymous():
+    #     # return redirect(url_for('auth.login'))
+    #     return render_template('location.html', page=page, 
+    #         applications=applications, refferals=refferals, branches = branches,
+    #         chp=chp, selected_applications=applications)
 
-    else:
-        return render_template('location.html', page=page, 
-            applications=applications, refferals=refferals, branches = branches,
-            chp=chp, selected_applications=applications)
+    # else:
+    #     return render_template('location.html', page=page, 
+    #         applications=applications, refferals=refferals, branches = branches,
+    #         chp=chp, selected_applications=applications)
 
 
 
