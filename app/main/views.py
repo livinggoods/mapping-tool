@@ -253,15 +253,16 @@ def applications():
         referrals = Referral.query.all()
         educations = Education.query.all()
         edu_level = EducationLevel.query.all()
-        cohorts = Cohort.query.all()
+        recruitments = Recruitments.query.filter_by(archived=0)
         applications = Application.query.all()
-        return render_template('applications.html', cohorts=cohorts, applications=applications, page=page, villages=villages, referrals= referrals, educations=educations, edu_level=edu_level)
+        return render_template('applications.html', recruitments=recruitments, applications=applications, page=page, villages=villages, referrals= referrals, educations=educations, edu_level=edu_level)
     else:
         if request.form.get('action') == 'select':
             # add the application to the selected application
             # the selected application must be alist
             for application in request.form.get('applications'):
-                selected = SelectedApplication(application_id =application.id)
+                saved_application = Application.query.filter_by(id=application.id)
+                selected = SelectedApplication(application_id =application.id, location_id=saved_application.location_id)
                 db.session.add_all([selected])
                 db.session.commit()
             return jsonify(status='ok')
