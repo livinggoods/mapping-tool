@@ -56,6 +56,7 @@ class ApplicationPhone(db.Model):
     application_id = Column(ForeignKey(u'application.id'), index=True)
     phone = Column(String(45))
     main_phone = Column(Integer, server_default=text("'0'"))
+    archived = Column(Integer, server_default=text("'0'"))
 
     application = relationship(u'Application')
 
