@@ -65,7 +65,7 @@ def index():
 @main.route('/application/<int:id>', methods=['GET', 'POST'])
 def application_details(id):
     if request.method == 'GET':
-        a = Application.query.filter_by(id=id).first()
+        a = Application.query.filter_by(id=id).first_or_404()
         page = {'title':' '.join([a.l_name, a.m_name, a.f_name]), 'subtitle':'Application details'}
         age = calculate_age(a.date_of_birth)
         qualified = appplication_status(a)
