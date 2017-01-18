@@ -265,6 +265,21 @@
         }
        });
     });
+    
+    $('#save-recruitment').click(function(){
+      $.ajax({
+        url:'/recruitments',
+        type:'POST',
+        dataType:'json',
+        data:{name:$('#name').val()},
+        success: function(data){
+          window.location.reload();
+        },
+        error: function(xhr){
+          console.log(xhr);
+        }
+      });
+    });
     </script>
 {% endblock %}
 {% block additionaljs %}
