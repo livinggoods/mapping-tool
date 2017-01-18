@@ -22,6 +22,7 @@ class Application(db.Model):
     referral_id = Column(ForeignKey(u'referrals.id'), index=True)
     date_added = db.Column(db.DateTime(), default=datetime.utcnow)
     location_id = Column(ForeignKey(u'location.id'), index=True)
+    recruitment_id = Column(ForeignKey(u'recruitments.id'), index=True)
     education_id = Column(ForeignKey(u'education.id'), index=True)
     edu_level_id = Column(ForeignKey(u'education_level.id'), index=True)
     vht = Column(Integer)
