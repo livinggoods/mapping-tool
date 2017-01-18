@@ -1,7 +1,7 @@
 import csv, os
 
 def get_locations():
-  with open('data.csv', 'r') as f:
+  with open(os.path.abspath(os.path.dirname(__file__))+'/data.csv', 'r') as f:
     data_numbers = {}
     districts = {}
     counties = {}
