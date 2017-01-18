@@ -292,11 +292,11 @@ def applications():
             languages = request.form.get('languages').title() if request.form.get('languages') != '' else None,
             worked_brac = request.form.get('worked_brac').title() if request.form.get('worked_brac') != '' else None,
             brac_chp = request.form.get('brac_chp').title() if request.form.get('brac_chp') != '' else None,
-            cohort_id = request.form.get('cohort_id') if request.form.get('cohort_id') != '' else None,
             community_membership = request.form.get('community_membership').title() if request.form.get('community_membership') != '' else None,
             read_english = request.form.get('read_english').title() if request.form.get('read_english') != '' else None,
+            recruitment_id = request.form.get('recruitment') if request.form.get('recruitment') != '' else None
             )
-            db.session.add_all([application])
+            db.session.add(application)
             db.session.commit()
             phones = request.form.getlist('phone[]')
             for phone in phones:
