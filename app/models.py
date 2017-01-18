@@ -85,6 +85,7 @@ class Chp(db.Model):
     branch_id = Column(ForeignKey(u'branch.id'), index=True)
     location_id = Column(ForeignKey(u'location.id'), index=True)
     chp_id = Column(String(45))
+    archived = Column(Integer, server_default=text("'0'"))
 
     branch = relationship(u'Branch')
     cohort = relationship(u'Cohort')
@@ -96,6 +97,7 @@ class Cohort(db.Model):
     id = Column(Integer, primary_key=True)
     cohort_number = Column(String(45))
     branch_id = Column(ForeignKey(u'branch.id'), index=True)
+    archived = Column(Integer, server_default=text("'0'"))
 
     branch = relationship(u'Branch')
 
@@ -106,6 +108,7 @@ class Education(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(45))
     date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+    archived = Column(Integer, server_default=text("'0'"))
 
 
 class EducationLevel(db.Model):
@@ -115,6 +118,7 @@ class EducationLevel(db.Model):
     education_id = Column(ForeignKey(u'education.id'), index=True)
     level_name = Column(String(45))
     date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+    archived = Column(Integer, server_default=text("'0'"))
 
     education = relationship(u'Education')
 
@@ -125,6 +129,7 @@ class Interview(db.Model):
     interview = Column(String(45))
     date_taken = db.Column(db.DateTime(), default=datetime.utcnow)
     cohort_id = Column(ForeignKey(u'cohort.id'), index=True)
+    archived = Column(Integer, server_default=text("'0'"))
 
     cohort = relationship(u'Cohort')
 
