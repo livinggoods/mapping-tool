@@ -44,12 +44,12 @@
                                     </div>
                                   </div>
                                   <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Cohort</label>
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Recruitment</label>
                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                      <select id="cohort_id" class="form-control" required>
+                                      <select id="recruitment" class="form-control" required>
                                         <option value="">Choose..</option>
-                                        {% for cohort in cohorts %}
-                                        <option value="{{cohort.id}}">{{cohort.cohort_number}}</option>
+                                        {% for recruit in recruitments %}
+                                        <option value="{{recruit.id}}">{{recruit.name}}</option>
                                         {% endfor %}
                                       </select>
                                     </div>
