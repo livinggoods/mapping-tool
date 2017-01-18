@@ -143,7 +143,7 @@ def selected_for_training():
 @main.route('/interview-scores', methods=['POST'])
 def interview_score():
     selection = request.form.get('selection_id')
-    application = Application.query.filter_by(id=selection).first()
+    selected = SelectedApplication.query.filter_by(application_id=selection).first()
     app = {}
     total = (int(request.form.get('motivation')) + int(request.form.get('community_work')) +
       int(request.form.get('mentality')) + int(request.form.get('selling')) +
