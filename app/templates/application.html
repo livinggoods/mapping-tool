@@ -291,6 +291,7 @@ $('.add-score').click(function (){
       'investment': $('#investment').val(),
       'interpersonal': $('#interpersonal').val(),
       'commitment': $('#commitment').val(),
+      'can_join': $("input:radio[name='can_join']:checked").val(),
     };
       console.log(data);
        $.ajax({
@@ -300,7 +301,7 @@ $('.add-score').click(function (){
         data: data,
         success: function(response) {
           console.log(response);
-          window.location.reload();
+          // window.location.reload();
         },
         error: function(xhr) {
           console.log('error');
