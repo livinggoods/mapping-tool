@@ -163,6 +163,8 @@ def interview_score():
         commitment = request.form.get('commitment'),
         interview_total_score = total,
         user_id = 1, #replace with current_user.id
+        location_id = application.location_id, #replace with current_user.id
+        application_id = application.id, #replace with current_user.id
     )
     db.session.add(score)
     db.session.commit()
