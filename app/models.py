@@ -175,6 +175,7 @@ class Referral(db.Model):
     phone = Column(String(45))
     title = Column(String(45))
     location_id = Column(ForeignKey(u'location.id'), index=True)
+    archived = Column(Integer, server_default=text("'0'"))
 
     location = relationship(u'Location')
 
@@ -183,9 +184,12 @@ class SelectedApplication(db.Model):
 
     id = Column(Integer, primary_key=True)
     application_id = Column(ForeignKey(u'application.id'), index=True)
+    location_id = Column(ForeignKey(u'location.id'), index=True)
     date_selected = db.Column(db.DateTime(), default=datetime.utcnow)
+    archived = Column(Integer, server_default=text("'0'"))
 
     application = relationship(u'Application')
+    location = relationship(u'Location')
 
 
 class Village(db.Model):
@@ -196,6 +200,7 @@ class Village(db.Model):
     location_id = Column(ForeignKey(u'location.id'), index=True)
     lat = Column(String(45))
     lon = Column(String(45))
+    archived = Column(Integer, server_default=text("'0'"))
 
     location = relationship(u'Location')
 
@@ -206,6 +211,7 @@ class LocationTargets(db.Model):
     location_id = Column(ForeignKey(u'location.id'), nullable=True, index=True)
     recruitment_id = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
     chps_needed = Column(Integer, server_default=text("'0'")) #the number of CHPs needed
+    archived = Column(Integer, server_default=text("'0'"))
 
     location = relationship(u'Location')
     recruitment = relationship(u'Recruitments')
@@ -216,6 +222,7 @@ class Recruitments(db.Model):
     id = Column(Integer, primary_key=True)
     date_added = db.Column(db.DateTime(), default=datetime.utcnow)
     name = Column(String(65), nullable=True)
+    archived = Column(Integer, server_default=text("'0'"))
 
 class Location(db.Model):
     __tablename__ = 'location'
@@ -229,6 +236,7 @@ class Location(db.Model):
     admin_name = Column(String(45))
     code = Column(String(45))
     polygon = Column(Text)
+    archived = Column(Integer, server_default=text("'0'"))
 
     parent1 = relationship(u'Location', remote_side=[id])
     chp_target = db.relationship('LocationTargets', backref='target', lazy='dynamic')
