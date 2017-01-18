@@ -303,6 +303,7 @@ class Role(db.Model):
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
     users = db.relationship('User', backref='role', lazy='dynamic')
+    archived = Column(Integer, server_default=text("'0'"))
 
     @staticmethod
     def insert_roles():
@@ -335,6 +336,7 @@ class Geo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     geo_name = db.Column(db.String(20), unique=True)
     users = db.relationship('User', backref='geo', lazy='dynamic')
+    archived = Column(Integer, server_default=text("'0'"))
 
     @staticmethod
     def insert_geos():
@@ -357,6 +359,7 @@ class UserType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(45), unique=True)
     users = db.relationship('User', backref='user_type', lazy='dynamic')
+    archived = Column(Integer, server_default=text("'0'"))
 
     @staticmethod
     def insert_user_types():
@@ -387,6 +390,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(64))
     location = db.Column(db.String(64))
     about_me = db.Column(db.Text())
+    archived = Column(Integer, server_default=text("'0'"))
 
     # 'default' can take a function so each time a default value needs to be
     # produced, the function is called
