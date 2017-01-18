@@ -396,6 +396,7 @@ $('.add-score').click(function (){
     });
     function selectApplication(){
       data={
+        'location_id': {{application.location_id}},
         'application_id': {{application.id}},
         'action': 'select'
       }
