@@ -261,17 +261,17 @@ class Location(db.Model):
         locations = data.get_locations()
         for key, value in locations.iteritems():
             # create district
-            district = Location(name=key, admin_name='District', parent=2)
+            district = Location(name=key.title(), admin_name='District', parent=2)
             db.session.add(district)
             db.session.commit()
             # create county
             district_id = district.id
             for k,v in value.iteritems():
-                county = Location(name=k, admin_name='County', parent=district_id)
+                county = Location(name=k.title(), admin_name='County', parent=district_id)
                 db.session.add(county)
                 db.session.commit()
                 for sub_county in v:
-                    s_county = Location(name=sub_county.get('name'), admin_name='Sub-County', parent=county.id, code=sub_county.get('number'))
+                    s_county = Location(name=sub_county.get('name').title(), admin_name='Sub-County', parent=county.id, code=sub_county.get('number'))
                     db.session.add(s_county)
                     db.session.commit()
 
