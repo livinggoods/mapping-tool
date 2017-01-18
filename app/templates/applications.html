@@ -26,7 +26,12 @@
                   <div class="x_title">
                     <h2>&nbsp;</h2>
                     <ul class="nav navbar-right panel_toolbox">
+                     {% if recruitments.count() > 0 %}
                       <li><button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">New Application</button>
+                      {% else %}
+                      <li><button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">New Recruitment</button>
+                      {% endif %}
+                      <!-- <li><button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">New Application</button> -->
                       </li>
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
