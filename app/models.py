@@ -156,11 +156,12 @@ class InterviewScore(db.Model):
     confirmed_attendance = Column(Integer, server_default=text("'0'")) # 0 = no, 1 = yes
     comments = Column(db.Text) # 0 = no, 1 = yes
     user_id = Column(ForeignKey(u'users.id'), index=True)
-    cohort_id = Column(ForeignKey(u'cohort.id'), index=True, nullable=False)
-    cohort = relationship(u'Cohort')
+    recruitment_id = Column(ForeignKey(u'recruitments.id'), index=True, nullable=False)
     application_id = Column(ForeignKey(u'application.id'), index=True)
     location_id = Column(ForeignKey(u'location.id'), index=True)
+    archived = Column(Integer, server_default=text("'0'"))
 
+    recruitment = relationship(u'Recruitments')
     interview = relationship(u'Interview')
     application = relationship(u'Application')
     selection = relationship(u'SelectedApplication')
