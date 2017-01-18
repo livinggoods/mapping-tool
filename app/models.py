@@ -69,6 +69,7 @@ class Branch(db.Model):
     location_id = Column(ForeignKey(u'location.id'), index=True)
     lat = Column(String(45))
     lon = Column(String(45))
+    archived = Column(Integer, server_default=text("'0'"))
 
     location = relationship(u'Location')
 
