@@ -3,7 +3,7 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>{{page.title|title}} <small>{{page.subtitle|title}}</small></h3>
+                <h3>{{page.title}} <small>{{page.subtitle}}</small></h3>
               </div>
 
               <div class="title_right">
@@ -80,8 +80,8 @@
                         {% for application in applications %}
                         <tr>
                           <td><input type="checkbox" id="{{application.id}}" class="flat" name="table_records"></td>
-                          <td>{{application.l_name|title}} {{application.f_name|title}} {{application.l_name|title}}</td>
-                          <td>{{application.location.name|title}}</td>
+                          <td>{{application.l_name}} {{application.f_name}} {{application.l_name}}</td>
+                          <td>{{application.location.name}}</td>
                           <td>{{application.gender}}</td>
                           <td>{{application.referral.name}} ({{application.referral.phone}})</td>
                           <td>{{application.total_score}}</td>
@@ -258,7 +258,8 @@
         dataType: 'json',
         data: data,
         success: function(response) {
-          window.location.reload();
+          console.log(response);
+          // window.location.reload();
         },
         error: function(xhr) {
           console.log('error');
