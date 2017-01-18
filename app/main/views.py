@@ -164,12 +164,12 @@ def interview_score():
         commitment = request.form.get('commitment'),
         interview_total_score = total,
         user_id = 1, #replace with current_user.id
-        location_id = application.location_id, #replace with current_user.id
-        application_id = application.id, #replace with current_user.id
+        location_id = selected.application.location_id, #replace with current_user.id
+        application_id = selection, 
     )
     db.session.add(score)
     db.session.commit()
-    return jsonify(status='ok')
+    return jsonify(selection=selection, rec=selected.application.recruitment_id)
 
 @main.route('/location/<int:id>', methods=['GET', 'POST'])
 def location(id):
