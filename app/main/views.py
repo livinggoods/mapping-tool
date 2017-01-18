@@ -151,8 +151,8 @@ def interview_score():
       int(request.form.get('interpersonal')) + int(request.form.get('commitment')))
 
     score = InterviewScore(
-        selection_id = selection,
-        cohort_id = application.cohort_id,
+        selection_id = selected.id,
+        recruitment_id = selected.application.recruitment_id,
         interview_id = request.form.get('interview_id'),
         motivation = request.form.get('motivation'),
         community_work = request.form.get('community_work'),
