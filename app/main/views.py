@@ -235,6 +235,16 @@ def get_interview_score(id):
       return jsonify(items)
 
 
+@main.route('/recruitments', methods=['GET', 'POST'])
+def recruitments():
+  if request.method == 'GET':
+    pass
+  else:
+    recruitments = Recruitments(name=request.form.get('name'))
+    db.session.add(recruitments)
+    db.session.commit()
+    return jsonify(status='ok')
+
 @main.route('/applications', methods=['GET', 'POST'])
 def applications():
     if request.method == 'GET':
