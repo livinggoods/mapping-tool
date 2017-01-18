@@ -96,7 +96,11 @@
               </div>
             </div>
             <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+              {% if recruitments.count() > 0 %}
               {% include 'form_application.html' %}
+              {% else %}
+              {% include 'form_recruitment.html' %}
+              {% endif %}
             </div>
           </div>
 {% endblock %}
