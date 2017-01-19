@@ -4,7 +4,7 @@
     <!-- ========================== -->
     <div class="page-title">
               <div class="title_left">
-                <h3>{{page.title}} <small> {{page.subtitle}} {{chps}}</small></h3>
+                <h3>{{page.title}} <small> {{page.subtitle}} </small></h3>
               </div>
 
               <div class="title_right">
@@ -36,9 +36,9 @@
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
                   <div class="icon"><i class="fa fa-comments-o"></i></div>
-                  <div class="count">179</div>
-                  <h3>Branches</h3>
-                  <p>Total branches in the area.</p>
+                  <div class="count">{{target.chps_needed}}</div>
+                  <h3>Target CHPs</h3>
+                  <p>The number of CHPs needed in the area.</p>
                 </div>
               </div>
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -52,9 +52,9 @@
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
                   <div class="icon"><i class="fa fa-check-square-o"></i></div>
-                  <div class="count">179</div>
-                  <h3>New Counties</h3>
-                  <p>Lorem ipsum psdea itgum rixt.</p>
+                  <div class="count">{{invited.count()}}</div>
+                  <h3>Numbers invited</h3>
+                  <p>Total CHPs invited for training</p>
                 </div>
               </div>
             </div>
@@ -226,15 +226,15 @@
                       <div class="col-md-5">
                         <div class="row" style="text-align: center;">
                           <div class="col-md-4">
-                            <canvas id="expansion" height="110" width="110" style="margin: 5px 10px 10px 0"></canvas>
+                            <canvas id="expansion" height="150" width="150" style="margin: 5px 10px 10px 0"></canvas>
                             <h4 style="margin:0">Recruitments</h4>
                           </div>
                           <div class="col-md-4">
-                            <canvas id="canvas1i2" height="110" width="110" style="margin: 5px 10px 10px 0"></canvas>
-                            <h4 style="margin:0">New Traffic</h4>
+                            <canvas id="gender" height="150" width="150" style="margin: 5px 10px 10px 0"></canvas>
+                            <h4 style="margin:0">Gender</h4>
                           </div>
                           <div class="col-md-4">
-                            <canvas id="canvas1i3" height="110" width="110" style="margin: 5px 10px 10px 0"></canvas>
+                            <canvas id="canvas1i3" height="150" width="150" style="margin: 5px 10px 10px 0"></canvas>
                             <h4 style="margin:0">Device Share</h4>
                           </div>
                         </div>
@@ -556,32 +556,23 @@
           options: options
         });
 
-        new Chart(document.getElementById("canvas1i2"), {
+        new Chart(document.getElementById("gender"), {
           type: 'doughnut',
           tooltipFillColor: "rgba(51, 51, 51, 0.55)",
           data: {
             labels: [
-              "Symbian",
-              "Blackberry",
-              "Other",
-              "Android",
-              "IOS"
+              "Male",
+              "Female"
             ],
             datasets: [{
-              data: [15, 20, 30, 10, 30],
+              data: [{{gender.m.count()}}, {{gender.f.count()}}],
               backgroundColor: [
                 "#BDC3C7",
-                "#9B59B6",
-                "#E74C3C",
-                "#26B99A",
-                "#3498DB"
+                "#9B59B6"
               ],
               hoverBackgroundColor: [
                 "#CFD4D8",
-                "#B370CF",
-                "#E95E4F",
-                "#36CAAB",
-                "#49A9EA"
+                "#B370CF"
               ]
 
             }]

@@ -1,11 +1,11 @@
 from flask import render_template, redirect, url_for, flash, request, abort, \
     current_app, jsonify
 from flask_login import current_user, login_required
-from sqlalchemy import func, distinct, select
+from sqlalchemy import func, distinct, select, and_
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm
 from .. import db
-from ..models import (Permission, Role, User, Geo, UserType, Village,
+from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets,
     Location, Education, EducationLevel, Referral, InterviewScore, Chp, Recruitments,
     SelectedApplication, Application, ApplicationPhone, Branch, Cohort)
 from ..decorators import admin_required, permission_required
@@ -14,15 +14,15 @@ from datetime import date
 import csv, os
 from ..data import data
 
-
+currency = 'UGX '
 @main.route('/', methods=['GET', 'POST'])
 def index():
     page = {'title': 'Home'}
     if current_user.is_anonymous():
         # return redirect(url_for('auth.login'))
-        return render_template('index.html', page=page)
+        return render_template('index.html', page=page, currency=currency)
     else:
-        return render_template('index.html', page=page)
+        return render_template('index.html', page=page, currency=currency)
 
 # @main.route('/villages')
 # def add_mapping_details():
@@ -79,7 +79,7 @@ def application_details(id):
           interview_score = InterviewScore.query.filter_by(selection_id=selected_application.id).first()
           taken_interview = True if interview_score else False
         phones = ApplicationPhone.query.filter_by(application_id=id)
-        return render_template('application.html', phones=phones, taken_interview=taken_interview, 
+        return render_template('application.html', phones=phones, taken_interview=taken_interview, currency=currency,
           selected=selected, selected_application=selected_application, interview_score=interview_score, qualified=qualified, age=age, page=page, application=a)
     else:
         if request.form.get('action') == 'select':
@@ -98,7 +98,6 @@ def selected_applications():
     if request.method == 'GET':
         applications = SelectedApplication.query.all()
         page = {'title': 'Selected Applications', 'subtitle':'Applications selected for interview'}
-        return render_template('selected-applications.html', page=page, applications=applications)
         return render_template('selected-applications.html', page=page, applications=applications, currency=currency)
     else:
         applications = request.form.getlist('applications[]')
@@ -122,9 +121,9 @@ def selected_for_training():
   #  and for each application, show whether the person declined the interview or not
   # 
     if request.method == 'GET':
-        applications = SelectedApplication.query.all()
+        applications = InterviewScore.query.filter_by(archived=0, invited_training=1)
         page = {'title': 'Training Selections', 'subtitle':'Applications selected for training'}
-        return render_template('selected-applications.html', page=page, applications=applications)
+        return render_template('selected-for-training.html', page=page, applications=applications, currency=currency)
     else:
         applications = request.form.getlist('applications[]')
         app = []
@@ -192,9 +191,8 @@ def location(id):
           'subtitle':location.admin_name.title() if location is not None else ''
         }
     return render_template('location.html', page=page, total_applications = applications.count(),
-            interviews = interviews,
+            interviews = interviews, target=target, invited=invited, gender=gender,
             applications=applications, refferals=refferals, chps=total_chp, branches = branches,
-            chp=chp, selected_applications=selected_applications)
             chp=chp, selected_applications=selected_applications, currency=currency)
     # if current_user.is_anonymous():
     #     # return redirect(url_for('auth.login'))
@@ -217,7 +215,15 @@ def get_interview_score(id):
       page = {'title':' '.join([application.l_name, application.m_name, application.f_name]), 'subtitle':'Interview Score'}
       age = calculate_age(application.date_of_birth)
       qualified = appplication_status(application)
-      # Is there any interview for this application?
+      # I this location, what is the target (number of CHPs) needed?
+
+      # q = session.query(Date).filter(and_(
+      #    Date.c.marital=='single',
+      #    Date.c.sex=='F'))
+
+      target = LocationTargets.query.filter_by(location_id=application.location_id, recruitment_id=application.recruitment_id, archived=0).first()
+      invited = InterviewScore.query.filter_by(location_id=application.location_id, invited_training=1)
+      # target = LocationTargets.query.filter(location_id=selection.location_id, recruitment=application.recruitment_id, archived=0).first()
       selected = False
       taken_interview = False
       if selection:
@@ -225,22 +231,23 @@ def get_interview_score(id):
         interview_score = InterviewScore.query.filter_by(selection_id=selection.id).first()
         taken_interview = True if interview_score else False
       phones = ApplicationPhone.query.filter_by(application_id=application.id)
-      return render_template('interview-score.html', phones=phones, 
-        taken_interview=taken_interview, selected=selected, 
+      return render_template('interview-score.html', phones=phones, invited=invited,
         taken_interview=taken_interview, selected=selected, target = target, currency=currency,
         selected_application=selection, score=interview_score, interview_score=interview_score,
         qualified=qualified, age=age, page=page, application=application)
     else:
       items = {}
-      for param, value in request.form.items():
-        items[param] = value
-        if param == 'select':
-          invited_training = False
-          confirmed_attendance = False
-      # when one is invited for training
-      # mark that application as invited for training
-
-      return jsonify(items)
+      if request.form.get('action') == 'select':
+        interview_score = InterviewScore.query.filter_by(id=request.form.get('interview')).first()
+        interview_score.invited_training = 1
+        db.session.add(interview_score)
+        db.session.commit()
+      if request.form.get('action') == 'confirm':
+        interview_score = InterviewScore.query.filter_by(id=request.form.get('interview')).first()
+        interview_score.confirmed_attendance = 1
+        db.session.add(interview_score)
+        db.session.commit()
+      return jsonify(status='ok', data=request.form)
 
 
 @main.route('/recruitments', methods=['GET', 'POST'])
@@ -263,7 +270,6 @@ def applications():
         edu_level = EducationLevel.query.all()
         recruitments = Recruitments.query.filter_by(archived=0)
         applications = Application.query.all()
-        return render_template('applications.html', recruitments=recruitments, applications=applications, page=page, villages=villages, referrals= referrals, educations=educations, edu_level=edu_level)
         return render_template('applications.html', recruitments=recruitments, 
           applications=applications, page=page, villages=villages, currency=currency,
           referrals= referrals, educations=educations, edu_level=edu_level)
@@ -358,7 +364,6 @@ def create_location():
             zoom=8,
             markers=[(-1.2728, 36.7901)]
         )
-        return render_template('mappings.html', page=page, map=inputmap,
         return render_template('mappings.html', page=page, map=inputmap, currency=currency,
          all_locations=all_locations,  locations=locations)
 
@@ -404,7 +409,7 @@ def branches():
         page = {'title': 'Branches', 'subtitle': 'List of branches'}
         
         locations = Location.query.all()
-        return render_template('branches.html', branches=branches, clustermap=branch_maps, locations=locations, page=page)
+        return render_template('branches.html', branches=branches, currency=currency, clustermap=branch_maps, locations=locations, page=page)
 
 @main.route('/cohort', methods=['GET', 'POST'])
 def cohort():
@@ -412,7 +417,6 @@ def cohort():
         page = {'title': 'Cohort', 'subtitle': 'List of all cohorts in all branches'}
         branches = Branch.query.all()
         cohorts = Cohort.query.all()
-        return render_template('cohort.html', cohorts=cohorts, branches=branches, page=page)
         return render_template('cohort.html', cohorts=cohorts, currency=currency, branches=branches, page=page)
     else:
         cohort = Cohort(
@@ -429,7 +433,6 @@ def educations():
     if request.method == 'GET':
         page = {'title': 'Education', 'subtitle': 'List of all education levels'}
         educations = Education.query.all()
-        return render_template('educations.html', educations=educations, page=page)
         return render_template('educations.html', educations=educations, page=page, currency=currency)
     else:
         educations = Education(
@@ -446,7 +449,6 @@ def education_levels():
         page = {'title': 'Education Level', 'subtitle': 'List of all education levels'}
         educations = Education.query.all()
         education_levels = EducationLevel.query.all()
-        return render_template('education-level.html', education_levels=education_levels, educations=educations, page=page)
         return render_template('education-level.html', education_levels=education_levels, educations=educations, page=page, currency=currency)
     else:
         educations = EducationLevel(
@@ -465,7 +467,6 @@ def refferals():
         page = {'title': 'Refferals', 'subtitle': 'List of persons who have reffered others'}
         refferals = Referral.query.all()
         locations = Location.query.all()
-        return render_template('refferals.html', refferals=refferals, page=page, locations=locations)
         return render_template('refferals.html', refferals=refferals, page=page, locations=locations, currency=currency)
     else:
         referral = Referral(
