@@ -99,6 +99,7 @@ def selected_applications():
         applications = SelectedApplication.query.all()
         page = {'title': 'Selected Applications', 'subtitle':'Applications selected for interview'}
         return render_template('selected-applications.html', page=page, applications=applications)
+        return render_template('selected-applications.html', page=page, applications=applications, currency=currency)
     else:
         applications = request.form.getlist('applications[]')
         app = []
@@ -181,6 +182,9 @@ def location(id):
     interviews = InterviewScore.query.filter_by(location_id=id)
     chp = Chp.query.filter_by(location_id=id)
     total_chp = chp.count()
+    target = LocationTargets.query.filter_by(location_id=id, archived=0).first()
+    invited = InterviewScore.query.filter_by(location_id=id, invited_training=1)
+    gender = {'m':applications.filter_by(gender='M'), 'f':applications.filter_by(gender='F')}
 
     # get the selected applications
     selected_applications = SelectedApplication.query.filter_by(location_id=id)
@@ -191,6 +195,7 @@ def location(id):
             interviews = interviews,
             applications=applications, refferals=refferals, chps=total_chp, branches = branches,
             chp=chp, selected_applications=selected_applications)
+            chp=chp, selected_applications=selected_applications, currency=currency)
     # if current_user.is_anonymous():
     #     # return redirect(url_for('auth.login'))
     #     return render_template('location.html', page=page, 
@@ -222,6 +227,7 @@ def get_interview_score(id):
       phones = ApplicationPhone.query.filter_by(application_id=application.id)
       return render_template('interview-score.html', phones=phones, 
         taken_interview=taken_interview, selected=selected, 
+        taken_interview=taken_interview, selected=selected, target = target, currency=currency,
         selected_application=selection, score=interview_score, interview_score=interview_score,
         qualified=qualified, age=age, page=page, application=application)
     else:
@@ -258,6 +264,9 @@ def applications():
         recruitments = Recruitments.query.filter_by(archived=0)
         applications = Application.query.all()
         return render_template('applications.html', recruitments=recruitments, applications=applications, page=page, villages=villages, referrals= referrals, educations=educations, edu_level=edu_level)
+        return render_template('applications.html', recruitments=recruitments, 
+          applications=applications, page=page, villages=villages, currency=currency,
+          referrals= referrals, educations=educations, edu_level=edu_level)
     else:
         if request.form.get('action') == 'select':
             # add the application to the selected application
@@ -350,6 +359,7 @@ def create_location():
             markers=[(-1.2728, 36.7901)]
         )
         return render_template('mappings.html', page=page, map=inputmap,
+        return render_template('mappings.html', page=page, map=inputmap, currency=currency,
          all_locations=all_locations,  locations=locations)
 
 
@@ -403,6 +413,7 @@ def cohort():
         branches = Branch.query.all()
         cohorts = Cohort.query.all()
         return render_template('cohort.html', cohorts=cohorts, branches=branches, page=page)
+        return render_template('cohort.html', cohorts=cohorts, currency=currency, branches=branches, page=page)
     else:
         cohort = Cohort(
             cohort_number = request.form.get('name'),
@@ -419,6 +430,7 @@ def educations():
         page = {'title': 'Education', 'subtitle': 'List of all education levels'}
         educations = Education.query.all()
         return render_template('educations.html', educations=educations, page=page)
+        return render_template('educations.html', educations=educations, page=page, currency=currency)
     else:
         educations = Education(
             name = request.form.get('name')
@@ -435,6 +447,7 @@ def education_levels():
         educations = Education.query.all()
         education_levels = EducationLevel.query.all()
         return render_template('education-level.html', education_levels=education_levels, educations=educations, page=page)
+        return render_template('education-level.html', education_levels=education_levels, educations=educations, page=page, currency=currency)
     else:
         educations = EducationLevel(
             level_name = request.form.get('name'),
@@ -453,6 +466,7 @@ def refferals():
         refferals = Referral.query.all()
         locations = Location.query.all()
         return render_template('refferals.html', refferals=refferals, page=page, locations=locations)
+        return render_template('refferals.html', refferals=refferals, page=page, locations=locations, currency=currency)
     else:
         referral = Referral(
             name = request.form.get('name'),
