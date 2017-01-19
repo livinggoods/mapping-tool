@@ -210,7 +210,7 @@ def location(id):
 @main.route('/interview-score/<int:id>', methods=['GET', 'POST'])
 def get_interview_score(id):
     if request.method == 'GET':
-      selection = SelectedApplication.query.filter_by(id=id).first()
+      selection = SelectedApplication.query.filter_by(id=id).first_or_404()
       application = selection.application
       page = {'title':' '.join([application.l_name, application.m_name, application.f_name]), 'subtitle':'Interview Score'}
       age = calculate_age(application.date_of_birth)
