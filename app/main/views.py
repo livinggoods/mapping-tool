@@ -428,6 +428,17 @@ def cohort():
         return jsonify(status='ok', data=request.form)
 
 
+@main.route('/get_location_expansion')
+def get_location_expansion():
+  id = request.args.get('id')
+  expansion = {}
+  targets = LocationTargets.query.filter_by(location_id=id)
+  for target in targets:
+    expansion[time.mktime(date.datetime(target.recruitment.date_added))] = target.chps_needed
+  return jsonify(expansion=expansion)
+
+
+
 @main.route('/educations', methods=['GET', 'POST'])
 def educations():
     if request.method == 'GET':
