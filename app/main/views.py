@@ -11,7 +11,7 @@ from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTa
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
 from datetime import date
-import csv, os
+import csv, os, time
 from ..data import data
 
 currency = 'UGX '
@@ -179,6 +179,7 @@ def location(id):
     referrals = Referral.query.filter_by(location_id=id)
     branches = Branch.query.filter_by(location_id=id)
     interviews = InterviewScore.query.filter_by(location_id=id)
+    recruitments = LocationTargets.query.filter_by(location_id=id)
     chp = Chp.query.filter_by(location_id=id)
     total_chp = chp.count()
     target = LocationTargets.query.filter_by(location_id=id, archived=0).first()
@@ -678,7 +679,6 @@ def followers(username):
     return render_template('followers.html', user=user, title="Followers of",
                            endpoint='main.followers', pagination=pagination,
                            follows=follows)
-
 
 @main.route('/followed-by/<username>')
 @login_required
