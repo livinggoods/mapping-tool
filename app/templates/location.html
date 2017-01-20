@@ -63,7 +63,7 @@
               <div class="col-md-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Transaction Summary <small>Weekly sales</small></h2>
+                    <h2>Expansion History <small>Number of selected recruited CHPs </small></h2>
                     <div class="filter">
                       <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
                         <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
@@ -166,7 +166,7 @@
                             </a>
                             <div class="media-body">
                               <a class="title" href="#">Ms. Mary Jane</a>
-                              <p><strong>$2300. </strong> Average Sales </p>
+                              <p><strong>{{currency}}2300. </strong> Average Sales </p>
                               <p> <small>12 Sales Today</small>
                               </p>
                             </div>
@@ -383,13 +383,14 @@
         };
 
         var d1 = [];
-        //var d2 = [];
+        var d2 = [];
 
         //here we generate data for chart
         for (var i = 0; i < 30; i++) {
           d1.push([new Date(Date.today().add(i).days()).getTime(), randNum() + i + i + 10]);
-          //    d2.push([new Date(Date.today().add(i).days()).getTime(), randNum()]);
+          d2.push([new Date(Date.today().add(i).days()).getTime(), randNum()]);
         }
+        console.log(d1);
 
         var chartMinDate = d1[0][0]; //first day
         var chartMaxDate = d1[20][0]; //last day
@@ -463,7 +464,7 @@
           }
         };
         var plot = $.plot($("#placeholder33x"), [{
-          label: "Email Sent",
+          label: "Number of CHPs",
           data: d1,
           lines: {
             fillColor: "rgba(150, 202, 89, 0.12)"
