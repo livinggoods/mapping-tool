@@ -191,7 +191,7 @@ def location(id):
           'subtitle':location.admin_name.title() if location is not None else ''
         }
     return render_template('location.html', page=page, total_applications = applications.count(),
-            interviews = interviews, target=target, invited=invited, gender=gender,
+            interviews = interviews, target=target, invited=invited, gender=gender, recruitments=recruitments,
             applications=applications, refferals=refferals, chps=total_chp, branches = branches,
             chp=chp, selected_applications=selected_applications, currency=currency)
     # if current_user.is_anonymous():
