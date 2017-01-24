@@ -29,7 +29,7 @@
                 <div class="tile-stats">
                   <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
                   <div class="count">{{chps}}</div>
-                  <h3>Total CHPs</h3>
+                  <h3>Exisiting CHPs</h3>
                   <p>Total number of CHPs in the area.</p>
                 </div>
               </div>
@@ -232,7 +232,7 @@
                       <article class="media event">
                         <a class="pull-left date">
                           <!-- <p class="month">{{application.date_added.month}}</p> -->
-                          <p class="month">{{application.date_added.strftime("%B")}}</p>
+                          <p class="month">{{application.date_added.strftime("%B")}}</p> 
                           <p class="day">{{application.date_added.day}}</p>
                         </a>
                         <div class="media-body">
@@ -347,9 +347,11 @@
           d2.push([new Date(Date.today().add(i).days()).getTime(), randNum()]);
         }
         console.log(d1);
+        var dd = {{data}};
+        d1=dd;
 
         var chartMinDate = d1[0][0]; //first day
-        var chartMaxDate = d1[20][0]; //last day
+        var chartMaxDate = d1[2][0]; //last day
 
         var tickSize = [1, "day"];
         var tformat = "%d/%m/%y";
