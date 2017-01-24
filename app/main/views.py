@@ -11,7 +11,7 @@ from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTa
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
 from datetime import date
-import csv, os, time
+import csv, os, time, calendar
 from ..data import data
 
 currency = 'UGX '
@@ -218,20 +218,15 @@ def location(id):
     page = {'title': location.name.title() if location is not None else 'No Village found',
           'subtitle':location.admin_name.title() if location is not None else ''
         }
-    return render_template('location.html', page=page, total_applications = applications.count(),
+    data = []
+    for d in recruitments:
+      data.append([calendar.timegm(d.recruitment.date_added.utctimetuple()), d.chps_needed])
+    return render_template('location.html', data=data, page=page, total_applications = applications.count(),
             interviews = interviews, target=target, invited=invited, gender=gender, recruitments=recruitments,
             applications=applications, refferals=refferals, chps=total_chp, branches = branches,
             chp=chp, selected_applications=selected_applications, currency=currency)
-    # if current_user.is_anonymous():
-    #     # return redirect(url_for('auth.login'))
-    #     return render_template('location.html', page=page, 
-    #         applications=applications, refferals=refferals, branches = branches,
-    #         chp=chp, selected_applications=applications)
-
-    # else:
-    #     return render_template('location.html', page=page, 
-    #         applications=applications, refferals=refferals, branches = branches,
-    #         chp=chp, selected_applications=applications)
+    
+    
 
 
 
