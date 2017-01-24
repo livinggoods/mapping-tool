@@ -140,6 +140,33 @@ def selected_for_training():
             return jsonify(status='no action selected')
         # return jsonify(details=request.form.getlist('applications[]'))
 
+
+
+@main.route('/training-list', methods=['GET', 'POST'])
+def training_list():
+  # the whole point here is to only show the applications that have been invited for training
+  #  and for each application, show whether the person declined the interview or not
+  # 
+    if request.method == 'GET':
+        applications = InterviewScore.query.filter_by(archived=0, invited_training=1, confirmed_attendance=1)
+        page = {'title': 'Training Selections', 'subtitle':'Applications selected for training'}
+        return render_template('selected-for-training.html', page=page, applications=applications, currency=currency)
+    else:
+        applications = request.form.getlist('applications[]')
+        app = []
+        if request.form.get('action') == 'select':
+            for application_id in applications:
+                application = SelectedApplication(
+                    application_id = application_id
+                )
+                db.session.add(application)
+                db.session.commit()
+                app.append(application.id)
+            return jsonify(app)
+        else:
+            return jsonify(status='no action selected')
+        # return jsonify(details=request.form.getlist('applications[]'))
+
 @main.route('/interview-scores', methods=['POST'])
 def interview_score():
     selection = request.form.get('selection_id')
