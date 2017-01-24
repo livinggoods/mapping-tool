@@ -57,6 +57,7 @@
                           <th>Lon</th>
                           <th>Country Code</th>
                           <th>Admin Name</th>
+                          <th></th>
                         </tr>
                       </thead>
 
@@ -70,6 +71,7 @@
                           <td>{{location.lon}}</td>
                           <td>{{location.country_code}}</td>
                           <td>{{location.admin_name}}</td>
+                          <td><a href="/location/{{location.id}}">More</a></td>
                         </tr>
                         {% endfor %}
                       </tbody>
