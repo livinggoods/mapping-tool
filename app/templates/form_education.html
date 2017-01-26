@@ -33,8 +33,29 @@
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                    <button type="button" id="save-details" class="btn btn-primary">Save changes</button>
+                                    <button type="button" id="save-education" class="btn btn-primary">Save changes</button>
                                   </div>
 
                                 </div>
                               </div>
+    <script>
+    $('#save-education').click(function(){
+      data={
+        'name': $('#name').val()
+      }
+      console.log(data);
+       $.ajax({
+        url: '/educations',
+        type: 'POST',
+        datatType: 'json',
+        data: data,
+        success: function(response) {
+          console.log(response);
+          $('.bs-example-modal-lg').modal('hide')
+        },
+        error: function(xhr) {
+          console.log('error');
+        }
+       });
+    });
+    </script>
