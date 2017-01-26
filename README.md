@@ -116,4 +116,19 @@ To setup the above variables, you can run the following commands. Be sure to cha
 * [Flask Login](https://flask-login.readthedocs.org/en/latest/)
 * [Flask Script](http://flask-script.readthedocs.org/en/latest/)
 
+
+# Points to note
+## Installation Errors
+When installing the dependencies, you might experience an error with psycopg2.
+
+```
+
+Command "/usr/bin/python -u -c "import setuptools, tokenize;__file__='/tmp/pip-build-WSjqit/psycopg2/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))" install --record /tmp/pip-db6s9R-record/install-record.txt --single-version-externally-managed --compile" failed with error code 1 in /tmp/pip-build-WSjqit/psycopg2/
+
+```
+To solve this problem you need run the following command (tested on Ubuntu)
+`sudo apt-get install python-dev postgresql-libs postgresql-devel`
+
+
+
 Maintained by[David Kimaru](mailto:kimarudg@gmail.com)
