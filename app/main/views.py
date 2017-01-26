@@ -280,10 +280,18 @@ def recruitments():
     recruitments = Recruitments.query.filter_by(archived=0)
     return render_template('recruitments.html', recruitments=recruitments, currency=currency, page=page)
   else:
-    recruitments = Recruitments(name=request.form.get('name'))
-    db.session.add(recruitments)
-    db.session.commit()
-    return jsonify(status='ok')
+    # check if there is an iD or if the ID is blank
+    
+    if 'id' in request.form:
+        recruitment = Recruitments.query.filter_by(id=request.form.get('id')).first()
+        recruitment.name=request.form.get('name')
+        db.session.commit()
+        return jsonify(status='updated', id=recruitment.id)
+    else:
+        recruitments = Recruitments(name=request.form.get('name'))
+        db.session.add(recruitments)
+        db.session.commit()
+        return jsonify(status='created', id=recruitments.id)
 
 @main.route('/applications', methods=['GET', 'POST'])
 def applications():
