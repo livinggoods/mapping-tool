@@ -165,28 +165,7 @@
         TableManageButtons.init();
       });
     </script>
-    <script>
-    $('#save-details').click(function(){
-      data={
-        'name': $('#name').val(),
-        'education': $('#education').val()
-      }
-      console.log(data);
-       $.ajax({
-        url: '/education-level',
-        type: 'POST',
-        datatType: 'json',
-        data: data,
-        success: function(response) {
-          console.log(response);
-          $('.bs-example-modal-lg').modal('hide')
-        },
-        error: function(xhr) {
-          console.log('error');
-        }
-       });
-    });
-    </script>
+    
 {% endblock %}
 {% block additionaljs %}
 <!-- Datatables -->

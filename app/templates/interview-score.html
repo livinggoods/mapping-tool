@@ -317,53 +317,6 @@ $('.invite-training').click(function(){
   });
 });
 
-$('.add-score').click(function (){
-      // set global var
-      var appID = $(this).attr('id');
-      $('#selection_id').val(appID);
-      $('.bs-example-modal-lg').modal('toggle');
-    });
-
-    $('#save-details').click(function(){
-    data = {
-      'selection_id': $('#selection_id').val(),
-      'interview_id': $('#interview_id').val(),
-      'motivation': $('#motivation').val(),
-      'community_work': $('#community_work').val(),
-      'mentality': $('#mentality').val(),
-      'selling': $('#selling').val(),
-      'health': $('#health').val(),
-      'investment': $('#investment').val(),
-      'interpersonal': $('#interpersonal').val(),
-      'commitment': $('#commitment').val(),
-    };
-      console.log(data);
-       $.ajax({
-        url: '/interview-scores',
-        type: 'POST',
-        datatType: 'json',
-        data: data,
-        success: function(response) {
-          console.log(response);
-          window.location.reload();
-        },
-        error: function(xhr) {
-          console.log('error');
-        }
-       });
-    });
-     function findTotal(){
-        var arr = document.getElementsByClassName('form-control calculate');
-        var tot=0;
-        for(var i=0;i<arr.length;i++){
-            if(parseInt(arr[i].value))
-                tot += parseInt(arr[i].value);
-        }
-        console.log(tot);
-        $("#calculated_score").text(tot);
-        $("#interview_total_score").text(tot);
-        // document.getElementById('calculated_score').html = tot;
-    }
       $(document).ready(function() {
         var handleDataTableButtons = function() {
           if ($("#datatable-buttons").length) {

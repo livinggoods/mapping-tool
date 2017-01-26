@@ -155,29 +155,7 @@
         TableManageButtons.init();
       });
     </script>
-<script>
-$('#save-village').click(function(){
-  data={
-    "name": $('#name').val(),
-    "parent": $('#parent').val(),
-    "admin_name": $('#admin_name').val(),
-    "lat": $('#lat').val(),
-    "lon": $('#lon').val(),
-  }
-   $.ajax({
-    url: '/locations',
-    type: 'POST',
-    datatType: 'json',
-    data: data,
-    success: function(response) {
-      window.location.reload();
-    },
-    error: function(xhr) {
-      console.log('error');
-    }
-   });
-});
-</script>
+
 <script type="text/javascript">
   var geocoder = new google.maps.Geocoder();
 

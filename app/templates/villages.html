@@ -181,30 +181,6 @@
           $('#notif-group div').first().css('display', 'block');
         });
       });
-
-      $('#save-village').click(function(){
-        data={
-          'name': $('#name').val(),
-          'parent': $('#parent').val(),
-          'lat': $('#lat').val(),
-          'lon': $('#lon').val(),
-          'country_code': $('#country_code').val(),
-          'admin_name': $('#admin_name').val(),
-        }
-        console.log(data);
-         $.ajax({
-          url: '/location',
-          type: 'POST',
-          datatType: 'json',
-          data: data,
-          success: function(response) {
-            console.log(response);
-          },
-          error: function(xhr) {
-            console.log('error');
-          }
-         });
-      });
     </script>
 <script type="text/javascript">
 var geocoder = new google.maps.Geocoder();
