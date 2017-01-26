@@ -1,10 +1,6 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
-os.environ['RDS_USERNAME'] = 'openpg'
-os.environ['RDS_PASSWORD'] = 'openpgpwd'
-os.environ['RDS_HOSTNAME'] = 'localhost'
-os.environ['RDS_PORT'] = '5432'
-os.environ['RDS_DB_NAME']  = 'lg_ops'
+
 
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY', 'hard to guess string')
