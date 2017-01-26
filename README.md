@@ -32,6 +32,24 @@ This is a simple dashboarding application built using Flask and Bootstrap.  The 
   ./manage db_rebuild
   ```
 
+5. Configure the application
+
+For your application to run properly, you need to set the following environment variables.
+RDS_USERNAME: The authorized username to the Postgres instance
+RDS_PASSWORD: The password for the username (above)
+RDS_HOSTNAME: The server name or IP of the Postgres server
+RDS_PORT: The Postgres port
+RDS_DB_NAME: The database name
+
+To setup the above variables, you can run the following commands. Be sure to change them to suit your server
+```
+  $  export RDS_USERNAME=postgres
+  $  export RDS_PASSWORD=postgres
+  $  export RDS_HOSTNAME=localhost
+  $  export RDS_PORT=5432
+  $  export RDS_DB_NAME=lg_ops
+```
+
 5. Run tests
 
   ```
