@@ -89,3 +89,26 @@
 
                           </div>
                         </div>
+<script type="text/javascript">
+  $('#save-branch').click(function(){
+    data={
+      "name": $('#name').val(),
+      "location_id": $('#location_id').val(),
+      "lat": $('#lat').val(),
+      "lon": $('#lon').val(),
+    }
+    console.log(data);
+     $.ajax({
+      url: '/branches',
+      type: 'POST',
+      datatType: 'json',
+      data: data,
+      success: function(response) {
+        window.location.reload();
+      },
+      error: function(xhr) {
+        console.log('error');
+      }
+     });
+  });
+</script>
