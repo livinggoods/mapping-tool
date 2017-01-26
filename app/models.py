@@ -224,6 +224,21 @@ class Recruitments(db.Model):
     date_added = db.Column(db.DateTime(), default=datetime.utcnow)
     name = Column(String(65), nullable=True)
     archived = Column(Integer, server_default=text("'0'"))
+    added_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+
+    owner = relationship(u'User')
+
+class RecruitmentUsers(db.Model):
+    __tablename__ = 'recruitment_users'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    recruitment_id = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
+    location_id = Column(ForeignKey(u'location.id'), nullable=True, index=True)
+    date_joined = db.Column(db.DateTime(), default=datetime.utcnow)
+
+    recruitment = relationship(u'Recruitments')
+    user = relationship(u'User')
+    location = relationship(u'Location')
 
 class Location(db.Model):
     __tablename__ = 'location'
