@@ -27,3 +27,15 @@ def recruitments_json():
     db.session.add(recruitments)
     db.session.commit()
     return jsonify(status='ok')
+
+@api.route('/recruitment/<int:id>', methods=['GET', 'POST'])
+def api_recruitment(id):
+  if request.method == 'GET':
+    page={'title':'Recruitments', 'subtitle':'Recruitments done so far'}
+    recruitment = Recruitments.query.filter_by(id=id).first()
+    return jsonify({'name':recruitment.name, 'id':recruitment.id})
+  else:
+    recruitments = Recruitments(name=request.form.get('name'))
+    db.session.add(recruitments)
+    db.session.commit()
+    return jsonify(status='ok')
