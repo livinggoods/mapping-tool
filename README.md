@@ -43,11 +43,11 @@ RDS_DB_NAME: The database name
 
 To setup the above variables, you can run the following commands. Be sure to change them to suit your server
 ```
-  $  export RDS_USERNAME=postgres
-  $  export RDS_PASSWORD=postgres
+  $  export RDS_USERNAME=username
+  $  export RDS_PASSWORD=password
   $  export RDS_HOSTNAME=localhost
   $  export RDS_PORT=5432
-  $  export RDS_DB_NAME=lg_ops
+  $   export RDS_DB_NAME=database
 ```
 
 5. Run tests
