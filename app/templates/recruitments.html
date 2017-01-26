@@ -26,6 +26,8 @@
                   <div class="x_title">
                     <h2>Recruitments <small>List of recruitments that have been made so far</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
+                      <li><button type="button" class="btn btn-primary new-recruitment">New Recruitment</button>
+                      </li>
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
                       <li class="dropdown">
@@ -50,15 +52,13 @@
                       <thead>
                         <tr>
                           <!-- <th>Action</th> -->
-                          <th>Recritment Name</th>
+                          <th>Recruitment Name</th>
                           <th>Added by</th>
                           <th>Conducted at</th>
                           <th>Conducted by</th>
                           <th></th>
                         </tr>
                       </thead>
-
-
                       <tbody>
                         {% for recruitment in recruitments %}
                         <tr>
@@ -66,7 +66,7 @@
                           <td>recruitment.user.id</td>
                           <td>recruitment.location</td>
                           <td>recruitment.users</td>
-                          <td>Edit | More</td>
+                          <td><button type="button" recruitment='{{recruitment.id}}' class="btn btn-primary edit-recruitment">Edit</button> <a href="/recruitment/{{recruitment.id}}" class="btn btn-primary">Details</a></td>
                         </tr>
                         {% endfor %}
                       </tbody>
@@ -75,38 +75,37 @@
                 </div>
               </div>
             </div>
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+              {% include 'form_recruitment.html' %}
+            </div>
           </div>
 {% endblock %}
 {% block javascript %}
-<script>
-      $(document).ready(function() {
-        $('#date_of_birth').daterangepicker({
-          singleDatePicker: true,
-          calender_style: "picker_4"
-        }, function(start, end, label) {
-          console.log(start.toISOString(), end.toISOString(), label);
-        });
-        $('#date_moved').daterangepicker({
-          singleDatePicker: true,
-          calender_style: "picker_4"
-        }, function(start, end, label) {
-          console.log(start.toISOString(), end.toISOString(), label);
-        });
-      });
-    </script>
-<script>
-  $('.confirm').click(function (){
-    console.log($(this).attr('id'));
+<script type="text/javascript">
+$('.new-recruitment').click(function(){
+  window.RecruitmentID = (function () { return; })();
+  $('#name').val('');
+  $('#myModalLabel').html('Create new recruitment drive');
+  $('.bs-example-modal-lg').modal('toggle');
+});
+  $('.edit-recruitment').click(function(){
+    console.log($(this).attr('recruitment'));
+    // get the details of the recruitment
+    recruitmentId = $(this).attr('recruitment');
     $.ajax({
-      url:'/interview-score/'+$(this).attr('id'),
-      data:{interview:$(this).attr('id'), action:'confirm'},
-      type: 'POST',
-      datatType: 'json',
-      success:function (data){
-        window.location.reload();
+      url:'/api/v1/recruitment/'+recruitmentId,
+      type: 'get',
+      dataType:'json',
+      success: function(data){
+        console.log(data);
+        window.RecruitmentID = data.id;
+        $('#myModalLabel').html('Editing '+data.name);
+        $('#name').val(data.name);
+        // Show Modal
+        $('.bs-example-modal-lg').modal('toggle');
       },
-      error: function (xhr){
-        console.log(xhr.responseText);
+      error: function(xhr){
+        console.log('error');
       }
     });
   });
@@ -179,55 +178,6 @@
 
         TableManageButtons.init();
       });
-    </script>
-    <script>
-   $('.add-score').click(function (){
-      // set global var
-      var appID = $(this).attr('id');
-      $('#selection_id').val(appID);
-      $('.bs-example-modal-lg').modal('toggle');
-    });
-
-    $('#save-details').click(function(){
-    data = {
-      'selection_id': $('#selection_id').val(),
-      'interview_id': $('#interview_id').val(),
-      'motivation': $('#motivation').val(),
-      'community_work': $('#community_work').val(),
-      'mentality': $('#mentality').val(),
-      'selling': $('#selling').val(),
-      'health': $('#health').val(),
-      'investment': $('#investment').val(),
-      'interpersonal': $('#interpersonal').val(),
-      'commitment': $('#commitment').val(),
-    };
-      console.log(data);
-       $.ajax({
-        url: '/interview-scores',
-        type: 'POST',
-        datatType: 'json',
-        data: data,
-        success: function(response) {
-          console.log(response);
-          window.location.reload();
-        },
-        error: function(xhr) {
-          console.log('error');
-        }
-       });
-    });
-     function findTotal(){
-        var arr = document.getElementsByClassName('form-control calculate');
-        var tot=0;
-        for(var i=0;i<arr.length;i++){
-            if(parseInt(arr[i].value))
-                tot += parseInt(arr[i].value);
-        }
-        console.log(tot);
-        $("#calculated_score").text(tot);
-        $("#interview_total_score").text(tot);
-        // document.getElementById('calculated_score').html = tot;
-    }
     </script>
 {% endblock %}
 {% block additionaljs %}

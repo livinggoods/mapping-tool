@@ -41,11 +41,12 @@
 <script type="text/javascript">
     
     $('#save-recruitment').click(function(){
+      console.log(window.RecruitmentID);
       $.ajax({
         url:'/recruitments',
         type:'POST',
         dataType:'json',
-        data:{name:$('#name').val()},
+        data:{name:$('#name').val(), id:window.RecruitmentID},
         success: function(data){
           window.location.reload();
         },
