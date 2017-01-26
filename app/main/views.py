@@ -276,7 +276,9 @@ def get_interview_score(id):
 @main.route('/recruitments', methods=['GET', 'POST'])
 def recruitments():
   if request.method == 'GET':
-    pass
+    page={'title':'Recruitments', 'subtitle':'Recruitments done so far'}
+    recruitments = Recruitments.query.filter_by(archived=0)
+    return render_template('recruitments.html', recruitments=recruitments, currency=currency, page=page)
   else:
     recruitments = Recruitments(name=request.form.get('name'))
     db.session.add(recruitments)
