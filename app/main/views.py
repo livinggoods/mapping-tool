@@ -234,7 +234,24 @@ def recruitments():
     return render_template('recruitments.html', recruitments=recruitments, currency=currency, page=page)
   else:
     # check if there is an iD or if the ID is blank
-    
+    if 'id' in request.form:
+        recruitment = Recruitments.query.filter_by(id=request.form.get('id')).first()
+        recruitment.name=request.form.get('name')
+        db.session.commit()
+        return jsonify(status='updated', id=recruitment.id)
+    else:
+        recruitments = Recruitments(name=request.form.get('name'))
+        db.session.add(recruitments)
+        db.session.commit()
+        return jsonify(status='created', id=recruitments.id)
+
+@main.route('/recruitment/<int:id>', methods=['GET', 'POST'])
+def recruitment(id):
+  if request.method == 'GET':
+    recruitment = Recruitments.query.filter_by(archived=0, id=id).first_or_404()
+    page={'title':recruitment.name.title(), 'subtitle':recruitment.name}
+    return render_template('recruitment.html', recruitment=recruitment, currency=currency, page=page)
+  else:
     if 'id' in request.form:
         recruitment = Recruitments.query.filter_by(id=request.form.get('id')).first()
         recruitment.name=request.form.get('name')
