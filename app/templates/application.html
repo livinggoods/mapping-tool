@@ -271,7 +271,33 @@
         });
       });
     </script>
-    
+     <script>
+    $('#select-application').click(function(){
+      selectApplication();
+      window.location.reload();
+    });$('#application-selected').click(function(){
+      selectApplication();
+    });
+    function selectApplication(){
+      data={
+        'location_id': {{application.location_id}},
+        'application_id': {{application.id}},
+        'action': 'select'
+      }
+       $.ajax({
+        url: '/application/{{application.id}}',
+        type: 'POST',
+        datatType: 'json',
+        data: data,
+        success: function(response) {
+          window.location.reload();
+        },
+        error: function(xhr) {
+          console.log('error');
+        }
+       });
+    }
+    </script>
 <script>
       $(document).ready(function() {
         var handleDataTableButtons = function() {
