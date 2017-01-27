@@ -187,10 +187,6 @@ def location(id):
             interviews = interviews, target=target, invited=invited, gender=gender, recruitments=recruitments,
             applications=applications, refferals=refferals, chps=total_chp, branches = branches,
             chp=chp, selected_applications=selected_applications, currency=currency)
-    
-    
-
-
 
 @main.route('/interview-score/<int:id>', methods=['GET', 'POST'])
 def get_interview_score(id):
@@ -201,11 +197,6 @@ def get_interview_score(id):
       age = calculate_age(application.date_of_birth)
       qualified = appplication_status(application)
       # I this location, what is the target (number of CHPs) needed?
-
-      # q = session.query(Date).filter(and_(
-      #    Date.c.marital=='single',
-      #    Date.c.sex=='F'))
-
       target = LocationTargets.query.filter_by(location_id=application.location_id, recruitment_id=application.recruitment_id, archived=0).first()
       invited = InterviewScore.query.filter_by(location_id=application.location_id, invited_training=1)
       # target = LocationTargets.query.filter(location_id=selection.location_id, recruitment=application.recruitment_id, archived=0).first()
@@ -354,7 +345,7 @@ def create_location():
         page = {'title': param, 'subtitle': 'mapped '+param}
         inputmap = Map(
             identifier="view-side",
-            lat=-1.2728, # -1.272898, 36.790095 
+            lat=-1.2728,
             lng=36.7901,
             zoom=8,
             markers=[(-1.2728, 36.7901)]
