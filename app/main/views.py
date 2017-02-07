@@ -251,17 +251,22 @@ def recruitments():
         db.session.commit()
         return jsonify(status='updated', id=recruitment.id)
     else:
-        recruitments = Recruitments(name=request.form.get('name'))
+        recruitments = Recruitments(name=request.form.get('name'), added_by=current_user.id)
         db.session.add(recruitments)
         db.session.commit()
         return jsonify(status='created', id=recruitments.id)
 
 @main.route('/recruitment/<int:id>', methods=['GET', 'POST'])
+@login_required
 def recruitment(id):
   if request.method == 'GET':
     recruitment = Recruitments.query.filter_by(archived=0, id=id).first_or_404()
-    page={'title':recruitment.name.title(), 'subtitle':recruitment.name}
-    return render_template('recruitment.html', recruitment=recruitment, currency=currency, page=page)
+    locations = LocationTargets.query.filter_by(recruitment_id=id)
+    applications = Application.query.filter_by(recruitment_id=id)
+    users = RecruitmentUsers.query.filter_by(recruitment_id=id)
+    page={'title':recruitment.name.title(), 'subtitle':recruitment.name if recruitment else 'Recruitments'}
+    return render_template('recruitment.html', locations=locations, recruitment=recruitment, 
+        applications=applications, users=users, currency=currency, page=page)
   else:
     if 'id' in request.form:
         recruitment = Recruitments.query.filter_by(id=request.form.get('id')).first()
