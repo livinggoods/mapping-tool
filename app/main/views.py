@@ -15,7 +15,18 @@ import csv, os, time, calendar
 from ..data import data
 
 currency = 'UGX '
+
+# @main.route('/main', methods=['GET', 'POST'])
+# def index_main():
+#     if current_user.is_anonymous():
+#         return redirect(url_for('auth.login'))
+#     else:
+#         return jsonify(id=current_user.id)
+
+
+
 @main.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
     page = {'title': 'Home'}
     if current_user.is_anonymous():
