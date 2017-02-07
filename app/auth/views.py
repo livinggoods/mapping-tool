@@ -45,7 +45,8 @@ def login():
             # original URL in the next query string argument
             return redirect(request.args.get('next') or url_for('main.index'))
         flash('Invalid username or password.', 'error')
-    return render_template('auth/login.html', form=form, page=page)
+    return render_template('login.html', form=form, page=page)
+    # return render_template('auth/login.html', form=form, page=page)
 
 
 @auth.route('/logout')
