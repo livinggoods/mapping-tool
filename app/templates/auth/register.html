@@ -1,28 +1,57 @@
-{% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-{% block title %}Insights - Register{% endblock %}
+    <title>{{page.title}}| </title>
 
-{% block navbar %}{% endblock %}
+    <!-- Bootstrap -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="/static/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="/static/css/nprogress.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="/static/css/animate.css" rel="stylesheet">
 
-{% block wrapper %}
+    <!-- Custom Theme Style -->
+    <link href="/static/css/custom.css" rel="stylesheet">
+  </head>
 
-    <! -- page header -->
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">
-                Register
-            </h1>
+  <body class="login">
+    <div>
+      <a class="hiddenanchor" id="signup"></a>
+      <a class="hiddenanchor" id="signin"></a>
+
+      <div class="login_wrapper">
+        <div class="animate form">
+          <section class="login_content">
+              <h1>Create Account</h1>
+              {{ wtf.quick_form(form) }}
+
+              <div class="clearfix"></div>
+
+              <div class="separator">
+                <p class="change_link">Already a member ?
+                  <a href="/auth/login" class="to_register"> Log in </a>
+                </p>
+
+                <div class="clearfix"></div>
+                <br />
+
+               <div>
+                  <h1><img src="/static/images/lg-logo.png" height="25px" /> Living Goods</h1>
+                  <p>©2017 All Rights Reserved.  Privacy and Terms</p>
+                </div>
+              </div>
+          </section>
         </div>
+      </div>
     </div>
-    <! -- end page header -->
-
-    <! -- register form -->
-    <div class="row">
-        <div class="col-lg-4">
-            {{ wtf.quick_form(form) }}
-        </div>
-    </div>
-    <! -- end register form -->
-
-{% endblock %}
+  </body>
+</html>
