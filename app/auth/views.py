@@ -45,7 +45,19 @@ def login():
             # original URL in the next query string argument
             return redirect(request.args.get('next') or url_for('main.index'))
         flash('Invalid username or password.', 'error')
-    return render_template('login.html', form=form, page=page)
+    register_form = RegistrationForm()
+    if register_form.validate_on_submit():
+        user = User(email=register_form.email.data,
+                    username=register_form.username.data,
+                    password=register_form.password.data)
+        db.session.add(user)
+        db.session.commit()  # must force commit to generate user id
+        token = user.generate_confirmation_token()
+        send_email(user.email, 'Confirm Your Account',
+                   'auth/email/confirm', user=user, token=token)
+        flash('A confirmation email has been sent to you by email.', 'info')
+        return redirect(url_for('auth.login'))
+    return render_template('login.html', form=form, page=page, register_form=register_form)
     # return render_template('auth/login.html', form=form, page=page)
 
 
