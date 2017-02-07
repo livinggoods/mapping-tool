@@ -3288,7 +3288,7 @@ a.hiddenanchor {
 
 .login_content {
   margin: 0 auto;
-  padding: 25px 0 0;
+  padding: 0px 0 0;
   position: relative;
   text-align: center;
   text-shadow: 0 1px 0 #fff;
@@ -3986,4 +3986,12 @@ ul.notifications {
 }
 .phone{
   position: relative;
+}
+.login_content .checkbox{
+  text-align: left;
+  float: left;
+}
+.borderd-list {
+  border-bottom: 2px solid #E6E9ED;
+}
 }
