@@ -3,7 +3,7 @@
 <div class="">
   <div class="page-title">
     <div class="title_left">
-      <h3>{{page.title|title}}</h3>
+      <h3>{{page.title|title}} <small>Owned by {{recruitment.owner.username|title}}</small></h3>
     </div>
 
     <div class="title_right">
@@ -70,7 +70,12 @@
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-          contetn
+        <ul>
+          <li class="borderd-list"><span class='left'>Name </span><span class="right">Target</span></li>
+          {% for location in locations %}
+          <li class="borderd-list"><span class='left'>{{location.location.name}}</span><span class="right">{{location.chps_needed}}</span></li>
+          {% endfor %}
+          </ul>
         </div>
       </div>
     </div>
@@ -130,7 +135,12 @@
         <div class="x_content">
           <div class="" role="tabpanel" data-example-id="togglable-tabs">
             <div class="row">
-              Users who have joined this 
+              <ul>
+                <li class="borderd-list"><span class='left'>Name </span><span class="right">Target</span></li>
+                {% for user in users %}
+                <li class="borderd-list"><span class='left'>{{user.user.name}}</span><span class="right">{{user.location.name}}</span></li>
+                {% endfor %}
+              </ul>
             </div>
           </div>
         </div>
