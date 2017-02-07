@@ -543,24 +543,6 @@ def user(username):
         .with_entities(User, Geo, UserType)\
         .filter(User.username==username).first_or_404()
 
-    # query for firms
-    # firms = Firm.query.join(FirmType).join(FirmTier).join(User)\
-    #     .with_entities(Firm, FirmType, FirmTier, User)\
-    #     .filter(User.username == username)\
-    #     .order_by(FirmTier.firm_tier.asc(), Firm.name.asc()).all()
-    #
-    # # parse firms
-    # vc_firms = []
-    # ai_firms = []
-    # su_firms = []
-    # for firm in firms:
-    #     if firm.FirmType.firm_type_code == 'vc':
-    #         vc_firms.append(firm)
-    #     if firm.FirmType.firm_type_code == 'ai':
-    #         ai_firms.append(firm)
-    #     if firm.FirmType.firm_type_code == 'su':
-    #         su_firms.append(firm)
-
     return render_template('user.html', user=user, vc_firms=[],
                            ai_firms=[], su_firms=[])
 
