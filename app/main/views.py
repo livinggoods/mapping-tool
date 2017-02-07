@@ -7,7 +7,7 @@ from .forms import EditProfileForm, EditProfileAdminForm, PostForm
 from .. import db
 from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets,
     Location, Education, EducationLevel, Referral, InterviewScore, Chp, Recruitments,
-    SelectedApplication, Application, ApplicationPhone, Branch, Cohort)
+    SelectedApplication, Application, ApplicationPhone, Branch, Cohort, RecruitmentUsers)
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
 from datetime import date
@@ -36,6 +36,7 @@ def index():
         return render_template('index.html', page=page, currency=currency)
 
 @main.route('/application/<int:id>', methods=['GET', 'POST'])
+@login_required
 def application_details(id):
     if request.method == 'GET':
         a = Application.query.filter_by(id=id).first_or_404()
@@ -67,6 +68,7 @@ def application_details(id):
     # fetch application details
 
 @main.route('/selected-applications', methods=['GET', 'POST'])
+@login_required
 def selected_applications():
     if request.method == 'GET':
         applications = SelectedApplication.query.all()
@@ -89,6 +91,7 @@ def selected_applications():
         # return jsonify(details=request.form.getlist('applications[]'))@main.route('/selected-applications', methods=['GET', 'POST'])
 
 @main.route('/trainings', methods=['GET', 'POST'])
+@login_required
 def selected_for_training():
   # the whole point here is to only show the applications that have been invited for training
   #  and for each application, show whether the person declined the interview or not
@@ -116,6 +119,7 @@ def selected_for_training():
 
 
 @main.route('/training-list', methods=['GET', 'POST'])
+@login_required
 def training_list():
   # the whole point here is to only show the applications that have been invited for training
   #  and for each application, show whether the person declined the interview or not
@@ -141,6 +145,7 @@ def training_list():
         # return jsonify(details=request.form.getlist('applications[]'))
 
 @main.route('/interview-scores', methods=['POST'])
+@login_required
 def interview_score():
     selection = request.form.get('selection_id')
     selected = SelectedApplication.query.filter_by(application_id=selection).first()
@@ -163,8 +168,8 @@ def interview_score():
         interpersonal = request.form.get('interpersonal'),
         commitment = request.form.get('commitment'),
         interview_total_score = total,
-        user_id = 1, #replace with current_user.id
-        location_id = selected.application.location_id, #replace with current_user.id
+        user_id = current_user.id,
+        location_id = selected.application.location_id,
         application_id = selection, 
     )
     db.session.add(score)
@@ -172,6 +177,7 @@ def interview_score():
     return jsonify(selection=selection, rec=selected.application.recruitment_id)
 
 @main.route('/location/<int:id>', methods=['GET', 'POST'])
+@login_required
 def location(id):
     location  = Location.query.filter_by(id=id).first_or_404()
     # get the applications
@@ -200,6 +206,7 @@ def location(id):
             chp=chp, selected_applications=selected_applications, currency=currency)
 
 @main.route('/interview-score/<int:id>', methods=['GET', 'POST'])
+@login_required
 def get_interview_score(id):
     if request.method == 'GET':
       selection = SelectedApplication.query.filter_by(id=id).first_or_404()
@@ -238,6 +245,7 @@ def get_interview_score(id):
 
 
 @main.route('/recruitments', methods=['GET', 'POST'])
+@login_required
 def recruitments():
   if request.method == 'GET':
     page={'title':'Recruitments', 'subtitle':'Recruitments done so far'}
@@ -274,12 +282,16 @@ def recruitment(id):
         db.session.commit()
         return jsonify(status='updated', id=recruitment.id)
     else:
-        recruitments = Recruitments(name=request.form.get('name'))
+        recruitments = Recruitments(name=request.form.get('name'), added_by=current_user.id)
         db.session.add(recruitments)
         db.session.commit()
+
+        # also add the recruitment
+        recruitment = RecruitmentUsers(user_id=current_user.id, recruitment_id= recruitments.id)
         return jsonify(status='created', id=recruitments.id)
 
 @main.route('/applications', methods=['GET', 'POST'])
+@login_required
 def applications():
     if request.method == 'GET':
         page = {'title': 'applications', 'subtitle': 'manage applications and create new applications'}
@@ -354,6 +366,7 @@ def applications():
 @main.route('/ward', methods=['GET', 'POST'])
 @main.route('/village', methods=['GET', 'POST'])
 @main.route('/locations', methods=['GET', 'POST'])
+@login_required
 def create_location():
     # if request.method == 'POST':
     if request.method == 'POST':
@@ -388,6 +401,7 @@ def create_location():
 
 
 @main.route('/branches', methods=['GET', 'POST'])
+@login_required
 def branches():
     if request.method == 'POST':
         branch = Branch(
@@ -431,6 +445,7 @@ def branches():
         return render_template('branches.html', branches=branches, currency=currency, clustermap=branch_maps, locations=locations, page=page)
 
 @main.route('/cohort', methods=['GET', 'POST'])
+@login_required
 def cohort():
     if request.method == 'GET':
         page = {'title': 'Cohort', 'subtitle': 'List of all cohorts in all branches'}
@@ -448,6 +463,7 @@ def cohort():
 
 
 @main.route('/get_location_expansion')
+@login_required
 def get_location_expansion():
   id = request.args.get('id')
   expansion = {}
@@ -459,6 +475,7 @@ def get_location_expansion():
 
 
 @main.route('/educations', methods=['GET', 'POST'])
+@login_required
 def educations():
     if request.method == 'GET':
         page = {'title': 'Education', 'subtitle': 'List of all education levels'}
@@ -474,6 +491,7 @@ def educations():
 
 
 @main.route('/education-level', methods=['GET', 'POST'])
+@login_required
 def education_levels():
     if request.method == 'GET':
         page = {'title': 'Education Level', 'subtitle': 'List of all education levels'}
@@ -492,6 +510,7 @@ def education_levels():
 
 
 @main.route('/refferals', methods=['GET', 'POST'])
+@login_required
 def refferals():
     if request.method == 'GET':
         page = {'title': 'Refferals', 'subtitle': 'List of persons who have reffered others'}
