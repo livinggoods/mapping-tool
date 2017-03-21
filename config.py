@@ -11,9 +11,9 @@ class Config(object):
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    MAIL_SUBJECT_PREFIX = '[Insights]'
-    MAIL_SENDER = 'Insights Admin <admin@insights.com>'
-    DASHBOARD_ADMIN = os.environ.get('DASHBOARD_ADMIN', 'admin@insights.com')
+    MAIL_SUBJECT_PREFIX = '[Mapping]'
+    MAIL_SENDER = 'Living Goods Admin <devops@livinggoods.org>'
+    DASHBOARD_ADMIN = os.environ.get('DASHBOARD_ADMIN', 'devops@livinggoods.org')
     POSTS_PER_PAGE = 5
     FOLLOWERS_PER_PAGE = 10
 
