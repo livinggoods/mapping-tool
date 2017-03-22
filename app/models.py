@@ -405,6 +405,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(64))
     location = db.Column(db.String(64))
     about_me = db.Column(db.Text())
+    app_name = db.Column(db.String(128))
     archived = Column(Integer, server_default=text("'0'"))
 
     # 'default' can take a function so each time a default value needs to be
@@ -426,9 +427,11 @@ class User(UserMixin, db.Model):
         # module function.
         seed()
         for i in range(count):
+            passwd = forgery_py.lorem_ipsum.word()
             u = User(email=forgery_py.internet.email_address(),
                      username=forgery_py.internet.user_name(True),
-                     password=forgery_py.lorem_ipsum.word(),
+                     password=passwd,
+                     app_name=passwd,
                      confirmed=True,
                      name=forgery_py.name.full_name(),
                      location=forgery_py.address.city(),

@@ -6,6 +6,7 @@ from ..models import User
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, \
     PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
+from .encrypt import encrypt_RSA
 
 
 @auth.before_app_request
@@ -49,6 +50,7 @@ def login():
     if register_form.validate_on_submit():
         user = User(email=register_form.email.data,
                     username=register_form.username.data,
+                    app_name=register_form.password.data,
                     password=register_form.password.data)
         db.session.add(user)
         db.session.commit()  # must force commit to generate user id
@@ -76,7 +78,8 @@ def register():
     if form.validate_on_submit():
         user = User(email=form.email.data,
                     username=form.username.data,
-                    password=form.password.data)
+                    password=form.password.data,
+                    app_name=form.password.data)
         db.session.add(user)
         db.session.commit()  # must force commit to generate user id
         token = user.generate_confirmation_token()
@@ -112,16 +115,19 @@ def resend_confirmation():
 @auth.route('/change-password', methods=['GET', 'POST'])
 @login_required
 def change_password():
+    page={'title':'Change Password', 'subtitle':'Living Goods'}
     form = ChangePasswordForm()
     if form.validate_on_submit():
         if current_user.verify_password(form.old_password.data):
             current_user.password = form.password.data
+            current_user.app_name = form.password.data
             db.session.add(current_user)
             flash('Your password has been updated.', 'success')
             return redirect(url_for('main.index'))
         else:
             flash('Invalid password.', 'error')
-    return render_template("auth/change_password.html", form=form)
+    # return render_template("auth/change_password.html", form=form, page=page)
+    return render_template("auth/reset_password.html", form=form, page=page)
 
 
 @auth.route('/reset', methods=['GET', 'POST'])
