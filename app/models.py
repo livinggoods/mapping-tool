@@ -5,7 +5,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app, request
 from flask_login import UserMixin, AnonymousUserMixin
 from . import db, login_manager
-from sqlalchemy import func, Column, DateTime, ForeignKey, Integer, String, Text, text
+from sqlalchemy import func, Column, DateTime, ForeignKey, Integer, String, Text, Numeric, text
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
