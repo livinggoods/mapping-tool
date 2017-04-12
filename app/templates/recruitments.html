@@ -63,9 +63,9 @@
                         {% for recruitment in recruitments %}
                         <tr>
                           <td>{{recruitment.name}}</td>
-                          <td>recruitment.user.id</td>
-                          <td>recruitment.location</td>
-                          <td>recruitment.users</td>
+                          <td>{{recruitment.owner.name}}</td>
+                          <td>{{recruitment.location}}</td>
+                          <td>{{recruitment.users}}</td>
                           <td><button type="button" recruitment='{{recruitment.id}}' class="btn btn-primary edit-recruitment">Edit</button> <a href="/recruitment/{{recruitment.id}}" class="btn btn-primary">Details</a></td>
                         </tr>
                         {% endfor %}
