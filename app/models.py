@@ -220,13 +220,61 @@ class LocationTargets(db.Model):
 class Recruitments(db.Model):
     __tablename__ = 'recruitments'
 
-    id = Column(Integer, primary_key=True)
-    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
-    name = Column(String(65), nullable=True)
-    archived = Column(Integer, server_default=text("'0'"))
+    id = Column(String(64), primary_key=True) #db.Column(db.Integer)
+    name = Column(String(128), nullable=True)
+    district = Column(Text)
+    lat = Column(String(128), nullable=True)
+    lon = Column(String(128), nullable=True)
+    subcounty = Column(String(128), nullable=True)
+    country = Column(String(128), nullable=True)
+    division = Column(String(128), nullable=True)
     added_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    comment = Column(Text)
+    client_time = Column(Numeric)
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+    synced = Column(Integer, server_default=text("'0'"))
+    archived = Column(Integer, server_default=text("'0'"))
+    
 
     owner = relationship(u'User')
+
+    def to_json(self):
+        json_record = {
+            'id': self.id,
+            'name': self.name,
+            'district': self.district,
+            'lat': self.lat,
+            'lon': self.lon,
+            'subcounty': self.subcounty,
+            'country': self.country,
+            'division': self.division,
+            'added_by':self.added_by,
+            'comment': self.comment,
+            'client_time': float(self.client_time),
+            'date_added': self.date_added,
+            'synced': self.synced
+            }
+
+        return json_record
+
+    @staticmethod
+    def from_json(json_record):
+        id = json_record.get('_id')
+        name = json_record.get('name')
+        district = json_record.get('district')
+        lat = json_record.get('lat')
+        lon = json_record.get('lon')
+        subcounty = json_record.get('subcounty')
+        country = json_record.get('country')
+        division = json_record.get('division')
+        added_by = json_record.get('added_by')
+        comment = json_record.get('comment')
+        client_time = json_record.get('date_added')
+        synced = json_record.get('synced')
+        return Recruitments(id=id, name=name, district=district,
+            lat=lat, lon=lon, subcounty=subcounty, country=country,
+            division=division, added_by=added_by, comment=comment, client_time=client_time, synced=1, archived=0)
+
 
 class RecruitmentUsers(db.Model):
     __tablename__ = 'recruitment_users'
