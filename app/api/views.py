@@ -2,7 +2,7 @@ from . import api
 from flask_login import login_required, current_user
 from flask import Response, request, jsonify
 import json
-from sqlalchemy import func, distinct, select, and_
+from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
 from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets,
     Location, Education, EducationLevel, Referral, InterviewScore, Chp, Recruitments,
