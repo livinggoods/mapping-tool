@@ -5,8 +5,8 @@ import json
 from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
 from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets,
-    Location, Education, EducationLevel, Referral, InterviewScore, Chp, Recruitments,
-    SelectedApplication, Application, ApplicationPhone, Branch, Cohort)
+    Location, Education, EducationLevel, Referral, Chp, Recruitments, Interview, Exam,
+    SelectedApplication, Application, ApplicationPhone, Branch, Cohort, Registration)
 
 
 @api.route('/firm_summary')
@@ -68,7 +68,63 @@ def sync_recruitments():
       #exists = db.session.query(db.exists().where(User.name == 'davidism')).scalar()
       if not db.session.query(db.exists().where(Recruitments.id == record.id)).scalar():
          db.session.add(record)
+      # else:
+      #   db.session.commit()
       status.append({'id':record.id, 'status':'ok'})
     return jsonify(status=status)
 
+@api.route('/sync/registrations', methods=['GET', 'POST'])
+def sync_registrations():
+  if request.method == 'GET':
+    records  = Registration.query.filter(Registration.archived != 1)
+    return jsonify({'registrations':[record.to_json() for record in records]})
+  else:
+    status = []
+    registration_list = request.json.get('registrations')
+    for registration in registration_list:
+      record = Registration.from_json(registration)
+      #exists = db.session.query(db.exists().where(User.name == 'davidism')).scalar()
+      if not db.session.query(db.exists().where(Registration.id == record.id)).scalar():
+         db.session.add(record)
+      # else:
+      #   db.session.commit()
+      status.append({'id':record.id, 'status':'ok'})
+    return jsonify(status=status)
+
+@api.route('/sync/interviews', methods=['GET', 'POST'])
+def sync_interviews():
+  if request.method == 'GET':
+    records  = Interview.query.filter(Interview.archived != 1)
+    return jsonify({'interviews':[record.to_json() for record in records]})
+  else:
+    status = []
+    interview_list = request.json.get('interviews')
+    for interview in interview_list:
+      record = Interview.from_json(interview)
+      #exists = db.session.query(db.exists().where(User.name == 'davidism')).scalar()
+      if not db.session.query(db.exists().where(Interview.id == record.id)).scalar():
+         db.session.add(record)
+      # else:
+      #   db.session.commit()
+      status.append({'id':record.id, 'status':'ok'})
+    return jsonify(status=status)
+
+
+@api.route('/sync/exams', methods=['GET', 'POST'])
+def sync_exams():
+  if request.method == 'GET':
+    records  = Exam.query.filter(Exam.archived != 1)
+    return jsonify({'exams':[record.to_json() for record in records]})
+  else:
+    status = []
+    exam_list = request.json.get('exams')
+    for exam in exam_list:
+      record = Exam.from_json(exam)
+      #exists = db.session.query(db.exists().where(User.name == 'davidism')).scalar()
+      if not db.session.query(db.exists().where(Exam.id == record.id)).scalar():
+         db.session.add(record)
+      # else:
+      #   db.session.commit()
+      status.append({'id':record.id, 'status':'ok'})
+    return jsonify(status=status)
 

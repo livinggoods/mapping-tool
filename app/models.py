@@ -122,52 +122,6 @@ class EducationLevel(db.Model):
 
     education = relationship(u'Education')
 
-class Interview(db.Model):
-    __tablename__ = 'interview'
-
-    id = Column(Integer, primary_key=True)
-    interview = Column(String(45))
-    date_taken = db.Column(db.DateTime(), default=datetime.utcnow)
-    cohort_id = Column(ForeignKey(u'cohort.id'), index=True)
-    archived = Column(Integer, server_default=text("'0'"))
-
-    cohort = relationship(u'Cohort')
-
-class InterviewScore(db.Model):
-    __tablename__ = 'interview_score'
-
-    id = Column(Integer, primary_key=True)
-    selection_id = Column(ForeignKey(u'selected_applications.id'), index=True)
-    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
-    interview_id = Column(ForeignKey(u'interview.id'), index=True)
-    motivation = Column(Integer)
-    community_work = Column(Integer)
-    mentality = Column(Integer)
-    selling = Column(Integer)
-    health = Column(Integer)
-    investment = Column(Integer)
-    interpersonal = Column(Integer)
-    commitment = Column(Integer)
-    interview_total_score = Column(Integer, server_default=text("'0'"))
-    special_conditions = Column(Integer, server_default=text("'0'"))
-    can_join = Column(Integer, server_default=text("'0'"))
-    qualify_training = Column(Integer, server_default=text("'0'")) # boolean Yes/No
-    invited_training = Column(Integer, server_default=text("'0'")) # 0 = no, 1 = yes
-    confirmed_attendance = Column(Integer, server_default=text("'0'")) # 0 = no, 1 = yes
-    comments = Column(db.Text) # 0 = no, 1 = yes
-    user_id = Column(ForeignKey(u'users.id'), index=True)
-    recruitment_id = Column(ForeignKey(u'recruitments.id'), index=True, nullable=False)
-    application_id = Column(ForeignKey(u'application.id'), index=True)
-    location_id = Column(ForeignKey(u'location.id'), index=True)
-    archived = Column(Integer, server_default=text("'0'"))
-
-    recruitment = relationship(u'Recruitments')
-    interview = relationship(u'Interview')
-    application = relationship(u'Application')
-    selection = relationship(u'SelectedApplication')
-    location = relationship(u'Location')
-    user = relationship(u'User')
-
 class Referral(db.Model):
     __tablename__ = 'referrals'
 
@@ -216,6 +170,108 @@ class LocationTargets(db.Model):
 
     location = relationship(u'Location')
     recruitment = relationship(u'Recruitments')
+
+class Registration (db.Model):
+    __tablename__ = 'registrations'
+
+    id = Column(String(64), primary_key=True)
+    name = Column(String(64), nullable=False)
+    phone = Column(String(64))
+    gender = Column(String(6))
+    recruitment = Column(String(64), nullable=True)
+    country = Column(String(16), nullable=True)
+    dob = Column(Numeric)
+    district = Column(String(64), nullable=True)
+    subcounty = Column(String(64), nullable=True)
+    division = Column(String(64), nullable=True)
+    village = Column(String(64), nullable=True)
+    feature = Column(String(128), nullable=True)
+    english = Column(Integer, server_default=text("'0'"))
+    date_moved = Column(Integer, nullable=True)
+    languages = Column(String(128), nullable=True)
+    brac = Column(Integer, server_default=text("'0'"))
+    brac_chp = Column(Integer, server_default=text("'0'"))
+    education = Column(Integer, server_default=text("'0'"))
+    occupation = Column(String(128), nullable=True)
+    community_membership = Column(Integer, server_default=text("'0'"))
+    added_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    comment = Column(Text)
+    proceed = Column(Integer, server_default=text("'0'"))
+    client_time = Column(Numeric)
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+    synced = Column(Integer, server_default=text("'0'"))
+    archived = Column(Integer, server_default=text("'0'"))
+    owner = relationship(u'User')
+
+    def to_json(self):
+        json_record = {
+            'id':self.id,
+            'name':self.name,
+            'phone':self.phone,
+            'gender':self.gender,
+            'recruitment':self.recruitment,
+            'country':self.country,
+            'dob': float(self.dob),
+            'district':self.district,
+            'subcounty':self.subcounty,
+            'division':self.division,
+            'village':self.village,
+            'feature':self.feature,
+            'english':self.english,
+            'date_moved':self.date_moved,
+            'languages':self.languages,
+            'brac':self.brac,
+            'brac_chp':self.brac_chp,
+            'education':self.education,
+            'occupation':self.occupation,
+            'community_membership':self.community_membership,
+            'added_by':self.added_by,
+            'comment':self.comment,
+            'proceed':self.proceed,
+            'client_time':float(self.client_time),
+            'date_added':self.date_added,
+            'synced':self.synced
+            }
+
+        return json_record
+
+    @staticmethod
+    def from_json(json_record):
+        id = json_record.get('_id')
+        id = json_record.get('id')
+        name = json_record.get('name')
+        phone = json_record.get('phone')
+        gender = json_record.get('gender')
+        recruitment = json_record.get('recruitment')
+        country = json_record.get('country')
+        dob = json_record.get('dob')
+        district = json_record.get('district')
+        subcounty = json_record.get('subcounty')
+        division = json_record.get('division')
+        village = json_record.get('village')
+        feature = json_record.get('feature')
+        english = json_record.get('english')
+        date_moved = json_record.get('date_moved')
+        languages = json_record.get('languages')
+        brac = json_record.get('brac')
+        brac_chp = json_record.get('brac_chp')
+        education = json_record.get('education')
+        occupation = json_record.get('occupation')
+        community_membership = json_record.get('community_membership')
+        added_by = json_record.get('added_by')
+        comment = json_record.get('comment')
+        proceed = json_record.get('proceed')
+        client_time = json_record.get('date_added')
+        synced = json_record.get('synced')
+        return Registration (id = id, name = name, phone = phone, gender = gender,
+            recruitment = recruitment, country = country, dob = dob,
+            district = district, subcounty = subcounty, division = division,
+            village = village, feature = feature, english = english,
+            date_moved = date_moved, languages = languages, brac = brac,
+            brac_chp = brac_chp, education = education, occupation = occupation,
+            community_membership = community_membership, added_by = added_by,
+            comment = comment, proceed = proceed,
+            client_time = client_time, synced = synced)
 
 class Recruitments(db.Model):
     __tablename__ = 'recruitments'
@@ -287,6 +343,143 @@ class RecruitmentUsers(db.Model):
     recruitment = relationship(u'Recruitments')
     user = relationship(u'User')
     location = relationship(u'Location')
+
+class Exam(db.Model):
+    """docstring for Exam"""
+    __tablename__ = 'exams'
+    id = Column(String(64), primary_key=True)
+    applicant = Column(ForeignKey(u'registrations.id'), nullable=True, index=True)
+    recruitment_id = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
+    country = Column(String(64))
+    math = Column(Integer, server_default=text("'0'"))
+    personality = Column(Integer, server_default=text("'0'"))
+    english = Column(Integer, server_default=text("'0'"))
+    added_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    comment = Column(Text)
+    client_time = Column(Numeric, nullable=True)
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+    synced = Column(Integer, server_default=text("'0'"))
+    archived = Column(Integer, server_default=text("'0'"))
+
+    registration = relationship(u'Registration')
+    recruitment = relationship(u'Recruitments')
+    user = relationship(u'User')
+    
+    def to_json(self):
+        json_record = {
+            'id': self.id,
+            'applicant': self.applicant,
+            'recruitment': self.recruitment_id,
+            'country': self.country,
+            'math': self.math,
+            'personality': self.personality,
+            'english': self.english,
+            'added_by': self.added_by,
+            'comment': self.comment,
+            'date_added': self.date_added,
+            'synced': self.synced
+        }
+        return json_record
+
+    @staticmethod
+    def from_json(json_record):
+        id = json_record.get('id')
+        applicant = json_record.get('applicant')
+        recruitment = json_record.get('recruitment')
+        country = json_record.get('country')
+        math = json_record.get('math')
+        personality = json_record.get('personality')
+        english = json_record.get('english')
+        added_by = json_record.get('added_by')
+        comment = json_record.get('comment')
+        client_time = json_record.get('date_added')
+        synced = json_record.get('synced')
+        return Exam(id = id, applicant = applicant, recruitment_id = recruitment,
+                country = country, math = math, personality = personality,
+                english = english, added_by = added_by, comment = comment,
+                client_time = client_time, synced = synced)
+
+class Interview(db.Model):
+    __tablename__ = 'interviews'
+
+    id = Column(String(64), primary_key=True)
+    applicant = Column(ForeignKey(u'registrations.id'), nullable=True, index=True)
+    recruitment_id = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
+    motivation = Column(String(64), nullable=True)
+    community = Column(String(64), nullable=True)
+    mentality = Column(String(64), nullable=True)
+    country = Column(String(64), nullable=True)
+    selling = Column(String(64), nullable=True)
+    health = Column(String(64), nullable=True)
+    investment = Column(String(64), nullable=True)
+    interpersonal = Column(String(64), nullable=True)
+    canjoin = Column(String(64), nullable=True)
+    commitment = Column(String(64), nullable=True)
+    total = Column(String(64), nullable=True)
+    selected = Column(String(64), nullable=True)
+    synced = Column(String(64), nullable=True)
+    added_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    comment = Column(String(64), nullable=True)
+    date_added = Column(String(64), nullable=True)
+    archived = Column(Integer, server_default=text("'0'"))
+
+    registration = relationship(u'Registration')
+    recruitment = relationship(u'Recruitments')
+    user = relationship(u'User')
+
+
+    def to_json(self):
+        json_record = {
+            'id': self.id,
+            'applicant': self.applicant,
+            'recruitment': self.recruitment_id,
+            'motivation': self.motivation,
+            'community' :self.community,
+            'mentality': self.mentality,
+            'country': self.country,
+            'selling': self.selling,
+            'health': self.health,
+            'investment': self.investment,
+            'interpersonal': self.interpersonal,
+            'canjoin' :self.canjoin,
+            'commitment': self.commitment,
+            'total' :self.total,
+            'selected': self.selected,
+            'synced': self.synced,
+            'added_by': self.added_by,
+            'comment': self.comment,
+            'date_added': self.date_added,
+        }
+        return json_record
+
+    @staticmethod
+    def from_json(json_record):
+        id = json_record.get('id')
+        applicant = json_record.get('applicant')
+        recruitment_id = json_record.get('recruitment')
+        motivation = json_record.get('motivation')
+        community = json_record.get('community')
+        mentality = json_record.get('mentality')
+        country = json_record.get('country')
+        selling = json_record.get('selling')
+        health = json_record.get('health')
+        investment = json_record.get('investment')
+        interpersonal = json_record.get('interpersonal')
+        canjoin = json_record.get('canjoin')
+        commitment = json_record.get('commitment')
+        total = json_record.get('total')
+        selected = json_record.get('selected')
+        synced = json_record.get('synced')
+        added_by = json_record.get('added_by')
+        comment = json_record.get('comment')
+        date_added = json_record.get('date_added')
+        return Interview (id = id, applicant = applicant, recruitment_id = recruitment_id,
+            motivation = motivation, community = community, mentality = mentality,
+            country = country, selling = selling, health = health, investment = investment,
+            interpersonal = interpersonal, canjoin = canjoin, commitment = commitment,
+            total = total, selected = selected, synced = synced, added_by = added_by,
+            comment = comment, date_added = date_added)
+
 
 class Location(db.Model):
     __tablename__ = 'location'
