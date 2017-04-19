@@ -201,6 +201,24 @@ class Registration (db.Model):
     date_added = db.Column(db.DateTime(), default=datetime.utcnow)
     synced = Column(Integer, server_default=text("'0'"))
     archived = Column(Integer, server_default=text("'0'"))
+    chew_name = Column(String(128), nullable=True)
+    chew_number = Column(String(128), nullable=True)
+    ward = Column(String(128), nullable=True)
+    cu_name = Column(String(128), nullable=True)
+    link_facility = Column(String(128), nullable=True)
+    households = Column(Integer, server_default=text("'0'"))
+    trainings = Column(String(128), nullable=True)
+    is_chv = Column(Integer, server_default=text("'0'"))
+    is_gok_trained = Column(Integer, server_default=text("'0'"))
+    referral = Column(String(128), nullable=True)
+    referral_number = Column(String(128), nullable=True)
+    referral_title = Column(String(128), nullable=True)
+    vht = Column(Integer, server_default=text("'0'"))
+    parish = Column(String(128), nullable=True)
+    financial_accounts = Column(Integer, server_default=text("'0'"))
+    recruitment_transport = Column(Integer, server_default=text("'0'"))
+    branch_transport = Column(Integer, server_default=text("'0'"))
+
     owner = relationship(u'User')
 
     def to_json(self):
@@ -230,14 +248,30 @@ class Registration (db.Model):
             'proceed':self.proceed,
             'client_time':float(self.client_time),
             'date_added':self.date_added,
-            'synced':self.synced
+            'synced':self.synced,
+            'chew_name' : self.chew_name,
+            'chew_number' : self.chew_number,
+            'ward' : self.ward,
+            'cu_name' : self.cu_name,
+            'link_facility' : self.link_facility,
+            'households' : self.households,
+            'trainings' : self.trainings,
+            'is_chv' : self.is_chv,
+            'is_gok_trained' : self.is_gok_trained,
+            'referral' : self.referral,
+            'referral_number' : self.referral_number,
+            'referral_title' : self.referral_title,
+            'vht' : self.vht,
+            'parish' : self.parish,
+            'financial_accounts' : self.financial_accounts,
+            'recruitment_transport' : self.recruitment_transport,
+            'branch_transport' : self.branch_transport
             }
 
         return json_record
 
     @staticmethod
     def from_json(json_record):
-        id = json_record.get('_id')
         id = json_record.get('id')
         name = json_record.get('name')
         phone = json_record.get('phone')
@@ -263,6 +297,23 @@ class Registration (db.Model):
         proceed = json_record.get('proceed')
         client_time = json_record.get('date_added')
         synced = json_record.get('synced')
+        chew_name = json_record.get('chew_name')
+        chew_number = json_record.get('chew_number')
+        ward = json_record.get('ward')
+        cu_name = json_record.get('cu_name')
+        link_facility = json_record.get('link_facility')
+        households = json_record.get('households')
+        trainings = json_record.get('trainings')
+        is_chv = json_record.get('is_chv')
+        is_gok_trained = json_record.get('is_gok_trained')
+        referral = json_record.get('referral')
+        referral_number = json_record.get('referral_number')
+        referral_title = json_record.get('referral_title')
+        vht = json_record.get('vht')
+        parish = json_record.get('parish')
+        financial_accounts = json_record.get('financial_accounts')
+        recruitment_transport = json_record.get('recruitment_transport')
+        branch_transport = json_record.get('branch_transport')
         return Registration (id = id, name = name, phone = phone, gender = gender,
             recruitment = recruitment, country = country, dob = dob,
             district = district, subcounty = subcounty, division = division,
@@ -270,7 +321,15 @@ class Registration (db.Model):
             date_moved = date_moved, languages = languages, brac = brac,
             brac_chp = brac_chp, education = education, occupation = occupation,
             community_membership = community_membership, added_by = added_by,
-            comment = comment, proceed = proceed,
+            comment = comment, proceed = proceed, chew_name = chew_name,
+            chew_number = chew_number, ward = ward, cu_name = cu_name,
+            link_facility = link_facility, households = households,
+            trainings = trainings, is_chv = is_chv, is_gok_trained = is_gok_trained,
+            referral = referral, referral_number = referral_number,
+            referral_title = referral_title, vht = vht, parish = parish,
+            financial_accounts = financial_accounts,
+            recruitment_transport = recruitment_transport,
+            branch_transport = branch_transport,
             client_time = client_time, synced = synced)
 
 class Recruitments(db.Model):
