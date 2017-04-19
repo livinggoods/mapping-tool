@@ -65,7 +65,7 @@ def db_rebuild():
         app_name ='dkimaru',
         confirmed=True,
         name='David Kimaru',
-        location='Nairobi, KE',
+        location='KE',
         about_me=forgery_py.lorem_ipsum.sentence(),
         member_since=forgery_py.date.date(True)
     )
@@ -76,7 +76,7 @@ def db_rebuild():
         app_name ='webmaster',
         confirmed=True,
         name='Web Master',
-        location='Nairobi, KE',
+        location='KE',
         about_me=forgery_py.lorem_ipsum.sentence(),
         member_since=forgery_py.date.date(True)
     )
