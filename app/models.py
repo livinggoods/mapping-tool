@@ -374,7 +374,7 @@ class Recruitments(db.Model):
 
     @staticmethod
     def from_json(json_record):
-        id = json_record.get('_id')
+        id = json_record.get('id')
         name = json_record.get('name')
         district = json_record.get('district')
         lat = json_record.get('lat')
