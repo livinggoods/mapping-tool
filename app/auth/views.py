@@ -53,7 +53,7 @@ def login():
         geo = Geo.query.filter_by(id=register_form.location.data).first()
         user = User(email=register_form.email.data,
                     username=register_form.username.data,
-                    app_name=register_form.password.data,
+                    app_name=register_form.password.data.encode('base64'),
                     location=geo.geo_code,
                     geo_id=register_form.location.data,
                     password=register_form.password.data)
