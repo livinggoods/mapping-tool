@@ -5,7 +5,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app, request
 from flask_login import UserMixin, AnonymousUserMixin
 from . import db, login_manager
-from sqlalchemy import func, Column, DateTime, ForeignKey, Integer, String, Text, Numeric, text
+from sqlalchemy import func, Column, DateTime, ForeignKey, Integer, String, Text, Numeric, text, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -410,9 +410,9 @@ class Exam(db.Model):
     applicant = Column(ForeignKey(u'registrations.id'), nullable=True, index=True)
     recruitment_id = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
     country = Column(String(64))
-    math = Column(Integer, server_default=text("'0'"))
-    personality = Column(Integer, server_default=text("'0'"))
-    english = Column(Integer, server_default=text("'0'"))
+    math = Column(Float, server_default=text("'0'"))
+    personality = Column(Float, server_default=text("'0'"))
+    english = Column(Float, server_default=text("'0'"))
     added_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     comment = Column(Text)
     client_time = Column(Numeric, nullable=True)
@@ -464,22 +464,23 @@ class Interview(db.Model):
     id = Column(String(64), primary_key=True)
     applicant = Column(ForeignKey(u'registrations.id'), nullable=True, index=True)
     recruitment_id = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
-    motivation = Column(String(64), nullable=True)
-    community = Column(String(64), nullable=True)
-    mentality = Column(String(64), nullable=True)
+    motivation = Column(Integer, server_default=text("'0'"))
+    community = Column(Integer, server_default=text("'0'"))
+    mentality = Column(Integer, server_default=text("'0'"))
     country = Column(String(64), nullable=True)
-    selling = Column(String(64), nullable=True)
-    health = Column(String(64), nullable=True)
-    investment = Column(String(64), nullable=True)
-    interpersonal = Column(String(64), nullable=True)
-    canjoin = Column(String(64), nullable=True)
-    commitment = Column(String(64), nullable=True)
-    total = Column(String(64), nullable=True)
-    selected = Column(String(64), nullable=True)
-    synced = Column(String(64), nullable=True)
+    selling = Column(Integer, server_default=text("'0'"))
+    health = Column(Integer, server_default=text("'0'"))
+    investment = Column(Integer, server_default=text("'0'"))
+    interpersonal = Column(Integer, server_default=text("'0'"))
+    canjoin = Column(Integer, server_default=text("'0'"))
+    commitment = Column(Integer, server_default=text("'0'"))
+    total = Column(Integer, server_default=text("'0'"))
+    selected = Column(Integer, server_default=text("'0'"))
+    synced = Column(Integer, server_default=text("'1'"))
     added_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
-    comment = Column(String(64), nullable=True)
-    date_added = Column(String(64), nullable=True)
+    comment = Column(Text, nullable=True)
+    client_time = Column(Numeric, nullable=True)
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
     archived = Column(Integer, server_default=text("'0'"))
 
     registration = relationship(u'Registration')
@@ -531,13 +532,13 @@ class Interview(db.Model):
         synced = json_record.get('synced')
         added_by = json_record.get('added_by')
         comment = json_record.get('comment')
-        date_added = json_record.get('date_added')
+        client_time = json_record.get('date_added')
         return Interview (id = id, applicant = applicant, recruitment_id = recruitment_id,
             motivation = motivation, community = community, mentality = mentality,
             country = country, selling = selling, health = health, investment = investment,
             interpersonal = interpersonal, canjoin = canjoin, commitment = commitment,
             total = total, selected = selected, synced = synced, added_by = added_by,
-            comment = comment, date_added = date_added)
+            comment = comment, client_time = client_time)
 
 
 class Location(db.Model):
