@@ -650,18 +650,19 @@ class Geo(db.Model):
     __tablename__ = 'geos'
     id = db.Column(db.Integer, primary_key=True)
     geo_name = db.Column(db.String(20), unique=True)
+    geo_code = db.Column(db.String(20))
     users = db.relationship('User', backref='geo', lazy='dynamic')
     archived = Column(Integer, server_default=text("'0'"))
 
     @staticmethod
     def insert_geos():
         """Update or create all Geos"""
-        geos = ['Kenya',
-                'Uganda']
-        for name in geos:
-            geo = Geo.query.filter_by(geo_name=name).first()
-            if geo is None:
-                geo = Geo(geo_name=name)
+        geos = [{'name':'Kenya', 'code':'KE'},
+                {'name':'Uganda', 'code':'UG'}]
+        for geo in geos:
+            added_geo = Geo.query.filter_by(geo_name=geo['name']).first()
+            if added_geo is None:
+                geo = Geo(geo_name=geo['name'], geo_code=geo['code'])
             db.session.add(geo)
         db.session.commit()
 

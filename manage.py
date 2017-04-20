@@ -61,8 +61,8 @@ def db_rebuild():
     test_user_1 = User(
         email='dkimaru@livinggoods.org',
         username='dkimaru',
-        password='dkimaru',
-        app_name ='dkimaru',
+        password='password',
+        app_name ='password',
         confirmed=True,
         name='David Kimaru',
         location='KE',

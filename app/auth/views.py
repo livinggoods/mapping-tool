@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from . import auth
 from .. import db
-from ..models import User
+from ..models import User, Geo
 from ..email import send_email
 from .forms import LoginForm, RegistrationForm, ChangePasswordForm, \
     PasswordResetRequestForm, PasswordResetForm, ChangeEmailForm
@@ -47,10 +47,15 @@ def login():
             return redirect(request.args.get('next') or url_for('main.index'))
         flash('Invalid username or password.', 'error')
     register_form = RegistrationForm()
+    geos = [(c.id, c.geo_name) for c in Geo.query.all()]
+    register_form.location.choices = geos
     if register_form.validate_on_submit():
+        geo = Geo.query.filter_by(id=register_form.location.data).first()
         user = User(email=register_form.email.data,
                     username=register_form.username.data,
                     app_name=register_form.password.data,
+                    location=geo.geo_code,
+                    geo_id=register_form.location.data,
                     password=register_form.password.data)
         db.session.add(user)
         db.session.commit()  # must force commit to generate user id
@@ -75,10 +80,13 @@ def logout():
 def register():
     page={'title':'Register', 'subtitle':'Living Goods'}
     form = RegistrationForm()
+    form.location.choices = [(a.id, a.geo_name) for a in \
+                               Geo.query.order_by('geo_name')]
     if form.validate_on_submit():
         user = User(email=form.email.data,
                     username=form.username.data,
                     password=form.password.data,
+                    location=form.location.data,
                     app_name=form.password.data)
         db.session.add(user)
         db.session.commit()  # must force commit to generate user id
