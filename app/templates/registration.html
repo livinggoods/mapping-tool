@@ -1,0 +1,645 @@
+{% extends 'base.html' %}
+{% block content %}
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Registration Details</h3>
+              </div>
+
+              <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>{{registration.name|title}} <small>Registration details</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                      <div class="profile_img">
+                        <div id="crop-avatar">
+                          <!-- Current avatar -->
+                          <img class="img-responsive avatar-view" src="{{ url_for('static', filename='images/user.png') }}" alt="Avatar" title="Change the avatar">
+                        </div>
+                      </div>
+                      <h3>{{registration.name|title}}</h3>
+
+                      <ul class="list-unstyled user_data">
+                        <li><i class="fa fa-map-signs user-profile-icon"></i> {{registration.village}}, {{registration.county}}, {{registration.country}}
+                        </li>
+
+                        <li>
+                          <i class="fa fa-briefcase user-profile-icon"></i> {{registration.occupation}}
+                        </li>
+
+                        <li class="m-top-xs">
+                          <i class="fa fa-phone user-profile-icon"></i>
+                          <a href="tel:{{registration.phone}}">{{registration.phone}}</a>
+                        </li>
+                      </ul>
+
+                      <!-- <a class="btn btn-success"><i class="fa fa-edit m-right-xs"></i>Edit Profile</a> -->
+                      <br />
+
+                      <!-- start skills -->
+                      <h4>Exam </h4>
+                      <ul class="list-unstyled user_data">
+                        <li>
+                          <p>Math</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{(exam.math / 10 ) * 100 if exam else 0}} "></div>
+                          
+                          </div>
+                        </li>
+                        <li>
+                          <p>English</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{(exam.english / 10 ) * 100 if exam else 0}}"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>About you</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{(exam.personality / 10 ) * 100 if exam else 0}}"></div>
+                          </div>
+                        </li>
+                        <li>
+                          <p>Total</p>
+                          <div class="progress progress_sm">
+                            <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{
+                              ((((exam.math / 10 ) * 100) +
+                              ((exam.math / 10 ) * 100) +
+                              ((exam.math / 10 ) * 100)) / 300) * 100  if exam else 0
+                              }}"></div>
+                          </div>
+                        </li>
+                      </ul>
+                      <!-- end of skills -->
+
+                    </div>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                          <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Registration Details</a>
+                          </li>
+                          <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Exam Details</a>
+                          </li>
+                          <li role="presentation" class=""><a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Interview Details</a>
+                          </li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                          <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+
+                            <!-- start recent activity -->
+                            <row>
+                              <div class="col-md-6 col-sm-6 col-xs-6">
+                                <ul class="messages">
+                                {% if registration.country == "KE" %}
+                                      <li>
+                                        <div class="img-div"><i class="fa fa-user avatar font-big"> </i></div>
+                                        <div class="message_wrapper">
+                                          <h4 class="heading">Chew Details</h4>
+                                          <blockquote class="message">
+                                          {% if registration.chew_name != "" %}
+                                            <i class="fa fa-id-badge avatar font-big"> </i>{{registration.chew_name}}
+                                          {% else %}
+                                            &nbsp;
+                                          {% endif %}
+                                          {% if registration.chew_number != "" %}
+                                            <i class="fa fa-phone avatar font-big"></i> {{registration.chew_number}}
+                                          {% else %}
+                                            &nbsp;
+                                          {% endif %}
+                                          </blockquote>
+                                        </div>
+                                      </li>
+                                  {% else %}
+                                      <li>
+                                        <div class="img-div"><i class="fa fa-user avatar font-big"> </i></div>
+                                        <div class="message_wrapper">
+                                          <h4 class="heading">Referral Details</h4>
+                                          <blockquote class="message">
+                                          {% if registration.referral != "" %}
+                                              {{registration.referral}}
+                                          {% else %}
+                                              &nbsp;
+                                          {% endif %}
+                                          {% if registration.referral_number != "" %}
+                                               <i class="fa fa-phone avatar font-big"></i>{{registration.referral_number}}
+                                          {% else %}
+                                              &nbsp;
+                                          {% endif %}
+                                          {% if registration.referral_title != "" %}
+                                               Position: {{registration.referral_title}}
+                                          {% else %}
+                                            &nbsp;
+                                          {% endif %}
+
+                                          </blockquote>
+                                        </div>
+                                      </li>
+                                  {% endif %}
+                                  
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-venus-mars avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Gender</h4>
+                                      <blockquote class="message">{% if registration.gender != "" %}
+                                        <i class="fa {{ 'fa-female' if registration.gender == 'female' else 'fa-male'}}" ></i>
+                                        {{registration.gender}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-globe avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Country</h4>
+                                      <blockquote class="message">{% if registration.country != "" %}
+                                        {{registration.country}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-calendar avatar font-big"> </i></div>
+                                    <div class="message_date">
+                                      <h3 class="date text-info">{{registration.age()}}</h3>
+                                      <p class="month">Years</p>
+                                    </div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Date of Birth</h4>
+                                      <blockquote class="message">{% if registration.date_of_birth() != "" %}
+                                        {{registration.date_of_birth()}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}
+                                      </blockquote>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-compass avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">District</h4>
+                                      <blockquote class="message">
+                                      {% if registration.district != "" %}
+                                        {{registration.district}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}
+
+                                      </blockquote>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-flag-checkered avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Sub-county</h4>
+                                      <blockquote class="message">{% if registration.subcounty != "" %}
+                                        {{registration.subcounty}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-map-marker avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Division</h4>
+                                      <blockquote class="message">{% if registration.division != "" %}
+                                        {{registration.division}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-map-signs avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Village</h4>
+                                      <blockquote class="message">{% if registration.village != "" %}
+                                        {{registration.village}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-road avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Landmark</h4>
+                                      <blockquote class="message">{% if registration.feature != "" %}
+                                        {{registration.feature}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-book avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Read /  Write English</h4>
+                                      <blockquote class="message">{% if registration.english != "" %}
+                                        {{ 'Yes' if registration.english == 1 else 'No' }}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-calendar-plus-o avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Years at this location</h4>
+                                      <blockquote class="message">{% if registration.date_moved != "" %}
+                                        {{registration.date_moved}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-language avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Languages</h4>
+                                      <blockquote class="message">{% if registration.languages != "" %}
+                                        {{registration.languages}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  {% if registration.country == "UG" %}
+                                      <li>
+                                        <div class="img-div"><i class="fa fa-hospital-o avatar font-big"> </i></div>
+                                        <div class="message_wrapper">
+                                          <h4 class="heading">Has worked with BRAC</h4>
+                                          <blockquote class="message">{% if registration.brac == 1 %}
+                                            Yes<br /> As BRAC CHP?
+                                            {{ 'Yes' if registration.brac_chp == 1 else 'No' }} 
+                                          {% else %}
+                                            No
+                                          {% endif %}</blockquote>
+                                        </div>
+                                      </li>
+                                  {% endif %}
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-graduation-cap avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Education</h4>
+                                      <blockquote class="message">{% if registration.education != "" %}
+                                        {{registration.education}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-cubes avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Current and previous experience</h4>
+                                      <blockquote class="message">{% if registration.occupation != "" %}
+                                        {{registration.occupation}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-object-group avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Community Membership</h4>
+                                      <blockquote class="message">{% if registration.community_membership != "" %}
+                                        {{'Yes' if registration.community_membership == 1 else 'No'}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  <!-- <li>
+                                    <div class="img-div"><i class="fa fa-user-plus avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Added by</h4>
+                                      <blockquote class="message">{% if registration.added_by != "" %}
+                                        {{registration.owner.name}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li> -->
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-comments avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Comment</h4>
+                                      <blockquote class="message">{% if registration.comment != "" %}
+                                        {{registration.comment}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                </ul>
+                              </div>
+                              <div class="col-md-6 col-sm-6 col-xs-6">
+                                <ul class="messages">
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-clock-o avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Client time</h4>
+                                      <blockquote class="message">{% if registration.date_client() != "" %}
+                                        {{registration.date_client()}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  <li>
+                                    <div class="img-div"><i class="fa fa-refresh avatar font-big"> </i></div>
+                                    <div class="message_wrapper">
+                                      <h4 class="heading">Synced</h4>
+                                      <blockquote class="message">{% if registration.synced != "" %}
+                                        {{'Yes' if registration.synced == 1 else 'No'}}
+                                      {% else %}
+                                        &nbsp;
+                                      {% endif %}</blockquote>
+                                    </div>
+                                  </li>
+                                  {% if registration.country == "KE" %}
+
+                                          <li>
+                                            <div class="img-div"><i class="fa fa-location-arrow avatar font-big"> </i></div>
+                                            <div class="message_wrapper">
+                                              <h4 class="heading">Ward</h4>
+                                              <blockquote class="message">{% if registration.ward != "" %}
+                                                {{registration.ward}}
+                                              {% else %}
+                                                &nbsp;
+                                              {% endif %}</blockquote>
+                                            </div>
+                                          </li>
+
+                                          <li>
+                                            <div class="img-div"><i class="fa fa-home avatar font-big"> </i></div>
+                                            <div class="message_wrapper">
+                                              <h4 class="heading">CU Name</h4>
+                                              <blockquote class="message">{% if registration.cu_name != "" %}
+                                                {{registration.cu_name}}
+                                              {% else %}
+                                                &nbsp;
+                                              {% endif %}</blockquote>
+                                            </div>
+                                          </li>
+                                          <li>
+                                            <div class="img-div"><i class="fa fa-h-square avatar font-big"> </i></div>
+                                            <div class="message_wrapper">
+                                              <h4 class="heading">Link Facility</h4>
+                                              <blockquote class="message">{% if registration.link_facility != "" %}
+                                                {{registration.link_facility}}
+                                              {% else %}
+                                                &nbsp;
+                                              {% endif %}</blockquote>
+                                            </div>
+                                          </li>
+                                          <li>
+                                            <div class="img-div"><i class="fa fa-window-restore avatar font-big"> </i></div>
+                                            <div class="message_wrapper">
+                                              <h4 class="heading">House Holds</h4>
+                                              <blockquote class="message">{% if registration.households != "" %}
+                                                {{registration.households}}
+                                              {% else %}
+                                                &nbsp;
+                                              {% endif %}</blockquote>
+                                            </div>
+                                          </li>
+                                          <li>
+                                            <div class="img-div"><i class="fa fa-certificate avatar font-big"> </i></div>
+                                            <div class="message_wrapper">
+                                              <h4 class="heading">Other trainings received</h4>
+                                              <blockquote class="message">{% if registration.trainings != "" %}
+                                                {{registration.trainings}}
+                                              {% else %}
+                                                &nbsp;
+                                              {% endif %}</blockquote>
+                                            </div>
+                                          </li>
+                                          <li>
+                                            <div class="img-div"><i class="fa fa-stethoscope avatar font-big"> </i></div>
+                                            <div class="message_wrapper">
+                                              <h4 class="heading">CHV</h4>
+                                              <blockquote class="message">{% if registration.is_chv != "" %}
+                                                {{ 'Yes' if registration.is_chv == 1 else 'No' }}
+                                              {% else %}
+                                                &nbsp;
+                                              {% endif %}</blockquote>
+                                            </div>
+                                          </li>
+                                          <li>
+                                            <div class="img-div"><i class="fa fa-ship avatar font-big"> </i></div>
+                                            <div class="message_wrapper">
+                                              <h4 class="heading">GoK Trained</h4>
+                                              <blockquote class="message">{% if registration.is_gok_trained != "" %}
+                                                {{ 'Yes' if registration.is_gok_trained == 1 else 'No' }}
+                                              {% else %}
+                                                &nbsp;
+                                              {% endif %}</blockquote>
+                                            </div>
+                                          </li>
+                                          <li>
+                                            <div class="img-div"><i class="fa fa-bank avatar font-big"> </i></div>
+                                            <div class="message_wrapper">
+                                              <h4 class="heading">Financial Accounts</h4>
+                                              <blockquote class="message">{% if registration.financial_accounts != "" %}
+                                                {{ 'Yes' if registration.financial_accounts == 1 else 'No' }}
+                                              {% else %}
+                                                &nbsp;
+                                              {% endif %}</blockquote>
+                                            </div>
+                                          </li>
+                                          <li>
+                                            <div class="img-div"><i class="fa fa-truck avatar font-big"> </i></div>
+                                            <div class="message_wrapper">
+                                              <h4 class="heading">Transport for recruitment</h4>
+                                              <blockquote class="message">{% if registration.recruitment_transport != "" %}
+                                                {{registration.recruitment_transport}}
+                                              {% else %}
+                                                &nbsp;
+                                              {% endif %}</blockquote>
+                                            </div>
+                                          </li>
+                                          <li>
+                                            <div class="img-div"><i class="fa fa-bus avatar font-big"> </i></div>
+                                            <div class="message_wrapper">
+                                              <h4 class="heading">Transport as per branch</h4>
+                                              <blockquote class="message">{% if registration.branch_transport != "" %}
+                                                {{registration.branch_transport}}
+                                              {% else %}
+                                                &nbsp;
+                                              {% endif %}</blockquote>
+                                            </div>
+                                          </li>
+                                  {% endif %}
+                                  {% if registration.country =="UG" %}
+                                          <li>
+                                            <div class="img-div"><i class="fa fa-stethoscope avatar font-big"> </i></div>
+                                            <div class="message_wrapper">
+                                              <h4 class="heading">VHT</h4>
+                                              <blockquote class="message">{% if registration.vht != "" %}
+                                                {{ 'Yes' if registration.vht == 1 else 'No' }}
+                                              {% else %}
+                                                &nbsp;
+                                              {% endif %}</blockquote>
+                                            </div>
+                                          </li>
+                                          <li>
+                                            <div class="img-div"><i class="fa fa-home avatar font-big"> </i></div>
+                                            <div class="message_wrapper">
+                                              <h4 class="heading">Parish</h4>
+                                              <blockquote class="message">{% if registration.parish != "" %}
+                                                {{registration.parish}}
+                                              {% else %}
+                                                &nbsp;
+                                              {% endif %}</blockquote>
+                                            </div>
+                                          </li>
+                                  {% endif %}
+                                </ul>
+                              <!-- end recent activity -->
+                              </div>
+                            </div>
+
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+
+                            <!-- start user projects -->
+                            <table class="data table table-striped no-margin">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Project Name</th>
+                                  <th>Client Company</th>
+                                  <th class="hidden-phone">Hours Spent</th>
+                                  <th>Contribution</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>1</td>
+                                  <td>New Company Takeover Review</td>
+                                  <td>Deveint Inc</td>
+                                  <td class="hidden-phone">18</td>
+                                  <td class="vertical-align-mid">
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-success" data-transitiongoal="35"></div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>2</td>
+                                  <td>New Partner Contracts Consultanci</td>
+                                  <td>Deveint Inc</td>
+                                  <td class="hidden-phone">13</td>
+                                  <td class="vertical-align-mid">
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-danger" data-transitiongoal="15"></div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>3</td>
+                                  <td>Partners and Inverstors report</td>
+                                  <td>Deveint Inc</td>
+                                  <td class="hidden-phone">30</td>
+                                  <td class="vertical-align-mid">
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-success" data-transitiongoal="45"></div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>4</td>
+                                  <td>New Company Takeover Review</td>
+                                  <td>Deveint Inc</td>
+                                  <td class="hidden-phone">28</td>
+                                  <td class="vertical-align-mid">
+                                    <div class="progress">
+                                      <div class="progress-bar progress-bar-success" data-transitiongoal="75"></div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <!-- end user projects -->
+
+                          </div>
+                          <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+                            <p>xxFood truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui
+                              photo booth letterpress, commodo enim craft beer mlkshk </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+{% endblock %}
+{% block additionaljs %}
+<!-- Datatables -->
+{{ url_for('static', filename='css/nprogress.css') }}
+    <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buttons.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buttons.flash.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buttons.html5.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buttons.print.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.fixedHeader.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.keyTable.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/responsive.bootstrap.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/datatables.scroller.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jszip.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pdfmake.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vfs_fonts.js') }}"></script>
+{% endblock %}
+{% block additionalcss %}
+    <link href="{{ url_for('static', filename='css/flat/green.css') }}"" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="{{ url_for('static', filename='css/dataTables.bootstrap.min.css') }}"" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/buttons.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/responsive.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/scroller.bootstrap.min.css') }}" rel="stylesheet">
+
+{% endblock %}
