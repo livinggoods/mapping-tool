@@ -5,12 +5,13 @@ from sqlalchemy import func, distinct, select, and_
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm
 from .. import db
-from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets,
-    Location, Education, EducationLevel, Referral, Chp, Recruitments,
+from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets, Exam,
+    Location, Education, EducationLevel, Referral, Chp, Recruitments, Registration, Interview,
     SelectedApplication, Application, ApplicationPhone, Branch, Cohort, RecruitmentUsers)
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
-from datetime import date
+from datetime import date, datetime
+import time
 import csv, os, time, calendar
 from ..data import data
 
@@ -35,26 +36,22 @@ def index():
     else:
         return render_template('index.html', page=page, currency=currency)
 
-@main.route('/application/<int:id>', methods=['GET', 'POST'])
+@main.route('/registration/<string:id>', methods=['GET', 'POST'])
 @login_required
 def application_details(id):
     if request.method == 'GET':
-        a = Application.query.filter_by(id=id).first_or_404()
-        page = {'title':' '.join([a.l_name, a.m_name, a.f_name]), 'subtitle':'Application details'}
-        age = calculate_age(a.date_of_birth)
-        qualified = appplication_status(a)
-        selected_application = SelectedApplication.query.filter_by(application_id=id).first()
-        # Is there any interview for this application?
-        selected = False
-        taken_interview = None
-        interview_score = False
-        if selected_application:
-          selected = True
-          interview_score = InterviewScore.query.filter_by(selection_id=selected_application.id).first()
-          taken_interview = True if interview_score else False
-        phones = ApplicationPhone.query.filter_by(application_id=id)
-        return render_template('application.html', phones=phones, taken_interview=taken_interview, currency=currency,
-          selected=selected, selected_application=selected_application, interview_score=interview_score, qualified=qualified, age=age, page=page, application=a)
+        a = Registration.query.filter_by(id=id).first_or_404()
+        mytime = time.strftime('%Y-%m-%d', time.localtime(1347517370))
+        dob = time.strftime('%Y-%m-%d', time.localtime(a.dob / 1000))
+        birthdate = datetime.strptime(dob, '%Y-%m-%d')
+        age = ((datetime.today() - birthdate).days/365)
+        page = {'title':a.name, 'subtitle':'Registration details'}
+        #age = time.time() - float(a.dob)
+        qualified = a.dob
+        interview = Interview.query.filter_by(applicant=id).first()
+        exam = Exam.query.filter_by(applicant=id).first()
+        return render_template('registration.html', exam=exam, dob=dob,
+            page=page, interview=interview, registration=a, age=age)
     else:
         if request.form.get('action') == 'select':
             # add the application to the selected application
@@ -264,17 +261,15 @@ def recruitments():
         db.session.commit()
         return jsonify(status='created', id=recruitments.id)
 
-@main.route('/recruitment/<int:id>', methods=['GET', 'POST'])
+@main.route('/recruitment/<string:id>', methods=['GET', 'POST'])
 @login_required
 def recruitment(id):
   if request.method == 'GET':
     recruitment = Recruitments.query.filter_by(archived=0, id=id).first_or_404()
-    locations = LocationTargets.query.filter_by(recruitment_id=id)
-    applications = Application.query.filter_by(recruitment_id=id)
-    users = RecruitmentUsers.query.filter_by(recruitment_id=id)
+    registrations = Registration.query.filter_by(recruitment=id)
     page={'title':recruitment.name.title(), 'subtitle':recruitment.name if recruitment else 'Recruitments'}
-    return render_template('recruitment.html', locations=locations, recruitment=recruitment, 
-        applications=applications, users=users, currency=currency, page=page)
+    return render_template('recruitment.html', recruitment=recruitment, 
+        registrations=registrations, page=page)
   else:
     if 'id' in request.form:
         recruitment = Recruitments.query.filter_by(id=request.form.get('id')).first()
@@ -290,7 +285,7 @@ def recruitment(id):
         recruitment = RecruitmentUsers(user_id=current_user.id, recruitment_id= recruitments.id)
         return jsonify(status='created', id=recruitments.id)
 
-@main.route('/applications', methods=['GET', 'POST'])
+@main.route('/registrations', methods=['GET', 'POST'])
 @login_required
 def applications():
     if request.method == 'GET':
