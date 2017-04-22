@@ -113,7 +113,8 @@ def deploy():
     Geo.insert_geos()
     UserType.insert_user_types()
 
-    # insert firm types/tiers as defined in model
+    # insert education data
+    Education.create_education()
 
 
 if __name__ == '__main__':
