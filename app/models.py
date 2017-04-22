@@ -1,5 +1,5 @@
 import hashlib
-from datetime import datetime
+from datetime import datetime, date
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app, request
@@ -8,6 +8,8 @@ from . import db, login_manager
 from sqlalchemy import func, Column, DateTime, ForeignKey, Integer, String, Text, Numeric, text, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+import time
+
 
 from data import data
 
@@ -107,8 +109,56 @@ class Education(db.Model):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(45))
+    level_type = Column(String(45))
+    hierachy = Column(Integer, server_default=text("'0'"))
+    country = Column(String(45), server_default=text("'UG'"))
     date_added = db.Column(db.DateTime(), default=datetime.utcnow)
     archived = Column(Integer, server_default=text("'0'"))
+
+    @staticmethod
+    def create_education():
+        """Update or create all Edus"""
+        # We start with UG to reflect Android data
+        for i in range(1, 9):
+            country = 'UG'
+            hierachy = i
+            level_type = ''
+            name = ''
+            if i > 7:
+                level_type = 'tertiary'
+                name = 'Tertiary'
+            elif i > 1:
+                name = 'S'+str((i-1))
+                level_type = 'secondary'
+            else:
+                name = 'Less than P7'
+                level_type = 'primary'
+            education = Education(name=name,level_type=level_type, hierachy=hierachy,
+                country=country)
+            db.session.add(education)
+        db.session.commit()
+
+        for i in range(1, 8):
+            country = 'KE'
+            hierachy = i
+            level_type = ''
+            name = ''
+            if i > 6:
+                level_type = 'tertiary'
+                name = 'Tertiary'
+            elif i > 2:
+                name = 'S'+str((i-2))
+                level_type = 'secondary'
+            elif i == 2:
+                name = 'P'+str((i+6))
+                level_type = 'primary'
+            else:
+                name = 'Less than P7'
+                level_type = 'primary'
+            education = Education(name=name,level_type=level_type, hierachy=hierachy,
+                country=country)
+            db.session.add(education)
+        db.session.commit()
 
 
 class EducationLevel(db.Model):
@@ -191,7 +241,7 @@ class Registration (db.Model):
     languages = Column(String(128), nullable=True)
     brac = Column(Integer, server_default=text("'0'"))
     brac_chp = Column(Integer, server_default=text("'0'"))
-    education = Column(Integer, server_default=text("'0'"))
+    education = Column(ForeignKey(u'education.id'), nullable=True, index=True)
     occupation = Column(String(128), nullable=True)
     community_membership = Column(Integer, server_default=text("'0'"))
     added_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
