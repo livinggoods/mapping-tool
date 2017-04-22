@@ -63,21 +63,25 @@ def sync_recruitments():
   else:
     status = []
     recruitment_list = request.json.get('recruitments')
-    for recruitment in recruitment_list:
-      operation=''
-      record = Recruitments.from_json(recruitment)
-      saved_record  = Recruitments.query.filter(Recruitments.id == record.id)
-      if saved_record:
-        recruitment['client_time'] = recruitment.get('date_added')
-        recruitment.pop('date_added', None)
-        saved_record.update(recruitment)
-        db.session.commit()
-        operation='updated'
-      else:
-        db.session.add(record)
-        operation='created'
-      status.append({'id':record.id, 'status':'ok', 'operation': operation})
-    return jsonify(status=status)
+    if recruitment_list is not None:
+      for recruitment in recruitment_list:
+        operation=''
+        record = Recruitments.from_json(recruitment)
+        saved_record  = Recruitments.query.filter(Recruitments.id == record.id).first()
+        if saved_record:
+          recruitment['client_time'] = recruitment.get('date_added')
+          recruitment.pop('date_added', None)
+          saved_record = record
+          db.session.commit()
+          operation='updated'
+        else:
+          db.session.add(record)
+          db.session.commit()
+          operation='created'
+        status.append({'id':record.id, 'status':'ok', 'operation': operation})
+      return jsonify(status=status)
+    else:
+      return jsonify(error="No records posted")
 
 @api.route('/sync/registrations', methods=['GET', 'POST'])
 def sync_registrations():
@@ -87,21 +91,25 @@ def sync_registrations():
   else:
     status = []
     registration_list = request.json.get('registrations')
-    for registration in registration_list:
-      operation='' #to hold the operation performed so that we can inform the client
-      record = Registration.from_json(registration)
-      saved_record  = Registration.query.filter(Registration.id == record.id)
-      if saved_record:
-        registration['client_time'] = registration.get('date_added')
-        registration.pop('date_added', None)
-        saved_record.update(registration)
-        db.session.commit()
-        operation='updated'
-      else:
-        db.session.add(record)
-        operation='created'
-      status.append({'id':record.id, 'status':'ok', 'operation':operation})
-    return jsonify(status=status)
+    if registration_list is not None:
+      for registration in registration_list:
+        operation='' #to hold the operation performed so that we can inform the client
+        record = Registration.from_json(registration)
+        saved_record  = Registration.query.filter(Registration.id == record.id).first()
+        if saved_record:
+          registration['client_time'] = registration.get('date_added')
+          registration.pop('date_added', None)
+          saved_record = record
+          db.session.commit()
+          operation='updated'
+        else:
+          db.session.add(record)
+          db.session.commit()
+          operation='created'
+        status.append({'id':record.id, 'status':'ok', 'operation':operation})
+      return jsonify(status=status)
+    else:
+      return jsonify(error="No records posted")
 
 @api.route('/sync/interviews', methods=['GET', 'POST'])
 def sync_interviews():
@@ -111,20 +119,24 @@ def sync_interviews():
   else:
     status = []
     interview_list = request.json.get('interviews')
-    for interview in interview_list:
-      record = Interview.from_json(interview)
-      saved_record  = Interview.query.filter(Interview.id == record.id)
-      if saved_record:
-        interview['client_time'] = interview.get('date_added')
-        interview.pop('date_added', None)
-        saved_record.update(interview)
-        db.session.commit()
-        operation='updated'
-      else:
-        db.session.add(record)
-        operation='created'
-      status.append({'id':record.id, 'status':'ok', 'operation':operation})
-    return jsonify(status=status)
+    if interview_list is not None:
+      for interview in interview_list:
+        record = Interview.from_json(interview)
+        saved_record  = Interview.query.filter(Interview.id == record.id).first()
+        if saved_record:
+          interview['client_time'] = interview.get('date_added')
+          interview.pop('date_added', None)
+          saved_record = record
+          db.session.commit()
+          operation='updated'
+        else:
+          db.session.add(record)
+          db.session.commit()
+          operation='created'
+        status.append({'id':record.id, 'status':'ok', 'operation':operation})
+      return jsonify(status=status)
+    else:
+      return jsonify(error="No records posted")
 
 
 @api.route('/sync/exams', methods=['GET', 'POST'])
@@ -135,18 +147,23 @@ def sync_exams():
   else:
     status = []
     exam_list = request.json.get('exams')
-    for exam in exam_list:
-      record = Exam.from_json(exam)
-      saved_record  = Exam.query.filter(Exam.id == record.id)
-      if saved_record:
-        exam['client_time'] = exam.get('date_added')
-        exam.pop('date_added', None)
-        saved_record.update(exam)
-        db.session.commit()
-        operation='updated'
-      else:
-        db.session.add(record)
-        operation='created'
-      status.append({'id':record.id, 'status':'ok', 'operation':operation})
-    return jsonify(status=status)
+    if exam_list is not None:
+      for exam in exam_list:
+        record = Exam.from_json(exam)
+        saved_record  = Exam.query.filter(Exam.id == record.id).first()
+        if saved_record:
+          exam['client_time'] = exam.get('date_added')
+          exam.pop('date_added', None)
+          saved_record = record
+          db.session.commit()
+          operation='updated'
+        else:
+          print 'Creating exam'
+          db.session.add(record)
+          db.session.commit()
+          operation='created'
+        status.append({'id':record.id, 'status':'ok', 'operation':operation})
+      return jsonify(status=status)
+    else:
+      return jsonify(error="No records posted")
 
