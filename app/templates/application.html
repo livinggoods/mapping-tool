@@ -52,201 +52,34 @@
                         <table class="data table table-striped no-margin">
                           <tbody>
                             <tr>
-                                <td class="details-left"> First Name :</td><td class="details-right"> {{application.f_name|title}}</td>
+                                <td class="details-left"> First Name :</td><td class="details-right"> {{registration.name|title}}</td>
                             </tr>
-                            <tr>
-                                <td class="details-left"> Mid Name :</td><td class="details-right"> {{application.m_name|title}}</td>
-                            </tr>
-                            <tr>
-                                <td class="details-left"> Last Name :</td><td class="details-right"> {{application.l_name|title}}</td>
-                            </tr>
-
                             <tr>
                                 <td class="details-left"> Phone :</td><td class="details-right">
-                                      {% for phone in phones %}
-                                        <a href="tel:{{phone.phone}}">{{phone.phone}}</a>
-                                      {% endfor %}
+                                  <a href="tel:{{registration.phone}}">{{registration.phone}}</a>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="details-left"> Gender :</td><td class="details-right"> {{ 'Male' if application.gender == 'm' else 'Female' }}</td>
+                                <td class="details-left"> Gender :</td><td class="details-right"> {{ registration.gender }}</td>
                             </tr>
                             <tr>
-                                <td class="details-left"> Date of Birth :</td><td class="details-right"> {{application.date_of_birth}} (Aged
-                                {{age}} years)</td>
+                                <td class="details-left"> Date of Birth :</td><td class="details-right"> {{registration.dob}} </td>
                             </tr>
                             <tr>
-                                <td class="details-left"> Referred By :</td><td class="details-right"> {{application.referral.name}}</td>
+                                <td class="details-left"> Referred By :</td><td class="details-right"> {{registration.referral_name}}</td>
                             </tr>
                             <tr>
-                                <td class="details-left"> Languages :</td><td class="details-right"> {{application.languages|title}}</td>
-                            </tr>
-                            <tr>
-                                <td class="details-left"> Education :</td><td class="details-right"> {{application.edu_level.level_name}} {{application.education.name}}</td>
+                                <td class="details-left"> Languages :</td><td class="details-right"> {{registration.languages|title}}</td>
                             </tr>
 
                           </tbody>
                         </table>
                       </div>
           </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="col-md-6 col-sm-6 col-xs-12">
-      <div class="x_panel">
-        <div class="x_title">
-          <h2><i class="fa fa-bars"></i> Application Details <small>Details for the application</small></h2>
-          <ul class="nav navbar-right panel_toolbox">
-            <li><div class="btn-group">
-              {%if qualified %}
-                  <button class="btn btn-sm btn-primary btn-success" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Qualified"><i class="fa fa-check"></i> Qualified</button>
-                  {%if selected %}
-                   <button class="btn btn-sm btn-primary btn-success" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Selected"><i class="fa fa-check"></i> Selected</button>
-                    {% else %}
-                    <button class="btn btn-sm btn-primary btn-info" id="application-selected" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Not Selected"><i class="fa fa-times"></i> Select</button>
-                  {% endif %}
-
-                {% else %}
-                <button class="btn btn-sm btn-primary btn-warning" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Not qualified"><i class="fa fa-times"></i> Not qualified</button>
-                {% endif%}
-              </div>
-            </li>
-            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-            </li>
-            <li><a class="close-link"><i class="fa fa-close"></i></a>
-            </li>
-          </ul>
-          <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-          <table class="data table table-striped no-margin">
-            <tbody>
-              <tr>
-                  <td class="details-left"> Location :</td><td class="details-right"> {{application.location.name}}</td>
-              </tr>
-              <tr>
-                  <td class="details-left"> Location landmark:</td><td class="details-right"> {{application.landmark}}</td>
-              </tr>
-              <tr>
-                  <td class="details-left"> Date Moved:</td><td class="details-right"> {{application.date_moved}}</td>
-              </tr>
-              <tr>
-                  <td class="details-left"> VHT? :</td><td class="details-right">{{ 'Yes' if application.vht else 'No' }}</td>
-              </tr>
-              <tr>
-                  <td class="details-left"> Worked for BRAC? :</td><td class="details-right"> {{ 'Yes' if application.worked_brac else 'No' }}</td>
-              </tr>
-              <tr>
-                  <td class="details-left"> Worked as BRAC CHP? :</td><td class="details-right">{{ 'Yes' if application.brac_chp else 'No' }}</td>
-              </tr>
-              <tr>
-                  <td class="details-left"> Community Membership? :</td><td class="details-right"> {{application.community_membership}}</td>
-              </tr>
-              <tr>
-                  <td class="details-left"> Read English?: </td><td class="details-right"> {{ 'Yes' if application.read_english else 'No' }}</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
   </div>
-    <div class="col-md-6 col-sm-6 col-xs-12">
-      <div class="x_panel">
-        <div class="x_title">
-          <h2><i class="fa fa-bars"></i> Test Scores <small>Scores for the test</small></h2>
-          <ul class="nav navbar-right panel_toolbox">
-            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-            </li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Settings 1</a>
-                </li>
-                <li><a href="#">Settings 2</a>
-                </li>
-              </ul>
-            </li>
-            <li><a class="close-link"><i class="fa fa-close"></i></a>
-            </li>
-          </ul>
-          <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-          <div class="" role="tabpanel" data-example-id="togglable-tabs">
-
-            <div class="">
-                        <table class="data table table-striped no-margin">
-                          <tbody>
-                            <tr>
-                                <td class="details-left"> Maths</td><td class="details-right"> {{application.maths}}</td>
-                            </tr>
-                            <tr>
-                                <td class="details-left">English </td><td class="details-right"> {{application.english}}</td>
-                            </tr>
-                            <tr>
-                                <td class="details-left">Self opinion</td><td class="details-right"> {{application.about_you}}</td>
-                            </tr>
-                            </tr>
-                            <tr>
-                                <td class="details-left">Total</td><td class="details-right"> {{(application.about_you + application.maths + application.english)}}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-sm-6 col-xs-12">
-      <div class="x_panel">
-        <div class="x_title">
-          <h2><i class="fa fa-bars"></i> Actions <small>What do you want to do?</small></h2>
-          <ul class="nav navbar-right panel_toolbox">
-            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-            </li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Settings 1</a>
-                </li>
-                <li><a href="#">Settings 2</a>
-                </li>
-              </ul>
-            </li>
-            <li><a class="close-link"><i class="fa fa-close"></i></a>
-            </li>
-          </ul>
-          <div class="clearfix"></div>
-        </div>
-        <div class="x_content">
-          <div class="" role="tabpanel" data-example-id="togglable-tabs">
-            <div class="row">
-              {%if selected %}
-                {% if taken_interview %}
-                  <div class="col-md-6 col-sm-6 col-xs-6">This application is already taken an interview. </div>
-                  <div class="col-md-6 col-sm-6 col-xs-6"><a href="/interview-score/{{selected_application.id}}"class="btn btn-sm btn-success" id="{{application.id}}">View Interview</a></div>
-                {% else %}
-                <div class="col-md-6 col-sm-6 col-xs-6">This application is already selected for interview. </div>
-                <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-sm btn-success add-score" id="{{application.id}}">Enter Interview Score</button></div>
-                {% endif %}
-              {% else %}
-                {% if qualified %}
-                <div class="col-md-6 col-sm-6 col-xs-6">Select the Application?</div>
-                <div class="col-md-6 col-sm-6 col-xs-6"><button type="button" id="select-application" class="btn btn-primary">Select</button></div>
-                {% else %}
-                <div class="col-md-6 col-sm-6 col-xs-6">Not qualified</div>
-                <div class="col-md-6 col-sm-6 col-xs-6"><button class="btn btn-sm btn-primary btn-warning" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Not qualified"><i class="fa fa-times"></i> Not qualified</button></div>
-                {% endif %}
-              {% endif%}
-                </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
   <div class="modal fade bs-example-modal-lg" data = "interview-score" tabindex="-1" role="dialog" aria-hidden="true">
     {% include 'form_interview_score.html' %}
@@ -272,7 +105,7 @@
       });
     </script>
      <script>
-    $('#select-application').click(function(){
+    $('#select-registrationregistration').click(function(){
       selectApplication();
       window.location.reload();
     });$('#application-selected').click(function(){
@@ -280,12 +113,12 @@
     });
     function selectApplication(){
       data={
-        'location_id': {{application.location_id}},
-        'application_id': {{application.id}},
+        'registration': {{registration.id}},
+        'registration': {{registration.id}},
         'action': 'select'
       }
        $.ajax({
-        url: '/application/{{application.id}}',
+        url: '/registration/{{registration.id}}',
         type: 'POST',
         datatType: 'json',
         data: data,
