@@ -357,7 +357,7 @@ class Registration (db.Model):
         added_by = json_record.get('added_by')
         comment = json_record.get('comment')
         proceed = json_record.get('proceed')
-        client_time = json_record.get('date_added')
+        client_time = json_record.get('client_time')
         synced = json_record.get('synced')
         chew_name = json_record.get('chew_name')
         chew_number = json_record.get('chew_number')
@@ -399,11 +399,12 @@ class Recruitments(db.Model):
 
     id = Column(String(64), primary_key=True) #db.Column(db.Integer)
     name = Column(String(128), nullable=True)
-    district = Column(Text)
     lat = Column(String(128), nullable=True)
     lon = Column(String(128), nullable=True)
     subcounty = Column(String(128), nullable=True)
+    district = Column(String(128), nullable=True)
     country = Column(String(128), nullable=True)
+    county = Column(String(128), nullable=True)
     division = Column(String(128), nullable=True)
     added_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     comment = Column(Text)
@@ -412,45 +413,45 @@ class Recruitments(db.Model):
     synced = Column(Integer, server_default=text("'0'"))
     archived = Column(Integer, server_default=text("'0'"))
     
-
     owner = relationship(u'User')
 
     def to_json(self):
         json_record = {
-            'id': self.id,
-            'name': self.name,
-            'district': self.district,
-            'lat': self.lat,
-            'lon': self.lon,
-            'subcounty': self.subcounty,
-            'country': self.country,
-            'division': self.division,
-            'added_by':self.added_by,
-            'comment': self.comment,
-            'client_time': float(self.client_time),
-            'date_added': self.date_added,
-            'synced': self.synced
-            }
-
+            'id' : self.id,
+            'name' : self.name,
+            'lon' : self.lon,
+            'lat' : self.lat,
+            'district' : self.district,
+            'subcounty' : self.subcounty,
+            'county' : self.county,
+            'division' : self.division,
+            'country' : self.country,
+            'added_by' : self.added_by,
+            'comment' : self.comment,
+            'client_time' : float(self.client_time),
+            'synced' : self.synced
+        }
         return json_record
 
     @staticmethod
     def from_json(json_record):
         id = json_record.get('id')
         name = json_record.get('name')
-        district = json_record.get('district')
-        lat = json_record.get('lat')
         lon = json_record.get('lon')
+        lat = json_record.get('lat')
+        district = json_record.get('district')
         subcounty = json_record.get('subcounty')
-        country = json_record.get('country')
+        county = json_record.get('county')
         division = json_record.get('division')
+        country = json_record.get('country')
         added_by = json_record.get('added_by')
         comment = json_record.get('comment')
-        client_time = json_record.get('date_added')
+        client_time = json_record.get('client_time')
         synced = json_record.get('synced')
-        return Recruitments(id=id, name=name, district=district,
-            lat=lat, lon=lon, subcounty=subcounty, country=country,
-            division=division, added_by=added_by, comment=comment, client_time=client_time, synced=1, archived=0)
+        return Recruitments(id=id, name=name, lon=lon,
+            lat=lat, district=district, subcounty=subcounty, county=county,
+            division=division, country=country, added_by=added_by, comment=comment,
+            client_time=client_time, synced=synced, archived=0)
 
 
 class RecruitmentUsers(db.Model):
@@ -470,7 +471,7 @@ class Exam(db.Model):
     __tablename__ = 'exams'
     id = Column(String(64), primary_key=True)
     applicant = Column(ForeignKey(u'registrations.id'), nullable=True, index=True)
-    recruitment_id = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
+    recruitment = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
     country = Column(String(64))
     math = Column(Float, server_default=text("'0'"))
     personality = Column(Float, server_default=text("'0'"))
@@ -483,21 +484,21 @@ class Exam(db.Model):
     archived = Column(Integer, server_default=text("'0'"))
 
     registration = relationship(u'Registration')
-    recruitment = relationship(u'Recruitments')
+    base_recruitment = relationship(u'Recruitments')
     user = relationship(u'User')
     
     def to_json(self):
         json_record = {
             'id': self.id,
             'applicant': self.applicant,
-            'recruitment': self.recruitment_id,
+            'recruitment': self.recruitment,
             'country': self.country,
             'math': self.math,
             'personality': self.personality,
             'english': self.english,
             'added_by': self.added_by,
             'comment': self.comment,
-            'date_added': self.date_added,
+            'client_time': float(self.client_time),
             'synced': self.synced
         }
         return json_record
@@ -513,9 +514,9 @@ class Exam(db.Model):
         english = json_record.get('english')
         added_by = json_record.get('added_by')
         comment = json_record.get('comment')
-        client_time = json_record.get('date_added')
+        client_time = json_record.get('client_time')
         synced = json_record.get('synced')
-        return Exam(id = id, applicant = applicant, recruitment_id = recruitment,
+        return Exam(id = id, applicant = applicant, recruitment = recruitment,
                 country = country, math = math, personality = personality,
                 english = english, added_by = added_by, comment = comment,
                 client_time = client_time, synced = synced)
@@ -525,7 +526,7 @@ class Interview(db.Model):
 
     id = Column(String(64), primary_key=True)
     applicant = Column(ForeignKey(u'registrations.id'), nullable=True, index=True)
-    recruitment_id = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
+    recruitment = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
     motivation = Column(Integer, server_default=text("'0'"))
     community = Column(Integer, server_default=text("'0'"))
     mentality = Column(Integer, server_default=text("'0'"))
@@ -546,7 +547,7 @@ class Interview(db.Model):
     archived = Column(Integer, server_default=text("'0'"))
 
     registration = relationship(u'Registration')
-    recruitment = relationship(u'Recruitments')
+    base_recruitment = relationship(u'Recruitments')
     user = relationship(u'User')
 
 
@@ -554,7 +555,7 @@ class Interview(db.Model):
         json_record = {
             'id': self.id,
             'applicant': self.applicant,
-            'recruitment': self.recruitment_id,
+            'recruitment': self.recruitment,
             'motivation': self.motivation,
             'community' :self.community,
             'mentality': self.mentality,
@@ -578,7 +579,7 @@ class Interview(db.Model):
     def from_json(json_record):
         id = json_record.get('id')
         applicant = json_record.get('applicant')
-        recruitment_id = json_record.get('recruitment')
+        recruitment = json_record.get('recruitment')
         motivation = json_record.get('motivation')
         community = json_record.get('community')
         mentality = json_record.get('mentality')
@@ -594,8 +595,8 @@ class Interview(db.Model):
         synced = json_record.get('synced')
         added_by = json_record.get('added_by')
         comment = json_record.get('comment')
-        client_time = json_record.get('date_added')
-        return Interview (id = id, applicant = applicant, recruitment_id = recruitment_id,
+        client_time = json_record.get('client_time')
+        return Interview (id = id, applicant = applicant, recruitment = recruitment,
             motivation = motivation, community = community, mentality = mentality,
             country = country, selling = selling, health = health, investment = investment,
             interpersonal = interpersonal, canjoin = canjoin, commitment = commitment,
