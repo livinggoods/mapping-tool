@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 from app import create_app, db
-from app.models import User, Role, Geo, UserType, Location
+from app.models import User, Role, Geo, UserType, Location, Education
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 from app.data import data
@@ -53,6 +53,9 @@ def db_rebuild():
     Geo.insert_geos()
     UserType.insert_user_types()
 
+    # insert education data
+    Education.create_education()
+
 
     # insert fake admin/test users
     from random import seed
@@ -76,7 +79,7 @@ def db_rebuild():
         app_name ='webmaster'.encode('base64'),
         confirmed=True,
         name='Web Master',
-        location='KE',
+        location='UG',
         about_me=forgery_py.lorem_ipsum.sentence(),
         member_since=forgery_py.date.date(True)
     )
