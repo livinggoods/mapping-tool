@@ -270,6 +270,18 @@ class Registration (db.Model):
     branch_transport = Column(Integer, server_default=text("'0'"))
 
     owner = relationship(u'User')
+    education_level = relationship(u'Education')
+
+    def age(self):
+        birthdate = datetime.strptime(self.date_of_birth(), '%Y-%b-%d')
+        age_years = ((datetime.today() - birthdate).days/365)
+        return age_years
+
+    def date_of_birth(self):
+        return time.strftime('%Y-%b-%d', time.localtime(self.dob / 1000))
+
+    def date_client(self):
+        return datetime.fromtimestamp(self.client_time / 1000).strftime('%Y-%b-%d %H:%M:%S')
 
     def to_json(self):
         json_record = {
