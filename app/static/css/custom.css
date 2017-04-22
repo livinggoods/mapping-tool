@@ -3995,3 +3995,29 @@ ul.notifications {
   border-bottom: 2px solid #E6E9ED;
 }
 }
+
+.img-div {
+    height: 32px;
+    width: 32px;
+    float: left;
+    display: inline-block;
+    border-radius: 2px;
+    padding: 2px;
+    background: #f7f7f7;
+    border: 1px solid #e6e6e6;
+}
+
+ul.messages li .img-div {
+    height: 32px;
+    width: 32px;
+    float: left;
+    display: inline-block;
+    border-radius: 2px;
+    padding: 2px;
+    background: #f7f7f7;
+    border: 1px solid #e6e6e6;
+}
+ul.messages li .img-div i{
+    padding: 5px;
+    font-size: 20px;
+}
