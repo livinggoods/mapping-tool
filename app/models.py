@@ -615,11 +615,28 @@ class Location(db.Model):
     meta = Column(Text)
     admin_name = Column(String(45))
     code = Column(String(45))
+    country = Column(String(45))
     polygon = Column(Text)
     archived = Column(Integer, server_default=text("'0'"))
 
     parent1 = relationship(u'Location', remote_side=[id])
     chp_target = db.relationship('LocationTargets', backref='target', lazy='dynamic')
+
+    def to_json(self):
+        json_record = {
+            'id' : self.id,
+            'name' : self.name,
+            'parent' : self.parent,
+            'lat' : self.lat,
+            'country': self.country,
+            'lon' : self.lon,
+            'meta' : self.meta,
+            'admin_name' : self.admin_name,
+            'code' : self.code,
+            'polygon' : self.polygon,
+            'archived' : self.archived,
+        }
+        return json_record
 
 
     @staticmethod
@@ -630,7 +647,7 @@ class Location(db.Model):
         for name in locs:
             loc = Location.query.filter_by(name=name.get('name')).first()
             if loc is None:
-                loc = Location(name=name.get('name'), lat=name.get('lat'), lon=name.get('lon'), admin_name='Country')
+                loc = Location(name=name.get('name'), country='UG', lat=name.get('lat'), lon=name.get('lon'), admin_name='Country')
             db.session.add(loc)
         db.session.commit()
 
@@ -640,17 +657,17 @@ class Location(db.Model):
         locations = data.get_locations()
         for key, value in locations.iteritems():
             # create district
-            district = Location(name=key.title(), admin_name='District', parent=2)
+            district = Location(name=key.title(), country='UG', admin_name='District', parent=2)
             db.session.add(district)
             db.session.commit()
             # create county
             district_id = district.id
             for k,v in value.iteritems():
-                county = Location(name=k.title(), admin_name='County', parent=district_id)
+                county = Location(name=k.title(), country='UG', admin_name='County', parent=district_id)
                 db.session.add(county)
                 db.session.commit()
                 for sub_county in v:
-                    s_county = Location(name=sub_county.get('name').title(), admin_name='Sub-County', parent=county.id, code=sub_county.get('number'))
+                    s_county = Location(name=sub_county.get('name').title(), admin_name='Sub-County', country='UG', parent=county.id, code=sub_county.get('number'))
                     db.session.add(s_county)
                     db.session.commit()
 
