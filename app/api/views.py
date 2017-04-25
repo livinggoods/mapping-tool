@@ -7,6 +7,7 @@ from .. import db
 from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets,
     Location, Education, EducationLevel, Referral, Chp, Recruitments, Interview, Exam,
     SelectedApplication, Application, ApplicationPhone, Branch, Cohort, Registration)
+from .. data import data
 
 
 @api.route('/firm_summary')
@@ -166,4 +167,11 @@ def sync_exams():
       return jsonify(status=status)
     else:
       return jsonify(error="No records posted")
+
+
+@api.route('/sync/locations', methods=['GET', 'POST'])
+def sync_locations():
+  if request.method == 'GET':
+    locations = Location.query.filter(Location.archived == 0)
+    return jsonify({'locations': [location.to_json() for location in locations]})
 
