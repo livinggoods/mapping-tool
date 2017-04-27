@@ -1,6 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request, abort, \
-    current_app, jsonify
+    current_app, jsonify, make_response
 from flask_login import current_user, login_required
+from flask.ext import excel
 from sqlalchemy import func, distinct, select, and_
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm
@@ -14,6 +15,8 @@ from datetime import date, datetime
 import time
 import csv, os, time, calendar
 from ..data import data
+import io
+import csv
 
 currency = 'UGX '
 
@@ -140,6 +143,152 @@ def training_list():
         else:
             return jsonify(status='no action selected')
         # return jsonify(details=request.form.getlist('applications[]'))
+
+@main.route('/export-scoring-tool/<string:id>', methods=['GET'])
+@login_required
+def export_scoring_tool(id):
+    # get the registrations for the recruitment
+    # Define our CSV
+    dest = io.StringIO()
+    writer = csv.writer(dest)
+    data = []
+    registrations  = Registration.query.filter(Registration.recruitment == id)
+    header = [
+        'Referral Name,',
+        'Referral Title,',
+        'Referral Mobile No,',
+        'VHT?,',
+        'Candidate Name,',
+        'Candidate Mobile,',
+        'Gender,',
+        'Age,',
+        'District,',
+        'Subcounty,',
+        'Parish,',
+        'Village/zone/cell, ',
+        'Landmark, ',
+        'Read/Speak English, ',
+        'Other Languages,',
+        'Years at this location,',
+        'Ever worked with BRAC?,',
+        'If yes as BRAC CHP?,',
+        'Highest Educational,',
+        'Community group memberships,',
+        'Maths Score,',
+        'Reading comprehension',
+        'About You,',
+        'Total Marks,',
+        'Eligible for Interview,',
+        'Interview Completed by,',
+        'Interview: Overall Motivation,',
+        'Interview: Ability to work with communities,',
+        'Interview: Mentality,',
+        'Interview:Selling skills,',
+        'Interview: Interest in health,',
+        'Interview: Ability to invest,',
+        'Interview: Interpersonal skills,',
+        'Interview: Ability to commit,',
+        'Interview Score,',
+        'DO NOT ASK OUTLOUD: Any conditions to prevent joining?,',
+        'Comments,',
+        'Qualify for Training,',
+        'Invite for Training']
+    data.append(header)
+
+    for registration in registrations:
+        # Get Exam
+        exam = Exam.query.filter(Exam.applicant == registration.id).first()
+        math = 0
+        english = 0
+        personality = 0
+        exam_total = 0
+        exam_passed = "N"
+        if exam:
+            math = exam.math
+            english = exam.english
+            personality = exam.personality
+            exam_total = exam.total_score()
+            exam_passed = "Y" if exam.has_passed else "N"
+
+        interview = Interview.query.filter(Interview.applicant == registration.id).first()
+        user = ""
+        motivation = 0
+        community = 0
+        mentality = 0
+        selling = 0
+        health = 0
+        investment = 0
+        interpersonal = 0
+        commitment = 0
+        total_score = 0
+        canjoin = "N"
+        comment = ""
+        canjoin = ""
+        selected = ""
+
+        if interview:
+            user = interview.user.name,
+            motivation = interview.motivation,
+            community = interview.community,
+            mentality = interview.mentality,
+            selling = interview.selling,
+            health = interview.health,
+            investment = interview.investment,
+            interpersonal = interview.interpersonal,
+            commitment = interview.commitment,
+            total_score = interview.total_score(),
+            canjoin = interview.canjoin,
+            comment = interview.comment.replace(',', ';'),
+            canjoin = interview.canjoin,
+            selected = interview.selected,
+        # interview= Interview.query.filter(Interview.archived != 1)
+        # Now that we have what we need, we generate the CSV rows
+        row = [
+            registration.referral,
+            registration.referral_title,
+            registration.referral_number,
+            registration.vht,
+            registration.name,
+            registration.phone.replace(',', ':'),
+            registration.gender,
+            registration.age,
+            registration.district,
+            registration.subcounty,
+            registration.parish,
+            registration.village,
+            registration.feature.replace(',', ':'),
+            registration.english,
+            registration.languages.replace(',', ':'),
+            registration.date_moved,
+            registration.brac,
+            registration.brac_chp,
+            registration.education,
+            registration.community_membership,
+            math,
+            english,
+            personality,
+            exam_total,
+            exam_passed,
+            user,
+            motivation,
+            community,
+            mentality,
+            selling,
+            health,
+            investment,
+            interpersonal,
+            commitment,
+            total_score,
+            canjoin,
+            comment,
+            canjoin,
+            selected,
+        ]
+        data.append(row)
+    output = excel.make_response_from_array(data, 'csv')
+    output.headers["Content-Disposition"] = "attachment; filename=scoring-tool.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
 
 @main.route('/interview-scores', methods=['POST'])
 @login_required

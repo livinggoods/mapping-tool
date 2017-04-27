@@ -486,6 +486,18 @@ class Exam(db.Model):
     registration = relationship(u'Registration')
     base_recruitment = relationship(u'Recruitments')
     user = relationship(u'User')
+
+    def total_score(self):
+        return (self.math + self.personality + self.english)
+
+    def has_passed(self):
+        if self.math == 0 or self.english == 0 or self.personality == 0:
+            return False
+        elif self.total_score < 30:
+            return False
+        else:
+            return True
+
     
     def to_json(self):
         json_record = {
@@ -550,6 +562,15 @@ class Interview(db.Model):
     base_recruitment = relationship(u'Recruitments')
     user = relationship(u'User')
 
+    def total_score(self):
+        return (self.motivation + self.community + self.mentality + self.selling + 
+            self.health + self.investment + self.interpersonal + self.commitment)
+
+    def has_passed():
+        if self.total_score > 24 and self.canjoin == 1 and self.commitment > 1:
+            return True
+        else:
+            return False
 
     def to_json(self):
         json_record = {
