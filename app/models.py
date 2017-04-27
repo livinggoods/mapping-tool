@@ -493,7 +493,7 @@ class Exam(db.Model):
     def has_passed(self):
         if self.math == 0 or self.english == 0 or self.personality == 0:
             return False
-        elif self.total_score < 30:
+        elif self.total_score() < 30:
             return False
         else:
             return True
