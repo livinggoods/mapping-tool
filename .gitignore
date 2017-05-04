@@ -7,6 +7,9 @@ venv/
 # python byte code files
 **/*.pyc
 
+# dd dumps
+**/*.sql
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
