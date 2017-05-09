@@ -19,3 +19,12 @@ def get_locations():
         districts[row[1]][row[2]] = []
         districts[row[1]][row[2]].append({'name':row[3], 'number':row[0]})
   return districts
+
+def get_ke_counties():
+  counties = []
+  # county = {}
+  with open(os.path.abspath(os.path.dirname(__file__))+'/kenya_county.csv', 'r') as f:
+    for row in csv.reader(f.read().splitlines()):
+      # county = {}
+      counties.append({'name': row[1], 'code': row[0]})
+  return counties

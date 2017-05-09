@@ -43,6 +43,9 @@ class Application(db.Model):
     read_english = Column(Integer, server_default=text("'0'"))
     application_score = Column(Integer, server_default=text("'0'"))
     archived = Column(Integer, server_default=text("'0'"))
+    testing = Column(Integer)
+    niaje = Column(Integer)
+
 
 
     edu_level = relationship(u'EducationLevel')
@@ -691,6 +694,13 @@ class Location(db.Model):
                     s_county = Location(name=sub_county.get('name').title(), admin_name='Sub-County', country='UG', parent=county.id, code=sub_county.get('number'))
                     db.session.add(s_county)
                     db.session.commit()
+        #KENYA
+        counties = data.get_ke_counties()
+        for county in counties:
+            loc = Location(name=county.get('name'), country='KE', code=county.get('code'), admin_name='County', parent=1)
+            db.session.add(loc)
+            db.session.commit()
+
 
 
 

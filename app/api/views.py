@@ -175,3 +175,14 @@ def sync_locations():
     locations = Location.query.filter(Location.archived == 0)
     return jsonify({'locations': [location.to_json() for location in locations]})
 
+@api.route('/sync/counties', methods=['GET', 'POST'])
+def sync_counties():
+  if request.method == 'GET':
+    locations = Location.query.filter(Location.archived == 0)
+    if request.args.get('country'):
+      country = request.args.get('country')
+      locations = Location.query.filter_by(archived=0, admin_name='County', country=country)
+      return jsonify({'locations': [location.to_json() for location in locations]})
+    #country = request.args.get('country')
+    locations = Location.query.filter_by(archived=0, admin_name='County')
+    return jsonify({'locations': [location.to_json() for location in locations]})
