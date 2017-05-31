@@ -65,6 +65,52 @@ class ApplicationPhone(db.Model):
 
     application = relationship(u'Application')
 
+class GpsData(db.Model):
+    __tablename__ = 'gps_data'
+
+    id = Column(String(45), primary_key=True)
+    chp_phone = Column(ForeignKey(u'application.id'), index=True)
+    record_uuid = Column(String(64))
+    country = Column(String(64))
+    client_time = Column(Numeric)
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+    lat = Column(Float, server_default=text("'0'"))
+    lon = Column(Float, server_default=text("'0'"))
+    gps_on = db.Column(db.Boolean, default=False)
+    activity_type = Column(String(45))
+    time_to_resolve = Column(String(45))
+
+    def to_json(self):
+        json_record = {
+            'id':self.id,
+            'chp_phone':self.chp_phone,
+            'record_uuid':self.record_uuid,
+            'country':self.country,
+            'client_time': float(self.client_time),
+            'lat': float(self.lat),
+            'lon': float(self.lon),
+            'gps_on':self.gps_on,
+            'activity_type':self.activity_type,
+            'time_to_resolve':self.time_to_resolve
+            }
+        return json_record
+
+    @staticmethod
+    def from_json(json_record):
+        return return Registration (
+            id = json_record.get('id'),
+            chp_phone = json_record.get('chp_phone'),
+            record_uuid = json_record.get('record_uuid'),
+            country = json_record.get('country'),
+            client_time = json_record.get('client_time'),
+            lat = json_record.get('lat'),
+            lon = json_record.get('lon'),
+            gps_on = json_record.get('gps_on'),
+            activity_type = json_record.get('activity_type'),
+            time_to_resolve = json_record.get('time_to_resolve'))
+
+
+
 
 class Branch(db.Model):
     __tablename__ = 'branch'

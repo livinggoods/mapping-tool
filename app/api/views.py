@@ -181,8 +181,30 @@ def sync_counties():
     locations = Location.query.filter(Location.archived == 0)
     if request.args.get('country'):
       country = request.args.get('country')
-      locations = Location.query.filter_by(archived=0, admin_name='County', country=country)
+      locations = Location.query.filter_by(archived=0, admin_name='County', country=country.upper())
       return jsonify({'locations': [location.to_json() for location in locations]})
     #country = request.args.get('country')
     locations = Location.query.filter_by(archived=0, admin_name='County')
     return jsonify({'locations': [location.to_json() for location in locations]})
+
+@api.route('/sync/gpsdata', methods=['GET', 'POST'])
+def sync_gps_data():
+  iif request.method == 'GET':
+    records  = GpsData.query.all()
+    return jsonify({'gps':[record.to_json() for record in records]})
+  else:
+    status = []
+    gps_list = request.json.get('gps')
+    if gps_list is not None:
+      for gps in gps_list:
+        record = GpsData.from_json(gps)
+        saved_record  = GpsData.query.filter(GpsData.id == record.id).first()
+        if saved_record:
+          pass
+        else:
+          db.session.add(record)
+          db.session.commit()
+        status.append({'id':record.id, 'status':'ok', 'operation':operation})
+      return jsonify(status=status)
+    else:
+      return jsonify(error="No records posted")
