@@ -97,7 +97,7 @@ class GpsData(db.Model):
 
     @staticmethod
     def from_json(json_record):
-        return return Registration (
+        return GpsData (
             id = json_record.get('id'),
             chp_phone = json_record.get('chp_phone'),
             record_uuid = json_record.get('record_uuid'),
