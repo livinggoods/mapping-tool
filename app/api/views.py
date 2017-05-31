@@ -204,7 +204,7 @@ def sync_gps_data():
         else:
           db.session.add(record)
           db.session.commit()
-        status.append({'id':record.id, 'status':'ok', 'operation':operation})
+        status.append({'id':record.id, 'status':'ok', 'operation':'saved'})
       return jsonify(status=status)
     else:
       return jsonify(error="No records posted")
