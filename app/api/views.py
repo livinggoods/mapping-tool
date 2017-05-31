@@ -189,7 +189,7 @@ def sync_counties():
 
 @api.route('/sync/gpsdata', methods=['GET', 'POST'])
 def sync_gps_data():
-  iif request.method == 'GET':
+  if request.method == 'GET':
     records  = GpsData.query.all()
     return jsonify({'gps':[record.to_json() for record in records]})
   else:
