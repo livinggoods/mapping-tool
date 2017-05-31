@@ -4,7 +4,7 @@ from flask import Response, request, jsonify
 import json
 from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
-from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets,
+from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets, GpsData,
     Location, Education, EducationLevel, Referral, Chp, Recruitments, Interview, Exam,
     SelectedApplication, Application, ApplicationPhone, Branch, Cohort, Registration)
 from .. data import data
