@@ -22,7 +22,6 @@ def get_locations():
 
 def get_ke_counties():
   counties = []
-  # county = {}
   with open(os.path.abspath(os.path.dirname(__file__))+'/kenya_county.csv', 'r') as f:
     for row in csv.reader(f.read().splitlines()):
       # county = {}

@@ -919,12 +919,6 @@ def firm(id):
     companies = firm.related_companies()
     return render_template('firm.html', firm=firm, companies=companies)
 
-@main.route('/test/locations')
-@login_required
-def locs():
-    locations = data.get_ke_counties()
-    return jsonify(location=locations)
-
 @main.route('/firms/<username>')
 @login_required
 def firms(username):
