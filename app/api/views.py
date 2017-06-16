@@ -19,10 +19,8 @@ def firm_summary():
 @api.route('/recruitments.json')
 def recruitments_json():
   if request.method == 'GET':
-    page={'title':'Recruitments', 'subtitle':'Recruitments done so far'}
-    recruitments = Recruitments.query.filter_by(archived=0)
-    result_dict = [u.name for u in recruitments]
-    return jsonify(recruitments=result_dict)
+    records = Recruitments.query.filter(Recruitments.archived != 1)
+    return jsonify({'recruitments': [record.to_json() for record in records]})
   else:
     recruitments = Recruitments(name=request.form.get('name'))
     db.session.add(recruitments)
@@ -112,6 +110,7 @@ def sync_registrations():
     else:
       return jsonify(error="No records posted")
 
+
 @api.route('/sync/interviews', methods=['GET', 'POST'])
 def sync_interviews():
   if request.method == 'GET':
@@ -183,7 +182,7 @@ def sync_counties():
       country = request.args.get('country')
       locations = Location.query.filter_by(archived=0, admin_name='County', country=country.upper())
       return jsonify({'locations': [location.to_json() for location in locations]})
-    #country = request.args.get('country')
+    # country = request.args.get('country')
     locations = Location.query.filter_by(archived=0, admin_name='County')
     return jsonify({'locations': [location.to_json() for location in locations]})
 

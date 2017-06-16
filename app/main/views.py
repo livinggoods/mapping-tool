@@ -28,7 +28,6 @@ currency = 'UGX '
 #         return jsonify(id=current_user.id)
 
 
-
 @main.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
@@ -38,6 +37,7 @@ def index():
         return render_template('index.html', page=page, currency=currency)
     else:
         return render_template('index.html', page=page, currency=currency)
+
 
 @main.route('/registration/<string:id>', methods=['GET', 'POST'])
 @login_required
@@ -49,7 +49,7 @@ def application_details(id):
         birthdate = datetime.strptime(dob, '%Y-%m-%d')
         age = ((datetime.today() - birthdate).days/365)
         page = {'title':a.name, 'subtitle':'Registration details'}
-        #age = time.time() - float(a.dob)
+        # age = time.time() - float(a.dob)
         qualified = a.dob
         interview = Interview.query.filter_by(applicant=id).first()
         exam = Exam.query.filter_by(applicant=id).first()
@@ -66,6 +66,7 @@ def application_details(id):
             db.session.commit()
             return jsonify(status='ok')
     # fetch application details
+
 
 @main.route('/selected-applications', methods=['GET', 'POST'])
 @login_required
@@ -143,6 +144,7 @@ def training_list():
         else:
             return jsonify(status='no action selected')
         # return jsonify(details=request.form.getlist('applications[]'))
+
 
 @main.route('/export-scoring-tool/<string:id>', methods=['GET'])
 @login_required
@@ -291,6 +293,7 @@ def export_scoring_tool(id):
     output.headers["Content-Disposition"] = "attachment; filename=scoring-tool.csv"
     output.headers["Content-type"] = "text/csv"
     return output
+
 
 @main.route('/interview-scores', methods=['POST'])
 @login_required

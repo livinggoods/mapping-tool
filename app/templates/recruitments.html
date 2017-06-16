@@ -26,8 +26,8 @@
                   <div class="x_title">
                     <h2>Recruitments <small>List of recruitments that have been made so far</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
-                      <li><button type="button" class="btn btn-primary new-recruitment">New Recruitment</button>
-                      </li>
+                      <!-- <li><button type="button" class="btn btn-primary new-recruitment">New Recruitment</button>
+                      </li> -->
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
                       <li class="dropdown">
@@ -54,19 +54,25 @@
                           <!-- <th>Action</th> -->
                           <th>Recruitment Name</th>
                           <th>Added by</th>
-                          <th>Conducted at</th>
-                          <th>Conducted by</th>
+                          <th>Country</th>
+                          <th>Date Added</th>
                           <th></th>
                         </tr>
                       </thead>
                       <tbody>
                         {% for recruitment in recruitments %}
                         <tr>
-                          <td>{{recruitment.name}}</td>
+                          <td><a href="/recruitment/{{recruitment.id}}">
+                                  {{recruitment.name}}
+                              </a></td>
                           <td>{{recruitment.owner.name}}</td>
-                          <td>{{recruitment.location}}</td>
-                          <td>{{recruitment.users}}</td>
-                          <td><button type="button" recruitment='{{recruitment.id}}' class="btn btn-primary edit-recruitment">Edit</button> <a href="/recruitment/{{recruitment.id}}" class="btn btn-primary">Details</a></td>
+                          <td>{{recruitment.country}}</td>
+                          <td>{{recruitment.date_added}}</td>
+                          <td>
+                            <a href="/recruitment/{{recruitment.id}}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Applicants </a>
+                            <a href="/export-scoring-tool/{{recruitment.id}}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Scoring tool </a>
+                            <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                          </td>
                         </tr>
                         {% endfor %}
                       </tbody>
