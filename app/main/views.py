@@ -32,11 +32,28 @@ currency = 'UGX '
 @login_required
 def index():
     page = {'title': 'Home'}
+    total_registrations = Registration.query.filter_by(archived=0)
+    registrations = total_registrations.count()
+
+    total_mappings = Registration.query.filter_by(archived=0)
+    mappings = total_mappings.count()
+
+    total_recruitments = Recruitments.query.filter_by(archived=0)
+    recruitments = total_recruitments.count()
+
+    recruitment = Recruitments.query.filter_by(archived=0).limit(5).all()
+
+    total_villages = Recruitments.query.filter_by(archived=0)
+    villages = total_villages.count()
     if current_user.is_anonymous():
         # return redirect(url_for('auth.login'))
-        return render_template('index.html', page=page, currency=currency)
+
+        return render_template('index.html', page=page, registrations=registrations, mappings=mappings,
+                               recruitments=recruitments, villages=villages, currency=currency)
     else:
-        return render_template('index.html', page=page, currency=currency)
+        return render_template('index.html', page=page, registrations=registrations, mappings=mappings,
+                               recruitments=recruitments, villages=villages, currency=currency,
+                               recruitment=recruitment)
 
 
 @main.route('/registration/<string:id>', methods=['GET', 'POST'])

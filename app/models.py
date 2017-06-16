@@ -582,6 +582,7 @@ class Exam(db.Model):
                 english = english, added_by = added_by, comment = comment,
                 client_time = client_time, synced = synced)
 
+
 class Interview(db.Model):
     __tablename__ = 'interviews'
 
@@ -1005,7 +1006,6 @@ class User(UserMixin, db.Model):
             self.email.encode('utf-8')).hexdigest()
         return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
             url=url, hash=hash, size=size, default=default, rating=rating)
-
 
 
 class AnonymousUser(AnonymousUserMixin):

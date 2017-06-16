@@ -4,33 +4,33 @@
             <div class="row top_tiles">
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
-                  <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
-                  <div class="count">179</div>
-                  <h3>New CHPs</h3>
-                  <p>Lorem ipsum psdea itgum rixt.</p>
+                  <div class="icon"><i class="fa fa-map-marker"></i></div>
+                  <div class="count">{{mappings}}</div>
+                  <h3>Total Mappings</h3>
+                  <p>Total Mappings done so far</p>
                 </div>
               </div>
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
                   <div class="icon"><i class="fa fa-comments-o"></i></div>
-                  <div class="count">179</div>
-                  <h3>New Villages</h3>
-                  <p>Lorem ipsum psdea itgum rixt.</p>
+                  <div class="count">{{recruitments}}</div>
+                  <h3>Recruitments</h3>
+                  <p>Total recruitments done</p>
                 </div>
               </div>
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
-                  <div class="icon"><i class="fa fa-sort-amount-desc"></i></div>
-                  <div class="count">179</div>
-                  <h3>New Branches</h3>
-                  <p>Lorem ipsum psdea itgum rixt.</p>
+                  <div class="icon"><i class="fa fa-list-ol"></i></div>
+                  <div class="count">{{registrations}}</div>
+                  <h3>Registrations</h3>
+                  <p>Total Registrations done.</p>
                 </div>
               </div>
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
-                  <div class="icon"><i class="fa fa-check-square-o"></i></div>
-                  <div class="count">179</div>
-                  <h3>New Counties</h3>
+                  <div class="icon"><i class="fa fa-object-group"></i></div>
+                  <div class="count">{{villages}}</div>
+                  <h3>Villages Mapped</h3>
                   <p>Lorem ipsum psdea itgum rixt.</p>
                 </div>
               </div>
@@ -83,10 +83,9 @@
                     <div class="col-md-3 col-sm-12 col-xs-12">
                       <div>
                         <div class="x_title">
-                          <h2>Active CHPs</h2>
+                          <h2>Recent Recruitments</h2>
                           <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                             <li class="dropdown">
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                               <ul class="dropdown-menu" role="menu">
@@ -102,61 +101,19 @@
                           <div class="clearfix"></div>
                         </div>
                         <ul class="list-unstyled top_profiles scroll-view">
-                          <li class="media event">
-                            <a class="pull-left border-aero profile_thumb">
-                              <i class="fa fa-user aero"></i>
-                            </a>
-                            <div class="media-body">
-                              <a class="title" href="#">Ms. Mary Jane</a>
-                              <p><strong>{{currency}}2300. </strong> Average Sales </p>
-                              <p> <small>12 Sales Today</small>
-                              </p>
-                            </div>
-                          </li>
-                          <li class="media event">
-                            <a class="pull-left border-green profile_thumb">
-                              <i class="fa fa-user green"></i>
-                            </a>
-                            <div class="media-body">
-                              <a class="title" href="#">Ms. Mary Jane</a>
-                              <p><strong>{{currency}}2300. </strong> Average Sales </p>
-                              <p> <small>12 Sales Today</small>
-                              </p>
-                            </div>
-                          </li>
-                          <li class="media event">
-                            <a class="pull-left border-blue profile_thumb">
-                              <i class="fa fa-user blue"></i>
-                            </a>
-                            <div class="media-body">
-                              <a class="title" href="#">Ms. Mary Jane</a>
-                              <p><strong>{{currency}}2300. </strong> Average Sales </p>
-                              <p> <small>12 Sales Today</small>
-                              </p>
-                            </div>
-                          </li>
-                          <li class="media event">
-                            <a class="pull-left border-aero profile_thumb">
-                              <i class="fa fa-user aero"></i>
-                            </a>
-                            <div class="media-body">
-                              <a class="title" href="#">Ms. Mary Jane</a>
-                              <p><strong>{{currency}}2300. </strong> Average Sales </p>
-                              <p> <small>12 Sales Today</small>
-                              </p>
-                            </div>
-                          </li>
-                          <li class="media event">
-                            <a class="pull-left border-green profile_thumb">
-                              <i class="fa fa-user green"></i>
-                            </a>
-                            <div class="media-body">
-                              <a class="title" href="#">Ms. Mary Jane</a>
-                              <p><strong>{{currency}}2300. </strong> Average Sales </p>
-                              <p> <small>12 Sales Today</small>
-                              </p>
-                            </div>
-                          </li>
+                          {% for r in recruitment %}
+                            <li class="media event">
+                              <a class="pull-left border-aero profile_thumb">
+                                <i class="fa fa-user aero"></i>
+                              </a>
+                              <div class="media-body">
+                                <a class="title" href="#">{{r.name}}</a>
+                                <p><strong>{{r.date_added}} </strong></p>
+                                <p> <small>12 Sales Today</small>
+                                </p>
+                              </div>
+                            </li>
+                          {% endfor %}
                         </ul>
                       </div>
                     </div>
