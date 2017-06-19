@@ -465,8 +465,14 @@ class Recruitments(db.Model):
     owner = relationship(u'User')
 
     def to_json(self):
+        # get the number of registrations
+        registrations = Registration.query.filter_by(archived=0,recruitment=self.id)
         json_record = {
             'id' : self.id,
+            'data':{'count': registrations.count(),
+                    'registrations': [registration.to_json() for registration in registrations]
+                    },
+            'registrations': registrations.count(),
             'name' : self.name,
             'lon' : self.lon,
             'lat' : self.lat,
@@ -502,6 +508,9 @@ class Recruitments(db.Model):
             division=division, country=country, added_by=added_by, comment=comment,
             client_time=client_time, synced=synced, archived=0)
 
+    def country_name(self):
+        geo = Geo.query.filter_by(geo_code=self.country).first()
+        return geo.geo_name
 
 class RecruitmentUsers(db.Model):
     __tablename__ = 'recruitment_users'
@@ -616,7 +625,7 @@ class Interview(db.Model):
         return (self.motivation + self.community + self.mentality + self.selling + 
             self.health + self.investment + self.interpersonal + self.commitment)
 
-    def has_passed():
+    def has_passed(self):
         if self.total_score > 24 and self.canjoin == 1 and self.commitment > 1:
             return True
         else:
@@ -1027,3 +1036,9 @@ def load_user(user_id):
     User identifier.  Returns User object or None.
     """
     return User.query.get(int(user_id))
+
+def get_country_name(code):
+    if code=="KE":
+        return "Kenya"
+    else:
+        return "Uganda"
