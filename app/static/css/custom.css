@@ -4021,3 +4021,12 @@ ul.messages li .img-div i{
     padding: 5px;
     font-size: 20px;
 }
+
+#placeholder33x .fa-spinner{
+    position: relative;
+    top: 50%;
+    left: 50%;
+ }
+ #sales-summary {
+    display:none;
+ }
