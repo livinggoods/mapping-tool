@@ -69,7 +69,7 @@ class GpsData(db.Model):
     __tablename__ = 'gps_data'
 
     id = Column(String(45), primary_key=True)
-    chp_phone = Column(ForeignKey(u'application.id'), index=True)
+    chp_phone = Column(String(45))
     record_uuid = Column(String(64))
     country = Column(String(64))
     client_time = Column(Numeric)
@@ -455,7 +455,7 @@ class Recruitments(db.Model):
     country = Column(String(128), nullable=True)
     county = Column(String(128), nullable=True)
     division = Column(String(128), nullable=True)
-    added_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    added_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
     comment = Column(Text)
     client_time = Column(Numeric)
     date_added = db.Column(db.DateTime(), default=datetime.utcnow)
@@ -511,6 +511,62 @@ class Recruitments(db.Model):
     def country_name(self):
         geo = Geo.query.filter_by(geo_code=self.country).first()
         return geo.geo_name
+
+class Mapping(db.Model):
+    __tablename__='mapping'
+    id = Column(String(64), primary_key=True)
+    name = Column(String(64), nullable=True)
+    country = Column(String(64), nullable=True)
+    county = Column(String(64), nullable=True)
+    subcounty = Column(String(64), nullable=True)
+    district = Column(String(64), nullable=True)
+    added_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+    contact_person = Column(String(64), nullable=True)
+    phone = Column(String(64), nullable=True)
+    comment = Column(Text)
+    synced = Column(Integer, server_default=text("'0'"))
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+    client_time = Column(Numeric)
+
+    owner = relationship(u'User')
+
+    def to_json(self):
+        json_record ={
+            'id':self.id,
+            'name':self.name,
+            'country':self.country,
+            'county':self.county,
+            'subcounty':self.subcounty,
+            'district':self.district,
+            'added_by':self.added_by,
+            'contact_person':self.contact_person,
+            'phone': self.phone,
+            'comment':self.comment,
+            'synced':self.synced,
+            'date_added':self.date_added,
+            'client_time':float(self.client_time)
+        }
+        return json_record
+
+    @staticmethod
+    def from_json(record):
+        id=record.get('id'),
+        name=record.get('name'),
+        country=record.get('country'),
+        county=record.get('county'),
+        subcounty=record.get('subcounty'),
+        district=record.get('district'),
+        added_by=record.get('added_by'),
+        contact_person=record.get('contact_person'),
+        phone=record.get('phone'),
+        comment=record.get('comment'),
+        synced=record.get('synced'),
+        client_time=record.get('client_time')
+
+        return Mapping(id=id, name=name, country=country, county=county, subcounty=subcounty, district=district,
+                       added_by=added_by, contact_person=contact_person,phone=phone, comment=comment, synced=synced,
+                       client_time=client_time)
+
 
 class RecruitmentUsers(db.Model):
     __tablename__ = 'recruitment_users'

@@ -16,9 +16,7 @@ def make_shell_context():
     Automatically import application, db, and model objects into interactive
     shell.
     """
-    return dict(application=application, db=db, User=User, Geo=Geo, Role=Role,
-                Follow=Follow, FirmType=FirmType, FirmTier=FirmTier, Firm=Firm,
-                Company=Company, Relationship=Relationship, UserType=UserType)
+    return dict(application=application, db=db, User=User, Geo=Geo, Role=Role, UserType=UserType)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 
@@ -31,6 +29,11 @@ def test():
     import unittest
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
+
+@manager.command
+def db_update_education():
+    # insert education data
+    Education.create_education()
 
 
 @manager.command
