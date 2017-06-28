@@ -49,6 +49,12 @@ def create_app(config_name):
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
+    # register 'admin' blueprint with Flask Application
+    from .admin import admin as admin_blueprint
+    # the 'url_prefix' parameter means all routes defined in the blueprint will
+    # be registered with the prefix '/admin' (e.g., '/admin/users')
+    app.register_blueprint(admin_blueprint, url_prefix='/admin')
+
     # register 'auth' blueprint with Flask application
     from .auth import auth as auth_blueprint
     # the 'url_prefix' parameter means all routes defined in the blueprint will
