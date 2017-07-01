@@ -41,6 +41,10 @@
                 <p class="change_link">New to site?
                   <a href="#signup" class="to_register"> Create Account </a>
                 </p>
+                </p>
+                  <p class="change_link">Already a member ?
+                  <a href="{{ url_for('auth.password_reset_request') }}" class="to_register"> Forgot password </a>
+                </p>
 
                 <div class="clearfix"></div>
                 <br />
@@ -64,6 +68,9 @@
               <div class="separator">
                 <p class="change_link">Already a member ?
                   <a href="#signin" class="to_register"> Log in </a>
+                </p>
+                  <p class="change_link">Already a member ?
+                  <a href="{{ url_for('auth.password_reset', token=token, _external=True) }}" class="to_register"> Forgot password </a>
                 </p>
 
                 <div class="clearfix"></div>
