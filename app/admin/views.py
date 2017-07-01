@@ -15,7 +15,7 @@ def admin_index():
     for user in users:
         usr.append({'name':user.name, 'email':user.email})
     # return jsonify(users=usr)
-    return render_template('users.html', page=page, users=users)
+    return render_template('admin/users.html', page=page, users=users)
 
 
 @admin.route('/user', methods=['POST'])
