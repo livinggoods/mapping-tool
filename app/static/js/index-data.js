@@ -13,7 +13,6 @@ $(document).ready(function(){
               var seriesData = [rec.client_time, rec.data.count];
               plotData.push(seriesData);
             });
-            console.log(plotData);
             createChart();
         }
     });
