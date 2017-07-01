@@ -135,13 +135,12 @@ def change_password():
     if form.validate_on_submit():
         if current_user.verify_password(form.old_password.data):
             current_user.password = form.password.data
-            current_user.app_name = form.password.data
+            current_user.app_name = form.password.data.encode('base64'),
             db.session.add(current_user)
             flash('Your password has been updated.', 'success')
             return redirect(url_for('main.index'))
         else:
             flash('Invalid password.', 'error')
-    # return render_template("auth/change_password.html", form=form, page=page)
     return render_template("auth/reset_password.html", form=form, page=page)
 
 
