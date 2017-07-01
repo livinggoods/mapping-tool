@@ -74,12 +74,12 @@
                           <td>
                               <a user="{{user.id}}" class="btn btn-primary btn-xs user-action">
                                   {% if user.confirmed %}
-                                        <i class="fa fa-times"></i> Un-confirm
+                                        <i class="fa fa-times-circle"></i> Un-confirm
                                   {% else %}
-                                    <i class="fa fa-check"></i> Confirm
+                                    <i class="fa fa-check-circle"></i> Confirm
                                   {% endif %}
                                </a>
-                            <a href="/user/{{user.id}}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
+                            <a href="/user/{{user.username}}" class="btn btn-info btn-xs"><i class="fa fa-info-circle"></i> Info </a>
                             <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
                           </td>
                         </tr>
