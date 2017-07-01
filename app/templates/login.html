@@ -42,7 +42,7 @@
                   <a href="#signup" class="to_register"> Create Account </a>
                 </p>
                 </p>
-                  <p class="change_link">Already a member ?
+                  <p class="change_link">
                   <a href="{{ url_for('auth.password_reset_request') }}" class="to_register"> Forgot password </a>
                 </p>
 
@@ -69,7 +69,7 @@
                 <p class="change_link">Already a member ?
                   <a href="#signin" class="to_register"> Log in </a>
                 </p>
-                  <p class="change_link">Already a member ?
+                  <p class="change_link">
                   <a href="{{ url_for('auth.password_reset', token=token, _external=True) }}" class="to_register"> Forgot password </a>
                 </p>
 
