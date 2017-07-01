@@ -744,8 +744,9 @@ def edit_profile():
     form = EditProfileForm()
     if form.validate_on_submit():
         # change values based on form input
+        geo = Geo.query.filter_by(id=form.geo.data).first()
         current_user.name = form.name.data
-        current_user.location = form.location.data
+        current_user.location = geo.geo_code
         current_user.about_me = form.about_me.data
         current_user.geo = Geo.query.get(form.geo.data)
         current_user.user_type = UserType.query.get(form.user_type.data)
@@ -754,7 +755,7 @@ def edit_profile():
         return redirect(url_for('main.user', username=current_user.username))
     # set inital values
     form.name.data = current_user.name
-    form.location.data = current_user.location
+    # form.location.data = current_user.location
     form.about_me.data = current_user.about_me
     form.geo.data = current_user.geo_id
     form.user_type.data = current_user.user_type_id
@@ -768,12 +769,14 @@ def edit_profile_admin(id):
     user = User.query.get_or_404(id)
     form = EditProfileAdminForm(user=user)
     if form.validate_on_submit():
+        username = form.email.data.split('@')[0]
+        geo = Geo.query.filter_by(id=form.geo.data).first()
         user.email = form.email.data
-        user.username = form.username.data
+        user.username = username
         user.confirmed = form.confirmed.data
         user.role = Role.query.get(form.role.data)
         user.name = form.name.data
-        user.location = form.location.data
+        user.location = geo.geo_code
         user.geo = Geo.query.get(form.geo.data)
         user.user_type = UserType.query.get(form.user_type.data)
         user.about_me = form.about_me.data
@@ -781,11 +784,11 @@ def edit_profile_admin(id):
         flash('The profile has been updated.', 'success')
         return redirect(url_for('main.user', username=user.username))
     form.email.data = user.email
-    form.username.data = user.username
+    # form.username.data = user.username
     form.confirmed.data = user.confirmed
     form.role.data = user.role_id
     form.name.data = user.name
-    form.location.data = user.location
+    # form.location.data = user.location
     form.geo.data = user.geo_id
     form.user_type.data = user.user_type_id
     form.about_me.data = user.about_me
