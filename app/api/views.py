@@ -57,7 +57,7 @@ def get_test_url():
 @api.route('/sync/recruitments', methods=['GET', 'POST'])
 def sync_recruitments():
   if request.method == 'GET':
-    records  = Recruitments.query.filter(Recruitments.archived != 1)
+    records  = Recruitments.query.order_by(Recruitments.client_time.asc()).filter(Recruitments.archived != 1)
     return jsonify({'recruitments':[record.to_json() for record in records]})
   else:
     status = []
