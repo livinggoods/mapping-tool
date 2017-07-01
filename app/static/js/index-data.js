@@ -11,8 +11,10 @@ $(document).ready(function(){
             $.each(data.recruitments, function(index, rec){
               // create the data point
               var seriesData = [rec.client_time, rec.data.count];
+              console.log(seriesData);
               plotData.push(seriesData);
             });
+            plotData.sort();
             createChart();
         }
     });
@@ -42,9 +44,9 @@ function createChart() {
         credits:{href:"mailto:dkimaru@livingggoods.org", text:"David Kimaru"},
 
         series: [{
-            name:'Recruitments',
+            name:'Total Registrations',
             data:plotData,
-            tooltip:{valueDecimals:0}
+            tooltip:{valueDecimals:0,}
         }]
     });
 }
