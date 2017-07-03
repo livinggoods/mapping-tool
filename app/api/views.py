@@ -68,9 +68,21 @@ def sync_recruitments():
         record = Recruitments.from_json(recruitment)
         saved_record  = Recruitments.query.filter(Recruitments.id == record.id).first()
         if saved_record:
-          recruitment['client_time'] = recruitment.get('date_added')
-          recruitment.pop('date_added', None)
-          saved_record = record
+          saved_record.id = recruitment.get('id')
+          saved_record.name = recruitment.get('name')
+          saved_record.lat = recruitment.get('lat')
+          saved_record.lon = recruitment.get('lon')
+          saved_record.subcounty = recruitment.get('subcounty')
+          saved_record.district = recruitment.get('district')
+          saved_record.country = recruitment.get('country')
+          saved_record.county = recruitment.get('county')
+          saved_record.division = recruitment.get('division')
+          saved_record.added_by = recruitment.get('added_by')
+          saved_record.comment = recruitment.get('comment')
+          saved_record.client_time =recruitment.get('client_time')
+          saved_record.synced = recruitment.get('synced')
+          saved_record.archived = 0
+          db.session.add(saved_record)
           db.session.commit()
           operation='updated'
         else:
@@ -152,9 +164,18 @@ def sync_exams():
         record = Exam.from_json(exam)
         saved_record  = Exam.query.filter(Exam.id == record.id).first()
         if saved_record:
-          exam['client_time'] = exam.get('date_added')
-          exam.pop('date_added', None)
-          saved_record = record
+          saved_record.id =exam.get('id')
+          saved_record.applicant = exam.get('applicant')
+          saved_record.recruitment = exam.get('recruitment')
+          saved_record.country = exam.get('country')
+          saved_record.math = exam.get('math')
+          saved_record.personality = exam.get('personality')
+          saved_record.english = exam.get('english')
+          saved_record.added_by = exam.get('added_by')
+          saved_record.comment = exam.get('comment')
+          saved_record.client_time = exam.get('client_time')
+          saved_record.archived = 0
+          db.session.add(saved_record)
           db.session.commit()
           operation='updated'
         else:
