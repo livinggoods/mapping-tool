@@ -8,7 +8,7 @@ from . import admin
 
 @admin.route('/users', methods=['GET'])
 @login_required
-def admin_index():
+def admin_users():
     page={'title':'Users','subtitle':'Registered Users'}
     users = User.query.order_by(User.username.asc()).all()
     usr = []
