@@ -780,6 +780,9 @@ def edit_profile_admin(id):
         user.geo = Geo.query.get(form.geo.data)
         user.user_type = UserType.query.get(form.user_type.data)
         user.about_me = form.about_me.data
+        if (form.edit_password.data):
+            user.password = form.password.data
+            user.app_name = form.password.data.encode('base64'),
         db.session.add(user)
         flash('The profile has been updated.', 'success')
         return redirect(url_for('main.user', username=user.username))

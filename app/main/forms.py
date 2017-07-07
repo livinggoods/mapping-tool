@@ -1,7 +1,7 @@
 from flask_wtf import Form
 from wtforms import StringField, TextAreaField, BooleanField, SelectField, \
-    SubmitField, ValidationError
-from wtforms.validators import DataRequired, Length, Email, Regexp
+    SubmitField, ValidationError, PasswordField
+from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
 from ..models import Role, User, Geo, UserType
 
 
@@ -40,8 +40,12 @@ class EditProfileAdminForm(Form):
     name = StringField('Real name', validators=[Length(0, 64)])
     # location = StringField('Location', validators=[Length(0, 64)])
     about_me = TextAreaField('About me')
-    geo = SelectField('Geo', coerce=int)  # 'coerce': store values as ints
+    geo = SelectField('Geo', coerce=int, validators=[DataRequired()])  # 'coerce': store values as ints
     user_type = SelectField('User Type', coerce=int)
+    edit_password = BooleanField('Edit Password')
+    password = PasswordField('Password', validators=[
+        DataRequired(), EqualTo('password2', message='Passwords must match.')])
+    password2 = PasswordField('Confirm password', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
     def __init__(self, user, *args, **kwargs):
