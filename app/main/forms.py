@@ -3,6 +3,7 @@ from wtforms import StringField, TextAreaField, BooleanField, SelectField, \
     SubmitField, ValidationError, PasswordField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
 from ..models import Role, User, Geo, UserType
+from ..utils.utils import RequiredIf
 
 
 class EditProfileForm(Form):
@@ -20,7 +21,7 @@ class EditProfileForm(Form):
         # and identifier of the item and the text to show in the control
         self.geo.choices = [(geo.id, geo.geo_name)
                              for geo in Geo.query.order_by(Geo.geo_name).all()]
-        self.geo.choices.insert(0, (-1, ''))
+        # self.geo.choices.insert(0, (-1, ''))
 
         self.user_type.choices = \
             [(utype.id, utype.name)
@@ -44,8 +45,9 @@ class EditProfileAdminForm(Form):
     user_type = SelectField('User Type', coerce=int)
     edit_password = BooleanField('Edit Password')
     password = PasswordField('Password', validators=[
-        DataRequired(), EqualTo('password2', message='Passwords must match.')])
-    password2 = PasswordField('Confirm password', validators=[DataRequired()])
+        RequiredIf(edit_password=True), EqualTo('password2', message='Passwords must match.')])
+    password2 = PasswordField('Confirm password', validators=[
+        RequiredIf(password!=''), EqualTo('password', message='Passwords must match.')])
     submit = SubmitField('Submit')
 
     def __init__(self, user, *args, **kwargs):
@@ -58,7 +60,7 @@ class EditProfileAdminForm(Form):
 
         self.geo.choices = [(geo.id, geo.geo_name)
                              for geo in Geo.query.order_by(Geo.geo_name).all()]
-        self.geo.choices.insert(0, (-1, ''))
+        # self.geo.choices.insert(0, (-1, ''))
 
         self.user_type.choices = \
             [(utype.id, utype.name)
