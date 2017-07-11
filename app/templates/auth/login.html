@@ -20,6 +20,7 @@
     <! -- login form -->
     <div class="row">
         <div class="col-lg-4">
+
             {{ wtf.quick_form(form) }}
             <br>
             <p>Forgot your password? <a href="{{ url_for('auth.password_reset_request') }}">Click here to reset it</a>.</p>
