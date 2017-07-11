@@ -1,19 +1,18 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY', 'hard to guess string')
     SSL_DISABLE = True
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True  # enable auto commit after request
-    MAIL_SERVER = 'root.server-ke25.com'
-    MAIL_PORT = 465
+    MAIL_SERVER = 'smtp.googlemail.com'
+    MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    MAIL_SUBJECT_PREFIX = '[Mapping]'
-    MAIL_SENDER = 'Living Goods Admin <devops@lg-apps.com>'
-    DASHBOARD_ADMIN = os.environ.get('DASHBOARD_ADMIN', 'devops@lg-apps.com')
+    MAIL_SUBJECT_PREFIX = '[Insights]'
+    MAIL_SENDER = 'Expansion Admin <devops@livinggoods.org>'
+    DASHBOARD_ADMIN = os.environ.get('DASHBOARD_ADMIN', 'devops@livinggoods.org')
     POSTS_PER_PAGE = 5
     FOLLOWERS_PER_PAGE = 10
 
