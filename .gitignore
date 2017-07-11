@@ -35,3 +35,6 @@ logs/**
 # IDE Files
 .ebextensions/
 .ebextensions/**
+
+# ignore config.py
+config.py
