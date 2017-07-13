@@ -798,28 +798,28 @@ def edit_profile_admin(id):
     return render_template('edit_profile.html', form=form, user=user)
 
 
-@main.route('/post/<int:id>')
-@login_required
-def post(id):
-    post = Post.query.get_or_404(id)
-    return render_template('post.html', posts=[post])
-
-
-@main.route('/edit/<int:id>', methods=['GET', 'POST'])
-@login_required
-def edit(id):
-    post = Post.query.get_or_404(id)
-    if current_user != post.author and \
-            not current_user.can(Permission.ADMINISTER):
-        abort(403)
-    form = PostForm()
-    if form.validate_on_submit():
-        post.body = form.body.data
-        db.session.add(post)
-        flash('The post has been updated.', 'success')
-        return redirect(url_for('main.post', id=post.id))
-    form.body.data = post.body
-    return render_template('edit_post.html', form=form)
+# @main.route('/post/<int:id>')
+# @login_required
+# def post(id):
+#     post = Post.query.get_or_404(id)
+#     return render_template('post.html', posts=[post])
+#
+#
+# @main.route('/edit/<int:id>', methods=['GET', 'POST'])
+# @login_required
+# def edit(id):
+#     post = Post.query.get_or_404(id)
+#     if current_user != post.author and \
+#             not current_user.can(Permission.ADMINISTER):
+#         abort(403)
+#     form = PostForm()
+#     if form.validate_on_submit():
+#         post.body = form.body.data
+#         db.session.add(post)
+#         flash('The post has been updated.', 'success')
+#         return redirect(url_for('main.post', id=post.id))
+#     form.body.data = post.body
+#     return render_template('edit_post.html', form=form)
 
 
 @main.route('/follow/<username>')
