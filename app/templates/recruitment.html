@@ -3,7 +3,7 @@
 <div class="">
   <div class="page-title">
     <div class="title_left">
-      <h3>{{page.title|title}} <small>Owned by {{recruitment.owner.username|title}}</small></h3>
+      <h3>{{page.title|title}} <small>Created by {{recruitment.owner.username|title}}</small></h3>
     </div>
 
     <div class="title_right">
@@ -58,6 +58,7 @@
                           <th>Date of Birth</th>
                           <th>Landmark</th>
                           <th>Country</th>
+                          <th>Status</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -72,6 +73,7 @@
                           <td>{{registration.date_of_birth()}}</td>
                           <td>{{registration.feature}}</td>
                           <td>{{registration.country}}</td>
+                          <td>{{'Yes' if registration.proceed == 1 else 'No'}}</td>
                           <td><a href="/registration/{{registration.id}}">More</a></td>
                         </tr>
                         {% endfor %}
