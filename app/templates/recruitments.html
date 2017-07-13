@@ -56,6 +56,7 @@
                           <th>Added by</th>
                           <th>Country</th>
                           <th>Date Added</th>
+                          <th>Status</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -68,6 +69,7 @@
                           <td>{{recruitment.owner.name}}</td>
                           <td>{{recruitment.country}}</td>
                           <td>{{recruitment.date_added}}</td>
+                          <td>{{recruitment.status|title}}</td>
                           <td>
                             <a href="/recruitment/{{recruitment.id}}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Applicants </a>
                             <a href="/export-scoring-tool/{{recruitment.id}}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Scoring tool </a>
