@@ -485,7 +485,8 @@ class Recruitments(db.Model):
             'added_by' : self.added_by,
             'comment' : self.comment,
             'client_time' : float(self.client_time),
-            'synced' : self.synced
+            'synced' : self.synced,
+            'status': self.status
         }
         return json_record
 
