@@ -461,7 +461,8 @@ class Recruitments(db.Model):
     date_added = db.Column(db.DateTime(), default=datetime.utcnow)
     synced = Column(Integer, server_default=text("'0'"))
     archived = Column(Integer, server_default=text("'0'"))
-    
+    status = Column(String(64), nullable=False, server_default=text("'draft'"))
+
     owner = relationship(u'User')
 
     def to_json(self):
