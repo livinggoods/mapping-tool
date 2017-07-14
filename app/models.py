@@ -819,6 +819,55 @@ class Interview(db.Model):
             comment = comment, client_time = client_time)
 
 
+class CommunityUnit(db.Model):
+  __tablename__ = 'community_unit'
+
+  id = Column(String(65), primary_key=True)
+  name = Column(String(45), nullable=False)
+  mappingid = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
+  lat = Column(Column(Float, server_default=text("'0'")))
+  lon = Column(Column(Float, server_default=text("'0'")))
+  country = Column(String(45))
+  subcountyid = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
+  linkfacilityid = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
+  areachiefname = Column(String(45))
+  ward = Column(String(65))
+  economicstatus = Column(String(45))
+  privatefacilityforact = Column(String(45))
+  privatefacilityformrdt = Column(String(45))
+  nameofngodoingiccm = Column(String(45))
+  nameofngodoingmhealth = Column(Text)
+  client_time = Column(Numeric, nullable=True)
+  date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+  addedby = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+  numberofchvs = Column(Integer, server_default=text("'0'"))
+  householdperchv = Column(Integer, server_default=text("'0'"))
+  numberofvillages = Column(Integer, server_default=text("'0'"))
+  distancetobranch = Column(Integer, server_default=text("'0'"))
+  transportcost = Column(Integer, server_default=text("'0'"))
+  distancetomainroad = Column(Integer, server_default=text("'0'"))
+  noofhouseholds = Column(Integer, server_default=text("'0'"))
+  mohpoplationdensity = Column(Integer, server_default=text("'0'"))
+  estimatedpopulationdensity = Column(Integer, server_default=text("'0'"))
+  distancetonearesthealthfacility = Column(Integer, server_default=text("'0'"))
+  actlevels = Column(Integer, server_default=text("'0'"))
+  actprice = Column(Integer, server_default=text("'0'"))
+  mrdtlevels = Column(Integer, server_default=text("'0'"))
+  mrdtprice = Column(Integer, server_default=text("'0'"))
+  noofdistibutors = Column(Integer, server_default=text("'0'"))
+  chvstrained = Column(Integer, server_default=text("'0'"))
+  presenceofestates = Column(Integer, server_default=text("'0'"))
+  presenceoffactories = Column(Integer, server_default=text("'0'"))
+  presenceofhostels = Column(Integer, server_default=text("'0'"))
+  tradermarket = Column(Integer, server_default=text("'0'"))
+  largesupermarket = Column(Integer, server_default=text("'0'"))
+  ngosgivingfreedrugs = Column(Integer, server_default=text("'0'"))
+  ngodoingiccm = Column(Integer, server_default=text("'0'"))
+  ngodoingmhealth = Column(Integer, server_default=text("'0'"))
+  comment = Column(Text)
+  # ForeignKey(u'registrations.id'), nullable=True, index=True
+
+
 class Location(db.Model):
     __tablename__ = 'location'
 
