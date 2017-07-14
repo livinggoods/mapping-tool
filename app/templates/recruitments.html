@@ -70,12 +70,27 @@
                           <td>{{recruitment.owner.name}}</td>
                           <td>{{recruitment.country}}</td>
                           <td>{{recruitment.date_added}}</td>
-                          <td>{{recruitment.status|title}}</td>
+                          <td>{{recruitment.status|title}}
+
+                          </td>
                           <td>{{recruitment.to_json().data.count}}</td>
                           <td>
-                            <a href="/recruitment/{{recruitment.id}}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> Applicants </a>
-                            <a href="/export-scoring-tool/{{recruitment.id}}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Scoring tool </a>
-                            <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                            <div class="btn-group closed">
+                                  <a class="btn btn-primary btn-xs " href="#"><i class="fa {{'fa-file-text' if recruitment.status=='draft' else 'fa-thumbs-up' }} fa-fw"></i> {{recruitment.status|title}}</a>
+                                  <a class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
+                                  </a>
+                                  <ul class="dropdown-menu">
+                                    <li><a href="#" class="confirm" action="confirmed" recruitment="{{recruitment.id}}"><i class="fa fa-thumbs-up fa-fw"></i> Confirm</a></li>
+                                    <li><a href="#" class="confirm" action="draft" recruitment="{{recruitment.id}}"><i class="fa fa-file-text fa-fw"></i> Draft</a></li>
+                                    <li><a href="/recruitment/{{recruitment.id}}"><i class="fa fa-folder"></i> Applicants </a></li>
+                                    <li><a href="/export-scoring-tool/{{recruitment.id}}"><i class="fa fa-pencil"></i> Scoring tool </a></li>
+                                    <li><a href="#"><i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
+                                    <li><a href="#"><i class="fa fa-ban fa-fw"></i> Ban</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="#"><i class="fa fa-unlock"></i> Make admin</a></li>
+                                  </ul>
+                              </div>
                           </td>
                         </tr>
                         {% endfor %}
@@ -92,6 +107,24 @@
 {% endblock %}
 {% block javascript %}
 <script type="text/javascript">
+$('.confirm').click(function(){
+    recruitmentId = $(this).attr('recruitment');
+    action = $(this).attr('action');
+    $.ajax({
+      url:'/api/v1/recruitment/'+recruitmentId,
+      type: 'post',
+      data: {action:action, id:recruitmentId},
+      dataType:'json',
+      success: function(data){
+        if (data.status=='updated'){
+            window.location.reload(true);
+        }
+      },
+      error: function(xhr){
+        console.log('error');
+      }
+    });
+});
 $('.new-recruitment').click(function(){
   window.RecruitmentID = (function () { return; })();
   $('#name').val('');
