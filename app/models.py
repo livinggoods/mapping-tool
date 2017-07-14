@@ -828,8 +828,8 @@ class CommunityUnit(db.Model):
   lat = Column(Column(Float, server_default=text("'0'")))
   lon = Column(Column(Float, server_default=text("'0'")))
   country = Column(String(45))
-  subcountyid = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
-  linkfacilityid = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
+  subcountyid = Column(ForeignKey(u'ke_subcounty.id'), nullable=True, index=True)
+  linkfacilityid = Column(ForeignKey(u'link_facility.id'), nullable=True, index=True)
   areachiefname = Column(String(45))
   ward = Column(String(65))
   economicstatus = Column(String(45))
@@ -865,7 +865,46 @@ class CommunityUnit(db.Model):
   ngodoingiccm = Column(Integer, server_default=text("'0'"))
   ngodoingmhealth = Column(Integer, server_default=text("'0'"))
   comment = Column(Text)
+
   # ForeignKey(u'registrations.id'), nullable=True, index=True
+
+
+class SubCounty(db.Model):
+  __tablename__ = 'ke_subcounty'
+
+  id = Column(String(64), primary_key=True)
+  name = Column(String(64))
+  countyID = Column(String(64))
+  country = Column(String(64))
+  mappingId = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
+  lat = Column(Float, server_default=text("'0'"))
+  lon = Column(Float, server_default=text("'0'"))
+  contactPerson = Column(String(64))
+  contactPersonPhone = Column(String(64))
+  mainTown = Column(String(64))
+  countySupport = Column(String(64))
+  subcountySupport = Column(String(64))
+  chv_activity_level = Column(String(64))
+  countyPopulation = Column(String(64))
+  subCountyPopulation = Column(String(64))
+  noOfVillages = Column(String(64))
+  mainTownPopulation = Column(String(64))
+  servicePopulation = Column(String(64))
+  populationDensity = Column(String(64))
+  transportCost = Column(String(64))
+  majorRoads = Column(String(64))
+  healtFacilities = Column(String(64))
+  privateClinicsInTown = Column(String(64))
+  privateClinicsInRadius = Column(String(64))
+  communityUnits = Column(String(64))
+  mainSupermarkets = Column(String(64))
+  mainBanks = Column(String(64))
+  anyMajorBusiness = Column(String(64))
+  comments = Column(Text)
+  recommendation = Column(Integer, server_default=text("'0'"))
+  client_time = Column(Numeric, nullable=True)
+  date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+  addedby = Column(ForeignKey(u'users.id'), nullable=True, index=True)
 
 
 class Location(db.Model):
