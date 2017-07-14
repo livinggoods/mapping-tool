@@ -59,6 +59,7 @@
                           <th>Landmark</th>
                           <th>Country</th>
                           <th>Status</th>
+                          <th>Status</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -74,6 +75,7 @@
                           <td>{{registration.feature}}</td>
                           <td>{{registration.country}}</td>
                           <td>{{'Yes' if registration.proceed == 1 else 'No'}}</td>
+                          <td>{{registration.to_json().interview.selected}}</td>
                           <td><a href="/registration/{{registration.id}}">More</a></td>
                         </tr>
                         {% endfor %}
