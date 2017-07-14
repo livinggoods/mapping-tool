@@ -266,6 +266,45 @@ class Referral(db.Model):
       }
       return json_record
 
+    @staticmethod
+    def from_json(record):
+      id=record.get('id')
+      phone=record.get('phone')
+      title=record.get('title')
+      recruitment_id=record.get('recruitment_id')
+      name=record.get('name')
+      country=record.get('country')
+      county=record.get('county')
+      district=record.get('district')
+      subcounty=record.get('subcounty')
+      community_unit=record.get('community_unit')
+      village=record.get('village')
+      mapping_id=record.get('mapping_id')
+      lat=record.get('lat')
+      lon=record.get('lon')
+      mobilization=record.get('mobilization')
+      synced=record.get('synced')
+      archived=record.get('archived')
+      return Referral(
+        id=id,
+        phone=phone,
+        title=title,
+        recruitment_id=recruitment_id,
+        name=name,
+        country=country,
+        county=county,
+        district=district,
+        subcounty=subcounty,
+        community_unit=community_unit,
+        village=village,
+        mapping_id=mapping_id,
+        lat=lat,
+        lon=lon,
+        mobilization=mobilization,
+        synced=synced,
+        archived=archived
+      )
+
 class SelectedApplication(db.Model):
     __tablename__ = 'selected_applications'
 
