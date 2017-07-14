@@ -244,6 +244,28 @@ class Referral(db.Model):
 
     recruitment = relationship(u'Location')
 
+    def to_json(self):
+      json_record = {
+        'id':self.id,
+        'phone':self.phone,
+        'title':self.title,
+        'recruitment_id':self.recruitment_id,
+        'name':self.name,
+        'country':self.country,
+        'county':self.county,
+        'district':self.district,
+        'subcounty':self.subcounty,
+        'community_unit':self.community_unit,
+        'village':self.village,
+        'mapping_id':self.mapping_id,
+        'lat':self.lat,
+        'lon':self.lon,
+        'mobilization':self.mobilization,
+        'synced':self.synced,
+        'archived':self.archived
+      }
+      return json_record
+
 class SelectedApplication(db.Model):
     __tablename__ = 'selected_applications'
 
