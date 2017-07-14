@@ -242,7 +242,8 @@ class Referral(db.Model):
     synced = Column(String(45))
     archived = Column(Integer, server_default=text("'0'"))
 
-    recruitment = relationship(u'Location')
+    recruitment = relationship(u'Recruitments')
+    mapping = relationship(u'Mapping')
 
     def to_json(self):
       json_record = {
