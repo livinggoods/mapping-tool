@@ -333,11 +333,16 @@ class Registration (db.Model):
         return datetime.fromtimestamp(self.client_time / 1000).strftime('%Y-%b-%d %H:%M:%S')
 
     def to_json(self):
+        exam = Exam.query.filter_by(applicant=self.id)
+        interview = Interview.query.filter_by(archived=0, applicant=self.id)
+
         json_record = {
             'id':self.id,
             'name':self.name,
             'phone':self.phone,
             'gender':self.gender,
+            'exam': [e.to_json() for e in exam],
+            'interview': [i.to_json() for i in interview],
             'recruitment':self.recruitment,
             'country':self.country,
             'dob': float(self.dob),
@@ -614,7 +619,6 @@ class Exam(db.Model):
         else:
             return True
 
-    
     def to_json(self):
         json_record = {
             'id': self.id,
