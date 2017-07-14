@@ -235,3 +235,25 @@ def sync_gps_data():
       return jsonify(status=status)
     else:
       return jsonify(error="No records posted")
+
+@api.route('/sync/chew-referral', methods=['GET', 'POST'])
+def sync_chew_referral():
+  if request.method == 'GET':
+    records  = Referral.query.all()
+    return jsonify({'referrals':[record.to_json() for record in records]})
+  else:
+    status = []
+    referral_list = request.json.get('referrals')
+    if referral_list is not None:
+      for referral in referral_list:
+        record = Referral.from_json(referral)
+        saved_record  = Referral.query.filter(Referral.id == record.id).first()
+        if saved_record:
+          pass
+        else:
+          db.session.add(record)
+          db.session.commit()
+        status.append({'id':record.id, 'status':'ok', 'operation':'saved'})
+      return jsonify(status=status)
+    else:
+      return jsonify(error="No records posted")
