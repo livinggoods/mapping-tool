@@ -224,14 +224,25 @@ class EducationLevel(db.Model):
 class Referral(db.Model):
     __tablename__ = 'referrals'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(45))
+    id = Column(String(64), primary_key=True)
     phone = Column(String(45))
     title = Column(String(45))
-    location_id = Column(ForeignKey(u'location.id'), index=True)
+    recruitment_id = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
+    name = Column(String(45))
+    country = Column(String(45))
+    county = Column(String(45))
+    district = Column(String(45))
+    subcounty = Column(String(45))
+    community_unit = Column(String(45))
+    village = Column(String(45))
+    mapping_id = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
+    lat = Column(Float, server_default=text("'0'"))
+    lon = Column(Float, server_default=text("'0'"))
+    mobilization = Column(String(45))
+    synced = Column(String(45))
     archived = Column(Integer, server_default=text("'0'"))
 
-    location = relationship(u'Location')
+    recruitment = relationship(u'Location')
 
 class SelectedApplication(db.Model):
     __tablename__ = 'selected_applications'
