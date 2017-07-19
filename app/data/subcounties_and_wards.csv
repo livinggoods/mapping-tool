@@ -1,1450 +1,1450 @@
-"1","1","changamwe","port reitz",
-"2","1","changamwe","kipevu",
-"3","1","changamwe","airport",
-"4","1","changamwe","changamwe",
-"5","1","changamwe","chaani",
-"6","1","jomvu","jomvu kuu",
-"7","1","jomvu","miritini",
-"8","1","jomvu","mikindani",
-"9","1","kisauni","mjambere",
-"10","1","kisauni","junda",
-"11","1","kisauni","bamburi",
-"12","1","kisauni","mwakirunge",
-"13","1","kisauni","mtopanga",
-"14","1","kisauni","magogoni",
-"15","1","kisauni","shanzu",
-"16","1","nyali","frere town",
-"17","1","nyali","ziwa la ng'ombe",
-"18","1","nyali","mkomani",
-"19","1","nyali","kongowea",
-"20","1","nyali","kadzandani",
-"21","1","likoni","mtongwe",
-"22","1","likoni","shika adabu",
-"23","1","likoni","bofu",
-"24","1","likoni","likoni",
-"25","1","likoni","timbwani",
-"26","1","mvita","mji wa kale/makadara",
-"27","1","mvita","tudor",
-"28","1","mvita","tononoka",
-"29","1","mvita","shimanzi/ganjoni",
-"30","1","mvita","majengo",
-"31","2","msambweni","gombatobongwe",
-"32","2","msambweni","ukunda",
-"33","2","msambweni","kinondo",
-"34","2","msambweni","ramisi",
-"35","2","lungalunga","pongwekikoneni",
-"36","2","lungalunga","dzombo",
-"37","2","lungalunga","mwereni",
-"38","2","lungalunga","vanga",
-"39","2","matuga","tsimba golini",
-"40","2","matuga","waa",
-"41","2","matuga","tiwi",
-"42","2","matuga","kubo south",
-"43","2","matuga","mkongani",
-"44","2","kinango","nadavaya",
-"45","2","kinango","puma",
-"46","2","kinango","kinango",
-"47","2","kinango","mackinnon-road",
-"48","2","kinango","chengoni/samburu",
-"49","2","kinango","mwavumbo",
-"50","2","kinango","kasemeni",
-"51","3","kilifi north","tezo",
-"52","3","kilifi north","sokoni",
-"53","3","kilifi north","kibarani",
-"54","3","kilifi north","dabaso",
-"55","3","kilifi north","matsangoni",
-"56","3","kilifi north","watamu",
-"57","3","kilifi north","mnarani",
-"58","3","kilifi south","junju",
-"59","3","kilifi south","mwarakaya",
-"60","3","kilifi south","shimo la tewa",
-"61","3","kilifi south","chasimba",
-"62","3","kilifi south","mtepeni",
-"63","3","kaloleni","mariakani",
-"64","3","kaloleni","kayafungo",
-"65","3","kaloleni","kaloleni",
-"66","3","kaloleni","mwanamwinga",
-"67","3","rabai","mwawesa",
-"68","3","rabai","ruruma",
-"69","3","rabai","kambe/ribe",
-"70","3","rabai","rabai/kisurutini",
-"71","3","ganze","ganze",
-"72","3","ganze","bamba",
-"73","3","ganze","jaribuni",
-"74","3","ganze","sokoke",
-"75","3","malindi","jilore",
-"76","3","malindi","kakuyuni",
-"77","3","malindi","ganda",
-"78","3","malindi","malindi town",
-"79","3","malindi","shella",
-"80","3","magarini","marafa",
-"81","3","magarini","magarini",
-"82","3","magarini","gongoni",
-"83","3","magarini","adu",
-"84","3","magarini","garashi",
-"85","3","magarini","sabaki",
-"86","4","garsen","kipini east",
-"87","4","garsen","garsen south",
-"88","4","garsen","kipini west",
-"89","4","garsen","garsen central",
-"90","4","garsen","garsen west",
-"91","4","garsen","garsen north",
-"92","4","galole","kinakomba",
-"93","4","galole","mikinduni",
-"94","4","galole","chewani",
-"95","4","galole","wayu",
-"96","4","bura","chewele",
-"97","4","bura","bura",
-"98","4","bura","bangale",
-"99","4","bura","sala",
-"100","4","bura","madogo",
-"101","5","lamu east","faza",
-"102","5","lamu east","kiunga",
-"103","5","lamu east","basuba",
-"104","5","lamu west","shella",
-"105","5","lamu west","mkomani",
-"106","5","lamu west","hindi",
-"107","5","lamu west","mkunumbi",
-"108","5","lamu west","hongwe",
-"109","5","lamu west","witu",
-"110","5","lamu west","bahari",
-"111","6","taveta","chala",
-"112","6","taveta","mahoo",
-"113","6","taveta","bomeni",
-"114","6","taveta","mboghoni",
-"115","6","taveta","mata",
-"116","6","wundanyi","wundanyi/mbale",
-"117","6","wundanyi","werugha",
-"118","6","wundanyi","wumingu/kishushe",
-"119","6","wundanyi","mwanda/mgange",
-"120","6","mwatate","rong'e",
-"121","6","mwatate","mwatate",
-"122","6","mwatate","bura",
-"123","6","mwatate","chawia",
-"124","6","mwatate","wusi/kishamba",
-"125","6","voi","mbololo",
-"126","6","voi","sagalla",
-"127","6","voi","kaloleni",
-"128","6","voi","marungu",
-"129","6","voi","kasigau",
-"130","6","voi","ngolia",
-"131","7","garissa township","waberi",
-"132","7","garissa township","galbet",
-"133","7","garissa township","township",
-"134","7","garissa township","iftin",
-"135","7","balambala","balambala",
-"136","7","balambala","danyere",
-"137","7","balambala","jara jara",
-"138","7","balambala","saka",
-"139","7","balambala","sankuri",
-"140","7","lagdera","modogashe",
-"141","7","lagdera","benane",
-"142","7","lagdera","goreale",
-"143","7","lagdera","maalimin",
-"144","7","lagdera","sabena",
-"145","7","lagdera","baraki",
-"146","7","dadaab","dertu",
-"147","7","dadaab","dadaab",
-"148","7","dadaab","labasigale",
-"149","7","dadaab","damajale",
-"150","7","dadaab","liboi",
-"151","7","dadaab","abakaile",
-"152","7","fafi","bura",
-"153","7","fafi","dekaharia",
-"154","7","fafi","jarajila",
-"155","7","fafi","fafi",
-"156","7","fafi","nanighi",
-"157","7","ijara","hulugho",
-"158","7","ijara","sangailu",
-"159","7","ijara","ijara",
-"160","7","ijara","masalani",
-"161","8","wajir north","gurar",
-"162","8","wajir north","bute",
-"163","8","wajir north","korondile",
-"164","8","wajir north","malkagufu",
-"165","8","wajir north","batalu",
-"166","8","wajir north","danaba",
-"167","8","wajir north","godoma",
-"168","8","wajir east","wagberi",
-"169","8","wajir east","township",
-"170","8","wajir east","barwago",
-"171","8","wajir east","khorof/harar",
-"172","8","tarbaj","elben",
-"173","8","tarbaj","sarman",
-"174","8","tarbaj","tarbaj",
-"175","8","tarbaj","wargadud",
-"176","8","wajir west","arbajahan",
-"177","8","wajir west","hadado/athibohol",
-"178","8","wajir west","ademasajide",
-"179","8","wajir west","wagalla/ganyure",
-"180","8","eldas","eldas",
-"181","8","eldas","della",
-"182","8","eldas","lakoley south/basir",
-"183","8","eldas","elnur/tula tula",
-"184","8","wajir south","benane",
-"185","8","wajir south","burder",
-"186","8","wajir south","dadaja bulla",
-"187","8","wajir south","habasswein",
-"188","8","wajir south","lagboghol south",
-"189","8","wajir south","ibrahim ure",
-"190","8","wajir south","diif",
-"191","9","mandera west","takaba south",
-"192","9","mandera west","takaba",
-"193","9","mandera west","lag sure",
-"194","9","mandera west","dandu",
-"195","9","mandera west","gither",
-"196","9","banissa","banissa",
-"197","9","banissa","derkhale",
-"198","9","banissa","guba",
-"199","9","banissa","malkamari",
-"200","9","banissa","kiliwehiri",
-"201","9","mandera north","ashabito",
-"202","9","mandera north","guticha",
-"203","9","mandera north","morothile",
-"204","9","mandera north","rhamu",
-"205","9","mandera north","rhamu-dimtu",
-"206","9","mandera south","wargudud",
-"207","9","mandera south","kutulo",
-"208","9","mandera south","elwak south",
-"209","9","mandera south","elwak north",
-"210","9","mandera south","shimbir fatuma",
-"211","9","mandera east","arabia",
-"212","9","mandera east","bulla mpya",
-"213","9","mandera east","khalalio",
-"214","9","mandera east","neboi",
-"215","9","mandera east","township",
-"216","9","lafey","libehia",
-"217","9","lafey","fino",
-"218","9","lafey","lafey",
-"219","9","lafey","warankara",
-"220","9","lafey","alungo gof",
-"221","10","moyale","butiye",
-"222","10","moyale","sololo",
-"223","10","moyale","heilu-manyatta",
-"224","10","moyale","golbo",
-"225","10","moyale","moyale township",
-"226","10","moyale","uran",
-"227","10","moyale","obbu",
-"228","10","north horr","illeret",
-"229","10","north horr","north horr",
-"230","10","north horr","dukana",
-"231","10","north horr","maikona",
-"232","10","north horr","turbi",
-"233","10","saku","sagante/jaldesa",
-"234","10","saku","karare",
-"235","10","saku","marsabit central",
-"236","10","laisamis","loiyangalani",
-"237","10","laisamis","kargi/south horr",
-"238","10","laisamis","korr/ngurunit",
-"239","10","laisamis","log logo",
-"240","10","laisamis","laisamis",
-"241","11","isiolo north","wabera",
-"242","11","isiolo north","bulla pesa",
-"243","11","isiolo north","chari",
-"244","11","isiolo north","cherab",
-"245","11","isiolo north","ngare mara",
-"246","11","isiolo north","burat",
-"247","11","isiolo north","oldonyiro",
-"248","11","isiolo south","garbatulla",
-"249","11","isiolo south","kinna",
-"250","11","isiolo south","sericho",
-"251","12","igembe south","maua",
-"252","12","igembe south","kiegoi/antubochiu",
-"253","12","igembe south","athiru gaiti",
-"254","12","igembe south","akachiu",
-"255","12","igembe south","kanuni",
-"256","12","igembe central","akirang'ondu",
-"257","12","igembe central","athiru ruujine",
-"258","12","igembe central","igembe east",
-"259","12","igembe central","njia",
-"260","12","igembe central","kangeta",
-"261","12","igembe north","antuambui",
-"262","12","igembe north","ntunene",
-"263","12","igembe north","antubetwe kiongo",
-"264","12","igembe north","naathu",
-"265","12","igembe north","amwathi",
-"266","12","tigania west","athwana",
-"267","12","tigania west","akithii",
-"268","12","tigania west","kianjai",
-"269","12","tigania west","nkomo",
-"270","12","tigania west","mbeu",
-"271","12","tigania east","thangatha",
-"272","12","tigania east","mikinduri",
-"273","12","tigania east","kiguchwa",
-"274","12","tigania east","muthara",
-"275","12","tigania east","karama",
-"276","12","north imenti","municipality",
-"277","12","north imenti","ntima east",
-"278","12","north imenti","ntima west",
-"279","12","north imenti","nyaki west",
-"280","12","north imenti","nyaki east",
-"281","12","buuri","timau",
-"282","12","buuri","kisima",
-"283","12","buuri","kiirua/naari",
-"284","12","buuri","ruiri/rwarera",
-"285","12","buuri","kibirichia",
-"286","12","central imenti","mwanganthia",
-"287","12","central imenti","abothuguchi central",
-"288","12","central imenti","abothuguchi west",
-"289","12","central imenti","kiagu",
-"290","12","south imenti","mitunguu",
-"291","12","south imenti","igoji east",
-"292","12","south imenti","igoji west",
-"293","12","south imenti","abogeta east",
-"294","12","south imenti","abogeta west",
-"295","12","south imenti","nkuene",
-"296","13","maara","mitheru",
-"297","13","maara","muthambi",
-"298","13","maara","mwimbi",
-"299","13","maara","ganga",
-"300","13","maara","chogoria",
-"301","13","chuka/igambang'om","mariani",
-"302","13","chuka/igambang'om","karingani",
-"303","13","chuka/igambang'om","magumoni",
-"304","13","chuka/igambang'om","mugwe",
-"305","13","chuka/igambang'om","igambang'ombe",
-"306","13","tharaka","gatunga",
-"307","13","tharaka","mukothima",
-"308","13","tharaka","nkondi",
-"309","13","tharaka","chiakariga",
-"310","13","tharaka","marimanti",
-"311","14","manyatta","ruguru/ngandori",
-"312","14","manyatta","kithimu",
-"313","14","manyatta","nginda",
-"314","14","manyatta","mbeti north",
-"315","14","manyatta","kirimari",
-"316","14","manyatta","gaturi south",
-"317","14","runyenjes","gaturi north",
-"318","14","runyenjes","kagaari south",
-"319","14","runyenjes","central  ward",
-"320","14","runyenjes","kagaari north",
-"321","14","runyenjes","kyeni north",
-"322","14","runyenjes","kyeni south",
-"323","14","mbeere south","mwea",
-"324","14","mbeere south","makima",
-"325","14","mbeere south","mbeti south",
-"326","14","mbeere south","mavuria",
-"327","14","mbeere south","kiambere",
-"328","14","mbeere north","nthawa",
-"329","14","mbeere north","muminji",
-"330","14","mbeere north","evurore",
-"331","15","mwingi north","ngomeni",
-"332","15","mwingi north","kyuso",
-"333","15","mwingi north","mumoni",
-"334","15","mwingi north","tseikuru",
-"335","15","mwingi north","tharaka",
-"336","15","mwingi west","kyome/thaana",
-"337","15","mwingi west","nguutani",
-"338","15","mwingi west","migwani",
-"339","15","mwingi west","kiomo/kyethani",
-"340","15","mwingi central","central",
-"341","15","mwingi central","kivou",
-"342","15","mwingi central","nguni",
-"343","15","mwingi central","nuu",
-"344","15","mwingi central","mui",
-"345","15","mwingi central","waita",
-"346","15","kitui west","mutonguni",
-"347","15","kitui west","kauwi",
-"348","15","kitui west","matinyani",
-"349","15","kitui west","kwa mutonga/kithumula",
-"350","15","kitui rural","kisasi",
-"351","15","kitui rural","mbitini",
-"352","15","kitui rural","kwavonza/yatta",
-"353","15","kitui rural","kanyangi",
-"354","15","kitui central","miambani",
-"355","15","kitui central","township",
-"356","15","kitui central","kyangwithya west",
-"357","15","kitui central","mulango",
-"358","15","kitui central","kyangwithya east",
-"359","15","kitui east","zombe/mwitika",
-"360","15","kitui east","chuluni",
-"361","15","kitui east","nzambani",
-"362","15","kitui east","voo/kyamatu",
-"363","15","kitui east","endau/malalani",
-"364","15","kitui east","mutito/kaliku",
-"365","15","kitui south","ikanga/kyatune",
-"366","15","kitui south","mutomo",
-"367","15","kitui south","mutha",
-"368","15","kitui south","ikutha",
-"369","15","kitui south","kanziko",
-"370","15","kitui south","athi",
-"371","16","masinga","kivaa",
-"372","16","masinga","masinga central",
-"373","16","masinga","ekalakala",
-"374","16","masinga","muthesya",
-"375","16","masinga","ndithini",
-"376","16","yatta","ndalani",
-"377","16","yatta","matuu",
-"378","16","yatta","kithimani",
-"379","16","yatta","ikombe",
-"380","16","yatta","katangi",
-"381","16","kangundo","kangundo north",
-"382","16","kangundo","kangundo central",
-"383","16","kangundo","kangundo east",
-"384","16","kangundo","kangundo west",
-"385","16","matungulu","tala",
-"386","16","matungulu","matungulu north",
-"387","16","matungulu","matungulu east",
-"388","16","matungulu","matungulu west",
-"389","16","matungulu","kyeleni",
-"390","16","kathiani","mitaboni",
-"391","16","kathiani","kathiani central",
-"392","16","kathiani","upper kaewa/iveti",
-"393","16","kathiani","lower kaewa/kaani",
-"394","16","mavoko","athi river",
-"395","16","mavoko","kinanie",
-"396","16","mavoko","muthwani",
-"397","16","mavoko","syokimau/mulolongo",
-"398","16","machakos town","kalama",
-"399","16","machakos town","mua",
-"400","16","machakos town","mutituni",
-"401","16","machakos town","machakos central",
-"402","16","machakos town","mumbuni north",
-"403","16","machakos town","muvuti/kiima-kimwe",
-"404","16","machakos town","kola",
-"405","16","mwala","mbiuni",
-"406","16","mwala","makutano/ mwala",
-"407","16","mwala","masii",
-"408","16","mwala","muthetheni",
-"409","16","mwala","wamunyu",
-"410","16","mwala","kibauni",
-"411","17","mbooni","tulimani",
-"412","17","mbooni","mbooni",
-"413","17","mbooni","kithungo/kitundu",
-"414","17","mbooni","kisau/kiteta",
-"415","17","mbooni","waia/kako",
-"416","17","mbooni","kalawa",
-"417","17","kilome","kasikeu",
-"418","17","kilome","mukaa",
-"419","17","kilome","kiima kiu/kalanzoni",
-"420","17","kaiti","ukia",
-"421","17","kaiti","kee",
-"422","17","kaiti","kilungu",
-"423","17","kaiti","ilima",
-"424","17","makueni","wote",
-"425","17","makueni","muvau/kikuumini",
-"426","17","makueni","mavindini",
-"427","17","makueni","kitise/kithuki",
-"428","17","makueni","kathonzweni",
-"429","17","makueni","nzaui/kilili/kalamba",
-"430","17","makueni","mbitini",
-"431","17","kibwezi west","makindu",
-"432","17","kibwezi west","nguumo",
-"433","17","kibwezi west","kikumbulyu north",
-"434","17","kibwezi west","kikumbulyu south",
-"435","17","kibwezi west","nguu/masumba",
-"436","17","kibwezi west","emali/mulala",
-"437","17","kibwezi east","masongaleni",
-"438","17","kibwezi east","mtito andei",
-"439","17","kibwezi east","thange",
-"440","17","kibwezi east","ivingoni/nzambani",
-"441","18","kinangop","engineer",
-"442","18","kinangop","gathara",
-"443","18","kinangop","north kinangop",
-"444","18","kinangop","murungaru",
-"445","18","kinangop","njabini\kiburu",
-"446","18","kinangop","nyakio",
-"447","18","kinangop","githabai",
-"448","18","kinangop","magumu",
-"449","18","kipipiri","wanjohi",
-"450","18","kipipiri","kipipiri",
-"451","18","kipipiri","geta",
-"452","18","kipipiri","githioro",
-"453","18","ol kalou","karau",
-"454","18","ol kalou","kanjuiri ridge",
-"455","18","ol kalou","mirangine",
-"456","18","ol kalou","kaimbaga",
-"457","18","ol kalou","rurii",
-"458","18","ol jorok","gathanji",
-"459","18","ol jorok","gatimu",
-"460","18","ol jorok","weru",
-"461","18","ol jorok","charagita",
-"462","18","ndaragwa","leshau pondo",
-"463","18","ndaragwa","kiriita",
-"464","18","ndaragwa","central",
-"465","18","ndaragwa","shamata",
-"466","19","tetu","dedan kimanthi",
-"467","19","tetu","wamagana",
-"468","19","tetu","aguthi/gaaki",
-"469","19","kieni","mweiga",
-"470","19","kieni","naromoru kiamathaga",
-"471","19","kieni","mwiyogo/endarasha",
-"472","19","kieni","mugunda",
-"473","19","kieni","gatarakwa",
-"474","19","kieni","thegu river",
-"475","19","kieni","kabaru",
-"476","19","kieni","gakawa",
-"477","19","mathira","ruguru",
-"478","19","mathira","magutu",
-"479","19","mathira","iriaini",
-"480","19","mathira","konyu",
-"481","19","mathira","kirimukuyu",
-"482","19","mathira","karatina town",
-"483","19","othaya","mahiga",
-"484","19","othaya","iria-ini",
-"485","19","othaya","chinga",
-"486","19","othaya","karima",
-"487","19","mukurweini","gikondi",
-"488","19","mukurweini","rugi",
-"489","19","mukurweini","mukurwe-ini west",
-"490","19","mukurweini","mukurwe-ini central",
-"491","19","nyeri town","kiganjo/mathari",
-"492","19","nyeri town","rware",
-"493","19","nyeri town","gatitu/muruguru",
-"494","19","nyeri town","ruring'u",
-"495","19","nyeri town","kamakwa/mukaro",
-"496","20","mwea","mutithi",
-"497","20","mwea","kangai",
-"498","20","mwea","thiba",
-"499","20","mwea","wamumu",
-"500","20","mwea","nyangati",
-"501","20","mwea","murinduko",
-"502","20","mwea","gathigiriri",
-"503","20","mwea","tebere",
-"504","20","gichugu","kabare",
-"505","20","gichugu","baragwi",
-"506","20","gichugu","njukiini",
-"507","20","gichugu","ngariama",
-"508","20","gichugu","karumandi",
-"509","20","ndia","mukure",
-"510","20","ndia","kiine",
-"511","20","ndia","kariti",
-"512","20","kirinyaga central","mutira",
-"513","20","kirinyaga central","kanyeki-ini",
-"514","20","kirinyaga central","kerugoya",
-"515","20","kirinyaga central","inoi",
-"516","21","kangema","kanyenyaini",
-"517","21","kangema","muguru",
-"518","21","kangema","rwathia",
-"519","21","mathioya","gitugi",
-"520","21","mathioya","kiru",
-"521","21","mathioya","kamacharia",
-"522","21","kiharu","wangu",
-"523","21","kiharu","mugoiri",
-"524","21","kiharu","mbiri",
-"525","21","kiharu","township",
-"526","21","kiharu","murarandia",
-"527","21","kiharu","gaturi",
-"528","21","kigumo","kahumbu",
-"529","21","kigumo","muthithi",
-"530","21","kigumo","kigumo",
-"531","21","kigumo","kangari",
-"532","21","kigumo","kinyona",
-"533","21","maragwa","kimorori/wempa",
-"534","21","maragwa","makuyu",
-"535","21","maragwa","kambiti",
-"536","21","maragwa","kamahuha",
-"537","21","maragwa","ichagaki",
-"538","21","maragwa","nginda",
-"539","21","kandara","ng'araria",
-"540","21","kandara","muruka",
-"541","21","kandara","kagundu-ini",
-"542","21","kandara","gaichanjiru",
-"543","21","kandara","ithiru",
-"544","21","kandara","ruchu",
-"545","21","gatanga","ithanga",
-"546","21","gatanga","kakuzi/mitubiri",
-"547","21","gatanga","mugumo-ini",
-"548","21","gatanga","kihumbu-ini",
-"549","21","gatanga","gatanga",
-"550","21","gatanga","kariara",
-"551","22","gatundu south","kiamwangi",
-"552","22","gatundu south","kiganjo",
-"553","22","gatundu south","ndarugu",
-"554","22","gatundu south","ngenda",
-"555","22","gatundu north","gituamba",
-"556","22","gatundu north","githobokoni",
-"557","22","gatundu north","chania",
-"558","22","gatundu north","mang'u",
-"559","22","juja","murera",
-"560","22","juja","theta",
-"561","22","juja","juja",
-"562","22","juja","witeithie",
-"563","22","juja","kalimoni",
-"564","22","thika town","township",
-"565","22","thika town","kamenu",
-"566","22","thika town","hospital",
-"567","22","thika town","gatuanyaga",
-"568","22","thika town","ngoliba",
-"569","22","ruiru","gitothua",
-"570","22","ruiru","biashara",
-"571","22","ruiru","gatongora",
-"572","22","ruiru","kahawa sukari",
-"573","22","ruiru","kahawa wendani",
-"574","22","ruiru","kiuu",
-"575","22","ruiru","mwiki",
-"576","22","ruiru","mwihoko",
-"577","22","githunguri","githunguri",
-"578","22","githunguri","githiga",
-"579","22","githunguri","ikinu",
-"580","22","githunguri","ngewa",
-"581","22","githunguri","komothai",
-"582","22","kiambu","ting'ang'a",
-"583","22","kiambu","ndumberi",
-"584","22","kiambu","riabai",
-"585","22","kiambu","township",
-"586","22","kiambaa","cianda",
-"587","22","kiambaa","karuri",
-"588","22","kiambaa","ndenderu",
-"589","22","kiambaa","muchatha",
-"590","22","kiambaa","kihara",
-"591","22","kabete","gitaru",
-"592","22","kabete","muguga",
-"593","22","kabete","nyadhuna",
-"594","22","kabete","kabete",
-"595","22","kabete","uthiru",
-"596","22","kikuyu","karai",
-"597","22","kikuyu","nachu",
-"598","22","kikuyu","sigona",
-"599","22","kikuyu","kikuyu",
-"600","22","kikuyu","kinoo",
-"601","22","limuru","bibirioni",
-"602","22","limuru","limuru central",
-"603","22","limuru","ndeiya",
-"604","22","limuru","limuru east",
-"605","22","limuru","ngecha tigoni",
-"606","22","lari","kinale",
-"607","22","lari","kijabe",
-"608","22","lari","nyanduma",
-"609","22","lari","kamburu",
-"610","22","lari","lari/kirenga",
-"611","23","turkana north","kaeris",
-"612","23","turkana north","lake zone",
-"613","23","turkana north","lapur",
-"614","23","turkana north","kaaleng/kaikor",
-"615","23","turkana north","kibish",
-"616","23","turkana north","nakalale",
-"617","23","turkana west","kakuma",
-"618","23","turkana west","lopur",
-"619","23","turkana west","letea",
-"620","23","turkana west","songot",
-"621","23","turkana west","kalobeyei",
-"622","23","turkana west","lokichoggio",
-"623","23","turkana west","nanaam",
-"624","23","turkana central","kerio delta",
-"625","23","turkana central","kang'atotha",
-"626","23","turkana central","kalokol",
-"627","23","turkana central","lodwar township",
-"628","23","turkana central","kanamkemer",
-"629","23","loima","kotaruk/lobei",
-"630","23","loima","turkwel",
-"631","23","loima","loima",
-"632","23","loima","lokiriama/lorengippi",
-"633","23","turkana south","kaputir",
-"634","23","turkana south","katilu",
-"635","23","turkana south","lobokat",
-"636","23","turkana south","kalapata",
-"637","23","turkana south","lokichar",
-"638","23","turkana east","kapedo/napeitom",
-"639","23","turkana east","katilia",
-"640","23","turkana east","lokori/kochodin",
-"641","24","kapenguria","riwo",
-"642","24","kapenguria","kapenguria",
-"643","24","kapenguria","mnagei",
-"644","24","kapenguria","siyoi",
-"645","24","kapenguria","endugh",
-"646","24","kapenguria","sook",
-"647","24","sigor","sekerr",
-"648","24","sigor","masool",
-"649","24","sigor","lomut",
-"650","24","sigor","weiwei",
-"651","24","kacheliba","suam",
-"652","24","kacheliba","kodich",
-"653","24","kacheliba","kapckok",
-"654","24","kacheliba","kasei",
-"655","24","kacheliba","kiwawa",
-"656","24","kacheliba","alale",
-"657","24","pokot south","chepareria",
-"658","24","pokot south","batei",
-"659","24","pokot south","lelan",
-"660","24","pokot south","tapach",
-"661","25","samburu west","lodokejek",
-"662","25","samburu west","suguta marmar",
-"663","25","samburu west","maralal",
-"664","25","samburu west","loosuk",
-"665","25","samburu west","poro",
-"666","25","samburu north","el-barta",
-"667","25","samburu north","nachola",
-"668","25","samburu north","ndoto",
-"669","25","samburu north","nyiro",
-"670","25","samburu north","angata nanyokie",
-"671","25","samburu north","baawa",
-"672","25","samburu east","waso",
-"673","25","samburu east","wamba west",
-"674","25","samburu east","wamba east",
-"675","25","samburu east","wamba north",
-"676","26","kwanza","kapomboi",
-"677","26","kwanza","kwanza",
-"678","26","kwanza","keiyo",
-"679","26","kwanza","bidii",
-"680","26","endebess","chepchoina",
-"681","26","endebess","endebess",
-"682","26","endebess","matumbei",
-"683","26","saboti","kinyoro",
-"684","26","saboti","matisi",
-"685","26","saboti","tuwani",
-"686","26","saboti","saboti",
-"687","26","saboti","machewa",
-"688","26","kiminini","kiminini",
-"689","26","kiminini","waitaluk",
-"690","26","kiminini","sirende",
-"691","26","kiminini","hospital",
-"692","26","kiminini","sikhendu",
-"693","26","kiminini","nabiswa",
-"694","26","cherangany","sinyerere",
-"695","26","cherangany","makutano",
-"696","26","cherangany","kaplamai",
-"697","26","cherangany","motosiet",
-"698","26","cherangany","cherangany/suwerwa",
-"699","26","cherangany","chepsiro/kiptoror",
-"700","26","cherangany","sitatunga",
-"701","27","soy","moi's bridge",
-"702","27","soy","kapkures",
-"703","27","soy","ziwa",
-"704","27","soy","segero/barsombe",
-"705","27","soy","kipsomba",
-"706","27","soy","soy",
-"707","27","soy","kuinet/kapsuswa",
-"708","27","turbo","ngenyilel",
-"709","27","turbo","tapsagoi",
-"710","27","turbo","kamagut",
-"711","27","turbo","kiplombe",
-"712","27","turbo","kapsaos",
-"713","27","turbo","huruma",
-"714","27","moiben","tembelio",
-"715","27","moiben","sergoit",
-"716","27","moiben","karuna/meibeki",
-"717","27","moiben","moiben",
-"718","27","moiben","kimumu",
-"719","27","ainabkoi","kapsoya",
-"720","27","ainabkoi","kaptagat",
-"721","27","ainabkoi","ainabkoi/olare",
-"722","27","kapseret","simat/kapseret",
-"723","27","kapseret","kipkenyo",
-"724","27","kapseret","ngeria",
-"725","27","kapseret","megun",
-"726","27","kapseret","langas",
-"727","27","kesses","racecourse",
-"728","27","kesses","cheptiret/kipchamo",
-"729","27","kesses","tulwet/chuiyat",
-"730","27","kesses","tarakwa",
-"731","28","marakwet east","kapyego",
-"732","28","marakwet east","sambirir",
-"733","28","marakwet east","endo",
-"734","28","marakwet east","embobut / embulot",
-"735","28","marakwet west","lelan",
-"736","28","marakwet west","sengwer",
-"737","28","marakwet west","cherang'any/chebororwa",
-"738","28","marakwet west","moiben/kuserwo",
-"739","28","marakwet west","kapsowar",
-"740","28","marakwet west","arror",
-"741","28","keiyo north","emsoo",
-"742","28","keiyo north","kamariny",
-"743","28","keiyo north","kapchemutwa",
-"744","28","keiyo north","tambach",
-"745","28","keiyo south","kaptarakwa",
-"746","28","keiyo south","chepkorio",
-"747","28","keiyo south","soy north",
-"748","28","keiyo south","soy south",
-"749","28","keiyo south","kabiemit",
-"750","28","keiyo south","metkei",
-"751","29","tinderet","songhor/soba",
-"752","29","tinderet","tindiret",
-"753","29","tinderet","chemelil/chemase",
-"754","29","tinderet","kapsimotwo",
-"755","29","aldai","kabwareng",
-"756","29","aldai","terik",
-"757","29","aldai","kemeloi-maraba",
-"758","29","aldai","kobujoi",
-"759","29","aldai","kaptumo-kaboi",
-"760","29","aldai","koyo-ndurio",
-"761","29","nandi hills","nandi hills",
-"762","29","nandi hills","chepkunyuk",
-"763","29","nandi hills","ol'lessos",
-"764","29","nandi hills","kapchorua",
-"765","29","chesumei","chemundu/kapng'etuny",
-"766","29","chesumei","kosirai",
-"767","29","chesumei","lelmokwo/ngechek",
-"768","29","chesumei","kaptel/kamoiywo",
-"769","29","chesumei","kiptuya",
-"770","29","emgwen","chepkumia",
-"771","29","emgwen","kapkangani",
-"772","29","emgwen","kapsabet",
-"773","29","emgwen","kilibwoni",
-"774","29","mosop","chepterwai",
-"775","29","mosop","kipkaren",
-"776","29","mosop","kurgung/surungai",
-"777","29","mosop","kabiyet",
-"778","29","mosop","ndalat",
-"779","29","mosop","kabisaga",
-"780","29","mosop","sangalo/kebulonik",
-"781","30","tiaty","tirioko",
-"782","30","tiaty","kolowa",
-"783","30","tiaty","ribkwo",
-"784","30","tiaty","silale",
-"785","30","tiaty","loiyamorock",
-"786","30","tiaty","tangulbei/korossi",
-"787","30","tiaty","churo/amaya",
-"788","30","baringo  north","barwessa",
-"789","30","baringo  north","kabartonjo",
-"790","30","baringo  north","saimo/kipsaraman",
-"791","30","baringo  north","saimo/soi",
-"792","30","baringo  north","bartabwa",
-"793","30","baringo central","kabarnet",
-"794","30","baringo central","sacho",
-"795","30","baringo central","tenges",
-"796","30","baringo central","ewalel chapchap",
-"797","30","baringo central","kapropita",
-"798","30","baringo south","marigat",
-"799","30","baringo south","ilchamus",
-"800","30","baringo south","mochongoi",
-"801","30","baringo south","mukutani",
-"802","30","mogotio","mogotio",
-"803","30","mogotio","emining",
-"804","30","mogotio","kisanana",
-"805","30","eldama ravine","lembus",
-"806","30","eldama ravine","lembus kwen",
-"807","30","eldama ravine","ravine",
-"808","30","eldama ravine","mumberes/maji mazuri",
-"809","30","eldama ravine","lembus/perkerra",
-"810","30","eldama ravine","koibatek",
-"811","31","laikipia west","olmoran",
-"812","31","laikipia west","rumuruti township",
-"813","31","laikipia west","kinamba",
-"814","31","laikipia west","marmanet",
-"815","31","laikipia west","igwamiti",
-"816","31","laikipia west","salama",
-"817","31","laikipia east","ngobit",
-"818","31","laikipia east","tigithi",
-"819","31","laikipia east","thingithu",
-"820","31","laikipia east","nanyuki",
-"821","31","laikipia east","umande",
-"822","31","laikipia north","sosian",
-"823","31","laikipia north","segera",
-"824","31","laikipia north","mukogondo west",
-"825","31","laikipia north","mukogondo east",
-"826","32","molo","mariashoni",
-"827","32","molo","elburgon",
-"828","32","molo","turi",
-"829","32","molo","molo",
-"830","32","njoro","maunarok",
-"831","32","njoro","mauche",
-"832","32","njoro","kihingo",
-"833","32","njoro","nessuit",
-"834","32","njoro","lare",
-"835","32","njoro","njoro",
-"836","32","naivasha","biashara",
-"837","32","naivasha","hells gate",
-"838","32","naivasha","lakeview",
-"839","32","naivasha","maai-mahiu",
-"840","32","naivasha","maiella",
-"841","32","naivasha","olkaria",
-"842","32","naivasha","naivasha east",
-"843","32","naivasha","viwandani",
-"844","32","gilgil","gilgil",
-"845","32","gilgil","elementaita",
-"846","32","gilgil","mbaruk/eburu",
-"847","32","gilgil","malewa west",
-"848","32","gilgil","murindati",
-"849","32","kuresoi south","amalo",
-"850","32","kuresoi south","keringet",
-"851","32","kuresoi south","kiptagich",
-"852","32","kuresoi south","tinet",
-"853","32","kuresoi north","kiptororo",
-"854","32","kuresoi north","nyota",
-"855","32","kuresoi north","sirikwa",
-"856","32","kuresoi north","kamara",
-"857","32","subukia","subukia",
-"858","32","subukia","waseges",
-"859","32","subukia","kabazi",
-"860","32","rongai","menengai west",
-"861","32","rongai","soin",
-"862","32","rongai","visoi",
-"863","32","rongai","mosop",
-"864","32","rongai","solai",
-"865","32","bahati","dundori",
-"866","32","bahati","kabatini",
-"867","32","bahati","kiamaina",
-"868","32","bahati","lanet/umoja",
-"869","32","bahati","bahati",
-"870","32","nakuru town west","barut",
-"871","32","nakuru town west","london",
-"872","32","nakuru town west","kaptembwo",
-"873","32","nakuru town west","kapkures",
-"874","32","nakuru town west","rhoda",
-"875","32","nakuru town west","shaabab",
-"876","32","nakuru town east","biashara",
-"877","32","nakuru town east","kivumbini",
-"878","32","nakuru town east","flamingo",
-"879","32","nakuru town east","menengai",
-"880","32","nakuru town east","nakuru east",
-"881","33","kilgoris","kilgoris central",
-"882","33","kilgoris","keyian",
-"883","33","kilgoris","angata barikoi",
-"884","33","kilgoris","shankoe",
-"885","33","kilgoris","kimintet",
-"886","33","kilgoris","lolgorian",
-"887","33","emurua dikirr","ilkerin",
-"888","33","emurua dikirr","ololmasani",
-"889","33","emurua dikirr","mogondo",
-"890","33","emurua dikirr","kapsasian",
-"891","33","narok north","olpusimoru",
-"892","33","narok north","olokurto",
-"893","33","narok north","narok town",
-"894","33","narok north","nkareta",
-"895","33","narok north","olorropil",
-"896","33","narok north","melili",
-"897","33","narok east","mosiro",
-"898","33","narok east","ildamat",
-"899","33","narok east","keekonyokie",
-"900","33","narok east","suswa",
-"901","33","narok south","majimoto/naroosura",
-"902","33","narok south","ololulung'a",
-"903","33","narok south","melelo",
-"904","33","narok south","loita",
-"905","33","narok south","sogoo",
-"906","33","narok south","sagamian",
-"907","33","narok west","ilmotiok",
-"908","33","narok west","mara",
-"909","33","narok west","siana",
-"910","33","narok west","naikarra",
-"911","34","kajiado north","olkeri",
-"912","34","kajiado north","ongata rongai",
-"913","34","kajiado north","nkaimurunya",
-"914","34","kajiado north","oloolua",
-"915","34","kajiado north","ngong",
-"916","34","kajiado central","purko",
-"917","34","kajiado central","ildamat",
-"918","34","kajiado central","dalalekutuk",
-"919","34","kajiado central","matapato north",
-"920","34","kajiado central","matapato south",
-"921","34","kajiado east","kaputiei north",
-"922","34","kajiado east","kitengela",
-"923","34","kajiado east","oloosirkon/sholinke",
-"924","34","kajiado east","kenyawa-poka",
-"925","34","kajiado east","imaroro",
-"926","34","kajiado west","keekonyokie",
-"927","34","kajiado west","iloodokilani",
-"928","34","kajiado west","magadi",
-"929","34","kajiado west","ewuaso oonkidong'i",
-"930","34","kajiado west","mosiro",
-"931","34","kajiado south","entonet/lenkisim",
-"932","34","kajiado south","mbirikani/eselenkei",
-"933","34","kajiado south","kuku",
-"934","34","kajiado south","rombo",
-"935","34","kajiado south","kimana",
-"936","35","kipkelion east","londiani",
-"937","35","kipkelion east","kedowa/kimugul",
-"938","35","kipkelion east","chepseon",
-"939","35","kipkelion east","tendeno/sorget",
-"940","35","kipkelion west","kunyak",
-"941","35","kipkelion west","kamasian",
-"942","35","kipkelion west","kipkelion",
-"943","35","kipkelion west","chilchila",
-"944","35","ainamoi","kapsoit",
-"945","35","ainamoi","ainamoi",
-"946","35","ainamoi","kapkugerwet",
-"947","35","ainamoi","kipchebor",
-"948","35","ainamoi","kipchimchim",
-"949","35","ainamoi","kapsaos",
-"950","35","bureti","kisiara",
-"951","35","bureti","tebesonik",
-"952","35","bureti","cheboin",
-"953","35","bureti","chemosot",
-"954","35","bureti","litein",
-"955","35","bureti","cheplanget",
-"956","35","bureti","kapkatet",
-"957","35","belgut","waldai",
-"958","35","belgut","kabianga",
-"959","35","belgut","cheptororiet/seretut",
-"960","35","belgut","chaik",
-"961","35","belgut","kapsuser",
-"962","35","sigowet/soin","sigowet",
-"963","35","sigowet/soin","kaplelartet",
-"964","35","sigowet/soin","soliat",
-"965","35","sigowet/soin","soin",
-"966","36","sotik","ndanai/abosi",
-"967","36","sotik","chemagel",
-"968","36","sotik","kipsonoi",
-"969","36","sotik","kapletundo",
-"970","36","sotik","rongena/manaret",
-"971","36","chepalungu","kong'asis",
-"972","36","chepalungu","nyangores",
-"973","36","chepalungu","sigor",
-"974","36","chepalungu","chebunyo",
-"975","36","chepalungu","siongiroi",
-"976","36","bomet east","merigi",
-"977","36","bomet east","kembu",
-"978","36","bomet east","longisa",
-"979","36","bomet east","kipreres",
-"980","36","bomet east","chemaner",
-"981","36","bomet central","silibwet township",
-"982","36","bomet central","ndaraweta",
-"983","36","bomet central","singorwet",
-"984","36","bomet central","chesoen",
-"985","36","bomet central","mutarakwa",
-"986","36","konoin","chepchabas",
-"987","36","konoin","kimulot",
-"988","36","konoin","mogogosiek",
-"989","36","konoin","boito",
-"990","36","konoin","embomos",
-"991","37","lugari","mautuma",
-"992","37","lugari","lugari",
-"993","37","lugari","lumakanda",
-"994","37","lugari","chekalini",
-"995","37","lugari","chevaywa",
-"996","37","lugari","lwandeti",
-"997","37","likuyani","likuyani",
-"998","37","likuyani","sango",
-"999","37","likuyani","kongoni",
-"1000","37","likuyani","nzoia",
-"1001","37","likuyani","sinoko",
-"1002","37","malava","west kabras",
-"1003","37","malava","chemuche",
-"1004","37","malava","east kabras",
-"1005","37","malava","butali/chegulo",
-"1006","37","malava","manda-shivanga",
-"1007","37","malava","shirugu-mugai",
-"1008","37","malava","south kabras",
-"1009","37","lurambi","butsotso east",
-"1010","37","lurambi","butsotso south",
-"1011","37","lurambi","butsotso central",
-"1012","37","lurambi","sheywe",
-"1013","37","lurambi","mahiakalo",
-"1014","37","lurambi","shirere",
-"1015","37","navakholo","ingostse-mathia",
-"1016","37","navakholo","shinoyi-shikomari-",
-"1017","37","navakholo","bunyala west",
-"1018","37","navakholo","bunyala east",
-"1019","37","navakholo","bunyala central",
-"1020","37","mumias west","mumias central",
-"1021","37","mumias west","mumias north",
-"1022","37","mumias west","etenje",
-"1023","37","mumias west","musanda",
-"1024","37","mumias east","lubinu/lusheya",
-"1025","37","mumias east","isongo/makunga/malaha",
-"1026","37","mumias east","east wanga",
-"1027","37","matungu","koyonzo",
-"1028","37","matungu","kholera",
-"1029","37","matungu","khalaba",
-"1030","37","matungu","mayoni",
-"1031","37","matungu","namamali",
-"1032","37","butere","marama west",
-"1033","37","butere","marama central",
-"1034","37","butere","marenyo - shianda",
-"1035","37","butere","marama north",
-"1036","37","butere","marama south",
-"1037","37","khwisero","kisa north",
-"1038","37","khwisero","kisa east",
-"1039","37","khwisero","kisa west",
-"1040","37","khwisero","kisa central",
-"1041","37","shinyalu","isukha north",
-"1042","37","shinyalu","murhanda",
-"1043","37","shinyalu","isukha central",
-"1044","37","shinyalu","isukha south",
-"1045","37","shinyalu","isukha east",
-"1046","37","shinyalu","isukha west",
-"1047","37","ikolomani","idakho south",
-"1048","37","ikolomani","idakho east",
-"1049","37","ikolomani","idakho north",
-"1050","37","ikolomani","idakho central",
-"1051","38","vihiga","lugaga-wamuluma",
-"1052","38","vihiga","south maragoli",
-"1053","38","vihiga","central maragoli",
-"1054","38","vihiga","mungoma",
-"1055","38","sabatia","lyaduywa/izava",
-"1056","38","sabatia","west sabatia",
-"1057","38","sabatia","chavakali",
-"1058","38","sabatia","north maragoli",
-"1059","38","sabatia","wodanga",
-"1060","38","sabatia","busali",
-"1061","38","hamisi","shiru",
-"1062","38","hamisi","muhudu",
-"1063","38","hamisi","shamakhokho",
-"1064","38","hamisi","gisambai",
-"1065","38","hamisi","banja",
-"1066","38","hamisi","tambua",
-"1067","38","hamisi","jepkoyai",
-"1068","38","luanda","luanda township",
-"1069","38","luanda","wemilabi",
-"1070","38","luanda","mwibona",
-"1071","38","luanda","luanda south",
-"1072","38","luanda","emabungo",
-"1073","38","emuhaya","north east bunyore",
-"1074","38","emuhaya","central bunyore",
-"1075","38","emuhaya","west bunyore",
-"1076","39","mt.elgon","cheptais",
-"1077","39","mt.elgon","chesikaki",
-"1078","39","mt.elgon","chepyuk",
-"1079","39","mt.elgon","kapkateny",
-"1080","39","mt.elgon","kaptama",
-"1081","39","mt.elgon","elgon",
-"1082","39","sirisia","namwela",
-"1083","39","sirisia","malakisi/south kulisiru",
-"1084","39","sirisia","lwandanyi",
-"1085","39","kabuchai","kabuchai/chwele",
-"1086","39","kabuchai","west nalondo",
-"1087","39","kabuchai","bwake/luuya",
-"1088","39","kabuchai","mukuyuni",
-"1089","39","bumula","south bukusu",
-"1090","39","bumula","bumula",
-"1091","39","bumula","khasoko",
-"1092","39","bumula","kabula",
-"1093","39","bumula","kimaeti",
-"1094","39","bumula","west bukusu",
-"1095","39","bumula","siboti",
-"1096","39","kanduyi","bukembe west",
-"1097","39","kanduyi","bukembe east",
-"1098","39","kanduyi","township",
-"1099","39","kanduyi","khalaba",
-"1100","39","kanduyi","musikoma",
-"1101","39","kanduyi","east sang'alo",
-"1102","39","kanduyi","marakaru/tuuti",
-"1103","39","kanduyi","sang'alo west",
-"1104","39","webuye east","mihuu",
-"1105","39","webuye east","ndivisi",
-"1106","39","webuye east","maraka",
-"1107","39","webuye west","misikhu",
-"1108","39","webuye west","sitikho",
-"1109","39","webuye west","matulo",
-"1110","39","webuye west","bokoli",
-"1111","39","kimilili","kimilili",
-"1112","39","kimilili","kibingei",
-"1113","39","kimilili","maeni",
-"1114","39","kimilili","kamukuywa",
-"1115","39","tongaren","mbakalo",
-"1116","39","tongaren","naitiri/kabuyefwe",
-"1117","39","tongaren","milima",
-"1118","39","tongaren","ndalu/ tabani",
-"1119","39","tongaren","tongaren",
-"1120","39","tongaren","soysambu/ mitua",
-"1121","40","teso north","malaba central",
-"1122","40","teso north","malaba north",
-"1123","40","teso north","ang'urai south",
-"1124","40","teso north","ang'urai north",
-"1125","40","teso north","ang'urai east",
-"1126","40","teso north","malaba south",
-"1127","40","teso south","ang'orom",
-"1128","40","teso south","chakol south",
-"1129","40","teso south","chakol north",
-"1130","40","teso south","amukura west",
-"1131","40","teso south","amukura east",
-"1132","40","teso south","amukura central",
-"1133","40","nambale","nambale township",
-"1134","40","nambale","bukhayo north/waltsi",
-"1135","40","nambale","bukhayo east",
-"1136","40","nambale","bukhayo central",
-"1137","40","matayos","bukhayo west",
-"1138","40","matayos","mayenje",
-"1139","40","matayos","matayos south",
-"1140","40","matayos","busibwabo",
-"1141","40","matayos","burumba",
-"1142","40","butula","marachi west",
-"1143","40","butula","kingandole",
-"1144","40","butula","marachi central",
-"1145","40","butula","marachi east",
-"1146","40","butula","marachi north",
-"1147","40","butula","elugulu",
-"1148","40","funyula","namboboto nambuku",
-"1149","40","funyula","nangina",
-"1150","40","funyula","ageng'a nanguba",
-"1151","40","funyula","bwiri",
-"1152","40","budalangi","bunyala central",
-"1153","40","budalangi","bunyala north",
-"1154","40","budalangi","bunyala west",
-"1155","40","budalangi","bunyala south",
-"1156","41","ugenya","west ugenya",
-"1157","41","ugenya","ukwala",
-"1158","41","ugenya","north ugenya",
-"1159","41","ugenya","east ugenya",
-"1160","41","ugunja","sidindi",
-"1161","41","ugunja","sigomere",
-"1162","41","ugunja","ugunja",
-"1163","41","alego usonga","usonga",
-"1164","41","alego usonga","west alego",
-"1165","41","alego usonga","central alego",
-"1166","41","alego usonga","siaya township",
-"1167","41","alego usonga","north alego",
-"1168","41","alego usonga","south east alego",
-"1169","41","gem","north gem",
-"1170","41","gem","west gem",
-"1171","41","gem","central gem",
-"1172","41","gem","yala township",
-"1173","41","gem","east gem",
-"1174","41","gem","south gem",
-"1175","41","bondo","west yimbo",
-"1176","41","bondo","central sakwa",
-"1177","41","bondo","south sakwa",
-"1178","41","bondo","yimbo east",
-"1179","41","bondo","west sakwa",
-"1180","41","bondo","north sakwa",
-"1181","41","rarieda","east asembo",
-"1182","41","rarieda","west asembo",
-"1183","41","rarieda","north uyoma",
-"1184","41","rarieda","south uyoma",
-"1185","41","rarieda","west uyoma",
-"1186","42","kisumu east","kajulu",
-"1187","42","kisumu east","kolwa east",
-"1188","42","kisumu east","manyatta 'b'",
-"1189","42","kisumu east","nyalenda 'a'",
-"1190","42","kisumu east","kolwa central",
-"1191","42","kisumu west","south west kisumu",
-"1192","42","kisumu west","central kisumu",
-"1193","42","kisumu west","kisumu north",
-"1194","42","kisumu west","west kisumu",
-"1195","42","kisumu west","north west kisumu",
-"1196","42","kisumu central","railways",
-"1197","42","kisumu central","migosi",
-"1198","42","kisumu central","shaurimoyo kaloleni",
-"1199","42","kisumu central","market milimani",
-"1200","42","kisumu central","kondele",
-"1201","42","kisumu central","nyalenda b",
-"1202","42","seme","west seme",
-"1203","42","seme","central seme",
-"1204","42","seme","east seme",
-"1205","42","seme","north seme",
-"1206","42","nyando","east kano/wawidhi",
-"1207","42","nyando","awasi/onjiko",
-"1208","42","nyando","ahero",
-"1209","42","nyando","kabonyo/kanyagwal",
-"1210","42","nyando","kobura",
-"1211","42","muhoroni","miwani",
-"1212","42","muhoroni","ombeyi",
-"1213","42","muhoroni","masogo/nyang'oma",
-"1214","42","muhoroni","chemelil",
-"1215","42","muhoroni","muhoroni/koru",
-"1216","42","nyakach","south west nyakach",
-"1217","42","nyakach","north nyakach",
-"1218","42","nyakach","central nyakach",
-"1219","42","nyakach","west nyakach",
-"1220","42","nyakach","south east nyakach",
-"1221","43","kasipul","west kasipul",
-"1222","43","kasipul","south kasipul",
-"1223","43","kasipul","central kasipul",
-"1224","43","kasipul","east kamagak",
-"1225","43","kasipul","west kamagak",
-"1226","43","kabondo kasipul","kabondo east",
-"1227","43","kabondo kasipul","kabondo west",
-"1228","43","kabondo kasipul","kokwanyo/kakelo",
-"1229","43","kabondo kasipul","kojwach",
-"1230","43","karachuonyo","west karachuonyo",
-"1231","43","karachuonyo","north karachuonyo",
-"1232","43","karachuonyo","central",
-"1233","43","karachuonyo","kanyaluo",
-"1234","43","karachuonyo","kibiri",
-"1235","43","karachuonyo","wangchieng",
-"1236","43","karachuonyo","kendu bay town",
-"1237","43","rangwe","west gem",
-"1238","43","rangwe","east gem",
-"1239","43","rangwe","kagan",
-"1240","43","rangwe","kochia",
-"1241","43","homa bay town","homa bay central",
-"1242","43","homa bay town","homa bay arujo",
-"1243","43","homa bay town","homa bay west",
-"1244","43","homa bay town","homa bay east",
-"1245","43","ndhiwa","kwabwai",
-"1246","43","ndhiwa","kanyadoto",
-"1247","43","ndhiwa","kanyikela",
-"1248","43","ndhiwa","north kabuoch",
-"1249","43","ndhiwa","kabuoch south/pala",
-"1250","43","ndhiwa","kanyamwa kologi",
-"1251","43","ndhiwa","kanyamwa kosewe",
-"1252","43","mbita","mfangano island",
-"1253","43","mbita","rusinga island",
-"1254","43","mbita","kasgunga",
-"1255","43","mbita","gembe",
-"1256","43","mbita","lambwe",
-"1257","43","suba","gwassi south",
-"1258","43","suba","gwassi north",
-"1259","43","suba","kaksingri west",
-"1260","43","suba","ruma kaksingri east",
-"1261","44","rongo","north kamagambo",
-"1262","44","rongo","central kamagambo",
-"1263","44","rongo","east kamagambo",
-"1264","44","rongo","south kamagambo",
-"1265","44","awendo","north sakwa",
-"1266","44","awendo","south sakwa",
-"1267","44","awendo","west sakwa",
-"1268","44","awendo","central sakwa",
-"1269","44","suna east","god jope",
-"1270","44","suna east","suna central",
-"1271","44","suna east","kakrao",
-"1272","44","suna east","kwa",
-"1273","44","suna west","wiga",
-"1274","44","suna west","wasweta ii",
-"1275","44","suna west","ragana-oruba",
-"1276","44","suna west","wasimbete",
-"1277","44","uriri","west kanyamkago",
-"1278","44","uriri","north kanyamkago",
-"1279","44","uriri","central kanyamkago",
-"1280","44","uriri","south kanyamkago",
-"1281","44","uriri","east kanyamkago",
-"1282","44","nyatike","kachien'g",
-"1283","44","nyatike","kanyasa",
-"1284","44","nyatike","north kadem",
-"1285","44","nyatike","macalder/kanyarwanda",
-"1286","44","nyatike","kaler",
-"1287","44","nyatike","got kachola",
-"1288","44","nyatike","muhuru",
-"1289","44","kuria west","bukira east",
-"1290","44","kuria west","bukira centrl/ikerege",
-"1291","44","kuria west","isibania",
-"1292","44","kuria west","makerero",
-"1293","44","kuria west","masaba",
-"1294","44","kuria west","tagare",
-"1295","44","kuria west","nyamosense/komosoko",
-"1296","44","kuria east","gokeharaka/getambwega",
-"1297","44","kuria east","ntimaru west",
-"1298","44","kuria east","ntimaru east",
-"1299","44","kuria east","nyabasi east",
-"1300","44","kuria east","nyabasi west",
-"1301","45","bonchari","bomariba",
-"1302","45","bonchari","bogiakumu",
-"1303","45","bonchari","bomorenda",
-"1304","45","bonchari","riana",
-"1305","45","south mugirango","tabaka",
-"1306","45","south mugirango","boikang'a",
-"1307","45","south mugirango","bogetenga",
-"1308","45","south mugirango","borabu / chitago",
-"1309","45","south mugirango","moticho",
-"1310","45","south mugirango","getenga",
-"1311","45","bomachoge borabu","bombaba borabu",
-"1312","45","bomachoge borabu","boochi borabu",
-"1313","45","bomachoge borabu","bokimonge",
-"1314","45","bomachoge borabu","magenche",
-"1315","45","bobasi","masige west",
-"1316","45","bobasi","masige east",
-"1317","45","bobasi","bobasi central",
-"1318","45","bobasi","nyacheki",
-"1319","45","bobasi","bobasi bogetaorio",
-"1320","45","bobasi","bobasi chache",
-"1321","45","bobasi","sameta/mokwerero",
-"1322","45","bobasi","bobasi boitangare",
-"1323","45","bomachoge chache","majoge",
-"1324","45","bomachoge chache","boochi/tendere",
-"1325","45","bomachoge chache","bosoti/sengera",
-"1326","45","nyaribari masaba","ichuni",
-"1327","45","nyaribari masaba","nyamasibi",
-"1328","45","nyaribari masaba","masimba",
-"1329","45","nyaribari masaba","gesusu",
-"1330","45","nyaribari masaba","kiamokama",
-"1331","45","nyaribari chache","bobaracho",
-"1332","45","nyaribari chache","kisii central",
-"1333","45","nyaribari chache","keumbu",
-"1334","45","nyaribari chache","kiogoro",
-"1335","45","nyaribari chache","birongo",
-"1336","45","nyaribari chache","ibeno",
-"1337","45","kitutu chache north","monyerero",
-"1338","45","kitutu chache north","sensi",
-"1339","45","kitutu chache north","marani",
-"1340","45","kitutu chache north","kegogi",
-"1341","45","kitutu chache south","bogusero",
-"1342","45","kitutu chache south","bogeka",
-"1343","45","kitutu chache south","nyakoe",
-"1344","45","kitutu chache south","kitutu   central",
-"1345","45","kitutu chache south","nyatieko",
-"1346","46","kitutu masaba","rigoma",
-"1347","46","kitutu masaba","gachuba",
-"1348","46","kitutu masaba","kemera",
-"1349","46","kitutu masaba","magombo",
-"1350","46","kitutu masaba","manga",
-"1351","46","kitutu masaba","gesima",
-"1352","46","west mugirango","nyamaiya",
-"1353","46","west mugirango","bogichora",
-"1354","46","west mugirango","bosamaro",
-"1355","46","west mugirango","bonyamatuta",
-"1356","46","west mugirango","township",
-"1357","46","north mugirango","itibo",
-"1358","46","north mugirango","bomwagamo",
-"1359","46","north mugirango","bokeira",
-"1360","46","north mugirango","magwagwa",
-"1361","46","north mugirango","ekerenyo",
-"1362","46","borabu","mekenene",
-"1363","46","borabu","kiabonyoru",
-"1364","46","borabu","nyansiongo",
-"1365","46","borabu","esise",
-"1366","47","westlands","kitisuru",
-"1367","47","westlands","parklands/highridge",
-"1368","47","westlands","karura",
-"1369","47","westlands","kangemi",
-"1370","47","westlands","mountain view",
-"1371","47","dagoretti north","kilimani",
-"1372","47","dagoretti north","kawangware",
-"1373","47","dagoretti north","gatina",
-"1374","47","dagoretti north","kileleshwa",
-"1375","47","dagoretti north","kabiro",
-"1376","47","dagoretti south","mutuini",
-"1377","47","dagoretti south","ngando",
-"1378","47","dagoretti south","riruta",
-"1379","47","dagoretti south","uthiru/ruthimitu",
-"1380","47","dagoretti south","waithaka",
-"1381","47","langata","karen",
-"1382","47","langata","nairobi west",
-"1383","47","langata","mugumo-ini",
-"1384","47","langata","south-c",
-"1385","47","langata","nyayo highrise",
-"1386","47","kibra","laini saba",
-"1387","47","kibra","lindi",
-"1388","47","kibra","makina",
-"1389","47","kibra","woodley/kenyatta golf",
-"1390","47","kibra","sarangombe",
-"1391","47","roysambu","githurai",
-"1392","47","roysambu","kahawa west",
-"1393","47","roysambu","zimmerman",
-"1394","47","roysambu","roysambu",
-"1395","47","roysambu","kahawa",
-"1396","47","kasarani","claycity",
-"1397","47","kasarani","mwiki",
-"1398","47","kasarani","kasarani",
-"1399","47","kasarani","njiru",
-"1400","47","kasarani","ruai",
-"1401","47","ruaraka","baba dogo",
-"1402","47","ruaraka","utalii",
-"1403","47","ruaraka","mathare north",
-"1404","47","ruaraka","lucky summer",
-"1405","47","ruaraka","korogocho",
-"1406","47","embakasi south","imara daima",
-"1407","47","embakasi south","kwa njenga",
-"1408","47","embakasi south","kwa reuben",
-"1409","47","embakasi south","pipeline",
-"1410","47","embakasi south","kware",
-"1411","47","embakasi north","kariobangi north",
-"1412","47","embakasi north","dandora area i",
-"1413","47","embakasi north","dandora area ii",
-"1414","47","embakasi north","dandora area iii",
-"1415","47","embakasi north","dandora area iv",
-"1416","47","embakasi central","kayole north",
-"1417","47","embakasi central","kayole central",
-"1418","47","embakasi central","kayole south",
-"1419","47","embakasi central","komarock",
-"1420","47","embakasi central","matopeni",
-"1421","47","embakasi east","upper savannah",
-"1422","47","embakasi east","lower savannah",
-"1423","47","embakasi east","embakasi",
-"1424","47","embakasi east","utawala",
-"1425","47","embakasi east","mihango",
-"1426","47","embakasi west","umoja i",
-"1427","47","embakasi west","umoja ii",
-"1428","47","embakasi west","mowlem",
-"1429","47","embakasi west","kariobangi south",
-"1430","47","makadara","makongeni",
-"1431","47","makadara","maringo/hamza",
-"1432","47","makadara","harambee",
-"1433","47","makadara","viwandani",
-"1434","47","kamukunji","pumwani",
-"1435","47","kamukunji","eastleigh north",
-"1436","47","kamukunji","eastleigh south",
-"1437","47","kamukunji","airbase",
-"1438","47","kamukunji","california",
-"1439","47","starehe","nairobi central",
-"1440","47","starehe","ngara",
-"1441","47","starehe","ziwani/kariokor",
-"1442","47","starehe","pangani",
-"1443","47","starehe","landimawe",
-"1444","47","starehe","nairobi south",
-"1445","47","mathare","hospital",
-"1446","47","mathare","mabatini",
-"1447","47","mathare","huruma",
-"1448","47","mathare","ngei",
-"1449","47","mathare","mlango kubwa",
-"1450","47","mathare","kiamaiko",
+1e6ae4cb-7079-4482-954e-9160c705b4f3,1,changamwe,port reitz
+4bd955b3-a93f-4fc9-8839-e424662a0967,1,changamwe,kipevu
+3d49c32b-0696-4770-a21d-0b63f725d330,1,changamwe,airport
+42b6e077-c92f-458f-8744-75bbfe04ca2d,1,changamwe,changamwe
+8e022427-480a-45fb-9126-50f0e4104851,1,changamwe,chaani
+a80c1824-76a2-4652-ab8a-be4455450331,1,jomvu,jomvu kuu
+97140a7e-0505-4eea-bc03-e1d79a5aa189,1,jomvu,miritini
+fc54bd62-34c9-44d8-a72a-c1a79c994732,1,jomvu,mikindani
+0944c33b-58c0-4717-a338-5268c37dd348,1,kisauni,mjambere
+8c094268-7a82-4654-91f8-c447954d03ae,1,kisauni,junda
+bd26ddf2-c597-4143-b072-01d0a5aeda7e,1,kisauni,bamburi
+8ffd9b01-73c2-4deb-962e-ea66142f4274,1,kisauni,mwakirunge
+2ed2a28f-3edb-425f-b065-1207258c5973,1,kisauni,mtopanga
+16cd215b-c973-4402-95ab-d3da7690b09b,1,kisauni,magogoni
+a5589113-102f-4a08-b491-565483730f07,1,kisauni,shanzu
+7250ee3b-37cc-444e-9a74-4f7a8fab433f,1,nyali,frere town
+4b7304f9-7cca-4c5d-b6d9-ea3e5ceebc3d,1,nyali,ziwa la ng'ombe
+66a50d4f-5310-4c1e-beab-ad2dd2b69f8c,1,nyali,mkomani
+ee0fed87-76a1-4cdd-900c-6c9d99802526,1,nyali,kongowea
+0505e402-7925-4562-a68a-811a2cc3ae6c,1,nyali,kadzandani
+1e985893-531a-4122-b77f-f10299424b1a,1,likoni,mtongwe
+c6842ee0-e020-474f-956c-cf2280ec5e9a,1,likoni,shika adabu
+05c68915-8532-4702-8c67-530b6dbbe5d8,1,likoni,bofu
+4fc5c6d3-2f6a-42a9-a388-01ee74461bb9,1,likoni,likoni
+cc69037c-39f7-42f8-8f9d-8d9b0d825563,1,likoni,timbwani
+d5476a89-1c34-4678-85e9-5f3213a3d99d,1,mvita,mji wa kale/makadara
+065fe84b-086c-4c07-ae58-38525598cf12,1,mvita,tudor
+b6c25961-7a3b-408c-a353-7aebe4e36d2a,1,mvita,tononoka
+6ee11b04-061e-4c5b-b3ab-61fe6d2e43c8,1,mvita,shimanzi/ganjoni
+ca7d8c9f-bc2f-4c56-80da-662d92e572d8,1,mvita,majengo
+d80b8ec6-97f4-4220-b95f-237e3c5057d0,2,msambweni,gombatobongwe
+d0d36eef-8e06-4f20-ad08-3459fc2eec76,2,msambweni,ukunda
+95692bc7-a72d-43ff-a02c-e0e18f3e5978,2,msambweni,kinondo
+a6f13a9e-297c-4ef4-a856-5d400cea01fe,2,msambweni,ramisi
+9aaf6902-206f-4cdc-a145-56e8f77683d1,2,lungalunga,pongwekikoneni
+f6256c0c-609c-48fe-8017-3e4bcf76914f,2,lungalunga,dzombo
+dbc87ae4-4509-4ef4-bfd4-a4970a0c1c1f,2,lungalunga,mwereni
+4b3ba237-ad2f-450d-916f-5b20989e7d23,2,lungalunga,vanga
+ea5e7cc1-81ea-40be-ba2f-aa73c8f392d9,2,matuga,tsimba golini
+6d0f82e3-e605-4dde-b758-a883f8eb855a,2,matuga,waa
+a51986d3-0461-4cf2-9e2a-e5b62845a2dd,2,matuga,tiwi
+d27eb859-6c18-42d5-8fc6-8e0307fd6fe5,2,matuga,kubo south
+0424316f-0d16-4fce-aeca-6317a39d0ea6,2,matuga,mkongani
+3b48aa48-8448-45ce-8a60-340a7c33a8fe,2,kinango,nadavaya
+27232fca-ec7c-4c43-b41f-aa0a3c3aa54e,2,kinango,puma
+cded2ec1-51c8-4e6c-9210-125832574962,2,kinango,kinango
+446505ab-bc58-4fb5-971b-441c02cc85aa,2,kinango,mackinnon-road
+935299ee-c29d-41ef-8b42-5d3197ef58a9,2,kinango,chengoni/samburu
+308d91f7-b3e7-4b1d-9854-7f92e6494107,2,kinango,mwavumbo
+69a29703-512a-49f4-8d8f-6838b3bf6111,2,kinango,kasemeni
+91b174af-2bb5-4491-910c-acb145973831,3,kilifi north,tezo
+a856acfc-6f4a-4ad1-a385-ded603139524,3,kilifi north,sokoni
+361ba23b-8e13-48e3-b3aa-d3f4230c1f3b,3,kilifi north,kibarani
+0964f5d3-90e4-418d-b260-13071affd9b7,3,kilifi north,dabaso
+e9055c8b-9659-4e1f-8787-d71e1e7e2392,3,kilifi north,matsangoni
+0a6c3f4a-f361-450a-a4b1-121d4808e750,3,kilifi north,watamu
+4da82850-6450-4dbf-b76b-ef8a2eb9c195,3,kilifi north,mnarani
+9ab3fb14-cc62-4950-b635-7b4fe8acf51f,3,kilifi south,junju
+93a8ba8c-937e-4b20-8577-9e427c9760fc,3,kilifi south,mwarakaya
+96237690-32aa-45f8-9583-80da5f659cd9,3,kilifi south,shimo la tewa
+722a0c26-11b7-4bee-937c-20f4ff5b604f,3,kilifi south,chasimba
+2fd933ae-5c0c-40d5-97bf-edde81fa31a2,3,kilifi south,mtepeni
+ce0a15cc-eda6-45f9-8f75-6f3cdba8735c,3,kaloleni,mariakani
+28084829-8737-4039-8b00-cd55a326bba0,3,kaloleni,kayafungo
+f69ef85f-8068-4b87-b20a-259b837f4fad,3,kaloleni,kaloleni
+6fd5f4a9-34d1-4397-84d2-9ef9e8a625fc,3,kaloleni,mwanamwinga
+cac110bd-5626-4d6a-9fcb-076408bc6c1f,3,rabai,mwawesa
+436e3b25-d7ec-4528-85dc-ea503fae1a7d,3,rabai,ruruma
+8dc5e91e-c6b9-462e-bb84-3f5029b72d53,3,rabai,kambe/ribe
+065e5c24-bebe-43a3-b893-ad9c0730925b,3,rabai,rabai/kisurutini
+53a3bccc-967d-441d-8bb7-a3dc1ba8f232,3,ganze,ganze
+ab688797-f7dd-4c52-afa8-15f5dd70eedf,3,ganze,bamba
+f85d827f-efee-400b-b3ab-59fed7b50a21,3,ganze,jaribuni
+5b8e642d-dba3-4750-835e-99a7bb514f66,3,ganze,sokoke
+1c6bd2a8-32e4-4ca9-be00-05eac55e9f3f,3,malindi,jilore
+fd5f0c8b-5b67-4b4d-bfca-4cf541f78ddd,3,malindi,kakuyuni
+75e9cdde-ca3f-4402-a858-945aece77d34,3,malindi,ganda
+5ade0afb-61e3-44e7-a85f-2e6d6f471116,3,malindi,malindi town
+4ae9b575-fec5-4f7c-b525-41291d4e1cf9,3,malindi,shella
+4da96537-7ee1-437f-a80a-52445653794b,3,magarini,marafa
+c5da6973-24e9-423f-9d3a-9a83e2a8b3a0,3,magarini,magarini
+c710a8f2-aa71-446e-9c59-adc073a95bb7,3,magarini,gongoni
+3416691a-d42a-4b39-95d4-98fc7507ff65,3,magarini,adu
+6da29a58-7049-4523-90d9-3a8b379f79cd,3,magarini,garashi
+ed76d7a5-933a-4526-9744-10ed17186e3d,3,magarini,sabaki
+185ffb28-b052-43e2-8169-548324ef47b6,4,garsen,kipini east
+491a1745-ddf7-4b78-a154-adaeebfa5a3b,4,garsen,garsen south
+1356e1c7-1937-4689-be9f-e2b386c5dc96,4,garsen,kipini west
+35cd261d-104c-4b6e-ab6e-9149206ae36f,4,garsen,garsen central
+5d5a7bde-f16d-43f7-b696-39adf11d4d43,4,garsen,garsen west
+aaa3a1c4-be6a-4841-9b80-a206483ed922,4,garsen,garsen north
+6344e6ed-a192-4662-985c-305ffed2d10a,4,galole,kinakomba
+01a7f0cc-c93c-4fa0-814f-c805b42a8b93,4,galole,mikinduni
+aad642da-3490-422f-8a78-4c1dbf5b44da,4,galole,chewani
+751afaee-d8fa-4aea-963c-2c42d63d35b6,4,galole,wayu
+211a26ff-9abc-42f4-bca6-218facdc8f5c,4,bura,chewele
+ff0817dc-11e3-4df7-97d1-2f0a347bbca2,4,bura,bura
+0b8bef7b-2e6c-4bb9-8ea5-fdffeef2f6e3,4,bura,bangale
+f6a61719-0a1a-4469-9fa9-5fb16acd30ae,4,bura,sala
+1297aa44-b9e2-481a-a053-b6a4e476631a,4,bura,madogo
+fd3e647c-dddf-43a3-8d41-be44a1204483,5,lamu east,faza
+1258a34d-e3cf-4505-b5ad-ef4ff1102b55,5,lamu east,kiunga
+83985d0f-5613-4cfb-b4b2-3408e3d591bf,5,lamu east,basuba
+f867c7ec-699e-41a6-9b7d-6815baba00ec,5,lamu west,shella
+7eac58d7-7306-4d11-9f37-fe0d9cef49f3,5,lamu west,mkomani
+73895649-b817-4b92-91e8-52d790aaece7,5,lamu west,hindi
+7847b8b8-ada0-4097-8bca-814e31c4aafb,5,lamu west,mkunumbi
+dfae0c56-69b9-4334-9768-2c1f73fce53e,5,lamu west,hongwe
+969ae41c-1a5e-4549-b495-561b94369493,5,lamu west,witu
+968cdaa2-84ff-4ce5-971b-48fc510b7a04,5,lamu west,bahari
+24830a37-35a4-445f-81c6-63b37a16c932,6,taveta,chala
+dcf8669e-4cf2-45cf-bb4a-79a5d70d52cc,6,taveta,mahoo
+7c69a40b-7771-4941-9b54-c1a926ef2f2f,6,taveta,bomeni
+6dd65f42-f3f8-4538-9cd3-2025dcedccd1,6,taveta,mboghoni
+0961a4c3-aeba-475b-831f-31b4b32f8884,6,taveta,mata
+91824be1-6b9f-4591-a8ab-b7e0153eb6f3,6,wundanyi,wundanyi/mbale
+0bd92861-2a60-49e3-98c9-b19fbe94a42d,6,wundanyi,werugha
+74a99c63-4af4-47b6-a110-e368f245121a,6,wundanyi,wumingu/kishushe
+6be7dd24-2723-4990-9858-3f19e8fbe779,6,wundanyi,mwanda/mgange
+30ff8d83-4987-4b5a-9e78-038a43448854,6,mwatate,rong'e
+bb7de602-13d5-4974-870e-1b1060882d24,6,mwatate,mwatate
+885b5127-fbe1-4ce6-adf0-89997752ad3e,6,mwatate,bura
+4670a3ba-8daa-489e-9386-1541de97afd8,6,mwatate,chawia
+31a93fb7-b201-4fab-afdf-5dd7d0ee7ea2,6,mwatate,wusi/kishamba
+bd9982c3-8f1e-4137-8604-73706e559866,6,voi,mbololo
+2e2f42d9-1672-4279-b419-fe3847be4291,6,voi,sagalla
+0bee1133-4e64-4318-8218-40e7975bf005,6,voi,kaloleni
+0cadc07d-87b7-48e6-93b2-83218595b223,6,voi,marungu
+23f6481c-8c04-453f-8fc3-e7d2e7502a0b,6,voi,kasigau
+24c4c51c-3f51-4e51-b72d-5007b4ec8125,6,voi,ngolia
+51f212fe-cb2f-4d96-9add-ca8d92a55953,7,garissa township,waberi
+eb6c2382-53c4-462f-a103-5b0cc4e1f8f7,7,garissa township,galbet
+e47cc6fe-94e6-4d4b-8456-e658464fceb3,7,garissa township,township
+60f5c45f-1f09-4537-88f6-ac09b6a8344b,7,garissa township,iftin
+4ffca4ef-98b3-4c1c-be41-0cfd79bb750c,7,balambala,balambala
+08c0187a-8d61-416f-a33e-7de52e5b9db5,7,balambala,danyere
+b57b0abe-01b0-43e0-a562-f6b2e47c4ef8,7,balambala,jara jara
+eeb1b776-c9f0-484d-bb6a-1b8961e9cc46,7,balambala,saka
+f99f7cea-61b5-4680-83a7-8e80a63c4c06,7,balambala,sankuri
+d0f82122-7562-4ea4-a255-e69c1397949b,7,lagdera,modogashe
+7916be7f-b4e4-455f-8f45-93d6ce43b992,7,lagdera,benane
+77615b6c-c6a2-463a-a043-c341f0aafa0b,7,lagdera,goreale
+2374982a-75ba-4758-a064-571e74935952,7,lagdera,maalimin
+1ee39757-52ca-42d3-87a9-2ad98aa8aced,7,lagdera,sabena
+0bd13c00-3f0c-4f33-be54-254adc3edabf,7,lagdera,baraki
+893c45d8-d05c-4382-a8c1-d1b4c6f30056,7,dadaab,dertu
+8312238f-8aac-4da0-be68-4226b2cf4baa,7,dadaab,dadaab
+2a0dd054-8e38-4507-8922-b3a940924d08,7,dadaab,labasigale
+cf215166-d439-4317-a188-56e236150e8a,7,dadaab,damajale
+0e4754b8-4510-46a6-93f1-ec0dc45a86b8,7,dadaab,liboi
+fe946297-e863-49b5-b57c-a9693db88028,7,dadaab,abakaile
+a47fef53-2fa7-41ea-a3ad-499f36b5703e,7,fafi,bura
+2fd550e3-cd42-4e91-b4f7-aff07720b639,7,fafi,dekaharia
+584d3644-a3db-476d-8ed1-2ec41ab86e7e,7,fafi,jarajila
+0adb6224-68de-4cdc-81e6-4a9d048a2f01,7,fafi,fafi
+7ab979ca-1be7-46de-b054-8496accb42c3,7,fafi,nanighi
+089f8a0d-7e4d-43e8-957c-2dddce303c3d,7,ijara,hulugho
+08c6f00d-4bc8-48e6-8650-c7ddc20a5745,7,ijara,sangailu
+86d9f30f-b189-45cb-8f70-bc4c61261e3e,7,ijara,ijara
+576e4ddc-8741-445c-bb9a-65b360f622c6,7,ijara,masalani
+8777fe51-1fb3-4a14-8c32-4db897e5fc6c,8,wajir north,gurar
+ab8729c0-2540-473f-aba6-9e873bb23604,8,wajir north,bute
+25296625-c22c-4593-86d6-d43bff7767b2,8,wajir north,korondile
+92ca610c-8844-4857-a1ed-937decad6d75,8,wajir north,malkagufu
+6e03cf3f-7d36-4bac-a5c5-c1177531f2ac,8,wajir north,batalu
+84a141dc-af16-44d2-91b7-b2a30034446f,8,wajir north,danaba
+30af80bb-2ea2-4c8d-a763-1c49e05177fd,8,wajir north,godoma
+9df37b8d-6c14-469b-bc85-357dce580492,8,wajir east,wagberi
+536eab3b-8775-43de-8e43-08efec5b5805,8,wajir east,township
+fa97bf24-6bcd-4687-a0c6-994f6169b354,8,wajir east,barwago
+475cb36e-55cf-4bf3-b70a-9160c0db2370,8,wajir east,khorof/harar
+36a70efe-7926-42fb-b338-3a5412d67b0e,8,tarbaj,elben
+79e89d85-333a-4f1e-9711-6761d7d5b596,8,tarbaj,sarman
+81ff0974-a04c-468d-9e09-97b38a30e87e,8,tarbaj,tarbaj
+2e02d875-c402-410f-a7c1-6c1f33a19441,8,tarbaj,wargadud
+41c2720f-9b55-4b2c-984b-e90b65dc6479,8,wajir west,arbajahan
+4f70212d-0cd1-42ae-ba78-ff86ff4a9eb8,8,wajir west,hadado/athibohol
+8b2ae3b6-21d4-4fdd-a013-eb4a1908974f,8,wajir west,ademasajide
+2807a017-720d-4858-80af-ae7f633c806c,8,wajir west,wagalla/ganyure
+035e0dcc-05b6-4e4a-be64-7e0f416d0ed5,8,eldas,eldas
+446ad50e-f53c-41f7-9ecb-d11cc80fe791,8,eldas,della
+449c4847-14aa-46f7-b245-39ba4668acd7,8,eldas,lakoley south/basir
+864fcdef-3532-4605-b056-5a51f902e972,8,eldas,elnur/tula tula
+6f5085c5-5590-468a-9f01-136ead511748,8,wajir south,benane
+71c74e81-aeab-47ae-849f-91419ffb713f,8,wajir south,burder
+3fab6e7d-15ca-4a9f-b338-24afbdaf29b6,8,wajir south,dadaja bulla
+4c099d29-35b3-405f-a9b9-bcc41cf1aafe,8,wajir south,habasswein
+4bbef864-7582-46ac-ab22-a58b84cc7584,8,wajir south,lagboghol south
+1f10fd2c-ea82-4c22-aec8-943cfeb326e9,8,wajir south,ibrahim ure
+f92c81f5-7bc1-4828-8b0a-e64eb1e913ea,8,wajir south,diif
+0066a4bd-ae6f-4195-b91e-b77567ed6124,9,mandera west,takaba south
+cb9ced6c-85d5-4bb2-af04-12c0835838c2,9,mandera west,takaba
+ccd9581a-b443-4856-aac1-df8cda86dec7,9,mandera west,lag sure
+204fa35b-19e1-465a-b648-b9717cf06503,9,mandera west,dandu
+a19bad3d-0a6a-4052-9da0-b2070fdce406,9,mandera west,gither
+153ebe66-f21c-48f7-a6dc-967655b15ea6,9,banissa,banissa
+3e8484ce-c2aa-4b67-a51c-67928a88ea44,9,banissa,derkhale
+8c007345-5135-4de9-832b-39696d4762ae,9,banissa,guba
+f53e9ca5-b48b-465b-acf4-1bbce7a5c498,9,banissa,malkamari
+967079a7-25cf-4ffc-8d63-f6fb6adff0fb,9,banissa,kiliwehiri
+d637faf2-8542-458b-9d03-f5ae3c9bc498,9,mandera north,ashabito
+43f5f835-ac25-4cbb-97a5-e7c691e885ed,9,mandera north,guticha
+27de190b-689a-4cc5-9358-7cf22ae421d4,9,mandera north,morothile
+220b311a-da52-4fb5-a168-4e77c9804dfa,9,mandera north,rhamu
+1c80b473-6fe1-41d6-ba90-d3e775b8229d,9,mandera north,rhamu-dimtu
+54422cda-43f7-4f6c-825b-3e9a4f4ff8af,9,mandera south,wargudud
+97b97799-6e6b-49dd-86f0-802a6d74adf5,9,mandera south,kutulo
+ed1970c6-dae5-4839-bca8-e8f0fb027240,9,mandera south,elwak south
+2cda8090-def9-4d73-9d5f-a9b848156d13,9,mandera south,elwak north
+f5645d55-0622-461e-9e92-d10e48b5eb89,9,mandera south,shimbir fatuma
+4e420276-3082-4ca1-b849-d6181751bf44,9,mandera east,arabia
+115e18b0-a4f7-4338-879d-4d1e0a06147d,9,mandera east,bulla mpya
+f8344dd2-324e-4dee-85e1-d67128867393,9,mandera east,khalalio
+846510a6-ffc2-4802-80d2-7b9469789bb9,9,mandera east,neboi
+8b940175-740f-4f1c-8a66-5d8b6f6f7175,9,mandera east,township
+16fec24f-d48d-4e5d-ae9e-25fb404feec0,9,lafey,libehia
+ecfe6307-5543-4b03-bd14-c8e41125d3bc,9,lafey,fino
+16c1dd30-3c57-400a-88f6-471c98b5db2b,9,lafey,lafey
+09e486cf-8801-479c-a039-7ef0a33950db,9,lafey,warankara
+6d6d843f-95d3-4bee-bcf5-7c98e822e88f,9,lafey,alungo gof
+bfb6815c-38be-4399-bf4d-64a84edf9b9b,10,moyale,butiye
+92457560-d3d5-4675-bc9f-c8fd4133c5ae,10,moyale,sololo
+d72a0c4e-1e97-4546-a056-104f678599a3,10,moyale,heilu-manyatta
+8a38078e-2dd9-4575-96ee-f006e4c331ec,10,moyale,golbo
+44e0abd5-831e-4e88-81b3-5ada544eb2c1,10,moyale,moyale township
+cc9bee84-bf4d-4bf1-b071-bfba0647facb,10,moyale,uran
+82bd6a11-971f-4b67-a119-bc364438903b,10,moyale,obbu
+0988e610-fcd0-4526-8058-49ff71e57e60,10,north horr,illeret
+4e17dfdf-f840-4410-892e-c9ee204175a0,10,north horr,north horr
+40a45505-2da9-40b5-875c-789876cd391b,10,north horr,dukana
+860aaee0-493b-4194-a7b0-a8debd2b10ab,10,north horr,maikona
+d90df56a-472e-4ee9-9b5a-e77f287d8b31,10,north horr,turbi
+091cd34c-5df0-4f4f-8414-76518cca4706,10,saku,sagante/jaldesa
+7049256a-cb16-408f-82cb-b47e93c438e1,10,saku,karare
+931cc98b-ecfc-4d18-bf72-60c25ac916ba,10,saku,marsabit central
+a750366e-ce3e-4185-839d-1e15b27acb00,10,laisamis,loiyangalani
+96b15e42-b132-45ac-856c-6002073c3ba9,10,laisamis,kargi/south horr
+4d3bcc0e-d858-4c4f-830e-c95bcb6f7aad,10,laisamis,korr/ngurunit
+f53448fc-be66-474b-9372-ab1d3d46047e,10,laisamis,log logo
+00c7c2d2-e41d-4925-8d68-8073ad3bac42,10,laisamis,laisamis
+a2e99c89-da38-42bc-ac3b-9cd9c8cb9e84,11,isiolo north,wabera
+cc0dedf2-0a32-479f-96ff-f88a2fd2a77f,11,isiolo north,bulla pesa
+1435e7be-149e-4888-a288-9a679362e54a,11,isiolo north,chari
+0bbb1314-6ba3-4ce8-94c9-f1bf123953d4,11,isiolo north,cherab
+ce2cdb1d-8b80-4398-9ba2-a0bb1379b29d,11,isiolo north,ngare mara
+5d9bc04f-1f2a-47d9-b7b3-2cb1e1ac2e75,11,isiolo north,burat
+ccd20065-a63c-4642-b32b-05755940f07d,11,isiolo north,oldonyiro
+2287d60e-5fa3-463a-b59f-43faeb4316f3,11,isiolo south,garbatulla
+a2486115-0e76-4efb-b2bd-a0a130846343,11,isiolo south,kinna
+44de96aa-75af-41ab-8e5e-5a66e29aef75,11,isiolo south,sericho
+18309013-223c-472f-9a35-c126791c7683,12,igembe south,maua
+b6681d03-0a53-44ed-adc9-f7c4832bc1aa,12,igembe south,kiegoi/antubochiu
+fc0df3ed-ebff-4308-b75d-c7ad55b738db,12,igembe south,athiru gaiti
+6244ce07-d912-4f8e-92d0-5d8291545b05,12,igembe south,akachiu
+fae7e76a-043b-49cf-ba94-77e0f89fdf30,12,igembe south,kanuni
+f30eba64-91b5-4724-8dd8-1e4f8c059191,12,igembe central,akirang'ondu
+60b2756e-a15c-48ea-b9cf-0124d7b7de68,12,igembe central,athiru ruujine
+a4b36696-03c1-4a63-9b6f-3079c42fd782,12,igembe central,igembe east
+b7b42ca6-e910-4da5-8873-225cc1205294,12,igembe central,njia
+bfacca9d-ba03-4c27-b8de-e0c58d494c0a,12,igembe central,kangeta
+52f01f1c-7bb0-4be3-b6db-6a7673b63f89,12,igembe north,antuambui
+f3b51fc0-4317-45f5-abc2-dcf7a4f1d754,12,igembe north,ntunene
+def6824a-5341-4a83-92ab-3d7ed5b852f7,12,igembe north,antubetwe kiongo
+2c602df4-9f34-493a-99cf-c19cae326c2b,12,igembe north,naathu
+1534d81d-09a6-4072-b762-9e435f66c85a,12,igembe north,amwathi
+325d8abd-bc7f-4fba-96da-a8d40388684c,12,tigania west,athwana
+28a8a0d8-7c63-44ae-b5d9-2ec314942696,12,tigania west,akithii
+e29da215-326d-4577-b6ae-26b6ececb7db,12,tigania west,kianjai
+07996154-6536-402d-ab8a-45f973680406,12,tigania west,nkomo
+2533435f-7699-44dd-bdec-0ec0a951bdd2,12,tigania west,mbeu
+d93ad3cb-f6db-4661-97d7-bf1c97c2f28a,12,tigania east,thangatha
+f62b7634-23ca-48e5-8a06-b2fb14d40080,12,tigania east,mikinduri
+9bc0aea4-e377-4e26-91b7-758c28a787f7,12,tigania east,kiguchwa
+e0ee3daf-ea3c-4467-8f5b-ffecd95bf340,12,tigania east,muthara
+6576edb6-6f5d-4d88-b2b7-91854489e0e6,12,tigania east,karama
+24ee3458-9737-49d5-92a9-efd8edd6bada,12,north imenti,municipality
+3dcf7f90-f4c2-4d76-abac-0b5cdb1fa4cf,12,north imenti,ntima east
+bf141254-7153-40d9-9ca4-ef00090d222d,12,north imenti,ntima west
+8d826a92-dce0-4611-ae1c-48aa35650e44,12,north imenti,nyaki west
+2f42955e-5fe8-4dc5-86ba-6319b92c5d93,12,north imenti,nyaki east
+d237cdf9-aa82-4f92-9fb9-338a88891847,12,buuri,timau
+aea16304-c744-47d9-b3f0-e20ce174f983,12,buuri,kisima
+ba36ba21-a8b4-4adc-b615-87b1e5e6ce7c,12,buuri,kiirua/naari
+5c05e43e-096c-4f75-aba6-2df47efde7da,12,buuri,ruiri/rwarera
+7ab3d55b-d7f5-4b53-9732-8ee63c5b7e44,12,buuri,kibirichia
+83640028-fe09-4d12-8fed-4045fb5960bf,12,central imenti,mwanganthia
+e12b2a35-341a-4063-9882-8fec2e963277,12,central imenti,abothuguchi central
+b4f92445-09fe-48f1-bc91-b937fe67934b,12,central imenti,abothuguchi west
+40bfb373-a78a-4d10-87c8-50dd7af4b1f1,12,central imenti,kiagu
+8104086c-ba0d-4773-9dea-2cc9cc9528b6,12,south imenti,mitunguu
+925b60f8-5062-48f2-ac14-a3b46ebbcb77,12,south imenti,igoji east
+e8ddc88c-e311-460b-9e12-3ee397cc4b28,12,south imenti,igoji west
+d08958a5-397d-4cd8-9a67-6fc658ce63a9,12,south imenti,abogeta east
+fd0a6e31-9f80-40d6-9c3a-3626cbe3cefb,12,south imenti,abogeta west
+888aa854-69e2-40b7-862d-e0c130c3b50e,12,south imenti,nkuene
+bdef1ee9-ce16-4215-b9ae-4956aae8f872,13,maara,mitheru
+30e6fdc6-bdb6-4bbb-a70d-035d17268ba1,13,maara,muthambi
+290e757b-b3cb-4132-b217-d7527c5f6cb8,13,maara,mwimbi
+ad0d24e2-0853-4224-9666-4d9a44f31ebf,13,maara,ganga
+55afab68-15ea-4501-96ec-613ed4fec89f,13,maara,chogoria
+ce2297a2-6ef6-4a4c-bb39-0f75f3132372,13,chuka/igambang'om,mariani
+8e155ea2-faa4-4fbe-ad9a-3e89db51375f,13,chuka/igambang'om,karingani
+b3b9b86e-6cd8-465c-b7ab-b0b8b91a7b1c,13,chuka/igambang'om,magumoni
+164b6660-3b3b-48c6-bd86-47fb97b14a3d,13,chuka/igambang'om,mugwe
+69f28bcd-ef37-42fb-a8d2-7483481da862,13,chuka/igambang'om,igambang'ombe
+0cd8ac40-1c82-42d7-88f4-c8236ea82e1e,13,tharaka,gatunga
+ddd00730-aa44-4004-845a-56c3351a55da,13,tharaka,mukothima
+2aa9ef36-a08c-4480-b797-1f484c8a89d6,13,tharaka,nkondi
+3b64b00e-e18c-4cc5-87af-fed35fd28786,13,tharaka,chiakariga
+de686704-c55d-4c18-a914-3ef23a55a3f8,13,tharaka,marimanti
+7208ba2d-6822-412b-a0d1-baf1a33ae985,14,manyatta,ruguru/ngandori
+13b9ed05-a985-4234-b90f-e5112ecda6d9,14,manyatta,kithimu
+308e1c45-1f27-48e6-a217-ee3167295fd7,14,manyatta,nginda
+f5e5a1d0-409c-49a7-85bf-a57d01dd1512,14,manyatta,mbeti north
+33423a8d-d650-4171-8e9b-8d43ee174c83,14,manyatta,kirimari
+7aa78b90-8769-474f-9aba-fa235965c242,14,manyatta,gaturi south
+df28c5d7-7aa7-4b4b-a896-7f36f747e2c5,14,runyenjes,gaturi north
+527b5012-62a1-4347-8de1-9ad43cb3b222,14,runyenjes,kagaari south
+586eb70c-2f89-493c-8ec3-9cf95757dba1,14,runyenjes,central  ward
+b7e559f9-47da-482d-9e15-86cad927c6af,14,runyenjes,kagaari north
+714aeddb-4be4-4809-9347-d2766d5587c1,14,runyenjes,kyeni north
+673b5911-8182-4fc5-85a8-0a8189647e85,14,runyenjes,kyeni south
+cd6a0931-e5e4-4a4b-aec0-6bf86da41088,14,mbeere south,mwea
+281a0f10-1f37-4d77-a77c-8a6f232edc16,14,mbeere south,makima
+7a5c4723-17c1-457c-96d3-7d849e225675,14,mbeere south,mbeti south
+8a0a6438-d433-4ac2-bdec-f3b4a25381de,14,mbeere south,mavuria
+dd933dfb-860f-4dcd-beb5-9c2fbfd74370,14,mbeere south,kiambere
+f685428e-9e96-45ac-9eb9-1bdaf31f7f6d,14,mbeere north,nthawa
+ddb48d14-f949-459a-a317-b53dd93854e9,14,mbeere north,muminji
+7ec2099b-8b6f-46fb-98b8-124e4bf7abf8,14,mbeere north,evurore
+3c5c201e-28fc-4a30-9dfb-ec52b7b09954,15,mwingi north,ngomeni
+4ac47fcb-164c-410e-8c08-ee66ec13405c,15,mwingi north,kyuso
+7be489e8-da7a-4007-b270-84e601516904,15,mwingi north,mumoni
+a69372d0-213f-43ab-802d-3027f0f0faec,15,mwingi north,tseikuru
+f0da325c-e57f-48f2-b1bb-cb9047f1cdba,15,mwingi north,tharaka
+86528820-3beb-41fe-ae63-91a141fc2ae9,15,mwingi west,kyome/thaana
+c98f0f08-9f0d-41d8-9dcd-6c6564770013,15,mwingi west,nguutani
+7a3b3d8d-6900-4607-9013-76b9d613eaa7,15,mwingi west,migwani
+313a5902-664a-4e0c-9231-bfd122b9e670,15,mwingi west,kiomo/kyethani
+d467936b-fbf0-4574-ade1-8e6f0c0e4287,15,mwingi central,central
+5abfd573-b6ca-4fd8-b7be-9fb5ede2b11f,15,mwingi central,kivou
+0d84df38-0f36-41fc-b44f-79ceece30c2c,15,mwingi central,nguni
+59bcfdb3-b957-4128-a069-f7117e2bad21,15,mwingi central,nuu
+7bb5006f-88e6-4d2a-ab4f-3fe5e8c6bb60,15,mwingi central,mui
+f0f109b1-729a-4287-9197-132ca06c9cd9,15,mwingi central,waita
+929ea820-348b-47b3-8bcc-e84ccfda35d6,15,kitui west,mutonguni
+e95f006b-8cac-40a9-a8d6-bc3e0cbcbc99,15,kitui west,kauwi
+3a60890a-6b13-4e82-a427-e62d260c2681,15,kitui west,matinyani
+3bd58208-dbef-460d-9f70-ce39a6acb3c6,15,kitui west,kwa mutonga/kithumula
+2a207eb4-c857-454b-b7b5-fbf79779f1a6,15,kitui rural,kisasi
+c3fa627b-48de-4536-895b-956418cad8de,15,kitui rural,mbitini
+e7d2d78d-7613-4253-84f0-b808e2a2bdd0,15,kitui rural,kwavonza/yatta
+c26aea51-dd46-4c07-b99c-60d29a750eed,15,kitui rural,kanyangi
+d703f321-02b9-4e6b-9f25-5249d72356a4,15,kitui central,miambani
+3cda41cd-73ff-4ee2-b902-ea4dec74f7d9,15,kitui central,township
+de0bf184-e9d1-4dca-b07e-13d47c828c9a,15,kitui central,kyangwithya west
+8fb1f2ef-77f2-4be9-b022-9cde991d4bf6,15,kitui central,mulango
+fbecaf99-9710-4cee-8530-ce42ebda77d4,15,kitui central,kyangwithya east
+bfe1f561-aff5-47be-9592-2f34b3f646f9,15,kitui east,zombe/mwitika
+d7214f0c-cd34-493d-99bb-137a6f32aa6b,15,kitui east,chuluni
+a1be11df-16f8-4d8a-8937-ea819c31e32b,15,kitui east,nzambani
+63a09037-e2bf-4104-aed1-c711d7f80c7c,15,kitui east,voo/kyamatu
+4780b3bd-c6ab-4c1a-b141-2f8b970b85ed,15,kitui east,endau/malalani
+e1be914b-04f4-4e24-aa7d-3f1094748e72,15,kitui east,mutito/kaliku
+884dea8f-4eb6-4495-a119-7a1ff5f51d38,15,kitui south,ikanga/kyatune
+5f4bb07b-0867-4c64-98be-3418e85930c4,15,kitui south,mutomo
+8a7a0c76-1212-464f-919c-1365dc52671a,15,kitui south,mutha
+a1d03c56-695f-48e5-ace4-ea178d555c84,15,kitui south,ikutha
+3e447832-7e07-430d-b7de-db1d769cb94f,15,kitui south,kanziko
+7d6fe0cb-de51-4458-a5ca-00d8e7da605b,15,kitui south,athi
+4a3a3291-3c5b-4452-a5a7-78023e3a6134,16,masinga,kivaa
+1b61afe5-23c9-46fd-a5e0-0c0a803c8172,16,masinga,masinga central
+65976e1a-565d-4a1e-a845-5e8ad4d4a73f,16,masinga,ekalakala
+8b255fa0-ba1a-4db7-8fec-08e922d703d1,16,masinga,muthesya
+023a8e9a-8af3-4f33-8dcd-c1dd38104857,16,masinga,ndithini
+0cb58f9c-db4f-4b52-b03f-ec55724d38eb,16,yatta,ndalani
+c72cd0bc-4078-42fa-b292-6e17d0e4f9a4,16,yatta,matuu
+83ed9406-161d-4522-b540-5615b9a86cfe,16,yatta,kithimani
+6432a2de-4281-4714-90a5-c75ef5df3c67,16,yatta,ikombe
+e359f83a-cae5-43ec-afb2-142d04a6af18,16,yatta,katangi
+618979cf-a1ef-4032-8ecc-820ec7542205,16,kangundo,kangundo north
+3f387207-78b6-486d-aafb-050f7acaa139,16,kangundo,kangundo central
+b0cf11d2-eeb3-43a3-835f-bb2dc244b720,16,kangundo,kangundo east
+6be759a8-c13f-45e8-9e36-757704155936,16,kangundo,kangundo west
+5597eb15-1c40-4012-9dd6-7e1d1859573c,16,matungulu,tala
+f6ca4ef0-8c1e-4897-8a95-e751803a5780,16,matungulu,matungulu north
+d26a3b59-26ab-441f-bc37-6a949c9d2864,16,matungulu,matungulu east
+a08a755f-8785-4476-aa5a-c9df44c19ba9,16,matungulu,matungulu west
+7678830c-a15e-46f6-9ce7-b4ff0a0e8b01,16,matungulu,kyeleni
+f4c5fc12-6e27-425c-822f-47451c140497,16,kathiani,mitaboni
+89003506-d6af-4aa0-ac24-14a82bd30aa0,16,kathiani,kathiani central
+5288a730-ec66-48b2-a146-47794914e5a3,16,kathiani,upper kaewa/iveti
+5d195ba2-b3c2-4ae1-bd13-c448a2981e3b,16,kathiani,lower kaewa/kaani
+ee43af6f-fe7e-4237-b362-1dbd9c8dc388,16,mavoko,athi river
+e44f02ca-c9bb-4230-90e9-db24a6b1a69f,16,mavoko,kinanie
+33085dc2-befc-4729-b4fd-b13449dc055b,16,mavoko,muthwani
+453b3d4e-c2c4-4342-ba4b-6af27eadd1d8,16,mavoko,syokimau/mulolongo
+142bac97-b14a-41b3-a3ce-d16597de0050,16,machakos town,kalama
+deddc84f-8ce8-4d80-a2a4-861237b42c65,16,machakos town,mua
+9b88249c-e822-4c5d-95d3-4a21f78b1bf4,16,machakos town,mutituni
+8b6703ac-f249-4463-b1f9-7d36f0124b07,16,machakos town,machakos central
+e463fa2d-0def-490a-8dcc-38ecefadba32,16,machakos town,mumbuni north
+7a866cc2-904d-42ad-aaa9-97309672ff33,16,machakos town,muvuti/kiima-kimwe
+cd9ceff1-3099-4158-b126-f777d91cb9d9,16,machakos town,kola
+3f54c3b9-cbb0-42a1-ada9-ad1528fc560f,16,mwala,mbiuni
+f26ca426-227c-4253-b743-2c7c1d7aa0e7,16,mwala,makutano/ mwala
+1699b058-123c-4b09-b29c-a5673b02cdbc,16,mwala,masii
+980d8089-8b78-4f56-89de-45df96699bc0,16,mwala,muthetheni
+cb981b8f-2745-43ad-9860-1b2980f4038b,16,mwala,wamunyu
+5a1a7d07-7ed0-4d09-8fc1-c959da02e4ae,16,mwala,kibauni
+dc43b481-b155-44c6-9256-d88aff9248b0,17,mbooni,tulimani
+aa54815c-3c2b-4066-a2a5-65f82b1fc09b,17,mbooni,mbooni
+50add746-62d9-48cd-aab8-dcd343315dae,17,mbooni,kithungo/kitundu
+8158069a-7dab-4cca-b6da-23547c55c914,17,mbooni,kisau/kiteta
+708650f3-a8dd-48c8-a07d-bc988c716363,17,mbooni,waia/kako
+585aebd6-8c9e-4b20-b3ca-8d0ab478ecb4,17,mbooni,kalawa
+0a11dbfe-2920-4e8f-9258-82ab6e350958,17,kilome,kasikeu
+bef9c140-34d1-4c52-8bc5-366e8c1a1a75,17,kilome,mukaa
+2e4a26ce-d48c-4a3c-9119-1a8a9fe3c13a,17,kilome,kiima kiu/kalanzoni
+048f900c-5150-4951-9143-4393a4215ed2,17,kaiti,ukia
+669811b4-f7db-4e4d-82a1-fa834eaf61dc,17,kaiti,kee
+f3daccab-f446-484d-9f40-b429e15ea647,17,kaiti,kilungu
+dab93b45-d4e1-4fb1-a279-65c6887ce14a,17,kaiti,ilima
+302fae57-f09c-4694-8ca4-bcd119a723a0,17,makueni,wote
+1d43086c-ed48-4db3-b170-dcb85bd0962f,17,makueni,muvau/kikuumini
+11051934-2100-435a-9854-92c7bf1330df,17,makueni,mavindini
+a326697f-cb37-484b-af4a-5faa9414a99b,17,makueni,kitise/kithuki
+9acbaddb-c5de-425b-a92a-a42296aa2052,17,makueni,kathonzweni
+968e0886-093e-4176-ad78-8d6e1f5eec5e,17,makueni,nzaui/kilili/kalamba
+4b98f184-8a1f-44d5-ae34-79a2f09c465b,17,makueni,mbitini
+81e8c2cf-015c-4957-9d10-ce64dba33dcd,17,kibwezi west,makindu
+a556fc42-5e6d-47bc-9eb0-391b0dc2bdaf,17,kibwezi west,nguumo
+af3e3564-29a1-432a-a0b9-5962bf438b01,17,kibwezi west,kikumbulyu north
+8c38f44a-7a97-4d54-82a1-f13277923c6e,17,kibwezi west,kikumbulyu south
+17dfb010-794d-4544-b325-4422e528736c,17,kibwezi west,nguu/masumba
+b4b8ec72-ff8d-4422-a325-13e5286d94c2,17,kibwezi west,emali/mulala
+f25c92ff-ec22-4332-8cf5-867cff2bb738,17,kibwezi east,masongaleni
+1c680760-32e2-4b47-b7dd-7ac8fab1c40c,17,kibwezi east,mtito andei
+33e21759-9a40-4b89-b59d-838f3bb1bb04,17,kibwezi east,thange
+975171c2-65a8-4591-9e64-f5b1f4aac39a,17,kibwezi east,ivingoni/nzambani
+a6289410-0e32-4e33-844b-84accde3ca6b,18,kinangop,engineer
+222026c7-0ea1-423c-9622-fc512a9a9fd2,18,kinangop,gathara
+66fe163b-e20f-41ff-9ae9-7c7801b0ee03,18,kinangop,north kinangop
+58c641fb-5b9b-4854-aae3-66c7cb7a60ae,18,kinangop,murungaru
+6d975f88-6712-47ce-87c3-6261fc697d3b,18,kinangop,njabini\kiburu
+23b1a694-89f5-4fce-936a-3fdf70eda5c6,18,kinangop,nyakio
+8b157079-d3b6-4512-9cb2-d7cc057c0f9d,18,kinangop,githabai
+5863f7da-92e8-4efb-bfa5-25f2625aad13,18,kinangop,magumu
+dc2ab0bf-cbe4-4f17-a7ad-9623823f72c8,18,kipipiri,wanjohi
+98f39451-53fb-4651-9fd2-5ee21a289a28,18,kipipiri,kipipiri
+6aeb6bdc-5856-499e-bb47-e066491a3fd4,18,kipipiri,geta
+c592c815-fcc2-419e-b27b-34316ab2f013,18,kipipiri,githioro
+5ad6086b-6b84-4d9a-8d34-f55bddb06eab,18,ol kalou,karau
+4faa0597-fed8-4d18-80f9-b83e5d6bd00c,18,ol kalou,kanjuiri ridge
+b9eb5d62-dead-469f-ad2d-ebf91fb547b1,18,ol kalou,mirangine
+863e3bcd-c4e0-439d-afd8-331ff1b26af4,18,ol kalou,kaimbaga
+080c2f35-e5d6-45ee-aec1-f8e1bf09afc6,18,ol kalou,rurii
+c0028afa-72c5-489f-8f35-37185a514a1a,18,ol jorok,gathanji
+6a1e8a4d-5b5f-4b17-b752-aa97f2707183,18,ol jorok,gatimu
+38eaf23d-2ddb-4539-88ec-ffe71f6b6fb0,18,ol jorok,weru
+83bed772-2745-4dbc-9b4e-7da656a7772e,18,ol jorok,charagita
+1e2d826b-365e-4e10-9dad-1be1423a7bc4,18,ndaragwa,leshau pondo
+194d96c1-ddc6-4fae-bf63-4acd98d39a11,18,ndaragwa,kiriita
+5e4b3d74-69df-4f3d-936f-332c27cc65d8,18,ndaragwa,central
+c8598ac6-d2d3-41ed-8dce-39127b535d62,18,ndaragwa,shamata
+ed569a0d-2f96-4d24-9ccf-8626eda83de2,19,tetu,dedan kimanthi
+a9077030-d02c-4848-8d66-25346221dff7,19,tetu,wamagana
+ab3bbe09-d436-4a68-bb04-e94bf1204403,19,tetu,aguthi/gaaki
+81d16919-4534-4395-b868-f9ce588b5003,19,kieni,mweiga
+db94dc94-c6fa-4116-a34f-38dfc3eba319,19,kieni,naromoru kiamathaga
+500bfd0b-c6d4-4f8e-b05f-c5122cd38227,19,kieni,mwiyogo/endarasha
+8b9ea578-5e2b-4a2b-b094-1f54cb9f1eef,19,kieni,mugunda
+53087fac-eb0d-4963-be17-006acda6cb9f,19,kieni,gatarakwa
+555ce7d8-cd2e-42ba-a47c-605e6066c840,19,kieni,thegu river
+32af0c7b-81ec-40c4-aeb7-46d2e51d07d9,19,kieni,kabaru
+14b8fb5d-c2cc-4cab-9f94-ea61dcdb2dc4,19,kieni,gakawa
+c95a673d-ac6a-4374-a52a-f8b295fb2fe0,19,mathira,ruguru
+d81d6486-3721-4aa2-9823-abdfeed36615,19,mathira,magutu
+59db69ca-37c9-45df-8406-ae7a335978b3,19,mathira,iriaini
+f0fb2ae7-a860-4c4d-8af5-37a802bce37e,19,mathira,konyu
+48f89e71-e245-49f7-a9bf-cc436698602e,19,mathira,kirimukuyu
+258ba254-2ba3-4448-9320-804fc5afeef7,19,mathira,karatina town
+86907d51-3158-4527-b8ef-b9915ab6b72a,19,othaya,mahiga
+7f968ae4-8898-4670-adfd-9762a0459afe,19,othaya,iria-ini
+992d09aa-d841-488b-991c-b5883f8ace18,19,othaya,chinga
+5be7ec06-b25b-47b4-bd0f-a82ec274fc7c,19,othaya,karima
+3cb587ef-013b-48fc-91b7-abe476bf5d10,19,mukurweini,gikondi
+0bbaeba0-e68a-4445-8167-15987534a150,19,mukurweini,rugi
+fb20a4f4-b3a4-45a5-88e2-30ff0a2af9a7,19,mukurweini,mukurwe-ini west
+a176673b-ed48-4bce-ac1b-9162fbf1019d,19,mukurweini,mukurwe-ini central
+a3b8a706-159a-44fc-9fbf-6e00cd7b294e,19,nyeri town,kiganjo/mathari
+7963b25c-be75-4b55-ba55-c8b4cff6a1f8,19,nyeri town,rware
+eb36f20d-c1a6-44fe-ad25-a67575d3d885,19,nyeri town,gatitu/muruguru
+05a30dfd-8e4a-48ab-b056-bc7f97f62055,19,nyeri town,ruring'u
+d0a92640-c7c9-4483-806b-a0df08eb2341,19,nyeri town,kamakwa/mukaro
+6e40a868-8d3e-4ce4-87b8-5930bbb6ba49,20,mwea,mutithi
+077be639-5f96-464c-9425-924efd79bd89,20,mwea,kangai
+85b5f3c3-b7f2-40d9-b498-5bd53ff46f89,20,mwea,thiba
+723585f7-062a-4ec7-977d-8121c27e50be,20,mwea,wamumu
+44c16c72-3fd1-4395-810b-00a0152fd849,20,mwea,nyangati
+b40fa1f3-0848-4b66-b1e3-5899d2f678d3,20,mwea,murinduko
+130332c7-e159-4e8e-97b3-06aa3b7dd4c2,20,mwea,gathigiriri
+a3001d3d-f536-4bb9-bd32-74feab9810de,20,mwea,tebere
+392198bf-0306-4168-bc66-d99464a6d3c5,20,gichugu,kabare
+f5d2deb9-8d26-43d6-a2ed-4e7eda3f8089,20,gichugu,baragwi
+dc88acd4-f1a2-40e6-93ed-6292e36b08da,20,gichugu,njukiini
+b0e1739e-475a-4da7-9cc9-82fc2cae6517,20,gichugu,ngariama
+3827e523-b23b-45c7-8d3f-f92bc07f515b,20,gichugu,karumandi
+0b392d79-aa4c-4e80-a10d-bc9246b79aeb,20,ndia,mukure
+c160d117-ce7d-4d0d-99ac-a3fedde7fb6d,20,ndia,kiine
+cbe6d31a-621b-4056-a105-0a7970485be5,20,ndia,kariti
+126aee67-7004-4751-8a10-56fa8b68d6cd,20,kirinyaga central,mutira
+0da628ed-00cb-42ac-b7a1-5005b8020e37,20,kirinyaga central,kanyeki-ini
+3f78c036-f3fc-4a36-a8ae-0b515c518412,20,kirinyaga central,kerugoya
+d061ed4b-dbd3-40a5-ae06-25113aaa7a83,20,kirinyaga central,inoi
+b4d01564-0958-450a-a829-53894c7bd907,21,kangema,kanyenyaini
+87609f71-0077-40fa-945e-30d2350cdcf0,21,kangema,muguru
+a97e98fe-6501-4212-819e-542207ba1547,21,kangema,rwathia
+89357eff-7942-4753-8c59-c22b3bff55d2,21,mathioya,gitugi
+fcaaf640-1e2d-4fb7-a67e-fbb8e7926ce3,21,mathioya,kiru
+e68b9436-5a71-4ebb-aac4-e7113e53e9f4,21,mathioya,kamacharia
+25b10a2d-f951-414a-a948-8ffb263051f6,21,kiharu,wangu
+4f4f3891-d8d6-45ed-86e4-cb500b2f8d55,21,kiharu,mugoiri
+552ee13c-5969-4286-b096-9c7adf3afbc9,21,kiharu,mbiri
+4c7bfd3a-ebba-41e7-b68b-859ca16048c8,21,kiharu,township
+02704f47-d233-47e1-894c-f30eda5ddce8,21,kiharu,murarandia
+fbcdc6bf-858c-4b15-8f63-d18ff5c9f83e,21,kiharu,gaturi
+495695ca-de0a-4443-b40d-f2da112d8ed1,21,kigumo,kahumbu
+11bb2544-7d07-40ba-9aaa-1bc2d9930a03,21,kigumo,muthithi
+e10950f0-a90f-4782-8012-25564c34d4ff,21,kigumo,kigumo
+b81f665e-a788-4075-ac40-d69491c86aba,21,kigumo,kangari
+2ca49b9f-8cbe-4af3-800d-9e2bad351c44,21,kigumo,kinyona
+780694de-69b4-4929-a452-24a0fb14379e,21,maragwa,kimorori/wempa
+aa5b9bed-1e87-4ac7-a078-3fc6b5593a72,21,maragwa,makuyu
+d5d768df-1f12-4227-8a67-fdab8b4c3a64,21,maragwa,kambiti
+1d5fe4c0-f74f-43ba-a2e8-3c1c92a5c65f,21,maragwa,kamahuha
+708b6146-fde1-4e73-b242-6cd2fa226396,21,maragwa,ichagaki
+7d1b4747-08dd-4fb5-a29e-e98d25f832b7,21,maragwa,nginda
+29f5919f-2b2b-4c27-a361-4370d6b27cdb,21,kandara,ng'araria
+e0168dec-b5a0-4522-ae0b-6075c067a2c9,21,kandara,muruka
+4c2c2bb0-1053-40f7-ad68-ab7e02dd5fd1,21,kandara,kagundu-ini
+90dab260-2b9b-4519-a303-0f673c527fd2,21,kandara,gaichanjiru
+21cbbe51-11ca-4dbe-bdd7-00d5cd2045d7,21,kandara,ithiru
+0cde1d4f-d83e-44f6-a044-7267f79dd818,21,kandara,ruchu
+ae2f1f8c-1d5e-465d-9264-78d443bf5f9d,21,gatanga,ithanga
+8526d1b5-c75d-4304-8bad-15cdc785d77e,21,gatanga,kakuzi/mitubiri
+e4b1e851-9afb-42d1-9057-f69a04bec273,21,gatanga,mugumo-ini
+88504faf-cdc2-47db-b20c-f00d46a26fd7,21,gatanga,kihumbu-ini
+b008f108-2ce4-4f62-903b-cb128f53fc09,21,gatanga,gatanga
+c1fd0250-5d84-4749-a2a8-c5c1a19700d9,21,gatanga,kariara
+51832f0f-6fc0-4f65-9e9e-d8ae578de797,22,gatundu south,kiamwangi
+1686418f-dba0-438e-8141-370a831d6b74,22,gatundu south,kiganjo
+c910123c-cc90-4fb6-a21c-eed47a90dfd1,22,gatundu south,ndarugu
+d1015ecb-3ddd-4956-bcb4-c5b8b21bbcff,22,gatundu south,ngenda
+dc146ed8-b401-4708-941c-fee713f8fd10,22,gatundu north,gituamba
+ead0d321-d7f5-462d-9619-012ecf9ae51b,22,gatundu north,githobokoni
+d5ad4ebc-25a3-446c-93f2-d0309b90501e,22,gatundu north,chania
+f9bdc135-07f2-4ccc-974d-c50b552eee8f,22,gatundu north,mang'u
+93ffdc65-4bef-42e0-86de-7f9fdb14d802,22,juja,murera
+dc8f4fae-38d6-479e-8c74-a58db4543cf5,22,juja,theta
+eabf334b-362a-4cc7-a679-62604e9ad9e3,22,juja,juja
+cc53cd1f-fc44-4cf0-8d15-d937dd775995,22,juja,witeithie
+794a3f71-e968-429e-8697-216ccdf9bfba,22,juja,kalimoni
+79c1d671-eff7-47f1-b9ee-77f6b52b6f8c,22,thika town,township
+e70cf2f7-ac98-4f4c-9c59-09ce9dcd0023,22,thika town,kamenu
+6cdf56be-d2e3-49f6-a2f6-0f05ada7f54d,22,thika town,hospital
+ce9a61a8-4abe-4f8f-8280-7fcd1e4e51e9,22,thika town,gatuanyaga
+4dd6cd35-21ee-4db3-8817-0ea6de476d5c,22,thika town,ngoliba
+e03dfdcf-97cf-42d0-b445-af0ea58b8f4c,22,ruiru,gitothua
+92a900ae-3513-42eb-8628-c76fed95b4c0,22,ruiru,biashara
+865c7aa6-7392-467a-a029-facbc4d3949a,22,ruiru,gatongora
+f1b2b38c-6fef-4f7d-9c96-da8dc2bd2160,22,ruiru,kahawa sukari
+f976bb2d-59e9-48dc-8c2d-7cffbc44835b,22,ruiru,kahawa wendani
+e347fdfc-788a-4e0c-8dbd-0b8c50dcc3c6,22,ruiru,kiuu
+13a7550e-2529-41b7-97e2-99dce182faed,22,ruiru,mwiki
+039ea8d9-97a6-499d-9cc0-625e0b4c0955,22,ruiru,mwihoko
+1f252fab-8758-4cf3-ba91-c6b44be2b632,22,githunguri,githunguri
+8a62edbb-176a-4b32-85e1-1e07fa88abf0,22,githunguri,githiga
+4afada50-bfc2-4305-8c07-e1a506b18ad7,22,githunguri,ikinu
+7bcf5f88-4ddb-4b70-a24d-8a2951bbfa98,22,githunguri,ngewa
+96b723be-8c7e-4e53-8ac2-e2f15118895f,22,githunguri,komothai
+732d7e04-07b1-496a-848c-6602d0608574,22,kiambu,ting'ang'a
+479d9c6b-bbcd-4ec2-8f50-72e1af695aa5,22,kiambu,ndumberi
+468fd4b8-9645-4021-be62-31b2b9b8605d,22,kiambu,riabai
+cce7bd70-39a8-4acd-9952-f9303a4165e9,22,kiambu,township
+573aeb82-3607-4cba-8f76-95f055856082,22,kiambaa,cianda
+3f017b4e-a16b-4ea2-9752-cec21170a50f,22,kiambaa,karuri
+66f0ef53-557d-4175-a9bc-4aa71dafbc1f,22,kiambaa,ndenderu
+88eec843-a033-484c-9e11-68f45cf655cb,22,kiambaa,muchatha
+86c8f0d1-ca53-4f47-b783-949cef3b8396,22,kiambaa,kihara
+2dbd99dc-48c2-4389-a138-bd303905f21e,22,kabete,gitaru
+debbbca7-40c4-4a92-855d-444e72fdb61a,22,kabete,muguga
+ae88bedb-3b95-4cdb-817a-770ed98464ce,22,kabete,nyadhuna
+52d58724-2f3d-4a73-8411-552ea5b85e71,22,kabete,kabete
+fafd990b-62b9-4abf-8bdd-d15d07bda87c,22,kabete,uthiru
+1d824294-02d9-42d8-9f04-ff2b3369801d,22,kikuyu,karai
+d7a64712-8574-42c2-8e50-1fa5fc7239f1,22,kikuyu,nachu
+38e89cca-d055-41d3-b9bb-595d459d55c0,22,kikuyu,sigona
+3bee8515-3da5-4158-8385-327a58e4c2f5,22,kikuyu,kikuyu
+dc095620-ed09-4997-9992-ff01adb13b27,22,kikuyu,kinoo
+35b7024e-9230-48e1-bfb6-d634131bff5b,22,limuru,bibirioni
+0634507f-2571-47ed-9831-7b9ddb9c0da1,22,limuru,limuru central
+9e6a7425-d6fd-4396-a9c4-24908c9faf73,22,limuru,ndeiya
+1e2a5526-c65f-4eb1-9b4d-3b3fb34114f5,22,limuru,limuru east
+7ef97e6d-9638-428f-806f-ca1a0f753555,22,limuru,ngecha tigoni
+b0a1a54d-1e8d-4bc9-b26c-9cfa64a909ab,22,lari,kinale
+ff6013d2-ad51-4ea7-be90-c322b52b6411,22,lari,kijabe
+b6278a2f-7b9f-4a44-b1d4-edf6cc3d10e1,22,lari,nyanduma
+377d80d8-98f8-4e92-a32f-02ae08a7e471,22,lari,kamburu
+938e18c5-db67-4635-82d2-ead28fd78fd6,22,lari,lari/kirenga
+8c1906ab-4301-43ab-9af4-a3fa832962bc,23,turkana north,kaeris
+b56a58fb-e3ba-4cae-924d-9f0d70efcd8e,23,turkana north,lake zone
+2eaff763-85c0-41b7-b4ee-5a48319a1e6c,23,turkana north,lapur
+ce80f807-ebbc-485a-b303-b405149e979f,23,turkana north,kaaleng/kaikor
+c3260bad-d52f-483e-9887-2623627ae974,23,turkana north,kibish
+2c6cb4ae-980d-4f9d-9fc2-6010291292d7,23,turkana north,nakalale
+33204612-cdb6-4ff6-8286-1e69121b3f7a,23,turkana west,kakuma
+b59be472-b7af-4dd0-a209-0848c5529e05,23,turkana west,lopur
+c4bfbb5e-0f5a-462e-acfb-a2942fc81274,23,turkana west,letea
+f8858035-ca16-416b-a957-7c7aaa406951,23,turkana west,songot
+8462a18f-4381-4169-bac1-610e00ef8ee9,23,turkana west,kalobeyei
+da0effbc-c9b4-4969-b1f6-206ab5cc0239,23,turkana west,lokichoggio
+70a37ad0-fe0d-405b-b666-0486fea63d0f,23,turkana west,nanaam
+815a0dda-f412-4649-8537-df7397b911b9,23,turkana central,kerio delta
+984a0857-5fa1-449c-9960-315b313f3a6b,23,turkana central,kang'atotha
+d88af147-ecf1-44bd-8e15-a96854e60640,23,turkana central,kalokol
+04760320-072f-40d9-b0c8-bda9767a58c6,23,turkana central,lodwar township
+7a12d57e-432b-4442-a6d4-c301f95923db,23,turkana central,kanamkemer
+2678ae92-881c-4871-9628-2dd81547aa56,23,loima,kotaruk/lobei
+507e5ecb-3748-4f35-a87d-2ff8ba3d11e2,23,loima,turkwel
+afd59c76-ab14-4ed8-8cc6-c815747c8385,23,loima,loima
+aeb2102e-8dec-4950-b8f6-34a8f84d3aee,23,loima,lokiriama/lorengippi
+df5becbd-56bd-41bd-a441-ab50a317e7cb,23,turkana south,kaputir
+a9e6e147-c39b-4525-a246-3c5b221a2dca,23,turkana south,katilu
+cefac8e6-fb25-497d-bede-3806c36dd8a6,23,turkana south,lobokat
+5f38a91f-9951-4a73-8a15-3e4b93d44b1d,23,turkana south,kalapata
+eb1ad778-ef56-4f74-b48b-f8c023c57ad2,23,turkana south,lokichar
+36ae21e7-5274-4592-b9be-c2deca2c0aeb,23,turkana east,kapedo/napeitom
+d0a3aa27-11a3-4745-b84d-2b319932c1a7,23,turkana east,katilia
+6f98fed2-cfaa-4df6-b5c6-6a6bd883f43e,23,turkana east,lokori/kochodin
+8c73d064-1321-418a-9a90-f878ed4c6ed1,24,kapenguria,riwo
+bf5977c1-d10b-455a-bede-14d23e644400,24,kapenguria,kapenguria
+64a42492-254f-4a9e-acd9-976343c63cd1,24,kapenguria,mnagei
+84491031-b6fc-4386-83bc-52f579692a98,24,kapenguria,siyoi
+84a85188-8930-4f1d-a193-59ed055fb722,24,kapenguria,endugh
+efb0ff11-74db-4ed2-830f-d595ad132d54,24,kapenguria,sook
+29a2eee8-7ded-48d2-afb4-e426625394a2,24,sigor,sekerr
+6ebbc31a-a735-4a78-a1bf-e27820e705a7,24,sigor,masool
+25093a2a-b877-41fb-b322-bdd72cd40155,24,sigor,lomut
+bd914bb0-f4bc-4319-9e58-97498e5fe44d,24,sigor,weiwei
+7f45c882-59ce-4f60-9b0c-730fb00691b6,24,kacheliba,suam
+42085aaf-643c-4c5e-97f4-12e62233fe6f,24,kacheliba,kodich
+5ab0d3f8-8a82-4d9c-8fc0-8956df93d473,24,kacheliba,kapckok
+2759e0e7-1470-484f-881d-1c28dc135304,24,kacheliba,kasei
+a4bfe07f-514d-434c-8750-f795053e0f98,24,kacheliba,kiwawa
+e270650f-4a58-47e3-8df9-78dcf211a840,24,kacheliba,alale
+3cb2b9f7-84e5-4088-8a69-7660e66047a5,24,pokot south,chepareria
+557c46c2-4a71-4b11-b072-5db3ce276ae2,24,pokot south,batei
+80c78d2c-bc54-4310-bba5-dc13b161b5aa,24,pokot south,lelan
+38b40300-f427-4ebf-adec-629866b5578c,24,pokot south,tapach
+5043811d-3e46-4c59-9565-353cebd212f5,25,samburu west,lodokejek
+241aa2bb-9cc7-43cb-b285-721ed0a96827,25,samburu west,suguta marmar
+f3adba85-5944-4542-9803-c61214c9346c,25,samburu west,maralal
+52117f8a-ae46-4e1d-be0d-291ac2e4b0d0,25,samburu west,loosuk
+87a13753-8d40-492d-826f-b7efd7a24479,25,samburu west,poro
+989410f8-203b-48e3-aca1-a5403ba1dd17,25,samburu north,el-barta
+594bb481-25ad-428b-9850-2d728683b283,25,samburu north,nachola
+287147fb-1d8b-4d52-9216-faf6d0067253,25,samburu north,ndoto
+a8fe6288-5705-41d0-8e47-7a1c88b4537c,25,samburu north,nyiro
+b04c5083-19dd-4be3-8069-c0c6efc405f5,25,samburu north,angata nanyokie
+05fa611b-2ca9-42e9-bd33-888cd7f4ad9a,25,samburu north,baawa
+d433a9ca-c5c1-4122-867b-328b655e3c53,25,samburu east,waso
+d07c87c5-a888-4130-816b-db5aa4f90206,25,samburu east,wamba west
+423935be-ce3e-4955-8cf8-95e5b979f0b6,25,samburu east,wamba east
+6ee1799d-ff03-4929-a4b8-e401eb48f4c1,25,samburu east,wamba north
+d0ccff96-3df2-4ae0-b1e4-16a1247da4fe,26,kwanza,kapomboi
+a1aebcc0-5958-44d9-8c12-290a9d6328ff,26,kwanza,kwanza
+e6c76eaf-5d92-433a-abda-75b30a1e0175,26,kwanza,keiyo
+c88c7863-bd0b-4a77-b9b8-ef1da22e40d9,26,kwanza,bidii
+261471d1-4c63-469a-ab60-f386b5399c46,26,endebess,chepchoina
+2b6043ad-e11e-4a77-8cb1-4d659164a562,26,endebess,endebess
+f4f99213-6f66-4297-a05f-1654fe3a5cde,26,endebess,matumbei
+01cad594-68f4-45c6-9711-cf9e5a6cd460,26,saboti,kinyoro
+9e4cf7cb-e69f-4be7-8baf-c1ea2ea517c2,26,saboti,matisi
+68d7194b-073f-432e-bf75-04a081a85de0,26,saboti,tuwani
+24ba0f2d-b462-462a-a3b1-e57050228708,26,saboti,saboti
+b5ac3890-a650-4d1d-97ef-80552eb58afc,26,saboti,machewa
+072f9022-97c8-49c0-abd2-7994ef9a25e8,26,kiminini,kiminini
+fb23880e-a995-46dc-b909-e02d4a299122,26,kiminini,waitaluk
+5604fd6d-e76f-4317-8c4a-4d38452a2ea9,26,kiminini,sirende
+c03e1db1-f7b0-4e9e-907d-7b06d542b8c8,26,kiminini,hospital
+458ad570-fb37-4c60-a9fb-d0197a422cda,26,kiminini,sikhendu
+767aa057-02bb-4335-b533-ddb4025895cd,26,kiminini,nabiswa
+ef989aa2-1593-48de-a5a3-f7b605716c44,26,cherangany,sinyerere
+480e8605-9b71-4fb9-b64e-fec611418975,26,cherangany,makutano
+e9b3c8a8-fea0-4609-a271-ecd45bddcc28,26,cherangany,kaplamai
+ffc0af80-bc1b-4a26-8053-486954e048a2,26,cherangany,motosiet
+3b926274-bf04-43c7-8a5d-e3ee6948421e,26,cherangany,cherangany/suwerwa
+1cf268f8-5de9-441f-806b-81407e217626,26,cherangany,chepsiro/kiptoror
+2c6c9763-6334-43a5-8d9a-25e9eb797bc2,26,cherangany,sitatunga
+61597a50-86ce-49aa-9830-8ac25182745e,27,soy,moi's bridge
+fabdd252-976d-4ccd-982b-3209bad6a688,27,soy,kapkures
+8a898ab0-7bae-4f9e-86ef-3e2e9bcb2425,27,soy,ziwa
+791071bf-7b1a-4096-9300-17eb583b9909,27,soy,segero/barsombe
+27bf0d33-de8f-4490-8b5f-dd4da1cc67af,27,soy,kipsomba
+e197e342-be2f-4bca-a329-e1edb605a4d1,27,soy,soy
+b74dd555-d741-4fdd-a300-40fedb1957f1,27,soy,kuinet/kapsuswa
+2239ace4-fd90-4775-9400-e4675d7717ab,27,turbo,ngenyilel
+e13a7ab0-7930-4b06-acf9-f932234a18d5,27,turbo,tapsagoi
+9cc4b860-0bf4-46e8-9729-82bd891fef04,27,turbo,kamagut
+7e973e57-f2e7-4059-bcf1-07c96fbd9019,27,turbo,kiplombe
+7639b0ea-4042-428d-854a-39e4b9d4e053,27,turbo,kapsaos
+a7ba9fc2-8783-4518-972b-39591937b4f4,27,turbo,huruma
+bf8ade5f-254c-4316-a4fd-283f6c95f959,27,moiben,tembelio
+e5d563bc-a2a5-4928-b61b-5c1d845eb4b7,27,moiben,sergoit
+f255475f-40df-417b-a3d0-d22d7bef944b,27,moiben,karuna/meibeki
+d792f432-970f-469e-bf22-6dce268b17f0,27,moiben,moiben
+24d6a611-9ff2-40a4-b64c-01d3a77d5846,27,moiben,kimumu
+e9464d0c-d379-4cb7-aac7-d1b3c3db0ff9,27,ainabkoi,kapsoya
+73135274-e909-489b-878a-b7e21f8422b6,27,ainabkoi,kaptagat
+ef965eed-ca6e-44c2-a924-670f99822058,27,ainabkoi,ainabkoi/olare
+5112081f-7eaa-4636-937a-3dd14d938d65,27,kapseret,simat/kapseret
+22e5ef89-1e53-44e0-a548-2d53ffaa34ce,27,kapseret,kipkenyo
+9733da4a-eed0-4f9e-8ff0-e4dff5b08059,27,kapseret,ngeria
+d68bc75e-35c6-45e1-9592-57dc56f904f2,27,kapseret,megun
+55c3cfbd-9e1f-4515-b893-27e40402a1ff,27,kapseret,langas
+6c37ab5a-6d1d-4bbc-b81a-e939ec230933,27,kesses,racecourse
+f42be075-848e-4bd0-ab40-e42d38505932,27,kesses,cheptiret/kipchamo
+21c32083-3265-4c83-9ea8-5b355221d71f,27,kesses,tulwet/chuiyat
+99fe6b76-b5c1-4c1c-92ec-68c768b9f142,27,kesses,tarakwa
+61f4c0ef-a488-4db4-a4c4-b135106e3a07,28,marakwet east,kapyego
+b0cfa9b8-2874-4fda-be78-4c12c8be336a,28,marakwet east,sambirir
+dec2d765-9afe-4805-9983-c47e9b0ce720,28,marakwet east,endo
+e0625bf5-1f46-464c-8c7f-8681bf894549,28,marakwet east,embobut / embulot
+07b44a49-d992-4bbe-8700-ce5438463bc3,28,marakwet west,lelan
+9eee15ff-8b15-4800-a287-f145e2034f4a,28,marakwet west,sengwer
+c50b5687-37f8-42e0-b8a1-17470b78d6e6,28,marakwet west,cherang'any/chebororwa
+81fd7539-6ca2-4522-bbfb-3096ae06f9ab,28,marakwet west,moiben/kuserwo
+ef072f01-4488-497b-b16f-a08419df098e,28,marakwet west,kapsowar
+1c46835d-25bd-40eb-8670-7f1373314bbb,28,marakwet west,arror
+0abbee7b-1d9e-442a-bc38-5c91b3a233e0,28,keiyo north,emsoo
+96452374-16a6-4059-bc7a-240972422491,28,keiyo north,kamariny
+64584304-894a-4d54-9d58-cce6462a008d,28,keiyo north,kapchemutwa
+5610a4a2-138b-4d61-b30d-810968bf93d0,28,keiyo north,tambach
+ee3f7839-76e9-4c75-b3a9-9fbb89bcb206,28,keiyo south,kaptarakwa
+f3bf0964-2c4e-44da-8c75-a342736b047c,28,keiyo south,chepkorio
+b3caea74-2321-41b8-b5d4-7ee3a091e19c,28,keiyo south,soy north
+6076612e-e860-4f55-bcbe-dff60ba421e6,28,keiyo south,soy south
+fd00f7d7-a4ed-42df-a366-96b0648a83fc,28,keiyo south,kabiemit
+2ae6fe61-f46f-4e1e-9433-d227fe18aefb,28,keiyo south,metkei
+5d0ca874-00db-4231-9649-9ecda82cd269,29,tinderet,songhor/soba
+3480f31c-d627-4d3f-8796-78af66a2dde7,29,tinderet,tindiret
+85b8b994-12a7-42a1-9a14-b84d743430b9,29,tinderet,chemelil/chemase
+d9b28259-9f7d-4a8e-93a3-6ba46a011e66,29,tinderet,kapsimotwo
+a20ef2f9-bdfb-4f59-8fd6-8b0bf45ce2ce,29,aldai,kabwareng
+6e4fcd0a-9b51-4d48-9064-7f88e17e2408,29,aldai,terik
+caf57689-452c-4a07-9725-756b78f8914c,29,aldai,kemeloi-maraba
+db179155-e64d-4ef4-98a5-77341dbcca93,29,aldai,kobujoi
+4fa1d2e7-d521-4f3d-b5bb-8db0b3d52ad5,29,aldai,kaptumo-kaboi
+28bae9ac-0800-4d8b-84c9-aeae52e0560a,29,aldai,koyo-ndurio
+51836c7f-5517-4c1b-bcaf-02eea3f92ab1,29,nandi hills,nandi hills
+8ec85c9f-46bc-4735-bf14-fec0f2dfd6d1,29,nandi hills,chepkunyuk
+792bd904-a2dc-4f8d-96f9-83f64e4fe33b,29,nandi hills,ol'lessos
+125d9e10-4934-4cc8-9159-5bcf549fd007,29,nandi hills,kapchorua
+9e69ff68-28e6-4081-a8cc-48c222d74769,29,chesumei,chemundu/kapng'etuny
+4bcdfef2-7cfb-4c7d-8a5d-c277f2b5cc9d,29,chesumei,kosirai
+70542a38-f07a-4f57-a7aa-3d3a9ba0b23c,29,chesumei,lelmokwo/ngechek
+c7966e33-5779-4654-a6d4-db63dac8e5e6,29,chesumei,kaptel/kamoiywo
+f920c85d-84b6-4024-9b5b-5e12e313a717,29,chesumei,kiptuya
+86578184-afed-4937-96ad-d91a777d330d,29,emgwen,chepkumia
+b0648285-4034-49c9-9512-f88aa082fa03,29,emgwen,kapkangani
+b690e1ed-2473-4788-b616-fc6bd141d572,29,emgwen,kapsabet
+3c2532f0-f0db-4966-b75f-147a8b997396,29,emgwen,kilibwoni
+4ead849e-f913-424e-90b7-4aa2a2572c26,29,mosop,chepterwai
+696f79f6-311f-49a5-86e0-ca300b530b3d,29,mosop,kipkaren
+76f74f8b-aeab-4821-b4d4-813d664f9299,29,mosop,kurgung/surungai
+09eb1d18-424b-42a4-b7a7-559208179cd5,29,mosop,kabiyet
+38cbbc2f-3927-4b76-adb4-25dce3b06849,29,mosop,ndalat
+b91744a3-fc45-48c9-802d-ef34a745c2a9,29,mosop,kabisaga
+c2bd3257-8c57-4952-aed7-a45abde9afe4,29,mosop,sangalo/kebulonik
+49bfadd5-b44d-42b3-9662-e99cc8990a8e,30,tiaty,tirioko
+ebbbe1eb-b5fb-454c-bf38-b0ca514f49c8,30,tiaty,kolowa
+8122605b-e49d-4f3c-9d8a-a9963d0c36eb,30,tiaty,ribkwo
+184b609c-f299-44fd-890e-052808461f4a,30,tiaty,silale
+2592a9ff-aa5c-4193-8677-afded59cfe81,30,tiaty,loiyamorock
+bde7cbfa-99fc-403f-b976-c8b7551cc9f0,30,tiaty,tangulbei/korossi
+24715249-6dee-4920-9a75-0d4c97fd3706,30,tiaty,churo/amaya
+1c9b687b-2304-4615-adb1-3fbe2ef35db3,30,baringo  north,barwessa
+dbca236b-9334-4777-a745-9fd6f6b507f1,30,baringo  north,kabartonjo
+9b1b9386-3771-476e-9dc3-7bc28dedb7f8,30,baringo  north,saimo/kipsaraman
+b8c9b1ae-0e0d-4338-9f4e-1345e9054c2f,30,baringo  north,saimo/soi
+fe5facbd-b766-411b-9195-0322e2b5967f,30,baringo  north,bartabwa
+d24a8694-9077-4250-8417-da0961abc73e,30,baringo central,kabarnet
+555df4cf-37f5-45dd-8ba2-4bcfc7cd89a4,30,baringo central,sacho
+84cf8e67-a230-4e21-8d4f-c1a4fc920fac,30,baringo central,tenges
+0fc1c57b-15c5-4b9b-b5f6-b536e8789e1a,30,baringo central,ewalel chapchap
+8dc32443-c228-4147-b53a-463a6a260465,30,baringo central,kapropita
+447e9141-1904-4bdf-9a64-711349c77f94,30,baringo south,marigat
+8a7f111f-1e5a-4d4c-a285-32d51b042d3b,30,baringo south,ilchamus
+0eca3cf5-e58a-470e-82e8-4d583ff2968a,30,baringo south,mochongoi
+5ba87b5d-04bf-40d8-a16f-be4e2f0dc722,30,baringo south,mukutani
+a8ac65b5-fbd4-4c2e-8ca6-578e8199d703,30,mogotio,mogotio
+dbe899ff-6874-42c0-a02c-aab3b55cde1f,30,mogotio,emining
+7d3af68b-7e3c-4804-b5e0-c881ff7e5492,30,mogotio,kisanana
+1773c8c4-e966-4421-b448-f3a7a9f0ed9d,30,eldama ravine,lembus
+b6e273d2-f54b-4fe1-894e-1184803a008b,30,eldama ravine,lembus kwen
+6034fc4f-8cbe-4ef3-b032-dfeb311eec70,30,eldama ravine,ravine
+c97482da-7bcb-4e4c-8874-12b47b857b3b,30,eldama ravine,mumberes/maji mazuri
+05cd72ae-1bfa-4816-a544-776d77907787,30,eldama ravine,lembus/perkerra
+e31c60dc-fe60-43fc-ad55-f03d6756baca,30,eldama ravine,koibatek
+940d61ea-0e7f-4c0d-a104-1f0c73c16ef3,31,laikipia west,olmoran
+5771872b-6a2e-41c5-b4e4-21453164e425,31,laikipia west,rumuruti township
+b6f2005f-5244-4436-9f34-f0fe1b8e679a,31,laikipia west,kinamba
+5f7dca79-eca2-499e-8af4-e5056f6dbee1,31,laikipia west,marmanet
+bc1c4686-8c53-406b-aaa4-99c27c905af4,31,laikipia west,igwamiti
+1a96b34a-2db4-4e7b-97c1-1a9f6c4ee99d,31,laikipia west,salama
+d5b93f3f-3d67-41cf-bcdb-4b64a47b8624,31,laikipia east,ngobit
+33b64238-f962-4b1f-a63b-158aedb20575,31,laikipia east,tigithi
+bd0c00de-3dcf-45e5-bd86-8a17c168ddcf,31,laikipia east,thingithu
+a432a363-6f97-41e1-bdf3-b1ed9ecc5bd6,31,laikipia east,nanyuki
+fa3593d4-13bc-4baa-80f5-b0aecd2e3957,31,laikipia east,umande
+5b2be2b4-d0f1-4189-ac5d-68c2cb554219,31,laikipia north,sosian
+ed4dc6ac-f301-42d5-8752-b7d163e6b429,31,laikipia north,segera
+035babf1-381c-45bf-bd21-a0b53074daa3,31,laikipia north,mukogondo west
+5d75dbc8-23e8-440d-b86f-fb9b20910144,31,laikipia north,mukogondo east
+f6163ff8-21ec-4e87-904b-3cfedf1fe3a7,32,molo,mariashoni
+d28144ca-4f26-4cdb-aeba-725f99fc1498,32,molo,elburgon
+ba53e698-8492-4ced-88f6-1052f55b3909,32,molo,turi
+db40907c-4d0b-425b-b2aa-f341583174e4,32,molo,molo
+1fe79a74-2fd0-42d5-973f-24d5a81f50ef,32,njoro,maunarok
+db35c4ec-9d2f-4238-9d27-3c2b011097de,32,njoro,mauche
+edd4849b-3d4f-44e7-a829-0186ff067b38,32,njoro,kihingo
+c84a3425-4cf3-41cc-8538-009b7ee8330d,32,njoro,nessuit
+f92c56be-176b-482f-b7ca-7fcb3c989f4c,32,njoro,lare
+26a9b2e2-9035-4266-82d2-5426e11c1049,32,njoro,njoro
+eed58810-045d-4b31-9e42-367d319f8c01,32,naivasha,biashara
+87bb01b1-950b-4c2b-b102-f795ca68c454,32,naivasha,hells gate
+b813c371-69d5-42b3-b25f-0bdfe04ded32,32,naivasha,lakeview
+7b7fd96d-1e74-48b6-b6b4-9b68b1d52655,32,naivasha,maai-mahiu
+30885872-b68d-4a2b-b1cc-21a16f581271,32,naivasha,maiella
+993508b5-2a65-4c53-aed7-d3e8c6e8f423,32,naivasha,olkaria
+83a3697f-f414-4bda-9503-84276b9466ff,32,naivasha,naivasha east
+96c17c98-5454-42ec-9226-83c84ecd8193,32,naivasha,viwandani
+d1e926fe-e5f7-4817-a39f-f606da75e6f3,32,gilgil,gilgil
+2f744a1c-9e63-44a3-8214-bfe6401c2a6e,32,gilgil,elementaita
+4057406f-92d8-4f13-81f8-1b552813aae7,32,gilgil,mbaruk/eburu
+2776833c-ef26-486c-b7fe-eeef3ee8c1f5,32,gilgil,malewa west
+5069984b-e848-4718-88db-d641fbf5752e,32,gilgil,murindati
+28da7757-21d4-4950-99f0-0f6163be5b83,32,kuresoi south,amalo
+981fa5b8-84b3-41bc-9ef2-50585c376c5f,32,kuresoi south,keringet
+ff4b7ac7-ed4a-4cc3-94bc-cb275edd664d,32,kuresoi south,kiptagich
+4dcfcc4a-745a-4725-8794-9b636641f958,32,kuresoi south,tinet
+8dd63566-5f30-4864-98eb-c9f7e885e9a4,32,kuresoi north,kiptororo
+e93619b3-a1a4-410d-a88a-c89aaf006a77,32,kuresoi north,nyota
+fc18b46b-944a-49de-9bde-d063bdb0d869,32,kuresoi north,sirikwa
+2beeb4a4-2f91-4d0a-be44-04b97c8668cd,32,kuresoi north,kamara
+e4a789e5-cb3d-466d-9dcc-9bace50c8528,32,subukia,subukia
+1ec04fa0-76cb-4690-8919-557d91b66cbd,32,subukia,waseges
+d560a5da-1b89-400b-be0c-d026fe28ffc2,32,subukia,kabazi
+aed9cad8-733c-4308-b45a-0ad9a5b126c8,32,rongai,menengai west
+d072c798-3c9d-40b4-aa55-a962bdfcb773,32,rongai,soin
+325f74bc-2fda-4edf-9c66-69d12be16e73,32,rongai,visoi
+4dc9b6c5-f9ab-45e5-aa7e-7bfa6c84e13c,32,rongai,mosop
+f2d65154-3018-4648-ad43-a7b09a2ae4dc,32,rongai,solai
+44a43430-a8e6-4ea1-8c51-ddb7a7ae111a,32,bahati,dundori
+4cbb2d4d-7cf4-4b83-bf88-e67204052974,32,bahati,kabatini
+45908b92-eba0-4cd3-81b7-82780edc48f8,32,bahati,kiamaina
+813bcf15-485e-4926-a439-cc074c0d9011,32,bahati,lanet/umoja
+f45e8e35-5682-45a2-9cea-f094aea7f5d1,32,bahati,bahati
+07e63dde-4b82-40b6-9337-7f0afd0c1205,32,nakuru town west,barut
+177952a7-cb6c-42ef-96bd-34aa116df333,32,nakuru town west,london
+caab4af8-7792-4a5a-bf83-aaaf82d34b1d,32,nakuru town west,kaptembwo
+f683c3a7-abee-4650-8bcf-1b1e109798bd,32,nakuru town west,kapkures
+09ccd145-8e71-4c8b-b416-14e400be479f,32,nakuru town west,rhoda
+8213e2b1-9990-4970-bb1a-f79e15cd7751,32,nakuru town west,shaabab
+c3a40477-e42a-44ec-bd37-3cbd18871b6a,32,nakuru town east,biashara
+938924e9-90b4-4749-9f3f-739e3a565644,32,nakuru town east,kivumbini
+474a8b43-3e11-4354-85a9-24bf0a79f88e,32,nakuru town east,flamingo
+1dd1ba33-eb25-415b-a864-aa74749d40df,32,nakuru town east,menengai
+7afd86b7-824f-4eb7-993e-ca664a00957a,32,nakuru town east,nakuru east
+9d4b2fa8-5a02-4cb4-aae9-2ab971cd601a,33,kilgoris,kilgoris central
+cd29a02d-a04b-4732-86a9-52296e8b2d4f,33,kilgoris,keyian
+a5fd0e46-9110-4151-beca-62777fdbe0e0,33,kilgoris,angata barikoi
+52b549be-0ae7-4fc6-aac4-f51c5bd69f5a,33,kilgoris,shankoe
+74b97809-59f5-48b5-9ed5-279d02d87e1a,33,kilgoris,kimintet
+3026190f-c614-4daf-bfb2-97d9944c0d0e,33,kilgoris,lolgorian
+789cd370-1f7c-40ba-9a01-92fa6e1dcbe3,33,emurua dikirr,ilkerin
+431200f1-112d-412b-9abe-2b167116be6c,33,emurua dikirr,ololmasani
+d562007c-1145-429c-9df5-e9bf0be49226,33,emurua dikirr,mogondo
+9499c7ce-7e01-4bd7-9d94-47b75906df44,33,emurua dikirr,kapsasian
+a085fb73-4773-4678-8f25-92ebf819f9e9,33,narok north,olpusimoru
+0822cb4a-208e-4429-a898-6c387c282c82,33,narok north,olokurto
+4f5d193c-fdc0-423e-a381-864553797f7c,33,narok north,narok town
+cb7973df-0342-4214-b420-713ff6204a12,33,narok north,nkareta
+e34415d7-e728-4754-a532-a8d4a6a74b8e,33,narok north,olorropil
+8430a4d3-8e5c-4f41-baa0-9489586ca514,33,narok north,melili
+7bcd7dbb-543c-4340-b95f-80e4a1b72a4f,33,narok east,mosiro
+9189b03c-4eb0-4a08-b5c6-1fbb2c1db819,33,narok east,ildamat
+d0082095-7dad-4983-8da7-ec69a7b3c57c,33,narok east,keekonyokie
+15083cb5-d844-459e-beb9-03a0ec782827,33,narok east,suswa
+50fecefd-9657-4b43-95dc-5fb2c2ed6aa2,33,narok south,majimoto/naroosura
+23dbff2f-c41b-4784-9236-8e54bbbf88e3,33,narok south,ololulung'a
+4b36ebd5-fd78-4ac1-8cc3-2d5259359494,33,narok south,melelo
+afa87dd9-d1f2-4549-b811-6805029d93bd,33,narok south,loita
+a83abeb2-43b1-480c-a278-a62f7d2e08a6,33,narok south,sogoo
+3896b1d5-00e8-4440-8154-6173c664c015,33,narok south,sagamian
+9928603d-874f-463e-a05f-c47c7022dab8,33,narok west,ilmotiok
+7ef483eb-ea93-4aaa-913a-463dae1731a6,33,narok west,mara
+d36f0a74-47db-4c47-adc7-1e4dde3a1fbd,33,narok west,siana
+110b93d1-ec72-4e7f-93a0-06940867bc0d,33,narok west,naikarra
+937f6dc6-44c2-4036-9a0c-2197ea4af389,34,kajiado north,olkeri
+d5233c18-b840-4c12-a048-b79cb11ba1fa,34,kajiado north,ongata rongai
+df1b8fe9-8f74-4e0d-9276-758946bec7ae,34,kajiado north,nkaimurunya
+a9e67810-3660-4307-a648-dd38ad02a497,34,kajiado north,oloolua
+2d9dc443-3d6f-426d-881e-aa57d9ee9db0,34,kajiado north,ngong
+1965e5dc-6575-4efb-b6cf-2609fb577a3f,34,kajiado central,purko
+72dae8f7-8758-4906-b227-1f15df5381d5,34,kajiado central,ildamat
+8a52d874-5553-4a35-ad09-a72c6320203c,34,kajiado central,dalalekutuk
+f85e1178-cd15-4db5-aa80-5a1180697d94,34,kajiado central,matapato north
+eb88c8dd-1a28-4a2a-8849-546de1703d68,34,kajiado central,matapato south
+bb55baf7-5169-467a-8817-a69825a5a5d4,34,kajiado east,kaputiei north
+797bef58-fbef-4c0a-9414-149e380f3366,34,kajiado east,kitengela
+5e6ca8bb-7f2c-4f17-b106-aa404a7917f1,34,kajiado east,oloosirkon/sholinke
+a59dcb7a-7628-429a-bac9-6ebd15451086,34,kajiado east,kenyawa-poka
+912ce1ac-7ef5-4d67-b664-ca922d8f85b2,34,kajiado east,imaroro
+9c88980d-d55b-421f-9c7c-992059175dfd,34,kajiado west,keekonyokie
+8ab407e7-c7c8-47da-a1f1-c7316063a511,34,kajiado west,iloodokilani
+c6112bef-6519-45d7-9e6f-2654906633e9,34,kajiado west,magadi
+4d2f7117-20fe-4015-815b-bc4f0fb44025,34,kajiado west,ewuaso oonkidong'i
+b41124fe-a371-4f8c-96e9-adf6b5602fce,34,kajiado west,mosiro
+2c74f32b-c2d6-459b-bbc1-e0f49eeb36fa,34,kajiado south,entonet/lenkisim
+9b4e0acc-c49f-4693-8c71-9ae5665d4c68,34,kajiado south,mbirikani/eselenkei
+a644c13b-ee1e-45fd-910e-4866358fb5c2,34,kajiado south,kuku
+70f74939-3bb0-4e01-9a6d-15ff3d34cf8a,34,kajiado south,rombo
+c32988c5-bc59-4acd-a1cc-5e93bcd874a3,34,kajiado south,kimana
+07f644f7-7409-43b1-8e12-7b40c4e23da9,35,kipkelion east,londiani
+ff6e8c84-df15-4b01-9afc-fd6f6a04635b,35,kipkelion east,kedowa/kimugul
+94eb87fb-1354-489f-8054-67c81be6aca9,35,kipkelion east,chepseon
+3ba6c4d9-dd06-4c13-9c22-4a9b51647db2,35,kipkelion east,tendeno/sorget
+95e1627c-7e6d-45d1-a6c2-b4a1980c0116,35,kipkelion west,kunyak
+b1410246-0519-4b00-be71-c40e944115b2,35,kipkelion west,kamasian
+440a99e5-babd-4e17-a195-3ff847666629,35,kipkelion west,kipkelion
+929145da-66d2-4492-a87e-344e3ae40369,35,kipkelion west,chilchila
+5d86b2ba-6f4d-4c4f-b520-778b25bdfa8c,35,ainamoi,kapsoit
+bf6e72e1-0d54-44a2-bda9-b9e9ae9ec343,35,ainamoi,ainamoi
+8486e91b-d68e-44a7-b3ae-87c32dfefdb8,35,ainamoi,kapkugerwet
+0e85e1f1-5034-4459-9fe9-70deaf65171c,35,ainamoi,kipchebor
+a0a39b6d-56ad-4444-9000-1276b26593e1,35,ainamoi,kipchimchim
+6ec7fac6-c30f-4936-b455-6d4a6c5c30b7,35,ainamoi,kapsaos
+da41b56a-33cc-4e08-9af3-d67d83343e75,35,bureti,kisiara
+aafdaf49-5481-4405-a7ee-5557dad316d6,35,bureti,tebesonik
+b742b182-95a1-4af2-bcfc-b5b52fc2430b,35,bureti,cheboin
+f2fb83af-563c-453c-b566-887923ec382f,35,bureti,chemosot
+af2edc8f-852a-4bb8-b93b-6fa77962ed40,35,bureti,litein
+6398ae21-c010-4269-8e34-74e2cf54712e,35,bureti,cheplanget
+e26a8f76-0bb4-48dc-9720-e581d57a79b4,35,bureti,kapkatet
+43c53e83-14bc-496f-8d75-be7e845c431a,35,belgut,waldai
+50b4deb8-3ccb-4bc2-9b4d-fd79a802ce70,35,belgut,kabianga
+a487287e-6ebb-449f-9589-e6a3138082ec,35,belgut,cheptororiet/seretut
+789ed3e2-afa3-43de-9d43-a96fcf7e58b3,35,belgut,chaik
+5ffc97e1-794d-4cc6-b544-c0e4194b4fc9,35,belgut,kapsuser
+cba80f39-3ebf-449a-9e80-c21f6ab5d852,35,sigowet/soin,sigowet
+2c00d156-5155-4a8c-99bf-b423563bd669,35,sigowet/soin,kaplelartet
+ac444a1e-b248-48b1-a2a0-ca97ac1c68f7,35,sigowet/soin,soliat
+a47d9e33-af9b-4eaf-a138-3159a6d65141,35,sigowet/soin,soin
+2976ddfa-00ec-404e-bfc5-6d0774afbb14,36,sotik,ndanai/abosi
+fe8a748d-8532-4094-9426-f0d8becd4515,36,sotik,chemagel
+ab5cf3f0-ce77-4896-be3b-0f952de866a1,36,sotik,kipsonoi
+16ce7a24-bdb3-45fe-93ec-e23c32f13031,36,sotik,kapletundo
+643080af-a92b-4445-9352-d8d72012182c,36,sotik,rongena/manaret
+4aaefe72-f470-4af2-8d1e-e34a593edbd1,36,chepalungu,kong'asis
+1718a9cc-709f-4cda-b3b6-382412e1e8d9,36,chepalungu,nyangores
+f625793f-15ea-40a6-88f5-c9bdc18bf3e7,36,chepalungu,sigor
+5ce03061-d4a2-42ad-b44c-b30791d50141,36,chepalungu,chebunyo
+ae006bf6-6e07-4dd1-96b1-f886bb63e6ab,36,chepalungu,siongiroi
+a2740de0-e256-4998-829e-9643296a2e90,36,bomet east,merigi
+7fb5cadb-7f7a-4da1-8e09-d310ca0562c6,36,bomet east,kembu
+4f00bcaf-d55f-4b22-a025-17c7cbda2a9e,36,bomet east,longisa
+1d68a5be-a1dd-413e-ac9a-945d2afd0366,36,bomet east,kipreres
+06987cd4-f545-44ed-b765-6d93e8bc2f33,36,bomet east,chemaner
+7a92e6f2-9057-47e5-93b4-d495ed4cf993,36,bomet central,silibwet township
+5aad3b4e-3708-4a2b-ba42-a13eaa64f392,36,bomet central,ndaraweta
+f2ece794-1ac9-4515-b55b-775f08513033,36,bomet central,singorwet
+8b16c02c-bcc5-4b70-b1dd-80c7235ea055,36,bomet central,chesoen
+49471fa3-9b97-40bb-895e-15a39adafcf5,36,bomet central,mutarakwa
+9866de5f-13e7-4963-ad24-7d02df8bff76,36,konoin,chepchabas
+799e7462-e27b-470b-83a0-cfd5b9059eae,36,konoin,kimulot
+f1a2999f-0e3b-49dc-b1b6-e0273a1e2ed4,36,konoin,mogogosiek
+8f30b37f-76ae-480a-9d22-b8b8310a0395,36,konoin,boito
+e2e51c8d-3e04-446f-a16a-c2899a2124e1,36,konoin,embomos
+18096b0d-be24-4438-9d87-8670d199db1b,37,lugari,mautuma
+61531ce8-dbb6-424b-ac46-19c21232d97d,37,lugari,lugari
+3c6f71d3-7343-488c-9e48-b81762774fd6,37,lugari,lumakanda
+bdc60422-e61a-4df9-b4a7-3a3e1f8973c9,37,lugari,chekalini
+7154ce41-df07-4331-baf9-f28046525e5a,37,lugari,chevaywa
+59e25a4c-19f0-4360-bf1a-29a73fbc47e9,37,lugari,lwandeti
+24c90230-251d-4743-89f2-9ab6f4dc3d48,37,likuyani,likuyani
+e6e5be24-44a7-4ac5-a3cd-237d49047c96,37,likuyani,sango
+d5b3bd27-ce47-4205-a9e5-dcd1b671b544,37,likuyani,kongoni
+d877d7b9-f98a-469c-a3fa-e7618f8a189a,37,likuyani,nzoia
+2ace688e-ad33-4d6e-9867-427e260a94ef,37,likuyani,sinoko
+fa992e46-1ba5-4a05-a3d7-ac0b0908fe92,37,malava,west kabras
+201e0df7-b0d6-4fe8-adb2-a2342224057c,37,malava,chemuche
+32429d68-553b-4f7f-83fd-0274492e3d29,37,malava,east kabras
+5d2c0eeb-be9d-4cb4-9a63-f9d17e2ed996,37,malava,butali/chegulo
+250a272b-4ce6-4c35-87aa-6e9e10a74dbc,37,malava,manda-shivanga
+e6213bb2-5225-40bf-92a8-ae0f4b93669d,37,malava,shirugu-mugai
+352b0b9c-7691-421a-8195-146572f29a5d,37,malava,south kabras
+c6c47f9b-c74e-4cda-93fd-fc1734bf3e18,37,lurambi,butsotso east
+d2b23bfc-3318-443a-b340-d74b9d62fcaa,37,lurambi,butsotso south
+ed708527-da71-434a-9a4b-866b4a169071,37,lurambi,butsotso central
+6cfa2787-4f51-44ff-a67b-979a46608e5a,37,lurambi,sheywe
+188c0dda-1edf-4bc0-a930-c1b88796d5de,37,lurambi,mahiakalo
+5e37d5e8-c647-4e6d-870e-c2522c181e45,37,lurambi,shirere
+3a8fc340-f255-46f5-b2f9-8bebfc7f6546,37,navakholo,ingostse-mathia
+4361cdae-312e-4990-8352-d6bb18ae3f99,37,navakholo,shinoyi-shikomari-
+ddd20b1d-05db-4a38-bb64-3f93bc9e0d7f,37,navakholo,bunyala west
+1dfdca58-03c4-4e72-a78e-c1810bcd13a4,37,navakholo,bunyala east
+5afd81a0-2b1f-4c16-ba5c-4d26358f1996,37,navakholo,bunyala central
+1fb34a0a-9c93-4287-9e3d-052c6d88bb83,37,mumias west,mumias central
+fa9d26d5-e67d-4cce-a2aa-7fd3529ae005,37,mumias west,mumias north
+b673169a-39ee-4776-9bd1-b58326d302af,37,mumias west,etenje
+1baa9f1b-0cb5-4fa3-a1ca-6c152e968f9a,37,mumias west,musanda
+ada7f68a-2ebd-43f9-98be-5dc8bda22b41,37,mumias east,lubinu/lusheya
+f8c66dcc-8b85-4840-a7a6-ed6978b18776,37,mumias east,isongo/makunga/malaha
+bfa54d40-967d-49d0-b4d1-6d7cea0f4015,37,mumias east,east wanga
+19b9fdf3-66b9-48ed-9803-4fd5f3b2744c,37,matungu,koyonzo
+70e17418-0ba7-47b3-9748-29372033ed56,37,matungu,kholera
+3b8906cc-654f-46df-8f3b-d59d3708aaa9,37,matungu,khalaba
+4de7be1a-35e6-4069-90b3-1bd6e8071806,37,matungu,mayoni
+5d78753e-2768-4175-9b37-4a202513e283,37,matungu,namamali
+5876cdcc-0a39-4172-84a2-2a826d36aa7e,37,butere,marama west
+d4ba3920-3977-431b-9d3a-e7265134f25f,37,butere,marama central
+4d66cc83-a187-4d7a-9dc3-2def43586456,37,butere,marenyo - shianda
+34712df2-5aee-4500-83d9-2c0e06585e04,37,butere,marama north
+a24f66d8-7503-4186-ac78-30bc13ab10d2,37,butere,marama south
+e3ad1120-9426-492d-ac23-14188cc8ab4d,37,khwisero,kisa north
+53e5ab7c-1fa9-4f0d-bbad-aeb89c693ee5,37,khwisero,kisa east
+3b758001-b277-4e6f-b2f6-9b6e06e5e00e,37,khwisero,kisa west
+796bf991-00d0-40ec-a0c1-4faff006a350,37,khwisero,kisa central
+4c5baa0f-ad6f-406b-850d-02623e032fbc,37,shinyalu,isukha north
+f2bc5154-ca6b-4370-8a9a-81789e316fa7,37,shinyalu,murhanda
+3a042d13-2578-486d-a7f4-7c7fa4c76ace,37,shinyalu,isukha central
+6d808224-4a0e-4dcb-9bd5-d7e6e1c20a8a,37,shinyalu,isukha south
+f2a3275b-e3ef-4e1a-ac28-f4a00ce6463a,37,shinyalu,isukha east
+a13fb0d8-b2db-4f02-8c69-02530a2bcc6b,37,shinyalu,isukha west
+c5583b0a-44f9-4cfc-b763-e87319357930,37,ikolomani,idakho south
+67aa6ea9-3dbc-4821-8bcf-2360f4ab8a59,37,ikolomani,idakho east
+b8f0440b-e8c6-4bfa-85f4-9f2d9eddc52b,37,ikolomani,idakho north
+b2c77810-ad41-4ece-a275-0a8809e81c98,37,ikolomani,idakho central
+2dc36755-a044-40c5-9fee-24eb3d4d3558,38,vihiga,lugaga-wamuluma
+e50bcee7-7720-4284-8898-50291aab8eea,38,vihiga,south maragoli
+a815dd49-f9c4-4394-af03-8c923e8584c9,38,vihiga,central maragoli
+f11244a1-3a91-4142-bc5b-c4651da2d75f,38,vihiga,mungoma
+4ccef3c7-5709-45af-aca3-5c9f26455d32,38,sabatia,lyaduywa/izava
+a2818fc0-5c91-46b0-9776-02246dff7023,38,sabatia,west sabatia
+72252095-ba79-4a28-bb44-f7c6f1d7b61d,38,sabatia,chavakali
+6446cb62-4458-4992-ac46-b53eb2534419,38,sabatia,north maragoli
+56f8a9fd-ff33-441e-9112-d47ff41166e4,38,sabatia,wodanga
+feecb216-6f00-4919-9ff0-38901428c6c8,38,sabatia,busali
+fe841b23-4904-4709-b998-9b8ae82dbb80,38,hamisi,shiru
+08f5c797-84ca-4d1f-aba7-67b243b47b1b,38,hamisi,muhudu
+ff19fced-9587-48d2-b5bf-fffa8f5df4d4,38,hamisi,shamakhokho
+23a8bd91-b835-4094-9ae3-a1a4b21ddb64,38,hamisi,gisambai
+487a5ff6-8746-4540-99f3-db8854e32d10,38,hamisi,banja
+9c966079-2059-420c-817d-7d554f6e7a56,38,hamisi,tambua
+00aed106-2d23-427b-bc6f-6a46468dbf57,38,hamisi,jepkoyai
+582ae3fe-6e24-43fe-9548-fc8906539297,38,luanda,luanda township
+28e45ff6-543c-46de-b853-4a9dcc459206,38,luanda,wemilabi
+f5456519-5465-49c9-8eb0-c4613371298a,38,luanda,mwibona
+abdae218-40d6-4371-9832-47afb42e3b6e,38,luanda,luanda south
+813ff377-0a2f-4afb-bfa2-3426c8695c3d,38,luanda,emabungo
+72379889-3c49-4b27-939e-bd37c518b0b9,38,emuhaya,north east bunyore
+4f443767-0109-4ffd-817c-d3608bb3b76b,38,emuhaya,central bunyore
+100542d8-f2be-4115-adc6-667ee7cd2464,38,emuhaya,west bunyore
+51760d8e-b1a0-4eb0-94a6-86a587724779,39,mt.elgon,cheptais
+310b708a-9627-4909-aa24-2a4685ecf63d,39,mt.elgon,chesikaki
+81e18b49-c391-48e7-8f3a-29b76c2bba59,39,mt.elgon,chepyuk
+f475905a-62e5-418e-9f22-24c8b97b9c73,39,mt.elgon,kapkateny
+d07d3060-ac2c-4754-850a-9e43c3717415,39,mt.elgon,kaptama
+6b12fe84-a0eb-4977-ae15-282c40ff4cdb,39,mt.elgon,elgon
+729ff5d5-e1ef-4879-830f-f165642cdd17,39,sirisia,namwela
+40ce5850-b907-4f5a-af6a-543cbdd41d16,39,sirisia,malakisi/south kulisiru
+918d8e16-f586-47c7-af04-2019d156dafe,39,sirisia,lwandanyi
+faa40126-e3d2-484d-aa47-e62c1abe7d71,39,kabuchai,kabuchai/chwele
+2ca3a258-dc25-40b7-ae36-b9bdd6dae62a,39,kabuchai,west nalondo
+83141e0f-c9e4-411b-9d4a-e323f90d56e7,39,kabuchai,bwake/luuya
+8851807a-67c6-4de4-886f-53931aee506a,39,kabuchai,mukuyuni
+6795ec92-37db-4241-bdce-a428794fa6f2,39,bumula,south bukusu
+ac50cb25-9ee7-43ed-b9c7-ef43cb4d5ceb,39,bumula,bumula
+e9bf5ddb-da94-4a93-815b-10dfe7de956c,39,bumula,khasoko
+917b9dcf-299d-4574-b7eb-b7422a859ea0,39,bumula,kabula
+3a7c53d7-4d8d-4f09-a958-4e9ded782409,39,bumula,kimaeti
+aee964b9-7ed3-48b2-b5ef-e39ecad3b016,39,bumula,west bukusu
+2269fe94-9f8f-47f7-bc1a-a54595a97c66,39,bumula,siboti
+b07b6560-9b1a-4d73-9e53-73fcb810bb23,39,kanduyi,bukembe west
+925fd763-a698-4d5d-b863-1c0f176a6b2f,39,kanduyi,bukembe east
+514dfcac-9650-4ea8-a140-f09858fedd62,39,kanduyi,township
+1ec7a9e2-b886-46de-892c-29454b723c8b,39,kanduyi,khalaba
+cff9d992-8bf1-45aa-be50-0428e4131b11,39,kanduyi,musikoma
+28c9c1b9-e6df-4323-9f95-6d170dcdbd34,39,kanduyi,east sang'alo
+170ec90a-a4d7-480c-a573-6b18bcf16212,39,kanduyi,marakaru/tuuti
+c848b861-1209-4f8d-950d-3131fccdf653,39,kanduyi,sang'alo west
+b412263c-cf43-4b1c-b5b9-8c8f23bdf8d4,39,webuye east,mihuu
+ff88c972-2383-4128-8d37-50940a2d7427,39,webuye east,ndivisi
+1fbd279f-3dc4-43b8-8dab-3d4516b342e4,39,webuye east,maraka
+47ce99df-ed48-4197-b1cb-884ea961a433,39,webuye west,misikhu
+17cd9440-f582-4f93-919d-a55e007ff508,39,webuye west,sitikho
+a9903719-d567-483d-8e98-3290bd2dacca,39,webuye west,matulo
+f045eb13-d417-43b3-ab9a-89ecd1f7b3a9,39,webuye west,bokoli
+14c32fc0-f15d-4397-8c1c-808570e60575,39,kimilili,kimilili
+733f6c22-e918-45e3-8dd9-478c6738c6ce,39,kimilili,kibingei
+e30fb2fb-fe15-478c-8a09-17a02bcc3eb4,39,kimilili,maeni
+09ce0cf6-207d-4f71-a41e-67391629ac37,39,kimilili,kamukuywa
+7553a6fe-7f20-401f-961a-faecd6cefa8c,39,tongaren,mbakalo
+352fe573-1a75-4a61-be92-598e9dc574c9,39,tongaren,naitiri/kabuyefwe
+1df2482b-b36e-4be7-9eda-b4cf00bac80a,39,tongaren,milima
+f0b68692-5b48-40ac-aef7-15fe845e5391,39,tongaren,ndalu/ tabani
+22347dbe-9cf4-4089-b48d-ae74aa2e1832,39,tongaren,tongaren
+9c649d3c-8eb9-4230-aec9-cca9f998100c,39,tongaren,soysambu/ mitua
+ee28edce-70b5-4af6-b783-97b6720e9d5a,40,teso north,malaba central
+f3e6730e-a134-4deb-8bbb-1374712f83f0,40,teso north,malaba north
+abc661a4-8dfe-4f10-8d79-e356b1ecc615,40,teso north,ang'urai south
+5ed0befe-a47c-40d0-a153-51e38567303e,40,teso north,ang'urai north
+afacdeca-8e61-40b8-b3a4-80674e9fd704,40,teso north,ang'urai east
+85fc262a-7482-45c2-b124-bf784cb3dea7,40,teso north,malaba south
+9aa3021e-a850-4e84-9eb7-c57572567e48,40,teso south,ang'orom
+67613f9f-6540-49aa-b323-f11b95e178f0,40,teso south,chakol south
+a7427bdc-7939-4f13-bc0d-4c6e88e880ce,40,teso south,chakol north
+bf0004b3-4cdb-41fe-b441-e1334fe80634,40,teso south,amukura west
+7fbfcaea-d427-44c4-8891-97d5105bda95,40,teso south,amukura east
+e6e7cb7f-9585-44e6-a56a-5cdd5943bb58,40,teso south,amukura central
+7485874b-d6e8-4d55-b4f9-59bd08283ba0,40,nambale,nambale township
+7aa070d3-620e-49b6-8c35-1c57777bb7f8,40,nambale,bukhayo north/waltsi
+882b1914-c1c5-4734-84e0-7dd008cd337e,40,nambale,bukhayo east
+1909a8d9-13bb-48fb-9bae-43370cf6e536,40,nambale,bukhayo central
+c120b38c-1938-4fe3-a68e-2213a929fa2c,40,matayos,bukhayo west
+b2f0437a-9ba1-4113-831e-a14a1938d167,40,matayos,mayenje
+9b9703b7-1012-4de4-90d1-ccc814c540f6,40,matayos,matayos south
+38d8dbc1-76f3-45a5-8bfe-fb93349e6e48,40,matayos,busibwabo
+fc78b492-8578-474a-bdf4-06cf452b5a2b,40,matayos,burumba
+89512392-69e0-4f58-a5ff-1caf2f760972,40,butula,marachi west
+93e5d859-cfc0-4ab7-ad68-8caffd2d4120,40,butula,kingandole
+10ccd817-20d8-48a9-b728-40f360cf74aa,40,butula,marachi central
+774e77b4-51ef-4680-9e50-d18d0620305e,40,butula,marachi east
+a88cae92-c293-4f8e-96ee-60152b792505,40,butula,marachi north
+b3f39cf1-fd9c-4108-a65f-77d2ee26e1a3,40,butula,elugulu
+3184e1ab-d029-4263-816b-d0f468526dbf,40,funyula,namboboto nambuku
+70d4d93e-b299-4a77-991e-2de6f5635c47,40,funyula,nangina
+8f0dfcdf-d13d-4805-916f-79a1d8c56cfd,40,funyula,ageng'a nanguba
+c793e7d6-4a10-4d7f-9bd7-4b468536cdba,40,funyula,bwiri
+e5c8c831-f9a0-44f5-b9e6-14267c99c7b0,40,budalangi,bunyala central
+f13e5e5b-1dcb-4afe-bdd1-ec726260fbd8,40,budalangi,bunyala north
+006fab1c-b651-4911-b3fb-bbb14439f091,40,budalangi,bunyala west
+11faec68-8e90-47f7-a637-3035114ebb72,40,budalangi,bunyala south
+ef2c01fd-7edd-494d-af36-3f9556fb7cab,41,ugenya,west ugenya
+b9a7a630-1674-4dea-9f65-6c4e0005b6a7,41,ugenya,ukwala
+ff0245a9-16ef-4d04-bb35-83a44b3f97c2,41,ugenya,north ugenya
+26cf6f1a-07f9-4afe-9e92-549e509bb40f,41,ugenya,east ugenya
+4ddd0551-5cb0-4609-aa47-afbbb11268cc,41,ugunja,sidindi
+eedb1bdc-b2d9-4eff-8567-ec00dc2eac41,41,ugunja,sigomere
+324d2330-6cdb-45e3-8f66-e01f6f349c74,41,ugunja,ugunja
+9437ff28-83ce-4754-a1ca-d01a467b37aa,41,alego usonga,usonga
+e69d0142-358f-4a83-8c83-6c4cd0dfd818,41,alego usonga,west alego
+f0c173c1-6a48-4cd5-8128-537d205cb2fd,41,alego usonga,central alego
+282313cf-1cc6-4b50-80c0-1f9a669c1d72,41,alego usonga,siaya township
+f5a248d8-6104-43e5-8cee-661cfa3a8785,41,alego usonga,north alego
+f318d680-030d-4996-a4ca-515b76848e0f,41,alego usonga,south east alego
+33626fe3-985c-4569-a8cd-1dbb3940bb6b,41,gem,north gem
+b6a10d26-e6ed-4925-869b-f32ed0ae0dae,41,gem,west gem
+b1e2b8a6-e30b-428d-8def-6767f5c71220,41,gem,central gem
+af72f6ca-f012-498d-bb38-0dc195420710,41,gem,yala township
+ff50f30d-561c-4387-8bee-53d90bb20d4f,41,gem,east gem
+bfed9b12-e32d-4983-bb30-cc57a745d394,41,gem,south gem
+2f5dcc07-1473-44e0-a18f-41d3fbff8cd3,41,bondo,west yimbo
+1eea9c50-8a9b-4e2a-a94d-9c944c09c6a9,41,bondo,central sakwa
+792aa123-f81a-4835-82a5-051a0a683568,41,bondo,south sakwa
+04a9fc33-e1de-43c5-ae00-551bd9bd6eee,41,bondo,yimbo east
+694178ec-f432-43d8-8bba-5805edc2c21f,41,bondo,west sakwa
+ba98045d-cf50-409c-9a83-ee46d8e85166,41,bondo,north sakwa
+374bfc67-db48-4b32-b34f-4c67f6aa0608,41,rarieda,east asembo
+7133c679-debf-4f05-a5af-c36b6dd0d080,41,rarieda,west asembo
+7e05ff45-cc9c-499d-bb02-3ff48d57ff15,41,rarieda,north uyoma
+78f5e5ff-dd42-4ff5-8ece-8835ad874acd,41,rarieda,south uyoma
+674ebfca-6580-48a3-a79a-7a7a7a3fe2f3,41,rarieda,west uyoma
+b99c53e1-a20a-4b84-9a64-a0e358e7868f,42,kisumu east,kajulu
+2ca5f6b4-05b0-48a0-8c84-529c5ef0e71a,42,kisumu east,kolwa east
+0fe5de5c-de0c-460a-8502-82944d9a12d5,42,kisumu east,manyatta 'b'
+487fea7d-b7be-4d65-b271-42bd90d5ca45,42,kisumu east,nyalenda 'a'
+1eab73e6-07bb-4872-8c30-7aa64674f24e,42,kisumu east,kolwa central
+8affff07-b52a-4315-9977-c65771cbe529,42,kisumu west,south west kisumu
+6002b97e-a843-421d-b79d-3c8a6ccf7f31,42,kisumu west,central kisumu
+51847bbd-eb07-4e34-9a7d-b07ad2909dbd,42,kisumu west,kisumu north
+b3f88c85-ecf5-44b1-945b-ce0b92fda995,42,kisumu west,west kisumu
+7691e9c5-0bda-47ee-811f-d02fcdf64037,42,kisumu west,north west kisumu
+ae626a32-a1b2-4bbf-a846-e4e6d55cbb4d,42,kisumu central,railways
+fa8255c2-9dc1-4998-806f-f85c3f17c3ce,42,kisumu central,migosi
+1ba40836-786b-4c58-a281-a9211887f651,42,kisumu central,shaurimoyo kaloleni
+b53fefc5-d1c1-4a4d-8680-2d5a67dcf463,42,kisumu central,market milimani
+524a2736-f534-49f7-83a3-67750f072a99,42,kisumu central,kondele
+65f54643-bc5a-4737-b828-6596a5028408,42,kisumu central,nyalenda b
+f45f63c7-045e-4b2a-83ae-545ea42b5d70,42,seme,west seme
+2a5b80e4-9cc9-450e-b591-d631ece76b30,42,seme,central seme
+fc3a0a66-43bd-4674-be36-5971a7f4df51,42,seme,east seme
+e7c1b1de-3773-4ced-aaf9-def2d143b941,42,seme,north seme
+1ffd8a68-b65b-4589-a42b-f148f699ba38,42,nyando,east kano/wawidhi
+107e9c93-5bd0-4fc1-be29-90d14a82efe3,42,nyando,awasi/onjiko
+41f1e538-b62d-4eab-ad8f-edc9b5a97809,42,nyando,ahero
+284fdfb8-493e-4c21-bbd8-19d305c5e2db,42,nyando,kabonyo/kanyagwal
+b039457c-beed-45b3-94c9-424ca57f0e51,42,nyando,kobura
+bb5333ae-9dc2-420c-b5fb-13ae6556fbd4,42,muhoroni,miwani
+78233f17-8faf-4dcf-8335-afb96962658f,42,muhoroni,ombeyi
+7de52929-fb02-41fe-af1c-849cd0256233,42,muhoroni,masogo/nyang'oma
+1914b931-2dae-4cd2-b77c-472f03ce819a,42,muhoroni,chemelil
+d40970af-c666-45dc-932f-946f395c81f4,42,muhoroni,muhoroni/koru
+93fdfee5-9d31-498e-8849-546cd67eb0a8,42,nyakach,south west nyakach
+fb6d07e6-f078-4184-abca-76302f8d8154,42,nyakach,north nyakach
+5c82d7e7-4e44-4303-bfd8-77b6bdf71d8d,42,nyakach,central nyakach
+2dda56be-5a8a-4ed5-a1aa-bb3ae402b8a7,42,nyakach,west nyakach
+f303a046-ba2f-4745-bd11-524dfdeabcc3,42,nyakach,south east nyakach
+c2c63ef9-eb98-4ca9-b48b-3d5ac2d4bfa3,43,kasipul,west kasipul
+cf6a6580-6625-443d-9d55-9e4b63e84d9c,43,kasipul,south kasipul
+bb39dea2-1c84-413b-bf27-7b43e79d7e96,43,kasipul,central kasipul
+eb3d07f0-13d5-4d1f-b835-f7f18f702c3f,43,kasipul,east kamagak
+d432b6c8-817f-435d-88c8-6f3d449fd2cf,43,kasipul,west kamagak
+355a9a61-5342-4ca5-aa2d-a6d7a367582a,43,kabondo kasipul,kabondo east
+c478347c-49c6-49b8-ac1c-c58f5993f9d8,43,kabondo kasipul,kabondo west
+34c4c959-744e-4ee5-a637-dcaa34f9e642,43,kabondo kasipul,kokwanyo/kakelo
+f7a9209c-272f-47df-a182-3206c4ffcbdf,43,kabondo kasipul,kojwach
+618f51ba-6431-4404-8164-b04f08a6c55a,43,karachuonyo,west karachuonyo
+0ab230d3-faae-4f19-bf97-5073e51a9ab0,43,karachuonyo,north karachuonyo
+4aa826df-8928-4897-96be-d42a4d4db234,43,karachuonyo,central
+87792e2a-6e14-4580-bf0b-59727d8ce473,43,karachuonyo,kanyaluo
+f310b252-77d9-48c9-8caa-4a813a069438,43,karachuonyo,kibiri
+736307ca-393d-43a3-b154-1d05ea3e1b19,43,karachuonyo,wangchieng
+fa867d2f-048c-4087-8d70-795bcf6aad9c,43,karachuonyo,kendu bay town
+911bde92-149c-49b7-8a61-8f3ab1f514f5,43,rangwe,west gem
+91c0cb2e-ea8f-4bfc-9f7b-ecd4e7c2bff4,43,rangwe,east gem
+ac1063b8-dd62-4210-93fe-00fc2585a4af,43,rangwe,kagan
+086175e8-7321-46fd-b04d-95d2edfe5131,43,rangwe,kochia
+fc0cdf6b-0684-49f0-9d5d-f83ba353b2b7,43,homa bay town,homa bay central
+b1c812c0-e76f-44d8-b2fa-a96a0c6a32ea,43,homa bay town,homa bay arujo
+8bd05d8c-b6aa-495f-bbd8-5e1ac11b4552,43,homa bay town,homa bay west
+493fe5d6-28bd-4e76-b1da-1aa6abf4d014,43,homa bay town,homa bay east
+6abce818-b33b-4107-8161-14ed14fcf0ac,43,ndhiwa,kwabwai
+c90866c4-261f-44b2-b129-db12c0d71c65,43,ndhiwa,kanyadoto
+60c9bbca-2e7b-4ba5-b70c-fb0f5f3e326d,43,ndhiwa,kanyikela
+3c55f188-cf5a-4ed7-9c28-926071c2e6e6,43,ndhiwa,north kabuoch
+24e53ba4-e10b-4240-a7d7-aeaa0e6756bb,43,ndhiwa,kabuoch south/pala
+92c154c1-105b-442b-83e6-526905f9c630,43,ndhiwa,kanyamwa kologi
+6e84018c-a17f-4c28-838b-ca6182bc9757,43,ndhiwa,kanyamwa kosewe
+30c998dd-d0c1-4720-948f-0946b9e2ed1f,43,mbita,mfangano island
+4609b963-2db8-45bb-bb7c-d651f3086f52,43,mbita,rusinga island
+57484a28-9a64-4ab6-9bd3-6d04590ee64d,43,mbita,kasgunga
+b40e0f7e-7513-4c72-8c19-525783eb916b,43,mbita,gembe
+c4ac2354-8399-4a01-92b2-a52897d09333,43,mbita,lambwe
+7c5ecfd9-5b7e-47fa-bcb5-36fb3998e30e,43,suba,gwassi south
+ba1feadb-9828-416c-8da5-c79024fdbbbc,43,suba,gwassi north
+70536bf7-efef-4da6-85e6-ffea83bee560,43,suba,kaksingri west
+ac2fe549-7884-4e52-9081-8c499b86a204,43,suba,ruma kaksingri east
+7d506529-b797-4b35-869b-cbd4d038cb76,44,rongo,north kamagambo
+7c3b8c90-f78a-4fdb-a88a-8c7cf3ee8020,44,rongo,central kamagambo
+92640dba-3188-439f-b5a3-63bd7855a9db,44,rongo,east kamagambo
+2b71be11-117d-47c8-b215-f2634320c489,44,rongo,south kamagambo
+805a1de8-0f7f-4db2-a7c9-0d82986dc5fa,44,awendo,north sakwa
+8053b697-620b-4d67-8f5e-1866a7409587,44,awendo,south sakwa
+8baa3fee-320b-46ad-9e8b-a1a3bc1259dd,44,awendo,west sakwa
+3350896c-0143-4004-ba35-feb9642a7866,44,awendo,central sakwa
+d29c737f-56f9-4bf0-88d8-054217c9e5f4,44,suna east,god jope
+62780a92-9f52-4bd9-afb4-d877fd467876,44,suna east,suna central
+da191b8c-79d8-436a-890c-11d0a5bbf8f2,44,suna east,kakrao
+8d98da5c-23df-4b8f-8c7a-a9b547eb5d16,44,suna east,kwa
+88baaac7-af1d-4dbf-97be-4226390adfa7,44,suna west,wiga
+90c9a498-1372-46e0-8501-18a78254caab,44,suna west,wasweta ii
+0d33bc28-e1d8-4bb2-b24e-00ec670c8759,44,suna west,ragana-oruba
+4c979c64-e172-4801-ba44-1b7695b6d86f,44,suna west,wasimbete
+7941538a-7222-4eb5-a84c-299cb794fc84,44,uriri,west kanyamkago
+5f45eaf1-a04b-4bc7-b370-1d7a13a82f76,44,uriri,north kanyamkago
+04c59841-202b-44d1-98be-cb1b60419210,44,uriri,central kanyamkago
+c40e6260-2e5c-464e-ac8c-761a3d0138a1,44,uriri,south kanyamkago
+fe6b3085-2126-4192-8585-0bd8e8706c6a,44,uriri,east kanyamkago
+9054af04-d18e-4085-9623-1679894ec4fc,44,nyatike,kachien'g
+639e9e0c-bee6-46fc-b787-b42f30d8478b,44,nyatike,kanyasa
+2066c27d-6104-4c2e-96dc-462b483de677,44,nyatike,north kadem
+fcbc4587-f2e8-4bb3-9733-ebb6da255cc1,44,nyatike,macalder/kanyarwanda
+f25028e1-7523-4242-b34c-f7379207a618,44,nyatike,kaler
+d8d15762-194e-49f3-bc6a-c34f05d4f4f1,44,nyatike,got kachola
+7fd3d208-d68f-4689-8e81-b051189957fe,44,nyatike,muhuru
+b6075530-0026-44f2-9ca4-8923cad60d45,44,kuria west,bukira east
+670d5529-f641-4c4d-a4b8-6a8ea6a48e26,44,kuria west,bukira centrl/ikerege
+e4e97b77-0653-45b9-a32f-ddda0fcfb258,44,kuria west,isibania
+550392c0-2423-438b-b91c-9bbf66d248c1,44,kuria west,makerero
+c91f0cc1-58be-4f62-8286-9d76243b57f4,44,kuria west,masaba
+f6e7fe35-8d27-4a76-b80e-4e2f99038d40,44,kuria west,tagare
+0de54ca0-05c2-4591-9e82-2a77e86677bd,44,kuria west,nyamosense/komosoko
+26ef5381-88b7-4598-aedb-9a32b774373a,44,kuria east,gokeharaka/getambwega
+63fb91b8-84bf-4ca9-98ea-8e675a58d29c,44,kuria east,ntimaru west
+e3324313-7bde-4934-ad58-f6c5a19f562d,44,kuria east,ntimaru east
+9632fbc1-c6ea-4715-b388-9efafc122a97,44,kuria east,nyabasi east
+d568b75a-3f07-4daf-ab28-8a8fbbe99990,44,kuria east,nyabasi west
+b31c305a-c3f2-47e0-8a8c-a26aef0fd68d,45,bonchari,bomariba
+5680524e-f3bb-45c4-b4c2-921979314a90,45,bonchari,bogiakumu
+b31ffd88-8926-47f4-9949-0013346f67d3,45,bonchari,bomorenda
+af8d97ce-98c1-41f1-9c53-4d17205ad4ef,45,bonchari,riana
+1732c4bd-fc92-40d7-9b11-30ea9e71f953,45,south mugirango,tabaka
+4cee8fdb-c3aa-46de-9ca9-bdc15ae8eac5,45,south mugirango,boikang'a
+0e453994-7f62-40c9-8b9b-6290e969ff42,45,south mugirango,bogetenga
+60a583ae-ae18-4365-a1a8-7a8d27ab2d9f,45,south mugirango,borabu / chitago
+221f49d3-4b19-4643-bf56-8afa9ceeee5b,45,south mugirango,moticho
+39a0e701-f8af-4b85-9afe-00e7993ddc96,45,south mugirango,getenga
+a7b54984-8d68-4cdd-8a8d-098869281694,45,bomachoge borabu,bombaba borabu
+8cd2b9e9-5f68-42e4-9468-1a6f4b814b9a,45,bomachoge borabu,boochi borabu
+ef0af204-e9b4-4593-a968-c4b2f0667f15,45,bomachoge borabu,bokimonge
+7a429de1-86c0-486f-8936-3bf808003c69,45,bomachoge borabu,magenche
+7b024401-7c10-47b4-8fce-0db88350d8cb,45,bobasi,masige west
+59e6fce4-9c90-429d-806b-ce7ad255a1c0,45,bobasi,masige east
+0fcf4cc0-42ca-40b0-97ff-cb2b5b04207f,45,bobasi,bobasi central
+8151243e-9311-4310-87c8-b920ac00a684,45,bobasi,nyacheki
+75abc882-54bb-4c47-8b64-87d158a4c2ff,45,bobasi,bobasi bogetaorio
+07b8cc42-2a15-471e-87ad-e7934f17de16,45,bobasi,bobasi chache
+a8e7defe-29e1-4b99-8239-e5683eeb3731,45,bobasi,sameta/mokwerero
+53b84454-a02a-4490-b49f-dcb66b946593,45,bobasi,bobasi boitangare
+4880230a-7e79-425c-91ba-516b2416a596,45,bomachoge chache,majoge
+51560c70-3899-4ea2-a377-8a78c9f1dc4a,45,bomachoge chache,boochi/tendere
+49dd2200-47f1-4c00-8cbc-f5ac8c57209d,45,bomachoge chache,bosoti/sengera
+1cdbbef2-93ce-4588-b1e1-3d81b40a2c67,45,nyaribari masaba,ichuni
+2e321d51-5de4-4db2-bcf0-eda7c12bbd6c,45,nyaribari masaba,nyamasibi
+f5acb2b4-7dc6-424a-9ab6-64a87ee10d87,45,nyaribari masaba,masimba
+a8da800b-c11c-435d-9be8-1bd0e48bc287,45,nyaribari masaba,gesusu
+4d50f77a-9413-4e72-acde-73251e1cb656,45,nyaribari masaba,kiamokama
+711bf4db-5417-4cc6-8e82-0d4189dda84f,45,nyaribari chache,bobaracho
+af05eb58-6335-4994-9325-f7ccf5578618,45,nyaribari chache,kisii central
+dbc7a38a-d3cc-47db-b009-b6de69f3ce9c,45,nyaribari chache,keumbu
+758d11f0-1f4f-447f-95bc-00fec16a516d,45,nyaribari chache,kiogoro
+7b666aca-28dd-4817-9c3b-0b5170a0bb20,45,nyaribari chache,birongo
+66e1db57-faa6-4a1e-b37a-d4666beb3887,45,nyaribari chache,ibeno
+d9aa7df2-9239-43d7-9614-850799291c7d,45,kitutu chache north,monyerero
+6b9a997d-988f-4ffb-a9e4-b31b65afe44c,45,kitutu chache north,sensi
+e4311fe2-4617-4efa-9437-791b8bec2991,45,kitutu chache north,marani
+325b93f4-a9b6-46a0-b0e2-768f8929d2b0,45,kitutu chache north,kegogi
+3d68f98b-2f2d-4078-b560-1988c127a9d4,45,kitutu chache south,bogusero
+7732ac0a-fe53-4197-b9ac-d28989b13500,45,kitutu chache south,bogeka
+71aeb1df-e2bd-45d6-84df-1929dc463e01,45,kitutu chache south,nyakoe
+9d3d554a-7c90-493e-98ba-940b33a92fb8,45,kitutu chache south,kitutu   central
+2c0144dd-8e71-4bbf-84ae-3ac6a9158362,45,kitutu chache south,nyatieko
+dab33076-a082-4825-bfb3-2142b9a8d094,46,kitutu masaba,rigoma
+04057b4a-640c-4910-94aa-8dcb60fcc3de,46,kitutu masaba,gachuba
+8751238b-329d-48ea-9ffe-bc5e65fcd0ce,46,kitutu masaba,kemera
+44e95324-0fa4-453e-b8bc-bac2c9b063ca,46,kitutu masaba,magombo
+bfdf4776-629b-46b7-869c-2631abe4b358,46,kitutu masaba,manga
+958b8c93-be3c-41be-b25d-94fdf1201e67,46,kitutu masaba,gesima
+d4f02898-71a8-4c2e-b61f-7826ccd83923,46,west mugirango,nyamaiya
+467a324c-6f0f-49f2-a64e-6580a74e6e9f,46,west mugirango,bogichora
+eb8e978d-3bfe-456a-85a3-6a550180bf9d,46,west mugirango,bosamaro
+bee26a14-7cf6-427f-b9e3-6c6db3f636dc,46,west mugirango,bonyamatuta
+4d8c0213-d4ae-4b9e-b450-cf62caa67982,46,west mugirango,township
+a4da0e56-8c83-473f-96fa-5327a22d7233,46,north mugirango,itibo
+82dc46ae-f8e5-4d61-9155-32925dd3bcea,46,north mugirango,bomwagamo
+af364be7-4671-4e8a-a0f5-cbfe413ce821,46,north mugirango,bokeira
+7279a7d0-0983-4215-8f10-5c8d9cb948f4,46,north mugirango,magwagwa
+9c5fe769-35bd-4889-85b7-bfd24dda9b2f,46,north mugirango,ekerenyo
+54f82ece-a7d0-418e-8363-885648bb28b4,46,borabu,mekenene
+562c19cc-9bdd-4faa-88e5-8ef0d4c0dd2a,46,borabu,kiabonyoru
+92b181d6-5283-47ce-9399-df41dc870e3d,46,borabu,nyansiongo
+452bd464-74ef-44dc-8503-0822785dfb04,46,borabu,esise
+de5933d6-ef8c-4154-b450-5113ab73e9ba,47,westlands,kitisuru
+2e642d00-55a4-4f6c-9243-9a718892397b,47,westlands,parklands/highridge
+5312ef7a-2bb1-411e-8c1d-6e7a1e305087,47,westlands,karura
+88966690-56bb-472f-845a-a0be6494c7b3,47,westlands,kangemi
+a04a19d5-0381-4509-aa9a-7494907d0f48,47,westlands,mountain view
+11962316-679a-4cc0-9e7b-7d40dfd0dea6,47,dagoretti north,kilimani
+402907c9-ac57-46ce-95fe-e9d9664e2aa4,47,dagoretti north,kawangware
+d3041434-4ae2-4bde-b66d-179531231d77,47,dagoretti north,gatina
+a50e0cd0-7ab9-485a-9481-835512a649ba,47,dagoretti north,kileleshwa
+ab082d2e-10f3-43cd-b014-1a938c2a182b,47,dagoretti north,kabiro
+e5d31aa4-cf8d-4e88-bb00-514af67851e7,47,dagoretti south,mutuini
+00489038-2921-4234-8a87-8c33dd05f53d,47,dagoretti south,ngando
+504b431f-ff20-46f2-98cd-1dc1828961d9,47,dagoretti south,riruta
+987cac54-9526-401e-82fc-621bd68083e9,47,dagoretti south,uthiru/ruthimitu
+bd8d6cb9-6c54-4a5f-9904-bc54b7969169,47,dagoretti south,waithaka
+9b476c26-ba81-4e91-af65-4e1000125b7e,47,langata,karen
+30728a98-d79d-439b-b518-e2193629244a,47,langata,nairobi west
+7e17b2a0-4df6-48c5-9319-552fcc88cace,47,langata,mugumo-ini
+23aca0ab-7154-4a40-b01c-d7a563acc92b,47,langata,south-c
+21572331-8657-4e49-84b3-08fb53ec84c7,47,langata,nyayo highrise
+c3eef7fa-6ae5-4b76-a39f-ff02949c1199,47,kibra,laini saba
+3fd4f41d-e30c-4494-804c-17c5b398f857,47,kibra,lindi
+3259c317-0cc7-4e69-bab5-384eb5b29275,47,kibra,makina
+0f0872f4-335d-40c1-bd97-207a06412477,47,kibra,woodley/kenyatta golf
+9933f490-4241-418d-978a-187871a00f6b,47,kibra,sarangombe
+131eb80a-b2ef-43b6-9dad-804d58d523e3,47,roysambu,githurai
+0eee5f3a-d3f4-411b-a0d3-9ab3b4a0c54c,47,roysambu,kahawa west
+ec6efbfb-e9fe-4177-a625-e0723d50a00a,47,roysambu,zimmerman
+a369dbd5-2a45-4d82-a1cf-f2f7d6cd7eaa,47,roysambu,roysambu
+0560d93c-0fef-48ae-aa7f-c334c4198ff1,47,roysambu,kahawa
+42d49560-4945-42e2-a471-c5918ff68860,47,kasarani,claycity
+866c22c6-e1ae-44a5-9193-85b3583e9947,47,kasarani,mwiki
+3d84d80e-0ec2-4eb7-b7ec-f8aa0ea497ac,47,kasarani,kasarani
+73d66939-742e-4e6b-980a-2bc62f7c0c8d,47,kasarani,njiru
+74e5cd0d-1448-498e-a787-afe1b2c1d2c8,47,kasarani,ruai
+ee4dac60-93e6-43e4-aa99-25feeb5d2433,47,ruaraka,baba dogo
+5281fe02-3ff4-4971-b887-ca6d61053bd6,47,ruaraka,utalii
+acc1c52e-fc75-4cd2-ada6-1bd8a52bcbfc,47,ruaraka,mathare north
+e8543565-4fde-419a-b1dd-360328859d19,47,ruaraka,lucky summer
+12eb455c-163c-42a5-a544-7530e3d1ace8,47,ruaraka,korogocho
+abb1817d-5045-4bc2-bfb0-bfa912450933,47,embakasi south,imara daima
+8eeafe9c-8e8f-4177-82bb-e99cf4f0ccfd,47,embakasi south,kwa njenga
+28b303f9-e5b9-4ba6-96ba-66676a823b81,47,embakasi south,kwa reuben
+94822f38-b65a-4ef3-b2ea-a12b7d10ff4a,47,embakasi south,pipeline
+a73b2376-0581-4b5f-8d77-cc714c8b042d,47,embakasi south,kware
+f22c97d6-e0d0-40c3-bcee-bceb295aee0b,47,embakasi north,kariobangi north
+402f3c0d-f216-4337-b7c8-036e7de91a98,47,embakasi north,dandora area i
+58497947-abe0-48ec-bbb8-f9d143b43722,47,embakasi north,dandora area ii
+27e068d9-2106-4af0-878d-d43a6dc4a453,47,embakasi north,dandora area iii
+ce489ff7-06d1-42a5-ace2-7e3b325d2a55,47,embakasi north,dandora area iv
+3f6826e7-e73e-4b82-9efa-df934734ca32,47,embakasi central,kayole north
+58fb08b5-883d-4d9c-906d-f25fb64943b0,47,embakasi central,kayole central
+b75ccdcd-0e35-4daa-98aa-e270277db2bc,47,embakasi central,kayole south
+9442f1ed-8288-4621-babc-6bfe6ee00762,47,embakasi central,komarock
+7f1d6b7f-a1be-43c1-bfbf-f12477a5f8ee,47,embakasi central,matopeni
+04b501f1-816e-4313-966b-ca72b20cd6ec,47,embakasi east,upper savannah
+aa92a8f5-b566-4ccf-a17f-7b9e4d6c104c,47,embakasi east,lower savannah
+767454b9-1521-4b59-a25b-e865e99b5849,47,embakasi east,embakasi
+4086becb-b598-4013-a395-0b9f4716f576,47,embakasi east,utawala
+285e201b-80c7-4f4b-8c25-79ef458170e3,47,embakasi east,mihango
+a31bf501-27d4-44d6-85e2-1479e844d535,47,embakasi west,umoja i
+306914c0-4b57-4f95-ad6d-4829cc3eb5b8,47,embakasi west,umoja ii
+ab53a11e-669b-4cba-8a24-18c4d48d2e77,47,embakasi west,mowlem
+03f32139-47e7-4c00-8b82-9edcda2b87ad,47,embakasi west,kariobangi south
+6c571846-4795-4647-b7bd-c787eaafb11f,47,makadara,makongeni
+feec07bf-5f95-41b7-ae7b-5a3361ca56ce,47,makadara,maringo/hamza
+97691cd8-29db-47f2-ac65-8f2af74cf0cb,47,makadara,harambee
+81e5ab28-1adb-4b75-8750-1b698208d8fe,47,makadara,viwandani
+75bd3d23-ebd6-45ba-b321-908905ae74c7,47,kamukunji,pumwani
+d1480b73-c296-44e1-b5bb-8d156c9ff014,47,kamukunji,eastleigh north
+ebc4e4b3-7a5b-4c8d-a517-dd2742e0706a,47,kamukunji,eastleigh south
+fc8c9965-511a-4aba-a4b9-4483315e7809,47,kamukunji,airbase
+89f49187-2e46-43a8-8283-73bd8aafcdd3,47,kamukunji,california
+e56d413c-1b27-4c8d-8d29-f6abbfb1f0d9,47,starehe,nairobi central
+edc8b6db-b273-473d-8318-b44bc5cbd4c9,47,starehe,ngara
+fab9eb81-c7b9-4cd8-925a-bd037ef6ef07,47,starehe,ziwani/kariokor
+ff22a8e6-55c6-4bfc-b6b4-b2e28382fef0,47,starehe,pangani
+fd478c3e-9ae8-4c19-a22b-52f5b9f4d5c9,47,starehe,landimawe
+5ae337a7-15e2-448b-990d-b309a887451c,47,starehe,nairobi south
+1afcff6a-6dc1-4d34-95bf-3402ea5ce9a9,47,mathare,hospital
+062b484c-43e2-40e7-801e-df8e125ce832,47,mathare,mabatini
+d6d597fa-37f1-4b4f-b44d-3ad531434057,47,mathare,huruma
+7b27c13f-829f-4291-a8c1-f48e8f1735a2,47,mathare,ngei
+5c39c583-252a-4891-b4c7-5852c0a01cdf,47,mathare,mlango kubwa
+388688f4-1c83-4805-a01a-29f5d66f2bd0,47,mathare,kiamaiko
