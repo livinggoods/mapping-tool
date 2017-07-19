@@ -5,7 +5,7 @@ import json
 from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
 from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets, GpsData,
-    Location, Education, EducationLevel, Referral, Chp, Recruitments, Interview, Exam,
+    Location, Education, EducationLevel, Referral, Chp, Recruitments, Interview, Exam, SubCounty,
     SelectedApplication, Application, ApplicationPhone, Branch, Cohort, Registration)
 from .. data import data
 
@@ -202,6 +202,32 @@ def sync_locations():
     locations = Location.query.filter(Location.archived == 0)
     return jsonify({'locations': [location.to_json() for location in locations]})
 
+@api.route('/sync/wards')
+def get_wards():
+  # subcounties = data.get_ke_subcounties()
+  # for key, value in subcounties.iteritems():
+  wards = data.get_ke_subcounties()
+  countyid=[]
+  subcounties=[]
+  for key, value in wards.iteritems():
+    # since this is a ward, check if the subcounty exists
+    subcounty = SubCounty.query.filter_by(id=value.get('uuid')).first()
+    if subcounty:
+      return jsonify(subcounty_details=subcounty)
+    else:
+      return jsonify(status='failed')
+
+  #   countyid.append(value)
+  #   for k, v in value.iteritems():
+  #     subcounties.append({'name': k, 'id': v.get('uuid'), 'more':v})
+  #     sub_county_obj = SubCounty(id=v.get('uuid'), name=k)
+  #
+  #     recruitments = Recruitments(name=request.form.get('name'), added_by=current_user.id)
+  #     db.session.add(recruitments)
+  #     db.session.commit()
+  # return jsonify(sub_counties=subcounties)
+
+
 @api.route('/sync/counties', methods=['GET', 'POST'])
 def sync_counties():
   if request.method == 'GET':
@@ -257,3 +283,8 @@ def sync_chew_referral():
       return jsonify(status=status)
     else:
       return jsonify(error="No records posted")
+
+@api.route('/sync/ke-subcounties', methods=['GET', 'POST'])
+def sync_ke_subcounties():
+  ke_subcounties = data.get_ke_subcounties()
+  return jsonify(subcounties=ke_subcounties)

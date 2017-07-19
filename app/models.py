@@ -331,6 +331,20 @@ class Village(db.Model):
 
     location = relationship(u'Location')
 
+
+class Ward(db.Model):
+  __tablename__ = 'ward'
+
+  id = Column(String(64), primary_key=True)
+  name = Column(String(65), nullable=False)
+  sub_county = Column(ForeignKey(u'subcounty.id'), index=True)
+  county = Column(Integer)
+  archived = Column(Integer, server_default=text("'0'"))
+
+  subcounty = relationship(u'SubCounty')
+
+
+
 class LocationTargets(db.Model):
     __tablename__ = 'location_targets'
 
@@ -825,10 +839,10 @@ class CommunityUnit(db.Model):
   id = Column(String(65), primary_key=True)
   name = Column(String(45), nullable=False)
   mappingid = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
-  lat = Column(Column(Float, server_default=text("'0'")))
-  lon = Column(Column(Float, server_default=text("'0'")))
+  lat = Column(Float, server_default=text("'0'"))
+  lon = Column(Float, server_default=text("'0'"))
   country = Column(String(45))
-  subcountyid = Column(ForeignKey(u'ke_subcounty.id'), nullable=True, index=True)
+  subcountyid = Column(ForeignKey(u'subcounty.id'), nullable=True, index=True)
   linkfacilityid = Column(ForeignKey(u'link_facility.id'), nullable=True, index=True)
   areachiefname = Column(String(45))
   ward = Column(String(65))
@@ -866,11 +880,35 @@ class CommunityUnit(db.Model):
   ngodoingmhealth = Column(Integer, server_default=text("'0'"))
   comment = Column(Text)
 
+  mapping = relationship(u'Mapping')
+  user = relationship(u'User')
+  subcounty = relationship(u'SubCounty')
+  linkfacility = relationship(u'LinkFacility')
+
   # ForeignKey(u'registrations.id'), nullable=True, index=True
 
 
+class LinkFacility(db.Model):
+  __tablename__ = 'link_facility'
+
+  id= Column(String(64), primary_key=True, nullable=False)
+  facility_name=Column(String(64))
+  county=Column(String(64))
+  lat=Column(Float, server_default=text("'0'"))
+  lon=Column(Float, server_default=text("'0'"))
+  subcounty=Column(String(64))
+  client_time = Column(Numeric, nullable=True)
+  date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+  addedby = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+  mrdt_levels=Column(Integer, server_default=text("'0'"))
+  act_levels=Column(Integer, server_default=text("'0'"))
+  country=Column(String(64))
+  facility_id=Column(String(64))
+
+  user=relationship(u'User')
+
 class SubCounty(db.Model):
-  __tablename__ = 'ke_subcounty'
+  __tablename__ = 'subcounty'
 
   id = Column(String(64), primary_key=True)
   name = Column(String(64))
@@ -906,6 +944,12 @@ class SubCounty(db.Model):
   date_added = db.Column(db.DateTime(), default=datetime.utcnow)
   addedby = Column(ForeignKey(u'users.id'), nullable=True, index=True)
 
+  user = relationship(u'User')
+  mapping = relationship(u'Mapping')
+
+  @staticmethod
+  def create_subcounties():
+    pass
 
 class Location(db.Model):
     __tablename__ = 'location'
@@ -941,7 +985,6 @@ class Location(db.Model):
         }
         return json_record
 
-
     @staticmethod
     def insert_locations():
         """Update or create all Geos"""
@@ -950,13 +993,12 @@ class Location(db.Model):
         for name in locs:
             loc = Location.query.filter_by(name=name.get('name')).first()
             if loc is None:
-                loc = Location(name=name.get('name'), country='UG', lat=name.get('lat'), lon=name.get('lon'), admin_name='Country')
+                loc = Location(name=name.get('name'), country='UG', lat=name.get('lat'), lon=name.get('lon'),
+                               admin_name='Country')
             db.session.add(loc)
         db.session.commit()
 
         # create locations based on the template given
-        # 
-        # import the  data
         locations = data.get_locations()
         for key, value in locations.iteritems():
             # create district
@@ -970,7 +1012,8 @@ class Location(db.Model):
                 db.session.add(county)
                 db.session.commit()
                 for sub_county in v:
-                    s_county = Location(name=sub_county.get('name').title(), admin_name='Sub-County', country='UG', parent=county.id, code=sub_county.get('number'))
+                    s_county = Location(name=sub_county.get('name').title(), admin_name='Sub-County', country='UG',
+                                        parent=county.id, code=sub_county.get('number'))
                     db.session.add(s_county)
                     db.session.commit()
         #KENYA
