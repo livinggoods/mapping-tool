@@ -344,17 +344,6 @@ class Ward(db.Model):
   subcounty = relationship(u'SubCounty')
 
 
-class County(db.Model):
-  __tablename__ = 'ke_county'
-
-  id = Column(Integer, primary_key=True, nullable=False)
-  name = Column(String(65), nullable=False)
-  short_code = Column(String(65))
-  archived = Column(Integer, server_default=text("'0'"))
-
-
-
-
 class LocationTargets(db.Model):
     __tablename__ = 'location_targets'
 
@@ -916,6 +905,17 @@ class LinkFacility(db.Model):
   facility_id=Column(String(64))
 
   user=relationship(u'User')
+
+class County(db.Model):
+  __tablename__ = 'ke_county'
+
+  id = Column(Integer, primary_key=True, nullable=False)
+  name = Column(String(65), nullable=False)
+  short_code = Column(String(65))
+  archived = Column(Integer, server_default=text("'0'"))
+
+  subcounties = relationship(u'SubCounty', back_populates='county', lazy='dynamic')
+
 
 class SubCounty(db.Model):
   __tablename__ = 'subcounty'
