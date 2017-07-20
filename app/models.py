@@ -352,8 +352,6 @@ class County(db.Model):
   short_code = Column(String(65))
   archived = Column(Integer, server_default=text("'0'"))
 
-  subcounty = relationship(u'SubCounty')
-
 
 
 
