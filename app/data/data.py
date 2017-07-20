@@ -53,4 +53,4 @@ def get_ke_subcounties():
         counties[row[1]][row[2]]['uuid'] = subcounties_id[row[2]]
         counties[row[1]][row[2]]['wards'] = []
         counties[row[1]][row[2]]['wards'].append({'id': row[0], 'subcounty_id': subcounties_id[row[2]], 'county': row[1], 'subcounty': row[2], 'ward': row[3]})
-  return counties
+  return counties, subcounties_id

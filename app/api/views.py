@@ -1,13 +1,16 @@
+import os
 from . import api
 from flask_login import login_required, current_user
 from flask import Response, request, jsonify
 import json
 from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
-from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets, GpsData,
+from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets, GpsData, Ward, County,
     Location, Education, EducationLevel, Referral, Chp, Recruitments, Interview, Exam, SubCounty,
     SelectedApplication, Application, ApplicationPhone, Branch, Cohort, Registration)
 from .. data import data
+import csv
+import uuid
 
 
 @api.route('/firm_summary')
@@ -202,6 +205,32 @@ def sync_locations():
     locations = Location.query.filter(Location.archived == 0)
     return jsonify({'locations': [location.to_json() for location in locations]})
 
+
+@api.route('/create/ke-counties')
+def create_ke_counties():
+  with open(os.path.dirname(os.path.abspath(data.__file__))+'/kenya_county.csv', 'r') as f:
+    for row in csv.reader(f.read().splitlines()):
+      county = County(id=row[0], name=row[1], archived=0)
+      db.session.add(county)
+      db.session.commit()
+  return jsonify(status='ok')
+
+
+@api.route('/sync/create_ke_wards')
+def get_ke_subcounties():
+  subcounties_id = {}
+  with open(os.path.dirname(os.path.abspath(data.__file__))+'/subcounties_and_wards.csv', 'r') as f:
+    for row in csv.reader(f.read().splitlines()):
+      if not row[2] in subcounties_id:
+        subcounties_id[row[2]] = str(uuid.uuid4())
+        ke_sub_county = SubCounty(id=subcounties_id.get(row[2]), name=row[2], countyID=row[1], country='KE')
+        db.session.add(ke_sub_county)
+        db.session.commit()
+      ward = Ward(id=row[0], name=row[3], sub_county=subcounties_id.get(row[2]), county=row[1], archived=0)
+      db.session.add(ward)
+      db.session.commit()
+  return jsonify(subcounties_id)
+
 @api.route('/sync/wards')
 def get_wards():
   # subcounties = data.get_ke_subcounties()
@@ -209,13 +238,27 @@ def get_wards():
   wards = data.get_ke_subcounties()
   countyid=[]
   subcounties=[]
-  for key, value in wards.iteritems():
-    # since this is a ward, check if the subcounty exists
-    subcounty = SubCounty.query.filter_by(id=value.get('uuid')).first()
-    if subcounty:
-      return jsonify(subcounty_details=subcounty)
-    else:
-      return jsonify(status='failed')
+  for county_id, value in wards.iteritems():
+    #this is county
+    for subcounty_name, details in value.iteritems():
+      for ward in details.get('wards'):
+        # since this is a ward, check if the subcounty exists
+        subcounty = SubCounty.query.filter_by(id=details.get('uuid')).first()
+        if not subcounty:
+          subcounties.append({'name': subcounty_name, 'status': 'found'})
+
+          new_subcounty = SubCounty(id=details.get('uuid'), name=subcounty_name, countyID=details.get('county'),
+                                    country='KE')
+          db.session.add(new_subcounty)
+          db.session.commit()
+        #create ward
+        new_ward = Ward(id=details.get('id'), name =details.get('ward'), sub_county = details.get('subcounty_id'),
+                        county=details.get('county'), archived=0)
+        db.session.add(new_ward)
+        db.session.commit()
+
+
+  return jsonify(status=subcounties)
 
   #   countyid.append(value)
   #   for k, v in value.iteritems():
