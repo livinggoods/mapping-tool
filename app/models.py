@@ -922,7 +922,7 @@ class SubCounty(db.Model):
 
   id = Column(String(64), primary_key=True)
   name = Column(String(64))
-  countyID = Column(String(64))
+  countyID = Column(ForeignKey(u'ke_county.id'), nullable=True, index=True)
   country = Column(String(64))
   mappingId = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
   lat = Column(Float, server_default=text("'0'"))
@@ -956,6 +956,7 @@ class SubCounty(db.Model):
 
   user = relationship(u'User')
   mapping = relationship(u'Mapping')
+  county = relationship(u'County')
 
   @staticmethod
   def create_subcounties():
