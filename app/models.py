@@ -956,11 +956,50 @@ class SubCounty(db.Model):
 
   user = relationship(u'User')
   mapping = relationship(u'Mapping')
-  county = relationship(u'County')
+  county = relationship(u'County', back_populates='subcounties')
 
   @staticmethod
   def create_subcounties():
     pass
+
+  def to_json(self):
+    json_record = {
+      'id': self.id,
+      'name': self.name,
+      'countyID': self.countyID,
+      'country': self.country,
+      'mappingId': self.mappingId,
+      'lat': self.lat,
+      'lon': self.lon,
+      'contactPerson': self.contactPerson,
+      'contactPersonPhone': self.contactPersonPhone,
+      'mainTown': self.mainTown,
+      'countySupport': self.countySupport,
+      'subcountySupport': self.subcountySupport,
+      'chv_activity_level': self.chv_activity_level,
+      'countyPopulation': self.countyPopulation,
+      'subCountyPopulation': self.subCountyPopulation,
+      'noOfVillages': self.noOfVillages,
+      'mainTownPopulation': self.mainTownPopulation,
+      'servicePopulation': self.servicePopulation,
+      'populationDensity': self.populationDensity,
+      'transportCost': self.transportCost,
+      'majorRoads': self.majorRoads,
+      'healtFacilities': self.healtFacilities,
+      'privateClinicsInTown': self.privateClinicsInTown,
+      'privateClinicsInRadius': self.privateClinicsInRadius,
+      'communityUnits': self.communityUnits,
+      'mainSupermarkets': self.mainSupermarkets,
+      'mainBanks': self.mainBanks,
+      'anyMajorBusiness': self.anyMajorBusiness,
+      'comments': self.comments,
+      'recommendation': self.recommendation,
+      'client_time': self.client_time,
+      'date_added': self.date_added,
+      'addedby': self.addedby
+    }
+    return json_record
+
 
 class Location(db.Model):
     __tablename__ = 'location'
