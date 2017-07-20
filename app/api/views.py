@@ -30,6 +30,19 @@ def recruitments_json():
     db.session.commit()
     return jsonify(status='ok')
 
+
+@api.route('/sync/ke-counties')
+def get_ke_counties_json():
+  if request.method == 'GET':
+    records = County.query.all()
+    return jsonify({'counties': [{'name':record.name, 'code':record.id,
+                                  'subcounties':[subcounty.to_json() for subcounty in record.subcounties]}
+                                 for record in records]})
+  else:
+    return jsonify(message='not permitted'), 200
+    # return jsonify({"success": True}), 202
+
+
 @api.route('/recruitment/<string:id>', methods=['GET', 'POST'])
 def api_recruitment(id):
   if request.method == 'GET':
