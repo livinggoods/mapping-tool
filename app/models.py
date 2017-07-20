@@ -332,18 +332,6 @@ class Village(db.Model):
     location = relationship(u'Location')
 
 
-class Ward(db.Model):
-  __tablename__ = 'ward'
-
-  id = Column(String(64), primary_key=True)
-  name = Column(String(65), nullable=False)
-  sub_county = Column(ForeignKey(u'subcounty.id'), index=True)
-  county = Column(Integer)
-  archived = Column(Integer, server_default=text("'0'"))
-
-  subcounty = relationship(u'SubCounty')
-
-
 class LocationTargets(db.Model):
     __tablename__ = 'location_targets'
 
