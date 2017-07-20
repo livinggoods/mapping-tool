@@ -945,6 +945,7 @@ class SubCounty(db.Model):
   user = relationship(u'User')
   mapping = relationship(u'Mapping')
   county = relationship(u'County', back_populates='subcounties')
+  wards = relationship(u'Ward', back_populates='subcounty', lazy='dynamic')
 
   @staticmethod
   def create_subcounties():
