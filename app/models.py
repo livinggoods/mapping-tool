@@ -347,7 +347,7 @@ class Ward(db.Model):
 class County(db.Model):
   __tablename__ = 'ke_county'
 
-  id = Column(String(64), primary_key=True)
+  id = Column(Integer, primary_key=True, nullable=False)
   name = Column(String(65), nullable=False)
   short_code = Column(String(65))
   archived = Column(Integer, server_default=text("'0'"))
