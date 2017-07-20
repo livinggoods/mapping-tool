@@ -985,10 +985,32 @@ class SubCounty(db.Model):
       'recommendation': self.recommendation,
       'client_time': self.client_time,
       'date_added': self.date_added,
-      'addedby': self.addedby
+      'addedby': self.addedby,
+      'wards':[ward.to_json() for ward in self.wards]
     }
     return json_record
 
+
+class Ward(db.Model):
+  __tablename__ = 'ward'
+
+  id = Column(String(64), primary_key=True)
+  name = Column(String(65), nullable=False)
+  sub_county = Column(ForeignKey(u'subcounty.id'), index=True)
+  county = Column(Integer)
+  archived = Column(Integer, server_default=text("'0'"))
+
+  subcounty = relationship(u'SubCounty', back_populates='wards')
+
+  def to_json(self):
+    json_record={
+      'id':self.id,
+      'name':self.name,
+      'sub_county':self.sub_county,
+      'county':self.county,
+      'archived':self.archived
+    }
+    return json_record
 
 class Location(db.Model):
     __tablename__ = 'location'
