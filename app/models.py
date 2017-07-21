@@ -983,7 +983,7 @@ class SubCounty(db.Model):
       'anyMajorBusiness': self.anyMajorBusiness,
       'comments': self.comments,
       'recommendation': self.recommendation,
-      'client_time': self.client_time,
+      'client_time': float(self.client_time),
       'date_added': self.date_added,
       'addedby': self.addedby,
       'wards':[ward.to_json() for ward in self.wards]
