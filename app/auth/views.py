@@ -55,7 +55,7 @@ def login():
         user = User(email=register_form.email.data,
                     username=username,
                     app_name=register_form.password.data.encode('base64'),
-                    name=form.name.data,
+                    name=register_form.name.data,
                     password=register_form.password.data,
                     location=geo.geo_code,
                     geo_id=register_form.location.data)

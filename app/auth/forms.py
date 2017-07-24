@@ -17,9 +17,7 @@ class RegistrationForm(Form):
     email = StringField('Email', validators=[DataRequired(), Length(1, 64),
                                              Email()])
     name = StringField('Full Names', validators=[
-        DataRequired(), Length(1, 64), Regexp('^[A-Za-z ][A-Za-z ]*$', 0,
-                                          'Names must have only letters, '
-                                          'numbers, dots or underscores')])
+        DataRequired(), Length(1, 64)])
     location = SelectField('Country',coerce=int)
     password = PasswordField('Password', validators=[
         DataRequired(), EqualTo('password2', message='Passwords must match.')])
