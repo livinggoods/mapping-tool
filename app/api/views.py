@@ -344,3 +344,23 @@ def sync_chew_referral():
 def sync_ke_subcounties():
   ke_subcounties = data.get_ke_subcounties()
   return jsonify(subcounties=ke_subcounties)
+
+
+@api.route('/get/training-data', methods=['GET', 'POST'])
+def get_training_data():
+  """
+    Returns Json Payload for the recruitments, and only the selected Applicants
+  """
+  if request.method == 'GET':
+    interviews = Interview.query.filter_by(selected=1)
+    trainings=[]
+    recruitments={}
+    for interview in interviews:
+      if interview.recruitment not in recruitments:
+        recruitments[interview.recruitment] = interview.base_recruitment.to_json()
+        recruitments[interview.recruitment]['data']['count'] = interviews.count()
+        recruitments[interview.recruitment]['data']['registrations'] = []
+      recruitments[interview.recruitment]['data']['registrations'].append(interview.registration.to_json())
+    return jsonify(draft_trainings=recruitments)
+  else:
+    return jsonify(message='not allowed'), 403
