@@ -322,12 +322,122 @@ class SelectedApplication(db.Model):
 class Village(db.Model):
     __tablename__ = 'village'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(65), nullable=False)
-    location_id = Column(ForeignKey(u'location.id'), index=True)
-    lat = Column(String(45))
-    lon = Column(String(45))
+    id = Column(String(65), primary_key=True)
+    village_name = Column(String(64), nullable=True)
+    mapping_id = Column(ForeignKey(u'mapping.id'), index=True)
+    lat = Column(Float, server_default=text("'0'"), nullable=False)
+    lon = Column(Float, server_default=text("'0'"), nullable=False)
+    country = Column(String(65), nullable=True)
+    district = Column(String(65), nullable=True)
+    county = Column(String(65),nullable=True)
+    sub_county_id = Column(String(65), nullable=True)
+    parish_id = Column(ForeignKey(u'parish.id'), index=True)
+    community_unit_id = Column(ForeignKey(u'community_unit.id'), index=True)
+    ward = Column(String(65), nullable=True)
+    link_facility_id = Column(ForeignKey(u'link_facility.id'), index=True)
+    area_chief_name = Column(String(65), nullable=True)
+    area_chief_phone = Column(String(65), nullable=True)
+    distancetobranch = Column(Float, server_default=text("'0'"), nullable=False)
+    transportcost = Column(Float, server_default=text("'0'"), nullable=False)
+    distancetomainroad = Column(Float, server_default=text("'0'"), nullable=False)
+    noofhouseholds = Column(Float, server_default=text("'0'"), nullable=False)
+    mohpoplationdensity = Column(Float, server_default=text("'0'"), nullable=False)
+    estimatedpopulationdensity = Column(Float, server_default=text("'0'"), nullable=False)
+    economic_status = Column(String(65), nullable=True)
+    distancetonearesthealthfacility = Column(Float, server_default=text("'0'"),nullable=False)
+    actlevels = Column(Float, server_default=text("'0'"),nullable=False)
+    actprice = Column(Float, server_default=text("'0'"), nullable=False)
+    mrdtlevels = Column(Float, server_default=text("'0'"), nullable=False)
+    mrdtprice = Column(Float, server_default=text("'0'"), nullable=False)
+    presenceofhostels = Column(Integer, server_default=text("'0'"),nullable=False)
+    presenceofestates = Column(Integer, server_default=text("'0'"), nullable=False)
+    number_of_factories = Column(Float, server_default=text("'0'"), nullable=False)
+    presenceofdistibutors = Column(Integer, server_default=text("'0'"), nullable=False)
+    name_of_distibutors = Column(Text, nullable=True)
+    tradermarket = Column(Integer, server_default=text("'0'"), nullable=False)
+    largesupermarket = Column(Integer, server_default=text("'0'"), nullable=False)
+    ngosgivingfreedrugs = Column(Integer, server_default=text("'0'"), nullable=False)
+    ngodoingiccm = Column(Integer, server_default=text("'0'"), nullable=False)
+    ngodoingmhealth = Column(Integer, server_default=text("'0'"), nullable=False)
+    nameofngodoingiccm = Column(Text, nullable=True)
+    nameofngodoingmhealth = Column(Text, nullable=True)
+    privatefacilityforact = Column(Text, nullable=True)
+    privatefacilityformrdt = Column(Text, nullable=True)
+    synced = Column(Integer, server_default=text("'0'"), nullable=False)
+    chvs_trained = Column(Integer, server_default=text("'0'"), nullable=False)
+    client_time = Column(Numeric, nullable=True)
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
     archived = Column(Integer, server_default=text("'0'"))
+    addedby = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    comment = Column(Text, nullable=True)
+    brac_operating = Column(Integer, server_default=text("'0'"), nullable=False)
+    mtn_signal = Column(Integer, server_default=text("'0'"), nullable=False)
+    safaricom_signal = Column(Integer, server_default=text("'0'"), nullable=False)
+    airtel_signal = Column(Integer, server_default=text("'0'"), nullable=False)
+    orange_signal = Column(Integer, server_default=text("'0'"), nullable=False)
+    act_stock = Column(Integer, server_default=text("'0'"), nullable=False)
+    
+    mapping = relationship(u'Mapping')
+    parish = relationship(u'Parish')
+    community_unit = relationship(u'CommunityUnit')
+    link_facility = relationship(u'LinkFacility')
+
+    def to_json(self):
+      json_record={
+        'id':self.id,
+        'village_name':self.village_name,
+        'mapping_id':self.mapping_id,
+        'lat':self.lat,
+        'lon':self.lon,
+        'country':self.country,
+        'district':self.district,
+        'county':self.county,
+        'sub_county_id':self.sub_county_id,
+        'parish':self.parish,
+        'community_unit':self.community_unit,
+        'ward':self.ward,
+        'link_facility_id':self.link_facility_id,
+        'area_chief_name':self.area_chief_name,
+        'area_chief_phone':self.area_chief_phone,
+        'distancetobranch':self.distancetobranch,
+        'transportcost':self.transportcost,
+        'distancetomainroad':self.distancetomainroad,
+        'noofhouseholds':self.noofhouseholds,
+        'mohpoplationdensity':self.mohpoplationdensity,
+        'estimatedpopulationdensity':self.estimatedpopulationdensity,
+        'economic_status':self.economic_status,
+        'distancetonearesthealthfacility':self.distancetonearesthealthfacility,
+        'actlevels':self.actlevels,
+        'actprice':self.actprice,
+        'mrdtlevels':self.mrdtlevels,
+        'mrdtprice':self.mrdtprice,
+        'presenceofhostels':self.presenceofhostels,
+        'presenceofestates':self.presenceofestates,
+        'number_of_factories':self.number_of_factories,
+        'presenceofdistibutors':self.presenceofdistibutors,
+        'name_of_distibutors':self.name_of_distibutors,
+        'tradermarket':self.tradermarket,
+        'largesupermarket':self.largesupermarket,
+        'ngosgivingfreedrugs':self.ngosgivingfreedrugs,
+        'ngodoingiccm':self.ngodoingiccm,
+        'ngodoingmhealth':self.ngodoingmhealth,
+        'nameofngodoingiccm':self.nameofngodoingiccm,
+        'nameofngodoingmhealth':self.nameofngodoingmhealth,
+        'privatefacilityforact':self.privatefacilityforact,
+        'privatefacilityformrdt':self.privatefacilityformrdt,
+        'synced':self.synced,
+        'chvs_trained':self.chvs_trained,
+        'dateadded':self.dateadded,
+        'addedby':self.addedby,
+        'comment':self.comment,
+        'brac_operating':self.brac_operating,
+        'mtn_signal':self.mtn_signal,
+        'safaricom_signal':self.safaricom_signal,
+        'airtel_signal':self.airtel_signal,
+        'orange_signal':self.orange_signal,
+        'act_stock':self.act_stock
+      }
+      return json_record
 
     location = relationship(u'Location')
 
@@ -521,6 +631,130 @@ class Registration (db.Model):
             recruitment_transport = recruitment_transport,
             branch_transport = branch_transport,
             client_time = client_time, synced = synced)
+    
+
+class Parish(db.Model):
+    __tablename__ = 'parish'
+    
+    id = Column(String(64), primary_key=True, nullable=False)
+    name = Column(String(64), nullable=False)
+    parent = Column(String(64), nullable=True)
+    mapping_id = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
+    added_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+    contact_person = Column(String(64), nullable=True)
+    phone = Column(String(64), nullable=True)
+    comment = Column(Text)
+    synced = Column(Integer, server_default=text("'0'"))
+    country = Column(String(64), nullable=True)
+    client_time = Column(Numeric)
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+    archived = Column(Integer, server_default=text("'0'"))
+
+    mapping = relationship(u'Mapping')
+    user = relationship(u'User')
+    
+    def to_json(self):
+      json_record={
+        'id':self.id,
+        'name':self.name,
+        'parent':self.parent,
+        'mapping_id':self.mapping_id,
+        'mapping': self.mapping.to_json(),
+        'added_by':self.added_by,
+        'contact_person':self.contact_person,
+        'phone':self.phone,
+        'comment':self.comment,
+        'synced':self.synced,
+        'country':self.country,
+        'client_time':float(self.client_time),
+        'date_added':self.date_added
+      }
+      return json_record
+
+
+class Partner(db.Model):
+    __tablename__ = 'partner'
+    
+    id = Column(String(64), primary_key=True, nullable=False)
+    name = Column(String(64), nullable=False)
+    contact_person = Column(String(64), nullable=True)
+    contact_person_phone = Column(String(64), nullable=True)
+    parent = Column(String(64), nullable=True)
+    mapping_id = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
+    client_time = Column(Numeric)
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+    added_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+    synced = Column(String(64), nullable=True)
+    country = Column(String(64), nullable=True)
+    comment = Column(String(64), nullable=True)
+    archived = Column(Integer, server_default=text("'0'"))
+    
+    user = relationship(u'User')
+    mapping = relationship(u'Mapping')
+    
+    def to_json(self):
+      json_record={
+        'id':self.id,
+        'name':self.name,
+        'contact_person':self.contact_person,
+        'contact_person_phone':self.contact_person_phone,
+        'parent':self.parent,
+        'mapping_id':self.mapping_id,
+        'mapping':self.mapping.to_json(),
+        'client_time':float(self.client_time),
+        'date_added':self.date_added,
+        'added_by':self.added_by,
+        'synced':self.synced,
+        'country':self.country,
+        'comment':self.comment
+      }
+      return json_record
+
+
+class PartnerCu(db.Model):
+    __tablename__ = 'partner_cu'
+    
+    id = Column(String(64), primary_key=True, nullable=False)
+    partner_id = Column(ForeignKey(u'partner.id'), nullable=True, index=True)
+    community_unit_id = Column(ForeignKey(u'community_unit.id'), nullable=True, index=True)
+    village_id = Column(ForeignKey(u'village.id'), nullable=True, index=True)
+    mapping_id = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
+    iccm_components = Column(Text, nullable=True) #separate the components with comma
+    client_time = Column(Numeric)
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+    added_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+    synced = Column(String(64), nullable=True)
+    country = Column(String(64), nullable=True)
+    comment = Column(String(64), nullable=True)
+    archived = Column(Integer, server_default=text("'0'"))
+    
+    user = relationship(u'User')
+    mapping = relationship(u'Mapping')
+    village = relationship(u'Village')
+    community_unit = relationship(u'CommunityUnit')
+    partner = relationship(u'Partner')
+    
+    def to_json(self):
+      json_record={
+        'id':self.id,
+        'partner_id':self.partner_id,
+        'partner':self.partner.to_json(),
+        'community_unit_id':self.community_unit_id,
+        'community_unit':self.community_unit.to_json(),
+        'village_id':self.village_id,
+        'village':self.village.to_json(),
+        'mapping_id':self.mapping_id,
+        'mapping':self.mapping.to_json(),
+        'iccm_components':self.iccm_components,
+        'client_time':float(self.client_time),
+        'date_added':self.date_added,
+        'added_by':self.added_by,
+        'synced':self.synced,
+        'country':self.country,
+        'comment':self.comment
+      }
+      return json_record
+
 
 class Recruitments(db.Model):
     __tablename__ = 'recruitments'
@@ -608,6 +842,7 @@ class Mapping(db.Model):
     synced = Column(Integer, server_default=text("'0'"))
     date_added = db.Column(db.DateTime(), default=datetime.utcnow)
     client_time = Column(Numeric)
+    archived = Column(Integer, server_default=text("'0'"))
 
     owner = relationship(u'User')
 
@@ -887,10 +1122,10 @@ class LinkFacility(db.Model):
   client_time = Column(Numeric, nullable=True)
   date_added = db.Column(db.DateTime(), default=datetime.utcnow)
   addedby = Column(ForeignKey(u'users.id'), nullable=True, index=True)
-  mrdt_levels=Column(Integer, server_default=text("'0'"))
-  act_levels=Column(Integer, server_default=text("'0'"))
+  mrdt_levels=Column(Integer, nullable=False, server_default=text("'0'"))
+  act_levels=Column(Integer, nullable=False, server_default=text("'0'"))
   country=Column(String(64))
-  facility_id=Column(String(64))
+  facility_id=Column(String(64), nullable=True)
 
   user=relationship(u'User')
 

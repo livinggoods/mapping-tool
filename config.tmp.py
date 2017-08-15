@@ -5,14 +5,14 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY', 'hard to guess string')
     SSL_DISABLE = True
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True  # enable auto commit after request
-    MAIL_SERVER = 'smtp.googlemail.com'
+    MAIL_SERVER = 'mail.example.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_SUBJECT_PREFIX = '[Insights]'
-    MAIL_SENDER = 'Expansion Admin <devops@livinggoods.org>'
-    DASHBOARD_ADMIN = os.environ.get('DASHBOARD_ADMIN', 'devops@livinggoods.org')
+    MAIL_SENDER = 'email sender'
+    DASHBOARD_ADMIN = os.environ.get('DASHBOARD_ADMIN', 'you@example.org')
     POSTS_PER_PAGE = 5
     FOLLOWERS_PER_PAGE = 10
 
@@ -23,7 +23,7 @@ class Config(object):
 
 class DevelopmentConfigPsql(Config):
     DEBUG = True
-    GOOGLEMAPS_KEY = "AIzaSyC8AYWcGLQwq0HUWCYf1adOYdE9LkaAiyg"
+    GOOGLEMAPS_KEY = "google apps key here"
     SQLALCHEMY_DATABASE_URI = \
         '{dialect}+{driver}://{user}:{password}@{host}:{port}/{dbname}'\
         .format(

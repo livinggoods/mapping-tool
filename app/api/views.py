@@ -5,9 +5,9 @@ from flask import Response, request, jsonify
 import json
 from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
-from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets, GpsData, Ward, County,
+from ..models import (Permission, Role, User, Geo, LinkFacility, Village, PartnerCu, GpsData, Ward, County,
     Location, Education, EducationLevel, Referral, Chp, Recruitments, Interview, Exam, SubCounty,
-    SelectedApplication, Application, ApplicationPhone, Branch, Cohort, Registration)
+    Partner, Mapping, Parish, Branch, Cohort, Registration)
 from .. data import data
 import csv
 import uuid
@@ -141,6 +141,122 @@ def sync_registrations():
           db.session.commit()
           operation='created'
         status.append({'id':record.id, 'status':'ok', 'operation':operation})
+      return jsonify(status=status)
+    else:
+      return jsonify(error="No records posted")
+    
+@api.route('/sync/link_facilities', methods=['GET', 'POST'])
+def sync_link_facilities():
+  if request.method == 'GET':
+    records = LinkFacility.query.filter(LinkFacility.archived != 1)
+    return jsonify({'link_facilities': [record.to_json() for record in records]})
+  else:
+    status = []
+    link_facilities_list = request.json.get('link_facilities')
+    if link_facilities_list is not None:
+      for link_facility in link_facilities_list:
+        saved_record = LinkFacility.query.filter(LinkFacility.id == link_facility.get('id')).first()
+        if saved_record:
+          saved_record.client_time = link_facility.get('date_added')
+          operation = 'updated'
+        else:
+          operation = 'created'
+        db.session.add(saved_record)
+        db.session.commit()
+        status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
+      return jsonify(status=status)
+    else:
+      return jsonify(error="No records posted")
+
+@api.route('/sync/mapping', methods=['GET', 'POST'])
+def sync_mapping():
+  if request.method == 'GET':
+    records = Mapping.query.filter(Mapping.archived != 1)
+    return jsonify({'mappings': [record.to_json() for record in records]})
+  else:
+    status = []
+    mapping_list = request.json.get('mappings')
+    if mapping_list is not None:
+      for mapping in mapping_list:
+        saved_record = Mapping.query.filter(Mapping.id == mapping.get('id')).first()
+        if saved_record:
+          saved_record.client_time = mapping.get('date_added')
+          operation = 'updated'
+        else:
+          operation = 'created'
+        db.session.add(saved_record)
+        db.session.commit()
+        status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
+      return jsonify(status=status)
+    else:
+      return jsonify(error="No records posted")
+
+@api.route('/sync/parish', methods=['GET', 'POST'])
+def sync_parish():
+  if request.method == 'GET':
+    records = Parish.query.filter(Parish.archived != 1)
+    return jsonify({'parish': [record.to_json() for record in records]})
+  else:
+    status = []
+    parish_list = request.json.get('parish')
+    if parish_list is not None:
+      for parish in parish_list:
+        saved_record = Parish.query.filter(Parish.id == parish.get('id')).first()
+        if saved_record:
+          saved_record.client_time = parish.get('date_added')
+          operation = 'updated'
+        else:
+          operation = 'created'
+        db.session.add(saved_record)
+        db.session.commit()
+        status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
+      return jsonify(status=status)
+    else:
+      return jsonify(error="No records posted")
+
+@api.route('/sync/partner', methods=['GET', 'POST'])
+def sync_partner():
+  if request.method == 'GET':
+    records = Partner.query.filter(Partner.archived != 1)
+    return jsonify({'partners': [record.to_json() for record in records]})
+  else:
+    status = []
+    partner_list = request.json.get('partners')
+    if partner_list is not None:
+      for partner in partner_list:
+        saved_record = Partner.query.filter(Partner.id == partner.get('id')).first()
+        if saved_record:
+          saved_record.client_time = partner.get('date_added')
+          operation = 'updated'
+        else:
+          operation = 'created'
+        db.session.add(saved_record)
+        db.session.commit()
+        status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
+      return jsonify(status=status)
+    else:
+      return jsonify(error="No records posted")
+
+
+@api.route('/sync/partner_cu', methods=['GET', 'POST'])
+def sync_partner_cu():
+  if request.method == 'GET':
+    records = PartnerCu.query.filter(PartnerCu.archived != 1)
+    return jsonify({'partners': [record.to_json() for record in records]})
+  else:
+    status = []
+    partner_cu_list = request.json.get('partners_cu')
+    if partner_cu_list is not None:
+      for partner_cu in partner_cu_list:
+        saved_record = PartnerCu.query.filter(PartnerCu.id == partner_cu.get('id')).first()
+        if saved_record:
+          saved_record.client_time = partner_cu.get('date_added')
+          operation = 'updated'
+        else:
+          operation = 'created'
+        db.session.add(saved_record)
+        db.session.commit()
+        status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
       return jsonify(status=status)
     else:
       return jsonify(error="No records posted")
