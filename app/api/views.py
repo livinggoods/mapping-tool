@@ -242,7 +242,7 @@ def sync_partner():
 def sync_partner_cu():
   if request.method == 'GET':
     records = PartnerCu.query.filter(PartnerCu.archived != 1)
-    return jsonify({'partners': [record.to_json() for record in records]})
+    return jsonify({'partner_cu': [record.to_json() for record in records]})
   else:
     status = []
     partner_cu_list = request.json.get('partners_cu')
