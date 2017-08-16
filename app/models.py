@@ -1124,6 +1124,7 @@ class LinkFacility(db.Model):
   act_levels=Column(Integer, nullable=False, server_default=text("'0'"))
   country=Column(String(64))
   facility_id=Column(String(64), nullable=True)
+  archived = Column(Integer, nullable=False, server_default=text("'0'"))
 
   user=relationship(u'User')
 
