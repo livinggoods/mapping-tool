@@ -1099,6 +1099,7 @@ class CommunityUnit(db.Model):
   ngodoingiccm = Column(Integer, server_default=text("'0'"))
   ngodoingmhealth = Column(Integer, server_default=text("'0'"))
   comment = Column(Text)
+  archived = Column(Integer, server_default=text("'0'"))
 
   mapping = relationship(u'Mapping')
   user = relationship(u'User')

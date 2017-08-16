@@ -6,7 +6,7 @@ import json
 from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
 from ..models import (Permission, Role, User, Geo, LinkFacility, Village, PartnerCu, GpsData, Ward, County,
-    Location, Education, EducationLevel, Referral, Chp, Recruitments, Interview, Exam, SubCounty,
+    Location, Education, CommunityUnit, Referral, Chp, Recruitments, Interview, Exam, SubCounty,
     Partner, Mapping, Parish, Branch, Cohort, Registration)
 from .. data import data
 import csv
@@ -214,6 +214,7 @@ def sync_parish():
     else:
       return jsonify(error="No records posted")
 
+
 @api.route('/sync/partner', methods=['GET', 'POST'])
 def sync_partner():
   if request.method == 'GET':
@@ -227,6 +228,30 @@ def sync_partner():
         saved_record = Partner.query.filter(Partner.id == partner.get('id')).first()
         if saved_record:
           saved_record.client_time = partner.get('date_added')
+          operation = 'updated'
+        else:
+          operation = 'created'
+        db.session.add(saved_record)
+        db.session.commit()
+        status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
+      return jsonify(status=status)
+    else:
+      return jsonify(error="No records posted")
+
+
+@api.route('/sync/community-units', methods=['GET', 'POST'])
+def sync_cu():
+  if request.method == 'GET':
+    records = CommunityUnit.query.filter(CommunityUnit.archived != 1)
+    return jsonify({'community_units': [record.to_json() for record in records]})
+  else:
+    status = []
+    community_unit_list = request.json.get('community_units')
+    if community_unit_list is not None:
+      for cu in community_unit_list:
+        saved_record = CommunityUnit.query.filter(CommunityUnit.id == cu.get('id')).first()
+        if saved_record:
+          saved_record.client_time = cu.get('date_added')
           operation = 'updated'
         else:
           operation = 'created'
