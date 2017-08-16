@@ -439,8 +439,6 @@ class Village(db.Model):
       }
       return json_record
 
-    location = relationship(u'Location')
-
 
 class LocationTargets(db.Model):
     __tablename__ = 'location_targets'
