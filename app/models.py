@@ -1529,6 +1529,23 @@ class User(UserMixin, db.Model):
         if self.email is not None and self.avatar_hash is None:
             self.avatar_hash = hashlib.md5(
                 self.email.encode('utf-8')).hexdigest()
+    
+    def to_json(self):
+        json_record={
+            'id':self.id,
+            'email':self.email,
+            'username':self.username,
+            'role_id':self.role_id,
+            'confirmed':self.confirmed,
+            'name':self.name,
+            'location':self.location,
+            'about_me':self.about_me,
+            'member_since':self.member_since,
+            'last_seen':self.last_seen,
+            'geo_id':self.geo_id,
+            'user_type_id':self.user_type_id,
+        }
+        return json_record
 
     @property
     def password(self):
