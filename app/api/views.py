@@ -5,7 +5,7 @@ from flask import Response, request, jsonify
 import json
 from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
-from ..models import (Permission, Role, User, Geo, LinkFacility, Village, PartnerActivity, GpsData, Ward, County,
+from ..models import (Permission, Role, User, IccmComponents, LinkFacility, Village, PartnerActivity, GpsData, Ward, County,
                       Location, Education, CommunityUnit, Referral, Chp, Recruitments, Interview, Exam, SubCounty,
                       Partner, Mapping, Parish, Branch, Cohort, Registration)
 from .. data import data
@@ -468,6 +468,14 @@ def sync_chew_referral():
       return jsonify(status=status)
     else:
       return jsonify(error="No records posted")
+
+@api.route('/sync/iccm-components', methods=['GET', 'POST'])
+def sync_iccm_components():
+  if request.method == 'GET':
+    iccms = IccmComponents.query.filter_by(archived=0)
+    return jsonify({'components': [r.to_json() for r in iccms]})
+  else:
+    return jsonify(error="No records posted")
 
 @api.route('/sync/ke-subcounties', methods=['GET', 'POST'])
 def sync_ke_subcounties():
