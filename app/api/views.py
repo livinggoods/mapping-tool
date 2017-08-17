@@ -5,9 +5,9 @@ from flask import Response, request, jsonify
 import json
 from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
-from ..models import (Permission, Role, User, Geo, LinkFacility, Village, PartnerCu, GpsData, Ward, County,
-    Location, Education, CommunityUnit, Referral, Chp, Recruitments, Interview, Exam, SubCounty,
-    Partner, Mapping, Parish, Branch, Cohort, Registration)
+from ..models import (Permission, Role, User, Geo, LinkFacility, Village, PartnerActivity, GpsData, Ward, County,
+                      Location, Education, CommunityUnit, Referral, Chp, Recruitments, Interview, Exam, SubCounty,
+                      Partner, Mapping, Parish, Branch, Cohort, Registration)
 from .. data import data
 import csv
 import uuid
