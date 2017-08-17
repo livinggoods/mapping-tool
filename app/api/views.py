@@ -360,7 +360,7 @@ def sync_locations():
     return jsonify({'locations': [location.to_json() for location in locations]})
 
 
-@api.route('/create/ke-counties')
+@api.route('/create/ke/counties')
 def create_ke_counties():
   with open(os.path.dirname(os.path.abspath(data.__file__))+'/kenya_county.csv', 'r') as f:
     for row in csv.reader(f.read().splitlines()):
@@ -370,7 +370,7 @@ def create_ke_counties():
   return jsonify(status='ok')
 
 
-@api.route('/sync/create_ke_wards')
+@api.route('/sync/create/ke/wards')
 def get_ke_subcounties():
   subcounties_id = {}
   with open(os.path.dirname(os.path.abspath(data.__file__))+'/subcounties_and_wards.csv', 'r') as f:
@@ -387,8 +387,6 @@ def get_ke_subcounties():
 
 @api.route('/sync/wards')
 def get_wards():
-  # subcounties = data.get_ke_subcounties()
-  # for key, value in subcounties.iteritems():
   wards = data.get_ke_subcounties()
   countyid=[]
   subcounties=[]
@@ -413,16 +411,6 @@ def get_wards():
 
 
   return jsonify(status=subcounties)
-
-  #   countyid.append(value)
-  #   for k, v in value.iteritems():
-  #     subcounties.append({'name': k, 'id': v.get('uuid'), 'more':v})
-  #     sub_county_obj = SubCounty(id=v.get('uuid'), name=k)
-  #
-  #     recruitments = Recruitments(name=request.form.get('name'), added_by=current_user.id)
-  #     db.session.add(recruitments)
-  #     db.session.commit()
-  # return jsonify(sub_counties=subcounties)
 
 
 @api.route('/sync/counties', methods=['GET', 'POST'])
