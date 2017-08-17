@@ -781,6 +781,21 @@ class IccmComponents(db.Model):
   date_added = db.Column(db.DateTime(), default=datetime.utcnow)
   archived = Column(Integer, server_default=text("'0'"))
   status = Column(String(64), nullable=False, server_default=text("'draft'"))
+  
+  user = relationship(u'User')
+  
+  def to_json(self):
+    json_record={
+      'id':self.id,
+      'component_name':self.component_name,
+      'added_by':self.user.to_json(),
+      'comment':self.comment,
+      'client_time':float(self.client_time),
+      'date_added':self.date_added,
+      'archived':self.archived,
+      'status':self.status
+    }
+    return json_record
 
 
 class Recruitments(db.Model):
