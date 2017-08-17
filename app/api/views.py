@@ -263,17 +263,17 @@ def sync_cu():
       return jsonify(error="No records posted")
 
 
-@api.route('/sync/partner_cu', methods=['GET', 'POST'])
+@api.route('/sync/partners/activity', methods=['GET', 'POST'])
 def sync_partner_cu():
   if request.method == 'GET':
-    records = PartnerCu.query.filter(PartnerCu.archived != 1)
+    records = PartnerActivity.query.filter(PartnerActivity.archived != 1)
     return jsonify({'partner_cu': [record.to_json() for record in records]})
   else:
     status = []
     partner_cu_list = request.json.get('partners_cu')
     if partner_cu_list is not None:
       for partner_cu in partner_cu_list:
-        saved_record = PartnerCu.query.filter(PartnerCu.id == partner_cu.get('id')).first()
+        saved_record = PartnerActivity.query.filter(PartnerActivity.id == partner_cu.get('id')).first()
         if saved_record:
           saved_record.client_time = partner_cu.get('date_added')
           operation = 'updated'
