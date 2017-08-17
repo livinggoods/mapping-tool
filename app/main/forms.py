@@ -91,3 +91,10 @@ class EditProfileAdminForm(Form):
 class PostForm(Form):
     body = TextAreaField("What's on your mind?", validators=[DataRequired()])
     submit = SubmitField('Submit')
+    
+    
+class IccmComponentForm(Form):
+    component_name = StringField('Component Name', validators=[DataRequired(),
+                                                               Length(1, 64, 'Maximun allowed characters is 64')])
+    comment = TextAreaField("Comments")
+    submit = SubmitField('Submit')
