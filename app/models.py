@@ -709,21 +709,28 @@ class Partner(db.Model):
       return json_record
 
 
-class PartnerCu(db.Model):
-    __tablename__ = 'partner_cu'
+class PartnerActivity(db.Model): # @TODO create an endpoint that we can use to check if the partner working in the area
+    __tablename__ = 'partner_activity'
     
     id = Column(String(64), primary_key=True, nullable=False)
     partner_id = Column(ForeignKey(u'partner.id'), nullable=True, index=True)
-    community_unit_id = Column(ForeignKey(u'community_unit.id'), nullable=True, index=True)
-    village_id = Column(ForeignKey(u'village.id'), nullable=True, index=True)
-    mapping_id = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
-    iccm_components = Column(Text, nullable=True) #separate the components with comma
-    client_time = Column(Numeric)
-    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
-    added_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
-    synced = Column(String(64), nullable=True)
     country = Column(String(64), nullable=True)
+    county_id = Column(String(64), nullable=True)
+    sub_county_id = Column(String(64), nullable=True)
+    parish_id = Column(String(64), nullable=True)
+    village_id = Column(ForeignKey(u'village.id'), nullable=True, index=True)
+    community_unit_id = Column(ForeignKey(u'community_unit.id'), nullable=True, index=True)
+    mapping_id = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
     comment = Column(String(64), nullable=True)
+    doing_mhealth = Column(Integer, nullable=True)
+    doing_iccm = Column(Integer, nullable=True)
+    giving_free_drugs = Column(Integer, nullable=True)
+    giving_stipend = Column(Integer, nullable=True)
+    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+    client_time = Column(Numeric)
+    added_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+    activities = Column(Text)
+    synced = Column(Integer, server_default=text("'0'"))
     archived = Column(Integer, server_default=text("'0'"))
     
     user = relationship(u'User')
@@ -737,19 +744,28 @@ class PartnerCu(db.Model):
         'id':self.id,
         'partner_id':self.partner_id,
         'partner':self.partner.to_json(),
-        'community_unit_id':self.community_unit_id,
-        'community_unit':self.community_unit.to_json(),
+        'country':self.country,
+        'county_id':self.county_id,
+        'sub_county_id':self.sub_county_id,
+        'parish_id':self.parish_id,
+        'parish':self.parish.to_json(),
         'village_id':self.village_id,
         'village':self.village.to_json(),
+        'community_unit_id':self.community_unit_id,
+        'community_unit':self.community_unit.to_json(),
         'mapping_id':self.mapping_id,
         'mapping':self.mapping.to_json(),
-        'iccm_components':self.iccm_components,
-        'client_time':float(self.client_time),
+        'comment':self.comment,
+        'doing_mhealth':self.doing_mhealth,
+        'doing_iccm':self.doing_iccm,
+        'giving_free_drugs':self.giving_free_drugs,
+        'giving_stipend':self.giving_stipend,
         'date_added':self.date_added,
+        'client_time':self.client_time,
         'added_by':self.added_by,
+        'activities':self.activities,
         'synced':self.synced,
-        'country':self.country,
-        'comment':self.comment
+        'archived':self.archived
       }
       return json_record
 
