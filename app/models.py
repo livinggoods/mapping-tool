@@ -770,6 +770,19 @@ class PartnerActivity(db.Model): # @TODO create an endpoint that we can use to c
       return json_record
 
 
+class IccmComponents(db.Model):
+  __tablename__ = 'iccm_components'
+  
+  id = db.Column(db.Integer, primary_key=True)
+  component_name = Column(String(128), nullable=True)
+  added_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+  comment = Column(Text)
+  client_time = Column(Numeric)
+  date_added = db.Column(db.DateTime(), default=datetime.utcnow)
+  archived = Column(Integer, server_default=text("'0'"))
+  status = Column(String(64), nullable=False, server_default=text("'draft'"))
+
+
 class Recruitments(db.Model):
     __tablename__ = 'recruitments'
 
