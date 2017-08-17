@@ -46,3 +46,61 @@ def user_action():
             return make_response(jsonify(status='user must be specified'), 404)
     else:
         return make_response(jsonify(status='not allowed'), 405)
+    
+
+@admin.route('/iccm-components/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_iccm_components(id):
+    form = IccmComponentForm()
+    iccm = IccmComponents.query.filter_by(id=id).first()
+    if form.validate_on_submit():
+        message = ''
+        if iccm:
+            iccm.component_name = form.component_name.data
+            iccm.added_by = current_user.id
+            iccm.comment = form.comment.data
+            iccm.client_time = int(time.time())
+            db.session.add(iccm)
+            message='Record updated'
+        else:
+            component = IccmComponents(
+                component_name=form.component_name.data,
+                added_by=current_user.id,
+                comment=form.comment.data,
+                client_time=int(time.time())
+            )
+            db.session.add(component)
+            message = 'Record created'
+        db.session.commit()
+        return redirect(url_for('admin.iccm_components'))
+    # set inital values
+    form.component_name.data = iccm.component_name
+    form.comment.data = iccm.comment
+    return render_template('new_iccm.html', form=form)
+
+
+@admin.route('/iccm-components/new', methods=['GET', 'POST'])
+@login_required
+def new_iccm_components():
+    form = IccmComponentForm()
+    if request.method == 'GET':
+        return render_template('new_iccm.html', form=form)
+    else:
+        if form.validate_on_submit():
+            component = IccmComponents(
+                component_name=form.component_name.data,
+                added_by=current_user.id,
+                comment=form.comment.data,
+                client_time=int(time.time())
+            )
+            db.session.add(component)
+            db.session.commit()
+        return redirect(url_for('admin.iccm_components'))
+
+
+@admin.route('/iccm-components', methods=['GET'])
+@login_required
+def iccm_components():
+    iccms = IccmComponents.query.filter_by(archived=0)
+    return render_template('iccm.html', iccms=iccms)
