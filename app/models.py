@@ -788,7 +788,8 @@ class IccmComponents(db.Model):
     json_record={
       'id':self.id,
       'component_name':self.component_name,
-      'added_by':self.user.to_json(),
+      'added_by':self.added_by,
+      'user':self.user.to_json(),
       'comment':self.comment,
       'client_time':float(self.client_time),
       'date_added':self.date_added,
