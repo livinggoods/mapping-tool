@@ -215,7 +215,7 @@ def sync_parish():
       return jsonify(error="No records posted")
 
 
-@api.route('/sync/partner', methods=['GET', 'POST'])
+@api.route('/sync/partners', methods=['GET', 'POST'])
 def sync_partner():
   if request.method == 'GET':
     records = Partner.query.filter(Partner.archived != 1)
