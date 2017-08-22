@@ -189,7 +189,7 @@ def sync_mapping():
         status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
       return jsonify(status=status)
     else:
-      return jsonify(error="No records posted")
+      return jsonify(error=mapping_list)
 
 @api.route('/sync/parish', methods=['GET', 'POST'])
 def sync_parish():
