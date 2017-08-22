@@ -198,7 +198,7 @@ def sync_parish():
     return jsonify({'parish': [record.to_json() for record in records]})
   else:
     status = []
-    parish_list = request.json.get('parish')
+    parish_list = request.json.get('parishes')
     if parish_list is not None:
       for parish in parish_list:
         saved_record = Parish.query.filter(Parish.id == parish.get('id')).first()
