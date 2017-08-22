@@ -920,7 +920,7 @@ class Mapping(db.Model):
         phone=record.get('phone'),
         comment=record.get('comment'),
         synced=record.get('synced'),
-        client_time=record.get('client_time')
+        client_time=record.get('date_added')
 
         return Mapping(id=id, name=name, country=country, county=county, subcounty=subcounty, district=district,
                        added_by=added_by, contact_person=contact_person,phone=phone, comment=comment, synced=synced,

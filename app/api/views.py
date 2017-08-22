@@ -178,18 +178,19 @@ def sync_mapping():
     mapping_list = request.json.get('mappings')
     if mapping_list is not None:
       for mapping in mapping_list:
-        saved_record = Mapping.query.filter(Mapping.id == mapping.get('id')).first()
+        record = Mapping.from_json(mapping)
+        saved_record = Mapping.query.filter(Mapping.id == record.id).first()
         if saved_record:
-          saved_record.client_time = mapping.get('date_added')
-          operation = 'updated'
+          operation = 'needs update'
         else:
           operation = 'created'
-        db.session.add(saved_record)
-        db.session.commit()
+          db.session.add(record)
+          db.session.commit()
+          
         status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
       return jsonify(status=status)
     else:
-      return jsonify(error="No records posted")
+      return jsonify(error=mapping_list)
 
 @api.route('/sync/parish', methods=['GET', 'POST'])
 def sync_parish():
