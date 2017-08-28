@@ -131,4 +131,4 @@ To solve this problem you need run the following command (tested on Ubuntu)
 
 
 
-Maintained by[David Kimaru](mailto:kimarudg@gmail.com)
+Maintained by [David Kimaru](https://github.com/kimarudg)

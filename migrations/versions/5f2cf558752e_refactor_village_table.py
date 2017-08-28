@@ -72,9 +72,13 @@ def upgrade():
                     nullable=False)
     op.alter_column('village', 'lat',
                existing_type=sa.VARCHAR(length=45),
+               type_=sa.Float(),
+               server_default=sa.text(u"'0'"),
                nullable=False)
     op.alter_column('village', 'lon',
                existing_type=sa.VARCHAR(length=45),
+               type_=sa.Float(),
+               server_default=sa.text(u"'0'"),
                nullable=False)
     op.create_index(op.f('ix_village_addedby'), 'village', ['addedby'], unique=False)
     op.create_index(op.f('ix_village_community_unit_id'), 'village', ['community_unit_id'], unique=False)

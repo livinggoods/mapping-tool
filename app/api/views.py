@@ -187,7 +187,7 @@ def sync_mapping():
           db.session.add(record)
           db.session.commit()
           
-        status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
+        status.append({'id': record.id, 'status': 'ok', 'operation': operation})
       return jsonify(status=status)
     else:
       return jsonify(error=mapping_list)
@@ -209,6 +209,87 @@ def sync_parish():
         else:
           operation = 'created'
         db.session.add(saved_record)
+        db.session.commit()
+        status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
+      return jsonify(status=status)
+    else:
+      return jsonify(error="No records posted")
+
+@api.route('/sync/villages', methods=['GET', 'POST'])
+def sync_village():
+  if request.method == 'GET':
+    records = Village.query.filter(Village.archived != 1)
+    return jsonify({'villages': [record.to_json() for record in records]})
+  else:
+    status = []
+    village_list = request.json.get('villages')
+    if village_list is not None:
+      for village in village_list:
+        saved_record = Village.query.filter(Village.id == village.get('id')).first()
+        new_village = Village(
+          id=village.get('id'),
+          village_name =village.get('village_name '),
+          mapping_id =village.get('mapping_id '),
+          lat =village.get('lat '),
+          lon =village.get('lon '),
+          country =village.get('country '),
+          district =village.get('district '),
+          county =village.get('county '),
+          sub_county_id =village.get('sub_county_id '),
+          parish_id =village.get('parish_id '),
+          community_unit_id =village.get('community_unit_id '),
+          ward =village.get('ward '),
+          link_facility_id =village.get('link_facility_id '),
+          area_chief_name =village.get('area_chief_name '),
+          area_chief_phone =village.get('area_chief_phone '),
+          distancetobranch =village.get('distancetobranch '),
+          transportcost =village.get('transportcost '),
+          distancetomainroad =village.get('distancetomainroad '),
+          noofhouseholds =village.get('noofhouseholds '),
+          mohpoplationdensity =village.get('mohpoplationdensity '),
+          estimatedpopulationdensity =village.get('estimatedpopulationdensity '),
+          economic_status =village.get('economic_status '),
+          distancetonearesthealthfacility =village.get('distancetonearesthealthfacility '),
+          actlevels =village.get('actlevels '),
+          actprice =village.get('actprice '),
+          mrdtlevels =village.get('mrdtlevels '),
+          mrdtprice =village.get('mrdtprice '),
+          presenceofhostels =village.get('presenceofhostels '),
+          presenceofestates =village.get('presenceofestates '),
+          number_of_factories =village.get('number_of_factories '),
+          presenceofdistibutors =village.get('presenceofdistibutors '),
+          name_of_distibutors =village.get('name_of_distibutors '),
+          tradermarket =village.get('tradermarket '),
+          largesupermarket =village.get('largesupermarket '),
+          ngosgivingfreedrugs =village.get('ngosgivingfreedrugs '),
+          ngodoingiccm =village.get('ngodoingiccm '),
+          ngodoingmhealth =village.get('ngodoingmhealth '),
+          nameofngodoingiccm =village.get('nameofngodoingiccm '),
+          nameofngodoingmhealth =village.get('nameofngodoingmhealth '),
+          privatefacilityforact =village.get('privatefacilityforact '),
+          privatefacilityformrdt =village.get('privatefacilityformrdt '),
+          synced =village.get('synced '),
+          chvs_trained =village.get('chvs_trained '),
+          client_time =village.get('client_time '),
+          date_added =village.get('date_added '),
+          archived =village.get('archived '),
+          addedby =village.get('addedby '),
+          comment =village.get('comment '),
+          brac_operating =village.get('brac_operating '),
+          mtn_signal =village.get('mtn_signal '),
+          safaricom_signal =village.get('safaricom_signal '),
+          airtel_signal =village.get('airtel_signal '),
+          orange_signal =village.get('orange_signal '),
+          act_stock =village.get('act_stock '),
+        )
+        if saved_record:
+          operation = 'updated'
+        else:
+          operation = 'created'
+          village = Village(
+            
+          )
+        db.session.add(new_village)
         db.session.commit()
         status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
       return jsonify(status=status)

@@ -6,7 +6,7 @@ from sqlalchemy import func, distinct, select, and_
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm
 from .. import db
-from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets, Exam,
+from ..models import (Permission, Role, User, Geo, UserType, Mapping, LocationTargets, Exam, Village,
     Location, Education, EducationLevel, Referral, Chp, Recruitments, Registration, Interview,
     SelectedApplication, Application, ApplicationPhone, Branch, Cohort, RecruitmentUsers)
 from ..decorators import admin_required, permission_required
@@ -35,7 +35,7 @@ def index():
     total_registrations = Registration.query.filter_by(archived=0)
     registrations = total_registrations.count()
 
-    total_mappings = Registration.query.filter_by(archived=0)
+    total_mappings = Mapping.query.filter_by(archived=0)
     mappings = total_mappings.count()
 
     total_recruitments = Recruitments.query.filter_by(archived=0)
@@ -43,15 +43,14 @@ def index():
 
     recruitment = Recruitments.query.filter_by(archived=0).limit(5).all()
 
-    total_villages = Recruitments.query.filter_by(archived=0)
-    villages = total_villages.count()
+    villages = Village.query.filter_by(archived=0)
     if current_user.is_anonymous():
         # return redirect(url_for('auth.login'))
 
-        return render_template('index.html', page=page, registrations=registrations, mappings=mappings,
+        return render_template('index.html', page=page, registrations=registrations, mappings=total_mappings,
                                recruitments=recruitments, villages=villages, currency=currency)
     else:
-        return render_template('index.html', page=page, registrations=registrations, mappings=mappings,
+        return render_template('index.html', page=page, registrations=registrations, mappings=total_mappings,
                                recruitments=recruitments, villages=villages, currency=currency,
                                recruitment=recruitment)
 
@@ -530,7 +529,6 @@ def applications():
 @main.route('/sub-county', methods=['GET', 'POST'])
 @main.route('/parish', methods=['GET', 'POST'])
 @main.route('/ward', methods=['GET', 'POST'])
-@main.route('/village', methods=['GET', 'POST'])
 @main.route('/locations', methods=['GET', 'POST'])
 @login_required
 def create_location():
@@ -564,6 +562,41 @@ def create_location():
         )
         return render_template('mappings.html', page=page, map=inputmap, currency=currency,
          all_locations=all_locations,  locations=locations)
+
+
+@main.route('/villages', methods=['GET', 'POST'])
+@login_required
+def create_village():
+    # if request.method == 'POST':
+    if request.method == 'POST':
+        parent = request.form.get('parent')  if request.form.get('parent') != '0' else None
+        location = Location(
+            name = request.form.get('name').title(),
+            parent = parent,
+            lat = request.form.get('lat'),
+            lon = request.form.get('lon'),
+            admin_name = request.form.get('admin_name').title()
+        )
+        db.session.add(location)
+        db.session.commit()
+        return jsonify(status='ok', parent=parent)
+    else:
+        param = request.path.strip('/')
+        all_locations = Location.query.all()
+        if param is None or param == 'locations':
+            locations = Location.query.all()
+        else:
+            locations = Village.query.filter_by(district="1")
+        page = {'title': param, 'subtitle': 'mapped Villages'}
+        inputmap = Map(
+            identifier="view-side",
+            lat=-1.2728,
+            lng=36.7901,
+            zoom=8,
+            markers=[(-1.2728, 36.7901)]
+        )
+        return render_template('villages.html', page=page, map=inputmap, currency=currency,
+         all_locations=all_locations,  villages=locations)
 
 
 @main.route('/branches', methods=['GET', 'POST'])
@@ -760,6 +793,8 @@ def edit_profile():
     form.geo.data = current_user.geo_id
     form.user_type.data = current_user.user_type_id
     return render_template('edit_profile.html', form=form)
+
+
 
 
 @main.route('/edit-profile/<int:id>', methods=['GET', 'POST'])

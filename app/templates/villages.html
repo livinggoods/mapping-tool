@@ -52,8 +52,8 @@
                   </div>
                   <div class="x_content">
                     <div class="col-md-9 col-sm-12 col-xs-12">
-                      {{clustermap.js}}
-                      {{clustermap.html}}
+                      {{map.js}}
+                      {{map.html}}
 
                     </div>
 
@@ -79,15 +79,15 @@
                           <div class="clearfix"></div>
                         </div>
                         <ul class="list-unstyled top_profiles scroll-view">
-                          {% for location in locations %}
+                          {% for village in villages %}
                           <li class="media event">
                             <a class="pull-left border-aero profile_thumb">
                               <i class="fa fa-user aero"></i>
                             </a>
                             <div class="media-body">
                               <a class="title" href="/village/{{location.id}}">{{ location.name }}</a>
-                              <p><strong>{{ location.name }}. </strong> {{ location.name }} </p>
-                              <p> <small>{{ location.name }}</small>
+                              <p><strong>{{ village.name }}. </strong> {{ village.name }} </p>
+                              <p> <small>{{ village.name }}</small>
                               </p>
                             </div>
                           </li>
