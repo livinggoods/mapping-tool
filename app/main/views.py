@@ -6,8 +6,8 @@ from sqlalchemy import func, distinct, select, and_
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm
 from .. import db
-from ..models import (Permission, Role, User, Geo, UserType, Village, LocationTargets, Exam,
-    Location, Education, EducationLevel, Referral, Chp, Recruitments, Registration, Interview,
+from ..models import (Permission, Role, User, Geo, UserType, Mapping, LocationTargets, Exam, Village,
+    Location, Education, EducationLevel, Referral, Parish, SubCounty, Recruitments, Registration, Interview,
     SelectedApplication, Application, ApplicationPhone, Branch, Cohort, RecruitmentUsers)
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
@@ -17,6 +17,7 @@ import csv, os, time, calendar
 from ..data import data
 import io
 import csv
+import random
 
 currency = 'UGX '
 
@@ -35,7 +36,7 @@ def index():
     total_registrations = Registration.query.filter_by(archived=0)
     registrations = total_registrations.count()
 
-    total_mappings = Registration.query.filter_by(archived=0)
+    total_mappings = Mapping.query.filter_by(archived=0)
     mappings = total_mappings.count()
 
     total_recruitments = Recruitments.query.filter_by(archived=0)
@@ -43,15 +44,14 @@ def index():
 
     recruitment = Recruitments.query.filter_by(archived=0).limit(5).all()
 
-    total_villages = Recruitments.query.filter_by(archived=0)
-    villages = total_villages.count()
+    villages = Village.query.filter_by(archived=0)
     if current_user.is_anonymous():
         # return redirect(url_for('auth.login'))
 
-        return render_template('index.html', page=page, registrations=registrations, mappings=mappings,
+        return render_template('index.html', page=page, registrations=registrations, mappings=total_mappings,
                                recruitments=recruitments, villages=villages, currency=currency)
     else:
-        return render_template('index.html', page=page, registrations=registrations, mappings=mappings,
+        return render_template('index.html', page=page, registrations=registrations, mappings=total_mappings,
                                recruitments=recruitments, villages=villages, currency=currency,
                                recruitment=recruitment)
 
@@ -344,34 +344,7 @@ def interview_score():
     db.session.commit()
     return jsonify(selection=selection, rec=selected.application.recruitment_id)
 
-@main.route('/location/<int:id>', methods=['GET', 'POST'])
-@login_required
-def location(id):
-    location  = Location.query.filter_by(id=id).first_or_404()
-    # get the applications
-    applications = Application.query.filter_by(location_id=id)
-    referrals = Referral.query.filter_by(location_id=id)
-    branches = Branch.query.filter_by(location_id=id)
-    interviews = InterviewScore.query.filter_by(location_id=id)
-    recruitments = LocationTargets.query.filter_by(location_id=id)
-    chp = Chp.query.filter_by(location_id=id)
-    total_chp = chp.count()
-    target = LocationTargets.query.filter_by(location_id=id, archived=0).first()
-    invited = InterviewScore.query.filter_by(location_id=id, invited_training=1)
-    gender = {'m':applications.filter_by(gender='M'), 'f':applications.filter_by(gender='F')}
 
-    # get the selected applications
-    selected_applications = SelectedApplication.query.filter_by(location_id=id)
-    page = {'title': location.name.title() if location is not None else 'No Village found',
-          'subtitle':location.admin_name.title() if location is not None else ''
-        }
-    data = []
-    for d in recruitments:
-      data.append([calendar.timegm(d.recruitment.date_added.utctimetuple()), d.chps_needed])
-    return render_template('location.html', data=data, page=page, total_applications = applications.count(),
-            interviews = interviews, target=target, invited=invited, gender=gender, recruitments=recruitments,
-            applications=applications, refferals=refferals, chps=total_chp, branches = branches,
-            chp=chp, selected_applications=selected_applications, currency=currency)
 
 @main.route('/interview-score/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -530,7 +503,6 @@ def applications():
 @main.route('/sub-county', methods=['GET', 'POST'])
 @main.route('/parish', methods=['GET', 'POST'])
 @main.route('/ward', methods=['GET', 'POST'])
-@main.route('/village', methods=['GET', 'POST'])
 @main.route('/locations', methods=['GET', 'POST'])
 @login_required
 def create_location():
@@ -562,10 +534,67 @@ def create_location():
             zoom=8,
             markers=[(-1.2728, 36.7901)]
         )
-        return render_template('mappings.html', page=page, map=inputmap, currency=currency,
+        return render_template('location.html', page=page, map=inputmap, currency=currency,
          all_locations=all_locations,  locations=locations)
 
 
+@main.route('/villages', methods=['GET', 'POST'])
+@login_required
+def create_village():
+    # if request.method == 'POST':
+    if request.method == 'POST':
+        pass
+    else:
+        page = {'title': 'Villages', 'subtitle': 'mapped Villages'}
+        villages = Village.query.filter_by(archived=0)
+        inputmap = Map(
+            identifier="view-side",
+            lat=-1.2728,
+            lng=36.7901,
+            zoom=8,
+            markers=[(-1.2728, 36.7901)]
+        )
+        return render_template('villages.html', page=page, map=inputmap, currency=currency,
+         villages=villages)
+
+
+@main.route('/mappings', methods=['GET', 'POST'])
+@login_required
+def create_mappings():
+    # if request.method == 'POST':
+    if request.method == 'POST':
+        pass
+    else:
+        page = {'title': 'Mappings', 'subtitle': ' Mappings'}
+        mappings = Mapping.query.all()
+        inputmap = Map(
+            identifier="view-side",
+            lat=-1.2728,
+            lng=36.7901,
+            zoom=8,
+            markers=[(-1.2728, 36.7901)]
+        )
+        return render_template('mappings.html', page=page, map=inputmap, currency=currency,
+         mappings=mappings)
+    
+    
+@main.route('/mapping/<string:id>', methods=['GET', 'POST'])
+@login_required
+def get_mapping_data(id):
+    # if request.method == 'POST':
+    if request.method == 'POST':
+        pass
+    else:
+        page = {'title': 'Mappings', 'subtitle': ' Mappings'}
+        color = ['dark', 'grey', 'blue', 'green', 'red']
+        mapping = Mapping.query.filter_by(id=id).first()
+        parishes = Parish.query.filter_by(mapping_id=id)
+        subcounties = SubCounty.query.filter_by(mappingId=id)
+        villages = Village.query.filter_by(mapping_id=id)
+        return render_template('mapping.html', page=page, villages=villages, mapping=mapping, parishes=parishes,
+                               subcounties=subcounties, color=color)
+    
+    
 @main.route('/branches', methods=['GET', 'POST'])
 @login_required
 def branches():
@@ -760,6 +789,8 @@ def edit_profile():
     form.geo.data = current_user.geo_id
     form.user_type.data = current_user.user_type_id
     return render_template('edit_profile.html', form=form)
+
+
 
 
 @main.route('/edit-profile/<int:id>', methods=['GET', 'POST'])

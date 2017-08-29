@@ -5,7 +5,7 @@
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
                   <div class="icon"><i class="fa fa-map-marker"></i></div>
-                  <div class="count">{{mappings}}</div>
+                  <div class="count">{{mappings.count()}}</div>
                   <h3>Total Mappings</h3>
                   <p>Total Mappings done so far</p>
                 </div>
@@ -29,7 +29,7 @@
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
                   <div class="icon"><i class="fa fa-object-group"></i></div>
-                  <div class="count">{{villages}}</div>
+                  <div class="count">{{villages.count()}}</div>
                   <h3>Villages Mapped</h3>
                   <p>Villages mapped so far.</p>
                 </div>
@@ -150,56 +150,19 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <article class="media event">
-                      <a class="pull-left date">
-                        <p class="month">April</p>
-                        <p class="day">23</p>
-                      </a>
-                      <div class="media-body">
-                        <a class="title" href="#">Item One Title</a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                      </div>
-                    </article>
-                    <article class="media event">
-                      <a class="pull-left date">
-                        <p class="month">April</p>
-                        <p class="day">23</p>
-                      </a>
-                      <div class="media-body">
-                        <a class="title" href="#">Item Two Title</a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                      </div>
-                    </article>
-                    <article class="media event">
-                      <a class="pull-left date">
-                        <p class="month">April</p>
-                        <p class="day">23</p>
-                      </a>
-                      <div class="media-body">
-                        <a class="title" href="#">Item Two Title</a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                      </div>
-                    </article>
-                    <article class="media event">
-                      <a class="pull-left date">
-                        <p class="month">April</p>
-                        <p class="day">23</p>
-                      </a>
-                      <div class="media-body">
-                        <a class="title" href="#">Item Two Title</a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                      </div>
-                    </article>
-                    <article class="media event">
-                      <a class="pull-left date">
-                        <p class="month">April</p>
-                        <p class="day">23</p>
-                      </a>
-                      <div class="media-body">
-                        <a class="title" href="#">Item Three Title</a>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                      </div>
-                    </article>
+                    {% for m in mappings %}
+                      <article class="media event">
+                        <a class="pull-left date">
+                          <p class="month">{{m.date_added.strftime("%B")}}</p>
+                          <p class="day">{{m.date_added.strftime("%d")}} </p>
+                        </a>
+                        <div class="media-body">
+                          <a class="title" href="#">{{m.name}}</a>
+                          <p>{{m.contact_person}}</p>
+                        </div>
+                      </article>
+                    {% endfor %}
+
                   </div>
                 </div>
               </div>

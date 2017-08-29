@@ -4030,3 +4030,11 @@ ul.messages li .img-div i{
  #sales-summary {
     display:none;
  }
+
+ .align_text_left {
+    text-align:left !important;
+ }
+
+ .align_text_right {
+    text-align:right !important;
+ }
