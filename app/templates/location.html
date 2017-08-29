@@ -1,18 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="">
-    <!-- ========================== -->
-    <div class="page-title">
+          <div class="">
+            <div class="page-title">
               <div class="title_left">
-                <h3>{{page.title}} <small> {{page.subtitle}} </small></h3>
+                <h3>{{page.title|title}} <small>{{page.subtitle|title}}</small></h3>
               </div>
 
               <div class="title_right">
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                   <div class="input-group">
-                    <!-- <input type="text" class="form-control" placeholder="Search for..."> -->
+                    <input type="text" class="form-control" placeholder="Search for...">
                     <span class="input-group-btn">
-                      <!-- <button class="btn btn-default" type="button">Go!</button> -->
+                      <button class="btn btn-default" type="button">Go!</button>
                     </span>
                   </div>
                 </div>
@@ -20,641 +19,247 @@
             </div>
 
             <div class="clearfix"></div>
-    <!-- ========================== -->
-
-
-
-            <div class="row top_tiles">
-              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="tile-stats">
-                  <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
-                  <div class="count">{{chps}}</div>
-                  <h3>Exisiting CHPs</h3>
-                  <p>Total number of CHPs in the area.</p>
-                </div>
-              </div>
-              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="tile-stats">
-                  <div class="icon"><i class="fa fa-comments-o"></i></div>
-                  <div class="count">{{target.chps_needed}}</div>
-                  <h3>Target CHPs</h3>
-                  <p>The number of CHPs needed in the area.</p>
-                </div>
-              </div>
-              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="tile-stats">
-                  <div class="icon"><i class="fa fa-sort-amount-desc"></i></div>
-                  <div class="count">{{recruitments.count()}}</div>
-                  <h3>Recruitments</h3>
-                  <p>number of recruitments in this location.</p>
-                </div>
-              </div>
-              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="tile-stats">
-                  <div class="icon"><i class="fa fa-check-square-o"></i></div>
-                  <div class="count">{{invited.count()}}</div>
-                  <h3>Numbers invited</h3>
-                  <p>Total CHPs invited for training</p>
-                </div>
-              </div>
-            </div>
 
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Expansion History <small>Number of selected recruited CHPs </small></h2>
-                    <div class="filter">
-                      <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
-                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                        <span>November 21, 2016 - December 21, 2016</span> <b class="caret"></b>
-                      </div>
-                    </div>
+                    <h2>Locations <small>All mapped locations</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">New Village</button>
+                      </li>
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <div class="col-md-9 col-sm-12 col-xs-12">
-                      <div class="demo-container" style="height:280px">
-                        <div id="placeholder33x" class="demo-placeholder"></div>
-                      </div>
-                      <div class="tiles">
-                        <div class="col-md-4 tile">
-                          <span>Total CHPs</span>
-                          <h2>231,809</h2>
-                          <span class="sparkline11 graph" style="height: 160px;">
-                                          <canvas width="200" height="60" style="display: inline-block; vertical-align: top; width: 94px; height: 30px;"></canvas>
-                                      </span>
-                        </div>
-                        <div class="col-md-4 tile">
-                          <span>Total Sales</span>
-                          <h2>{{currency}}231,809</h2>
-                          <span class="sparkline22 graph" style="height: 160px;">
-                                          <canvas width="200" height="60" style="display: inline-block; vertical-align: top; width: 94px; height: 30px;"></canvas>
-                                      </span>
-                        </div>
-                        <div class="col-md-4 tile">
-                          <span>Total Branches</span>
-                          <h2>231,809</h2>
-                          <span class="sparkline11 graph" style="height: 160px;">
-                                          <canvas width="200" height="60" style="display: inline-block; vertical-align: top; width: 94px; height: 30px;"></canvas>
-                                      </span>
-                        </div>
-                      </div>
+                    <p class="text-muted font-13 m-b-30">
+                      A list of maped locations to date, icluding their parent location where available
+                    </p>
+                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                      <thead>
+                        <tr>
+                          <th>Location Name</th>
+                          <th>Parent Location</th>
+                          <th>Lat</th>
+                          <th>Lon</th>
+                          <th>Country Code</th>
+                          <th>Admin Name</th>
+                          <th></th>
+                        </tr>
+                      </thead>
 
-                    </div>
 
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                      <div>
-                        <div class="x_title">
-                          <h2>Active CHPs</h2>
-                          <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                            </li>
-                            <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                              <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Settings 1</a>
-                                </li>
-                                <li><a href="#">Settings 2</a>
-                                </li>
-                              </ul>
-                            </li>
-                            <li><a class="close-link"><i class="fa fa-close"></i></a>
-                            </li>
-                          </ul>
-                          <div class="clearfix"></div>
-                        </div>
-                        <ul class="list-unstyled top_profiles scroll-view">
-                          {% for chp in chp %}
-                          <li class="media event">
-                            <a class="pull-left border-aero profile_thumb">
-                              <i class="fa fa-user aero"></i>
-                            </a>
-                            <div class="media-body">
-                              <a class="title" href="#">{{chp.l_name}}</a>
-                              <p><strong>{{currency}}2300. </strong> Average Sales </p>
-                              <p> <small>12 Sales Today</small>
-                              </p>
-                            </div>
-                          </li>
-                          {% endfor %}
-                        </ul>
-                      </div>
-                    </div>
-
+                      <tbody>
+                        {% for location in locations %}
+                        <tr>
+                          <td>{{location.name}}</td>
+                          <td>{{location.parent1.name}}</td>
+                          <td>{{location.lat}}</td>
+                          <td>{{location.lon}}</td>
+                          <td>{{location.country_code}}</td>
+                          <td>{{location.admin_name}}</td>
+                          <td><a href="/location/{{location.id}}">More</a></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
             </div>
-
-
-
-            <div class="row">
-              <div class="col-md-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Weekly Summary <small>Sales Data</small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Settings 1</a>
-                          </li>
-                          <li><a href="#">Settings 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-
-                    <div class="row" style="border-bottom: 1px solid #E0E0E0; padding-bottom: 5px; margin-bottom: 5px;">
-                      <div class="col-md-7" style="overflow:hidden;">
-                        <span class="sparkline_one" style="height: 160px; padding: 10px 25px;">
-                                      <canvas width="200" height="60" style="display: inline-block; vertical-align: top; width: 94px; height: 30px;"></canvas>
-                                  </span>
-                        <h4 style="margin:18px">Weekly sales progress</h4>
-                      </div>
-
-                      <div class="col-md-5">
-                        <div class="row" style="text-align: center;">
-                          <div class="col-md-4">
-                            <canvas id="expansion" height="150" width="150" style="margin: 5px 10px 10px 0"></canvas>
-                            <h4 style="margin:0">Recruitments</h4>
-                          </div>
-                          <div class="col-md-4">
-                            <canvas id="gender" height="150" width="150" style="margin: 5px 10px 10px 0"></canvas>
-                            <h4 style="margin:0">Gender</h4>
-                          </div>
-                          <div class="col-md-4">
-                            <canvas id="canvas1i3" height="150" width="150" style="margin: 5px 10px 10px 0"></canvas>
-                            <h4 style="margin:0">Device Share</h4>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-
-            <div class="row">
-              <div class="col-md-4">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Applications<small>{{applications.count()}} application received</small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Settings 1</a>
-                          </li>
-                          <li><a href="#">Settings 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                  {% for application in applications %}
-                      <article class="media event">
-                        <a class="pull-left date">
-                          <!-- <p class="month">{{application.date_added.month}}</p> -->
-                          <p class="month">{{application.date_added.strftime("%B")}}</p> 
-                          <p class="day">{{application.date_added.day}}</p>
-                        </a>
-                        <div class="media-body">
-                          <a class="title" href="#">{{application.f_name}} {{application.m_name}} {{application.l_name}}</a>
-                          <p>Recruitment <strong>{{application.recruitment.name}}</strong> Total Score <strong>{{application.total_score}}</strong></p>
-                        </div>
-                      </article>
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Branches <small>Branches in this location</small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Settings 1</a>
-                          </li>
-                          <li><a href="#">Settings 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    {% for branch in branches %}
-                      <article class="media event">
-                        <a class="pull-left date">
-                          <p class="month">April</p>
-                          <p class="day">23</p>
-                        </a>
-                        <div class="media-body">
-                          <a class="title" href="#">{{branch.name}}</a>
-                          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </div>
-                      </article>
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Interview<small> {{interviews.count() }} people interviewed</small></h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                      </li>
-                      <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Settings 1</a>
-                          </li>
-                          <li><a href="#">Settings 2</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li><a class="close-link"><i class="fa fa-close"></i></a>
-                      </li>
-                    </ul>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    {% for interview in interviews %}
-                      <article class="media event">
-                        <a class="pull-left date">
-                          <p class="month">{{interview.application.date_added.strftime("%B")}}</p>
-                          <p class="day">{{interview.application.date_added.day}}</p>
-                        </a>
-                        <div class="media-body">
-                          <a class="title" href="#">{{interview.application.f_name}} {{interview.application.m_name}} {{interview.application.l_name}}</a>
-                          <p>
-                            Interview Scores <strong>{{interview.interview_total_score}}</strong>
-                            <button type="button" class="btn btn-default" data-toggle="tooltip" id='select' interview="{{interview.id}}" data-placement="left" title="Select for training" data-original-title="Select for training">Select</button>
-                            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="left" title="Decline" data-original-title="Tooltip left">Decline</button>
-                          </p>
-                        </div>
-                      </article>
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+              {% include 'add_location_form.html' %}
             </div>
           </div>
 {% endblock %}
 {% block javascript %}
 <script>
       $(document).ready(function() {
-        //define chart clolors ( you maybe add more colors if you want or flot will add it automatic )
-        var chartColours = ['#96CA59', '#3F97EB', '#72c380', '#6f7a8a', '#f7cb38', '#5a8022', '#2c7282'];
-
-        //generate random number for charts
-        randNum = function() {
-          return (Math.floor(Math.random() * (1 + 40 - 20))) + 20;
+        var handleDataTableButtons = function() {
+          if ($("#datatable-buttons").length) {
+            $("#datatable-buttons").DataTable({
+              fixedHeader: true,
+              keys: true,
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "excel",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "pdfHtml5",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "print",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+            });
+          }
         };
 
-        var d1 = [];
-        var d2 = [];
-
-        //here we generate data for chart
-        for (var i = 0; i < 30; i++) {
-          d1.push([new Date(Date.today().add(i).days()).getTime(), randNum() + i + i + 10]);
-          d2.push([new Date(Date.today().add(i).days()).getTime(), randNum()]);
-        }
-        console.log(d1);
-        var dd = {{data}};
-        d1=dd;
-
-        var chartMinDate = d1[0][0]; //first day
-        var chartMaxDate = d1[2][0]; //last day
-
-        var tickSize = [1, "day"];
-        var tformat = "%d/%m/%y";
-
-        //graph options
-        var options = {
-          grid: {
-            show: true,
-            aboveData: true,
-            color: "#3f3f3f",
-            labelMargin: 10,
-            axisMargin: 0,
-            borderWidth: 0,
-            borderColor: null,
-            minBorderMargin: 5,
-            clickable: true,
-            hoverable: true,
-            autoHighlight: true,
-            mouseActiveRadius: 100
-          },
-          series: {
-            lines: {
-              show: true,
-              fill: true,
-              lineWidth: 2,
-              steps: false
-            },
-            points: {
-              show: true,
-              radius: 4.5,
-              symbol: "circle",
-              lineWidth: 3.0
+        TableManageButtons = function() {
+          "use strict";
+          return {
+            init: function() {
+              handleDataTableButtons();
             }
-          },
-          legend: {
-            position: "ne",
-            margin: [0, -25],
-            noColumns: 0,
-            labelBoxBorderColor: null,
-            labelFormatter: function(label, series) {
-              // just add some space to labes
-              return label + '&nbsp;&nbsp;';
-            },
-            width: 40,
-            height: 1
-          },
-          colors: chartColours,
-          shadowSize: 0,
-          tooltip: true, //activate tooltip
-          tooltipOpts: {
-            content: "%s: %y.0",
-            xDateFormat: "%d/%m",
-            shifts: {
-              x: -30,
-              y: -50
-            },
-            defaultTheme: false
-          },
-          yaxis: {
-            min: 0
-          },
-          xaxis: {
-            mode: "time",
-            minTickSize: tickSize,
-            timeformat: tformat,
-            min: chartMinDate,
-            max: chartMaxDate
-          }
-        };
-        var plot = $.plot($("#placeholder33x"), [{
-          label: "Number of CHPs",
-          data: d1,
-          lines: {
-            fillColor: "rgba(150, 202, 89, 0.12)"
-          }, //#96CA59 rgba(150, 202, 89, 0.42)
-          points: {
-            fillColor: "#fff"
-          }
-        }], options);
-      });
-    </script>
-    <!-- /Flot -->
+          };
+        }();
 
-    <!-- jQuery Sparklines -->
-    <script>
-      $(document).ready(function() {
-        $(".sparkline_one").sparkline([2, 4, 3, 4, 5, 4, 5, 4, 3, 4, 5, 6, 4, 5, 6, 3, 5, 4, 5, 4, 5, 4, 3, 4, 5, 6, 7, 5, 4, 3, 5, 6], {
-          type: 'bar',
-          height: '125',
-          barWidth: 13,
-          colorMap: {
-            '7': '#a1a1a1'
-          },
-          barSpacing: 2,
-          barColor: '#26B99A'
+        $('#datatable-scroller').DataTable({
+          ajax: "js/datatables/json/scroller-demo.json",
+          deferRender: true,
+          scrollY: 380,
+          scrollCollapse: true,
+          scroller: true
         });
 
-        $(".sparkline11").sparkline([2, 4, 3, 4, 5, 4, 5, 4, 3, 4, 6, 2, 4, 3, 4, 5, 4, 5, 4, 3], {
-          type: 'bar',
-          height: '40',
-          barWidth: 8,
-          colorMap: {
-            '7': '#a1a1a1'
-          },
-          barSpacing: 2,
-          barColor: '#26B99A'
-        });
+        var $datatable = $('#datatable-checkbox');
 
-        $(".sparkline22").sparkline([2, 4, 3, 4, 7, 5, 4, 3, 5, 6, 2, 4, 3, 4, 5, 4, 5, 4, 3, 4, 6], {
-          type: 'line',
-          height: '40',
-          width: '200',
-          lineColor: '#26B99A',
-          fillColor: '#ffffff',
-          lineWidth: 3,
-          spotColor: '#34495E',
-          minSpotColor: '#34495E'
+        $datatable.dataTable({
+          'order': [[ 1, 'asc' ]],
+          'columnDefs': [
+            { orderable: false, targets: [0] }
+          ]
         });
-      });
-    </script>
-    <!-- /jQuery Sparklines -->
-
-    <!-- Doughnut Chart -->
-    <script>
-      $(document).ready(function() {
-        var canvasDoughnut,
-            options = {
-              legend: false,
-              responsive: false
-            };
-
-        new Chart(document.getElementById("expansion"), {
-          type: 'doughnut',
-          tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-          data: {
-            labels: [
-              "Applications",
-              "Selected",
-              "Interviews",
-              "CHPs",
-            ],
-            datasets: [{
-              data: [
-                {{applications.count()}}, 
-                {{selected_applications.count()}}, 
-                {{interviews.count()}},
-                {{chp.count()}}],
-              backgroundColor: [
-                "#BDC3C7",
-                "#9B59B6",
-                "#E74C3C",
-                "#26B99A"
-              ],
-              hoverBackgroundColor: [
-                "#CFD4D8",
-                "#B370CF",
-                "#E95E4F",
-                "#36CAAB"
-              ]
-
-            }]
-          },
-          options: options
-        });
-
-        new Chart(document.getElementById("gender"), {
-          type: 'doughnut',
-          tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-          data: {
-            labels: [
-              "Male",
-              "Female"
-            ],
-            datasets: [{
-              data: [{{gender.m.count()}}, {{gender.f.count()}}],
-              backgroundColor: [
-                "#BDC3C7",
-                "#9B59B6"
-              ],
-              hoverBackgroundColor: [
-                "#CFD4D8",
-                "#B370CF"
-              ]
-
-            }]
-          },
-          options: options
-        });
-
-        new Chart(document.getElementById("canvas1i3"), {
-          type: 'doughnut',
-          tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-          data: {
-            labels: [
-              "Symbian",
-              "Blackberry",
-              "Other",
-              "Android",
-              "IOS"
-            ],
-            datasets: [{
-              data: [15, 20, 30, 10, 30],
-              backgroundColor: [
-                "#BDC3C7",
-                "#9B59B6",
-                "#E74C3C",
-                "#26B99A",
-                "#3498DB"
-              ],
-              hoverBackgroundColor: [
-                "#CFD4D8",
-                "#B370CF",
-                "#E95E4F",
-                "#36CAAB",
-                "#49A9EA"
-              ]
-
-            }]
-          },
-          options: options
-        });
-      });
-    </script>
-    <!-- /Doughnut Chart -->
-
-    <!-- bootstrap-daterangepicker -->
-    <script type="text/javascript">
-      $(document).ready(function() {
-
-        var cb = function(start, end, label) {
-          console.log(start.toISOString(), end.toISOString(), label);
-          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        };
-
-        var optionSet1 = {
-          startDate: moment().subtract(29, 'days'),
-          endDate: moment(),
-          minDate: '01/01/2012',
-          maxDate: '12/31/2015',
-          dateLimit: {
-            days: 60
-          },
-          showDropdowns: true,
-          showWeekNumbers: true,
-          timePicker: false,
-          timePickerIncrement: 1,
-          timePicker12Hour: true,
-          ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-          },
-          opens: 'left',
-          buttonClasses: ['btn btn-default'],
-          applyClass: 'btn-small btn-primary',
-          cancelClass: 'btn-small',
-          format: 'MM/DD/YYYY',
-          separator: ' to ',
-          locale: {
-            applyLabel: 'Submit',
-            cancelLabel: 'Clear',
-            fromLabel: 'From',
-            toLabel: 'To',
-            customRangeLabel: 'Custom',
-            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            firstDay: 1
-          }
-        };
-        $('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
-        $('#reportrange').daterangepicker(optionSet1, cb);
-        $('#reportrange').on('show.daterangepicker', function() {
-          console.log("show event fired");
-        });
-        $('#reportrange').on('hide.daterangepicker', function() {
-          console.log("hide event fired");
-        });
-        $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-          console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
-        });
-        $('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
-          console.log("cancel event fired");
-        });
-        $('#options1').click(function() {
-          $('#reportrange').data('daterangepicker').setOptions(optionSet1, cb);
-        });
-        $('#options2').click(function() {
-          $('#reportrange').data('daterangepicker').setOptions(optionSet2, cb);
-        });
-        $('#destroy').click(function() {
-          $('#reportrange').data('daterangepicker').remove();
-        });
-      });
-    </script>
-    <script type="text/javascript">
-       $(document).ready(function() {
-          $('#select').click(function() {
-            console.log($(this).attr('interview'))
+        $datatable.on('draw.dt', function() {
+          $('input').iCheck({
+            checkboxClass: 'icheckbox_flat-green'
           });
-       });
-      
+        });
+
+        TableManageButtons.init();
+      });
     </script>
+
+<script type="text/javascript">
+  var geocoder = new google.maps.Geocoder();
+
+function geocodePosition(pos) {
+  geocoder.geocode({
+    latLng: pos
+  }, function(responses) {
+    if (responses && responses.length > 0) {
+      updateMarkerAddress(responses[0].formatted_address);
+    } else {
+      updateMarkerAddress('Cannot determine address at this location.');
+    }
+  });
+}
+
+function updateMarkerStatus(str) {
+  document.getElementById('markerStatus').innerHTML = str;
+}
+
+function updateMarkerPosition(latLng) {
+  document.getElementById('info').innerHTML = [
+    latLng.lat(),
+    latLng.lng()
+  ].join(', ');
+  $("#lat").val(latLng.lat());
+  $("#lon").val(latLng.lng());
+}
+
+function updateMarkerAddress(str) {
+  document.getElementById('address').innerHTML = str;
+}
+
+function initialize() {
+  var latLng = new google.maps.LatLng(-1.2728, 36.7901);
+  var map = new google.maps.Map(document.getElementById('mapCanvas'), {
+    zoom: 7,
+    center: latLng,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  });
+  var marker = new google.maps.Marker({
+    position: latLng,
+    title: 'Drag to add a location',
+    map: map,
+    draggable: true
+  });
+
+  // Update current position info.
+  updateMarkerPosition(latLng);
+  geocodePosition(latLng);
+
+  // Add dragging event listeners.
+  google.maps.event.addListener(marker, 'dragstart', function() {
+    updateMarkerAddress('Dragging...');
+  });
+
+  google.maps.event.addListener(marker, 'drag', function() {
+    updateMarkerStatus('Dragging...');
+    updateMarkerPosition(marker.getPosition());
+  });
+
+  google.maps.event.addListener(marker, 'dragend', function() {
+    updateMarkerStatus('Drag ended');
+    geocodePosition(marker.getPosition());
+  });
+}
+
+// Onload handler to fire off the app.
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<script>
+$(".bs-example-modal-lg").on("shown.bs.modal", function () {
+  initialize();
+  map.setCenter({lat: -1.2728, lng: 36.7901});
+  google.maps.event.trigger(map, "resize");
+
+});
+</script>
+{% endblock %}
+{% block additionaljs %}
+<!-- Datatables -->
+{{ url_for('static', filename='css/nprogress.css') }}
+    <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buttons.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buttons.flash.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buttons.html5.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buttons.print.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.fixedHeader.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.keyTable.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/responsive.bootstrap.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/datatables.scroller.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jszip.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pdfmake.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vfs_fonts.js') }}"></script>
+{% endblock %}
+{% block additionalcss %}
+    <link href="{{ url_for('static', filename='css/flat/green.css') }}"" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="{{ url_for('static', filename='css/dataTables.bootstrap.min.css') }}"" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/buttons.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/responsive.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/scroller.bootstrap.min.css') }}" rel="stylesheet">
+
 {% endblock %}

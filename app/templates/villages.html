@@ -60,7 +60,7 @@
                     <div class="col-md-3 col-sm-12 col-xs-12">
                       <div>
                         <div class="x_title">
-                          <h2>Mapped Locations</h2>
+                          <h2>Mapped Villages</h2>
                           <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -79,20 +79,29 @@
                           <div class="clearfix"></div>
                         </div>
                         <ul class="list-unstyled top_profiles scroll-view">
-                          {% for village in villages %}
-                          <li class="media event">
-                            <a class="pull-left border-aero profile_thumb">
-                              <i class="fa fa-user aero"></i>
-                            </a>
-                            <div class="media-body">
-                              <a class="title" href="/village/{{location.id}}">{{ location.name }}</a>
-                              <p><strong>{{ village.name }}. </strong> {{ village.name }} </p>
-                              <p> <small>{{ village.name }}</small>
-                              </p>
-                            </div>
-                          </li>
-                          {% endfor %}
+                          {% if villages.count() < 1 %}
+                            <li class="media event">
+                              <div class="media-body">
+                                <p>No Village found </p>
+                                </div>
+                            </li>
+                          {% else %}
+                            {% for village in villages %}
+                            <li class="media event">
+                              <a class="pull-left border-aero profile_thumb">
+                                <i class="fa fa-user aero"></i>
+                              </a>
+                              <div class="media-body">
+                                <a class="title" href="/village/{{village.id}}">{{ village.village_name }}</a>
+                                <p><strong>{{ village.village_name }}. </strong> {{ village.village_name }} </p>
+                                <p> <small>{{ village.village_name }}</small>
+                                </p>
+                              </div>
+                            </li>
+                            {% endfor %}
+                          {% endif %}
                         </ul>
+                        <h2>Village Data Table</h2>
                       </div>
                     </div>
 
@@ -103,85 +112,39 @@
 {% endblock %}
 {% block javascript %}
 
+{% block additionaljs %}
+<!-- Datatables -->
+{{ url_for('static', filename='css/nprogress.css') }}
+    <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buttons.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buttons.flash.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buttons.html5.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/buttons.print.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.fixedHeader.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.keyTable.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/responsive.bootstrap.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/datatables.scroller.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jszip.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pdfmake.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vfs_fonts.js') }}"></script>
+{% endblock %}
+{% block additionalcss %}
+    <link href="{{ url_for('static', filename='css/flat/green.css') }}"" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="{{ url_for('static', filename='css/dataTables.bootstrap.min.css') }}"" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/buttons.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/responsive.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/scroller.bootstrap.min.css') }}" rel="stylesheet">
 
-<script>
-      $(document).ready(function() {
-        new PNotify({
-          title: "PNotify",
-          type: "info",
-          text: "Welcome. Try hovering over me. You can click things behind me, because I'm non-blocking.",
-          nonblock: {
-              nonblock: true
-          },
-          addclass: 'dark',
-          styling: 'bootstrap3',
-          hide: false,
-          before_close: function(PNotify) {
-            PNotify.update({
-              title: PNotify.options.title + " - Enjoy your Stay",
-              before_close: null
-            });
-
-            PNotify.queueRemove();
-
-            return false;
-          }
-        });
-
-      });
-    </script>
+{% endblock %}
     <!-- /PNotify -->
 
     <!-- Custom Notification -->
-    <script>
-      $(document).ready(function() {
-        var cnt = 10;
 
-        TabbedNotification = function(options) {
-          var message = "<div id='ntf" + cnt + "' class='text alert-" + options.type + "' style='display:none'><h2><i class='fa fa-bell'></i> " + options.title +
-            "</h2><div class='close'><a href='javascript:;' class='notification_close'><i class='fa fa-close'></i></a></div><p>" + options.text + "</p></div>";
-
-          if (!document.getElementById('custom_notifications')) {
-            alert('doesnt exists');
-          } else {
-            $('#custom_notifications ul.notifications').append("<li><a id='ntlink" + cnt + "' class='alert-" + options.type + "' href='#ntf" + cnt + "'><i class='fa fa-bell animated shake'></i></a></li>");
-            $('#custom_notifications #notif-group').append(message);
-            cnt++;
-            CustomTabs(options);
-          }
-        };
-
-        CustomTabs = function(options) {
-          $('.tabbed_notifications > div').hide();
-          $('.tabbed_notifications > div:first-of-type').show();
-          $('#custom_notifications').removeClass('dsp_none');
-          $('.notifications a').click(function(e) {
-            e.preventDefault();
-            var $this = $(this),
-              tabbed_notifications = '#' + $this.parents('.notifications').data('tabbed_notifications'),
-              others = $this.closest('li').siblings().children('a'),
-              target = $this.attr('href');
-            others.removeClass('active');
-            $this.addClass('active');
-            $(tabbed_notifications).children('div').hide();
-            $(target).show();
-          });
-        };
-
-        CustomTabs();
-
-        var tabid = idname = '';
-
-        $(document).on('click', '.notification_close', function(e) {
-          idname = $(this).parent().parent().attr("id");
-          tabid = idname.substr(-2);
-          $('#ntf' + tabid).remove();
-          $('#ntlink' + tabid).parent().remove();
-          $('.notifications a').first().addClass('active');
-          $('#notif-group div').first().css('display', 'block');
-        });
-      });
-    </script>
 <script type="text/javascript">
 var geocoder = new google.maps.Geocoder();
 

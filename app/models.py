@@ -427,7 +427,7 @@ class Village(db.Model):
         'privatefacilityformrdt':self.privatefacilityformrdt,
         'synced':self.synced,
         'chvs_trained':self.chvs_trained,
-        'dateadded':self.dateadded,
+        'date_added':self.date_added,
         'addedby':self.addedby,
         'comment':self.comment,
         'brac_operating':self.brac_operating,
