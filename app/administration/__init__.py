@@ -1,8 +1,8 @@
 from flask import Blueprint
 
 # Create a Flask Blueprint which will define views and errors
-admin = Blueprint(
-    'admin',  # blueprint name
+administration = Blueprint(
+    'administration',  # blueprint name
     __name__  # module where blueprint is located
 )
 

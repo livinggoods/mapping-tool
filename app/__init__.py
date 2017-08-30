@@ -4,8 +4,12 @@ from flask_mail import Mail
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 from config import config
 from flask_googlemaps import GoogleMaps, Map
+
+
 
 # initialize flask extensions
 # note, extensions are initalized with no Flask app instance because
@@ -14,6 +18,7 @@ bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
+admin = Admin()
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'  # use strong session protection
@@ -37,8 +42,15 @@ def create_app(config_name):
     mail.init_app(app)
     moment.init_app(app)
     db.init_app(app)
+    admin = Admin(app, name='Admin', template_mode='bootstrap3')
     GoogleMaps(app)
     login_manager.init_app(app)
+    
+    ## Add admin
+    from models import (User, Mapping)
+    admin.add_view(ModelView(User, db.session))
+    admin.add_view(ModelView(Mapping, db.session))
+    
 
     # redirect all http requests to https
     if not app.debug and not app.testing and not app.config['SSL_DISABLE']:
@@ -49,11 +61,11 @@ def create_app(config_name):
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
-    # register 'admin' blueprint with Flask Application
-    from .admin import admin as admin_blueprint
+    # register 'administration' blueprint with Flask Application
+    from .administration import administration as admin_blueprint
     # the 'url_prefix' parameter means all routes defined in the blueprint will
-    # be registered with the prefix '/admin' (e.g., '/admin/users')
-    app.register_blueprint(admin_blueprint, url_prefix='/admin')
+    # be registered with the prefix '/administration' (e.g., '/administration/users')
+    app.register_blueprint(admin_blueprint, url_prefix='/administration')
 
     # register 'auth' blueprint with Flask application
     from .auth import auth as auth_blueprint

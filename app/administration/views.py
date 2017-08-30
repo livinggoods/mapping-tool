@@ -4,17 +4,17 @@ from flask_login import current_user, login_required
 from ..models import User, Geo, IccmComponents
 from ..main.forms import IccmComponentForm
 from ..decorators import admin_required, permission_required
-from .. import db
-from . import admin
+from .. import db, admin
+from . import administration
 import time
 
 
-@admin.route('/', methods=['GET'])
+@administration.route('/', methods=['GET'])
 @login_required
 def admin_dashboard():
     return make_response(jsonify(status='dashboard coming soon'), 200)
 
-@admin.route('/users', methods=['GET'])
+@administration.route('/users', methods=['GET'])
 @login_required
 def admin_users():
     page={'title':'Users','subtitle':'Registered Users'}
@@ -26,7 +26,7 @@ def admin_users():
     return render_template('admin/users.html', page=page, users=users)
 
 
-@admin.route('/user', methods=['POST'])
+@administration.route('/user', methods=['POST'])
 @login_required
 def user_action():
     if request.method=='POST':
@@ -48,7 +48,7 @@ def user_action():
         return make_response(jsonify(status='not allowed'), 405)
     
 
-@admin.route('/iccm-components/<int:id>', methods=['GET', 'POST'])
+@administration.route('/iccm-components/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def edit_iccm_components(id):
@@ -80,7 +80,7 @@ def edit_iccm_components(id):
     return render_template('new_iccm.html', form=form)
 
 
-@admin.route('/iccm-components/new', methods=['GET', 'POST'])
+@administration.route('/iccm-components/new', methods=['GET', 'POST'])
 @login_required
 def new_iccm_components():
     form = IccmComponentForm()
@@ -99,7 +99,7 @@ def new_iccm_components():
         return redirect(url_for('admin.iccm_components'))
 
 
-@admin.route('/iccm-components', methods=['GET'])
+@administration.route('/iccm-components', methods=['GET'])
 @login_required
 def iccm_components():
     iccms = IccmComponents.query.filter_by(archived=0)
