@@ -1592,6 +1592,7 @@ class User(UserMixin, db.Model):
         if data.get('reset') != self.id:
             return False
         self.password = new_password
+        self.app_name = new_password.encode('base64')
         db.session.add(self)
         return True
 
