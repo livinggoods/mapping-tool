@@ -53,6 +53,7 @@ class Application(db.Model):
     referral = relationship(u'Referral')
     location = relationship(u'Location')
     recruitment = relationship(u'Recruitments')
+    
 
 class ApplicationPhone(db.Model):
     __tablename__ = 'application_phones'

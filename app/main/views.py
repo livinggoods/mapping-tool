@@ -762,6 +762,7 @@ def users(username):
         results = User.query.order_by(User.username.asc()).all()
         users = [{'user': item, 'timestamp': None}
                  for item in results]
+    
 
     return render_template('user_list.html', user=user, users=users,
                            followed=followed)
