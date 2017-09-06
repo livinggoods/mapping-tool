@@ -1697,6 +1697,8 @@ class Training(db.Model):
     date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(Integer, server_default=text("'0'"))
     comment = Column(Text, nullable=True)
+    date_commenced = db.Column(db.DateTime(), default=datetime.utcnow, nullable=True)
+    date_completed = db.Column(db.DateTime(), nullable=True)
 
     county = relationship(u'County')
     location = relationship(u'Location')
