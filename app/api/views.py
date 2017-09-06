@@ -3,6 +3,7 @@ from . import api
 from flask_login import login_required, current_user
 from flask import Response, request, jsonify
 import json
+import time
 from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
 from ..models import (Permission, Role, User, IccmComponents, LinkFacility, Village, PartnerActivity, GpsData, Ward, County,
@@ -55,6 +56,25 @@ def api_recruitment(id):
       recruitment.status = request.form.get('action')
       db.session.add(recruitment)
       db.session.commit()
+      # also create a draft training, that needs to be confirmed by the Training Team.
+      # When training has been confirmed, the person who confirmeed it becomes the owner
+      if request.form.get('action') == 'confirmed':
+        existing_training = Training.query.filter_by(recruitment_id=recruitment.id).first()
+        if not existing_training:
+          training = Training(
+            id = uuid.uuid4(),
+            training_name = recruitment.name,
+            country = recruitment.country,
+            district = recruitment.district,
+            recruitment_id = recruitment.id,
+            status = 1,
+            client_time = time.time(),
+            created_by = 1,
+          )
+          if recruitment.country == 'KE':
+            training.subcounty_id = recruitment.subcounty
+          db.session.add(training)
+          db.session.commit()
       return jsonify(status='updated', id=recruitment.id)
     else:
       # recruitments = Recruitments(name=request.form.get('name'))
@@ -549,7 +569,7 @@ def get_training_data():
     return jsonify(message='not allowed'), 403
 
 
-@api.route('/get/trainings', methods=['GET', 'POST'])
+@api.route('/sync/trainings', methods=['GET', 'POST'])
 def get_trainings():
   """
     Returns Json Payload for the training data
