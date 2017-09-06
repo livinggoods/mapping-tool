@@ -34,8 +34,8 @@ def upgrade():
     op.create_index(op.f('ix_subcounty_mappingId'), 'subcounty', ['mappingId'], unique=False)
     op.drop_index('ix_subcounty_countyID', table_name='subcounty')
     op.drop_index('ix_subcounty_mappingId', table_name='subcounty')
-    op.add_column('training', sa.Column('date_commenced', sa.DateTime(), nullable=True))
-    op.add_column('training', sa.Column('date_completed', sa.DateTime(), nullable=True))
+    op.add_column('training', sa.Column('date_commenced', sa.Numeric(), nullable=True))
+    op.add_column('training', sa.Column('date_completed', sa.Numeric(), nullable=True))
     op.create_index(op.f('ix_training_trainers_trainer_id'), 'training_trainers', ['trainer_id'], unique=False)
     # ### end Alembic commands ###
 
