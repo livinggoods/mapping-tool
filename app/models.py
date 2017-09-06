@@ -1642,6 +1642,8 @@ class User(UserMixin, db.Model):
         return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
             url=url, hash=hash, size=size, default=default, rating=rating)
 
+    def __str__(self):
+      return '%s (%s)' % (self.username, self.name)
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
@@ -1715,7 +1717,7 @@ class Training(db.Model):
         'lat':self.lat,
         'lon':self.lon,
         'status':self.status,
-        'client_time':self.client_time,
+        'client_time':float(self.client_time),
         'created_by':self.created_by,
         'date_created':self.date_created,
         'archived':self.archived,
