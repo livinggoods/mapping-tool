@@ -7,7 +7,7 @@ from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
 from ..models import (Permission, Role, User, IccmComponents, LinkFacility, Village, PartnerActivity, GpsData, Ward, County,
                       Location, Education, CommunityUnit, Referral, Chp, Recruitments, Interview, Exam, SubCounty,
-                      Partner, Mapping, Parish, Branch, Cohort, Registration)
+                      Partner, Mapping, Parish, Training, Cohort, Registration)
 from .. data import data
 import csv
 import uuid
@@ -545,5 +545,17 @@ def get_training_data():
         recruitments[interview.recruitment]['data']['registrations'] = []
       recruitments[interview.recruitment]['data']['registrations'].append(interview.registration.to_json())
     return jsonify(draft_trainings=recruitments)
+  else:
+    return jsonify(message='not allowed'), 403
+
+
+@api.route('/get/trainings', methods=['GET', 'POST'])
+def get_trainings():
+  """
+    Returns Json Payload for the training data
+  """
+  if request.method == 'GET':
+    trainings = Training.query.filter_by(archived=0)
+    return jsonify(trainings=[r.to_json() for r in trainings])
   else:
     return jsonify(message='not allowed'), 403

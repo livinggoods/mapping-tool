@@ -1764,9 +1764,9 @@ class SessionAttendance(db.Model):
   comment = Column(Text, nullable=True)
   
   training_session = relationship(u'TrainingSession')
-  trainee = relationship(u'Registrations')
+  trainee = relationship(u'Registration')
   training_session_type = relationship(u'TrainingSessionType')
-  training_id = relationship(u'Training')
+  training = relationship(u'Training')
   user = relationship(u'User')
 
 
@@ -1793,12 +1793,10 @@ class TrainingSessionType(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     session_name = db.Column(db.String(20))
-    date_added = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
-    added_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
     country = db.Column(db.String(20), nullable=False)
     archived = Column(Integer, server_default=text("'0'"))
     client_time = db.Column(db.Numeric)
-    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    created_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
     date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
 
     user = relationship(u'User')
@@ -1848,5 +1846,6 @@ class TrainingTrainers(db.Model):
     archived = Column(Integer, server_default=text("'0'"))
     training_role_id = Column(ForeignKey(u'training_roles.id'), nullable=True, index=True)
 
-    trainer = relationship(u'User')
-
+    trainer = relationship(u'User', foreign_keys=[trainer_id])
+    user = relationship(u'User', foreign_keys=[created_by])
+    
