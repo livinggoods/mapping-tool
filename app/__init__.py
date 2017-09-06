@@ -47,9 +47,9 @@ def create_app(config_name):
     login_manager.init_app(app)
     
     ## Add admin
-    from models import (User, Mapping)
-    admin.add_view(ModelView(User, db.session))
-    admin.add_view(ModelView(Mapping, db.session))
+    from admins import TrainingStatusAdmin
+    
+    admin.add_view(TrainingStatusAdmin(db.session))
     
 
     # redirect all http requests to https
