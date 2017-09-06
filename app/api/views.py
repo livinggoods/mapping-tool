@@ -72,7 +72,13 @@ def api_recruitment(id):
             created_by = 1,
           )
           if recruitment.country == 'KE':
-            training.subcounty_id = recruitment.subcounty
+            if recruitment.subcounty_id is not None:
+              training.subcounty_id = recruitment.subcounty_id
+            if recruitment.county_id is not None:
+              training.county_id = recruitment.county_id
+          else:
+            if recruitment.location_id is not None:
+              training.location_id = recruitment.location_id
           db.session.add(training)
           db.session.commit()
       return jsonify(status='updated', id=recruitment.id)
