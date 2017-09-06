@@ -819,6 +819,9 @@ class Recruitments(db.Model):
     synced = Column(Integer, server_default=text("'0'"))
     archived = Column(Integer, server_default=text("'0'"))
     status = Column(String(64), nullable=False, server_default=text("'draft'"))
+    county_id = Column(ForeignKey(u'ke_county.id'), nullable=True, index=True)
+    subcounty_id = Column(ForeignKey(u'subcounty.id'), nullable=True, index=True)
+    location_id = Column(ForeignKey(u'location.id'), nullable=True, index=True)
 
     owner = relationship(u'User')
 
