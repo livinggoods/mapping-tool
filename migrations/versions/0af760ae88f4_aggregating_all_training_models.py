@@ -93,7 +93,7 @@ def upgrade():
 
 
     # Branch table
-    op.alter_column(u'branch', 'name', name='branch_name')
+    op.alter_column(u'branch', 'name', new_column_name='branch_name')
     op.alter_column(u'branch',
                     'lat',
                     type_=sa.Float,
@@ -127,25 +127,13 @@ def upgrade():
     # cohort
     op.add_column(u'cohort', sa.Column('cohort_name', sa.String(length=45), nullable=True))
 
-    # session attendance
-    op.add_column(u'session_attendance', sa.Column('training_id', sa.String(length=64), nullable=True))
-    op.create_index(op.f('ix_session_attendance_training_id'), 'session_attendance', ['training_id'], unique=False)
-    op.create_foreign_key(None, 'session_attendance', 'training', ['training_id'], ['id'])
-    op.create_index(op.f('ix_subcounty_countyID'), 'subcounty', ['countyID'], unique=False)
-    op.create_index(op.f('ix_subcounty_mappingId'), 'subcounty', ['mappingId'], unique=False)
-
+    
     # training
-    op.add_column(u'training', sa.Column('date_commenced', sa.Numeric(), nullable=True))
-    op.add_column(u'training', sa.Column('date_completed', sa.Numeric(), nullable=True))
-    op.add_column(u'training', sa.Column('training_status_id', sa.Integer(), nullable=True))
+    
+    
     op.add_column(u'training', sa.Column('training_venue_id', sa.String(length=64), nullable=True))
-    op.create_index(op.f('ix_training_training_status_id'), 'training', ['training_status_id'], unique=False)
     op.create_index(op.f('ix_training_training_venue_id'), 'training', ['training_venue_id'], unique=False)
-    op.drop_index('ix_training_status', table_name='training')
-    op.drop_constraint(u'training_status_fkey', 'training', type_='foreignkey')
     op.create_foreign_key(None, 'training', 'training_venues', ['training_venue_id'], ['id'])
-    op.create_foreign_key(None, 'training', 'training_status', ['training_status_id'], ['id'])
-    op.drop_column(u'training', 'status')
 
     # training session
     op.add_column(u'training_session', sa.Column('class_id', sa.Integer(), nullable=False))
@@ -165,11 +153,8 @@ def upgrade():
 
     # training trainers
     op.add_column(u'training_trainers', sa.Column('class_id', sa.Integer(), nullable=True))
-    op.add_column(u'training_trainers', sa.Column('training_role_id', sa.Integer(), nullable=True))
     op.create_index(op.f('ix_training_trainers_class_id'), 'training_trainers', ['class_id'], unique=False)
-    op.create_index(op.f('ix_training_trainers_training_role_id'), 'training_trainers', ['training_role_id'], unique=False)
     op.create_foreign_key(None, 'training_trainers', 'training_classes', ['class_id'], ['id'])
-    op.create_foreign_key(None, 'training_trainers', 'training_roles', ['training_role_id'], ['id'])
     # ### end Alembic commands ###
 
 
@@ -200,30 +185,16 @@ def downgrade():
     op.drop_column(u'training_session', 'class_id')
 
     # training
-    op.add_column(u'training', sa.Column('status', sa.INTEGER(), autoincrement=False, nullable=True))
     op.drop_constraint(None, 'training', type_='foreignkey')
-    op.drop_constraint(None, 'training', type_='foreignkey')
-    op.create_foreign_key(u'training_status_fkey', 'training', 'training_status', ['status'], ['id'])
-    op.create_index('ix_training_status', 'training', ['status'], unique=False)
     op.drop_index(op.f('ix_training_training_venue_id'), table_name='training')
-    op.drop_index(op.f('ix_training_training_status_id'), table_name='training')
     op.drop_column(u'training', 'training_venue_id')
-    op.drop_column(u'training', 'training_status_id')
-    op.drop_column(u'training', 'date_completed')
-    op.drop_column(u'training', 'date_commenced')
-    op.drop_index(op.f('ix_subcounty_mappingId'), table_name='subcounty')
-    op.drop_index(op.f('ix_subcounty_countyID'), table_name='subcounty')
-
-    # session attendance
-    op.drop_constraint(None, 'session_attendance', type_='foreignkey')
-    op.drop_index(op.f('ix_session_attendance_training_id'), table_name='session_attendance')
-    op.drop_column(u'session_attendance', 'training_id')
+   
 
     # cohort
     op.drop_column(u'cohort', 'cohort_name')
 
     # branch
-    op.alter_column(u'branch', 'branch_name', name='name')
+    op.alter_column(u'branch', 'branch_name', new_column_name='name')
     op.add_column(u'branch', sa.Column('location_id', sa.INTEGER(), autoincrement=False, nullable=True))
     op.drop_constraint(None, 'branch', type_='foreignkey')
     op.create_foreign_key(u'branch_location_id_fkey', 'branch', 'location', ['location_id'], ['id'])
