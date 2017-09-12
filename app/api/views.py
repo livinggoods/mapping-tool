@@ -7,8 +7,8 @@ import time
 from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
 from ..models import (Permission, Role, User, IccmComponents, LinkFacility, Village, PartnerActivity, GpsData, Ward, County,
-                      Location, Education, CommunityUnit, Referral, Chp, Recruitments, Interview, Exam, SubCounty,
-                      Partner, Mapping, Parish, Training, Cohort, Registration)
+                      Location, Education, CommunityUnit, Referral, Recruitments, Interview, Exam, SubCounty,
+                      Partner, Mapping, Parish, Training, Trainees, TrainingClasses, Cohort, Registration)
 from .. data import data
 import csv
 import uuid
@@ -585,3 +585,70 @@ def get_trainings():
     return jsonify(trainings=[r.to_json() for r in trainings])
   else:
     return jsonify(message='not allowed'), 403
+
+
+@api.route('/sync/training-classes', methods=['GET', 'POST'])
+def sync_training_classes():
+  """
+  Syncs training classes at the cloud and in the mobile app
+  """
+  if request.method == 'GET':
+    records = TrainingClasses.query.all()
+    return jsonify({'training-classes': [record.to_json for record in records]})
+  else:
+    status = []
+    training_classes = request.json.get('training_classes')
+    if training_classes is not None:
+      for training_class in training_classes:
+        record = TrainingClasses.from_json(training_class)
+        saved_record = TrainingClasses.query.filter(TrainingClasses.id == record.id).first()
+        if saved_record:
+          saved_record.id = training_class.get('id')
+          saved_record.class_name = training_class.get('class_name')
+          saved_record.created_by = training_class.get('created_by')
+          saved_record.client_time = training_class.get('client_time')
+          saved_record.date_created = training_class.get('date_created')
+          db.session.add(record)
+          db.session.commit()
+          operation = 'updated'
+        else:
+          db.session.add(record)
+          db.session.commit()
+          operation = 'added'
+        status.append({'id': record.id, 'status': 'ok', 'operation': operation})
+      return jsonify(status=status)
+    else:
+      return jsonify(message='No records posted')
+
+
+@api.route('/sync/trainees', methods=['GET', 'POST'])
+def sync_trainees():
+  """
+  Syncs trainees to and from the cloud
+  """
+  if request.method == 'GET':
+    records = Trainees.query.all()
+    return jsonify({'trainees': [record.to_json for record in records]})
+  else:
+    status = []
+    trainees = request.json.get('trainees')
+    if trainees is not None:
+      for trainee in trainees:
+        record = Trainees.from_json(trainee)
+        saved_record = Trainees.query.filter(Trainees.id == record.id).first()
+        if saved_record:
+          saved_record.id = trainee.get('id')
+          saved_record.registration_id = trainee.get('registration_id')
+          saved_record.class_id = trainee.get('class_id')
+          saved_record.training_id = trainee.get('training_id')
+          db.session.add(record)
+          db.session.commit()
+          operation = 'updated'
+        else:
+          db.session.add(record)
+          db.session.commit()
+          operation = 'added'
+        status.append({'id': record.id, 'status': 'ok', 'operation': operation})
+        return jsonify(status=status)
+      else:
+        return jsonify(message='No records posted')

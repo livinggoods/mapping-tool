@@ -117,37 +117,22 @@ class Branch(db.Model):
     __tablename__ = 'branch'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(45))
-    location_id = Column(ForeignKey(u'location.id'), index=True)
-    lat = Column(String(45))
-    lon = Column(String(45))
+    branch_name = Column(String(45)) # e.g. Busia
+    branch_code = Column(String(45)) # BUS
+    mapping_id = Column(ForeignKey(u'mapping.id'), nullable=True)
+    lat = Column(Float)
+    lon = Column(Float)
     archived = Column(Integer, server_default=text("'0'"))
 
-    location = relationship(u'Location')
+    mapping = relationship(u'Mapping')
 
-class Chp(db.Model):
-    __tablename__ = 'chp'
-
-    id = Column(Integer, primary_key=True)
-    f_name = Column(String(45))
-    l_name = Column(String(45))
-    m_name = Column(String(45))
-    cohort_id = Column(ForeignKey(u'cohort.id'), index=True)
-    phone = Column(String(45))
-    branch_id = Column(ForeignKey(u'branch.id'), index=True)
-    location_id = Column(ForeignKey(u'location.id'), index=True)
-    chp_id = Column(String(45))
-    archived = Column(Integer, server_default=text("'0'"))
-
-    branch = relationship(u'Branch')
-    cohort = relationship(u'Cohort')
-    location = relationship(u'Location')
 
 class Cohort(db.Model):
     __tablename__ = 'cohort'
 
     id = Column(Integer, primary_key=True)
     cohort_number = Column(String(45))
+    cohort_name = Column(String(45)) # e.g. 1BUS for Busia
     branch_id = Column(ForeignKey(u'branch.id'), index=True)
     archived = Column(Integer, server_default=text("'0'"))
 
@@ -1677,82 +1662,107 @@ def get_country_name(code):
     
     
 class Training(db.Model):
-    __tablename__ = 'training'
+  __tablename__ = 'training'
 
-    id = db.Column(db.String(64), primary_key=True, nullable=False)
-    training_name = db.Column(db.String(64), nullable=False)
-    country = Column(String(64))
-    county_id = Column(ForeignKey(u'ke_county.id'), nullable=True, index=True)
-    location_id = Column(ForeignKey(u'location.id'), nullable=True, index=True)
-    subcounty_id = Column(ForeignKey(u'subcounty.id'), nullable=True, index=True)
-    ward_id = Column(ForeignKey(u'ward.id'), nullable=True, index=True)
-    district = db.Column(db.String(45), nullable=True)
-    recruitment_id = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
-    parish_id = Column(ForeignKey(u'parish.id'), nullable=True, index=True)
-    lat = Column(Float, server_default=text("'0'"))
-    lon = Column(Float, server_default=text("'0'"))
-    status = Column(ForeignKey(u'training_status.id'), nullable=True, index=True)
-    client_time = db.Column(db.Numeric)
-    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
-    date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
-    archived = Column(Integer, server_default=text("'0'"))
-    comment = Column(Text, nullable=True)
-    date_commenced = db.Column(Numeric, nullable=True)
-    date_completed = db.Column(Numeric, nullable=True)
+  id = db.Column(db.String(64), primary_key=True, nullable=False)
+  training_name = db.Column(db.String(64), nullable=False)
+  country = Column(String(64))
+  county_id = Column(ForeignKey(u'ke_county.id'), nullable=True, index=True)
+  location_id = Column(ForeignKey(u'location.id'), nullable=True, index=True)
+  subcounty_id = Column(ForeignKey(u'subcounty.id'), nullable=True, index=True)
+  ward_id = Column(ForeignKey(u'ward.id'), nullable=True, index=True)
+  district = db.Column(db.String(45), nullable=True)
+  recruitment_id = Column(ForeignKey(u'recruitments.id'), nullable=True, index=True)
+  parish_id = Column(ForeignKey(u'parish.id'), nullable=True, index=True)
+  lat = Column(Float, server_default=text("'0'"))
+  lon = Column(Float, server_default=text("'0'"))
+  training_venue_id = Column(ForeignKey(u'training_venues.id'), nullable=True, index=True)
+  training_status_id = Column(ForeignKey(u'training_status.id'), nullable=True, index=True)
+  client_time = db.Column(db.Numeric)
+  created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+  date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+  archived = Column(Integer, server_default=text("'0'"))
+  comment = Column(Text, nullable=True)
+  date_commenced = db.Column(Numeric, nullable=True)
+  date_completed = db.Column(Numeric, nullable=True)
 
-    county = relationship(u'County')
-    location = relationship(u'Location')
-    subcounty = relationship(u'SubCounty')
-    ward = relationship(u'Ward')
-    parish = relationship(u'Parish')
-    user = relationship(u'User')
+  county = relationship(u'County')
+  location = relationship(u'Location')
+  subcounty = relationship(u'SubCounty')
+  ward = relationship(u'Ward')
+  parish = relationship(u'Parish')
+  user = relationship(u'User')
+  recruitment = relationship(u'Recruitments')
+  training_venue = relationship(u'TrainingVenues')
     
-    def to_json(self):
-      json_record = {
-        'id':self.id,
-        'training_name':self.training_name,
-        'country':self.country,
-        'county_id':self.county_id,
-        'location_id':self.location_id,
-        'subcounty_id':self.subcounty_id,
-        'ward_id':self.ward_id,
-        'district':self.district,
-        'recruitment_id':self.recruitment_id,
-        'parish_id':self.parish_id,
-        'lat':self.lat,
-        'lon':self.lon,
-        'status':self.status,
-        'client_time':float(self.client_time),
-        'created_by':self.created_by,
-        'date_created':self.date_created,
-        'archived':self.archived,
-        'comment':self.comment
-      }
-      return json_record
+  def to_json(self):
+    json_record = {
+      'id':self.id,
+      'training_name':self.training_name,
+      'country':self.country,
+      'county_id':self.county_id,
+      'location_id':self.location_id,
+      'subcounty_id':self.subcounty_id,
+      'recruitment_details':self.recruitment.to_json(),
+      'ward_id':self.ward_id,
+      'district':self.district,
+      'recruitment_id':self.recruitment_id,
+      'parish_id':self.parish_id,
+      'lat':self.lat,
+      'lon':self.lon,
+      'status':self.status,
+      'client_time':float(self.client_time),
+      'created_by':self.created_by,
+      'date_created':self.date_created,
+      'archived':self.archived,
+      'comment':self.comment,
+      'training_venue_id' : self.training_venue_id,
+      'training_venue_details': self.training_venue.to_json()
+    }
+    return json_record
     
-    @staticmethod
-    def from_json(json):
-      return Training(
-          id = json.get('id'),
-          training_name = json.get('training_name'),
-          country = json.get('country'),
-          county_id = json.get('county_id'),
-          location_id = json.get('location_id'),
-          subcounty_id = json.get('subcounty_id'),
-          ward_id = json.get('ward_id'),
-          district = json.get('district'),
-          recruitment_id = json.get('recruitment_id'),
-          parish_id = json.get('parish_id'),
-          lat = json.get('lat'),
-          lon = json.get('lon'),
-          status = json.get('status'),
-          client_time = json.get('client_time'),
-          created_by = json.get('created_by'),
-          date_created = json.get('date_created'),
-          archived = json.get('archived'),
-          comment = json.get('comment'),
-      )
-    
+  @staticmethod
+  def from_json(json):
+    return Training(
+        id = json.get('id'),
+        training_name = json.get('training_name'),
+        country = json.get('country'),
+        county_id = json.get('county_id'),
+        location_id = json.get('location_id'),
+        subcounty_id = json.get('subcounty_id'),
+        ward_id = json.get('ward_id'),
+        district = json.get('district'),
+        recruitment_id = json.get('recruitment_id'),
+        parish_id = json.get('parish_id'),
+        lat = json.get('lat'),
+        lon = json.get('lon'),
+        status = json.get('status'),
+        client_time = json.get('client_time'),
+        created_by = json.get('created_by'),
+        date_created = json.get('date_created'),
+        archived = json.get('archived'),
+        comment = json.get('comment'),
+    )
+
+
+class TrainingVenues(db.Model):
+  __tablename__ = 'training_venues'
+
+  id = Column(String(64), primary_key=True, nullable=False)
+  name = Column(String(64), nullable=True)
+  mapping = Column(ForeignKey(u'mapping.id'), nullable=True)
+  lat = Column(Float, server_default=text('0'), nullable=False)
+  lon = Column(Float, server_default=text('0'), nullable=False)
+  inspected = Column(Integer, server_default=text("'0'"))
+  country = Column(String(20))
+  selected = Column(Integer, server_default=text("'0'"))
+  capacity = Column(Integer, server_default=text("'0'"))
+  date_added = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+  added_by = Column(Integer, nullable=True)
+  client_time = Column(Numeric, nullable=True)
+  meta_data = Column(Text, nullable=True)
+  archived = Column(Integer, server_default=text("'0'"))
+
 
 class SessionAttendance(db.Model):
   __tablename__ = 'session_attendance'
@@ -1776,53 +1786,72 @@ class SessionAttendance(db.Model):
   training = relationship(u'Training')
   user = relationship(u'User')
 
+class SessionTopic(db.Model):
+  __tablename__ = 'session_topic'
+
+  id = Column(Integer, primary_key=True, nullable=False)
+  name = Column(String(70), nullable=False)
+  country = Column(String(20))
+  archived = Column(Integer, server_default=text("'0'"))
+  date_added = Column(DateTime(), default=datetime.utcnow, nullable=False)
+  added_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+
+  user = relationship(u'User')
+
 
 class TrainingSession(db.Model):
-    __tablename__ = 'training_session'
+  __tablename__ = 'training_session'
 
-    id = db.Column(db.String(64), primary_key=True, nullable=False, unique=True)
-    training_session_type_id = Column(ForeignKey(u'training_session_type.id'), nullable=True, index=True)
-    training_id = Column(ForeignKey(u'training.id'), nullable=False, index=True)
-    country = db.Column(db.String(20))
-    archived = Column(Integer, server_default=text("'0'"))
-    comment = Column(Text, nullable=True)
-    client_time = db.Column(db.Numeric)
-    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
-    date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+  id = db.Column(db.String(64), primary_key=True, nullable=False, unique=True)
+  training_session_type_id = Column(ForeignKey(u'training_session_type.id'), nullable=True, index=True)
+  class_id = Column(ForeignKey(u'training_classes.id'), nullable=False, index=True)
+  training_id = Column(ForeignKey(u'training.id'), nullable=False, index=True)
+  trainer_id = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+  country = db.Column(db.String(20))
+  archived = Column(Integer, server_default=text("'0'"))
+  comment = Column(Text, nullable=True)
+  session_start_time = db.Column(db.Numeric)
+  session_end_time = db.Column(db.Numeric)
+  session_topic_id = Column(ForeignKey(u'session_topic.id'), nullable=False, index=True)
+  session_lead_trainer = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+  client_time = db.Column(db.Numeric)
+  created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+  date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
 
-    training_session_type = relationship(u'TrainingSessionType')
-    training = relationship(u'Training')
-    user = relationship(u'User')
+  training_session_type = relationship(u'TrainingSessionType')
+  training = relationship(u'Training')
+  lead_trainer = relationship(u'User', foreign_keys=[session_lead_trainer])
+  trainer = relationship(u'User', foreign_keys=[trainer_id])
+  session_creator = relationship(u'User', foreign_keys=[created_by])
 
 
 class TrainingSessionType(db.Model):
-    __tablename__ = 'training_session_type'
+  __tablename__ = 'training_session_type'
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    session_name = db.Column(db.String(20))
-    country = db.Column(db.String(20), nullable=False)
-    archived = Column(Integer, server_default=text("'0'"))
-    client_time = db.Column(db.Numeric)
-    created_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
-    date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+  id = db.Column(db.Integer, primary_key=True, nullable=False)
+  session_name = db.Column(db.String(20))
+  country = db.Column(db.String(20), nullable=False)
+  archived = Column(Integer, server_default=text("'0'"))
+  client_time = db.Column(db.Numeric)
+  created_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+  date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
 
-    user = relationship(u'User')
-    
+  user = relationship(u'User')
     
 
 class TrainingStatus(db.Model):
-    __tablename__ = 'training_status'
+  __tablename__ = 'training_status'
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    name = db.Column(db.String(20))
-    archived = Column(Integer, server_default=text("'0'"))
-    readonly = Column(Integer, server_default=text("'0'"))
-    country = db.Column(db.String(20), nullable=False)
-    client_time = db.Column(db.Numeric)
-    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
-    date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+  id = db.Column(db.Integer, primary_key=True, nullable=False)
+  name = db.Column(db.String(20))
+  archived = Column(Integer, server_default=text("'0'"))
+  readonly = Column(Integer, server_default=text("'0'"))
+  country = db.Column(db.String(20), nullable=False)
+  client_time = db.Column(db.Numeric)
+  created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+  date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
 
-    user = relationship(u'User')
+  user = relationship(u'User')
 
 
 class TrainingRoles(db.Model):
@@ -1836,23 +1865,92 @@ class TrainingRoles(db.Model):
   client_time = db.Column(db.Numeric)
   created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
   date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
-  
+
   user = relationship(u'User')
     
 
 class TrainingTrainers(db.Model):
-    __tablename__ = 'training_trainers'
+  __tablename__ = 'training_trainers'
 
-    id = Column(Integer, primary_key=True, nullable=False)
-    training_id = Column(ForeignKey(u'training.id'), nullable=True, index=True)
-    trainer_id = Column(ForeignKey(u'users.id'), nullable=True, index=True)
-    country = Column(String(20))
-    client_time = db.Column(db.Numeric)
-    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
-    date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
-    archived = Column(Integer, server_default=text("'0'"))
-    training_role_id = Column(ForeignKey(u'training_roles.id'), nullable=True, index=True)
+  id = Column(Integer, primary_key=True, nullable=False)
+  training_id = Column(ForeignKey(u'training.id'), nullable=True, index=True)
+  class_id = Column(ForeignKey(u'training_classes.id'), nullable=True, index=True)
+  trainer_id = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+  country = Column(String(20))
+  client_time = db.Column(db.Numeric)
+  created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+  date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+  archived = Column(Integer, server_default=text("'0'"))
+  training_role_id = Column(ForeignKey(u'training_roles.id'), nullable=True, index=True)
 
-    trainer = relationship(u'User', foreign_keys=[trainer_id])
-    user = relationship(u'User', foreign_keys=[created_by])
+  trainer = relationship(u'User', foreign_keys=[trainer_id])
+  user = relationship(u'User', foreign_keys=[created_by])
+  training_role = relationship(u'TrainingRoles')
     
+
+class TrainingClasses(db.Model):
+  __tablename__ = 'training_classes'
+
+  id = Column(Integer, primary_key=True, nullable=False)
+  training_id = Column(ForeignKey(u'training.id'), nullable=False, index=True)
+  class_name = Column(String(20), nullable=False)
+  created_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+  client_time = Column(db.Numeric)
+  date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+  archived = Column(Integer, server_default=text("'0'"))
+  country = Column(String(20), server_default=text("'UG'"), nullable=False)
+
+  def to_json(self):
+    json_record = {
+      'id': self.id,
+      'class_name': self.class_name,
+      'created_by': self.created_by,
+      'client_time': self.client_time,
+      'date_created': self.date_created
+    }
+    return json_record
+
+  @staticmethod
+  def from_json(json_record):
+    return TrainingClasses(
+      id=json_record.get('id'),
+      class_name=json_record.get('class_name'),
+      created_by=json_record.get('created_by'),
+      client_time=json_record.get('client_time'),
+      date_created=json_record.get('date_created')
+    )
+
+
+class Trainees(db.Model):
+  __tablename__ = 'trainees'
+
+  id = Column(String(64), primary_key=True, nullable=False)
+  registration_id = Column(ForeignKey(u'registrations.id'), nullable=False, index=True)
+  class_id = Column(ForeignKey(u'training_classes.id'), nullable=False, index=True)
+  training_id = Column(ForeignKey(u'training.id'), nullable=False, index=True)
+  country = Column(String(20), server_default=text("'UG'"), nullable=False)
+  date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+  added_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+  client_time = Column(db.Numeric)
+  branch = Column(ForeignKey(u'branch.id'), nullable=False, index=True)
+  cohort = Column(ForeignKey(u'cohort.id'), nullable=False, index=True)
+  chp_code = Column(String(45), nullable=False)
+
+
+  def to_json(self):
+    json_record = {
+      'id': self.id,
+      'registration_id': self.registration_id,
+      'class_id': self.class_id,
+      'training_id': self.training_id
+    }
+    return json_record
+
+  @staticmethod
+  def from_json(json_record):
+    return Trainees(
+      id=json_record.get('id'),
+      registration_id=json_record.get('id'),
+      class_id=json_record.get('class_id'),
+      training_id=json_record.get('training_id')
+    )
