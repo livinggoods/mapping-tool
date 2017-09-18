@@ -6,9 +6,9 @@ from sqlalchemy import func, distinct, select, and_
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm
 from .. import db
-from ..models import (Permission, Role, User, Geo, UserType, Mapping, LocationTargets, Exam, Village,
+from ..models import (Permission, Role, User, Geo, UserType, Mapping, LocationTargets, Exam, Village, Ward,
     Location, Education, EducationLevel, Referral, Parish, SubCounty, Recruitments, Registration, Interview,
-    SelectedApplication, Application, ApplicationPhone, Branch, Cohort, RecruitmentUsers)
+    Branch, Cohort, RecruitmentUsers, LinkFacility, CommunityUnit)
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
 from datetime import date, datetime
@@ -171,141 +171,312 @@ def export_scoring_tool(id):
     dest = io.StringIO()
     writer = csv.writer(dest)
     data = []
-    registrations  = Registration.query.filter(Registration.recruitment == id)
-    header = [
-        'Referral Name',
-        'Referral Title',
-        'Referral Mobile No',
-        'VHT?',
-        'Candidate Name',
-        'Candidate Mobile',
-        'Gender',
-        'Age',
-        'District',
-        'Subcounty',
-        'Parish',
-        'Village/zone/cell',
-        'Landmark',
-        'Read/Speak English',
-        'Other Languages',
-        'Years at this location',
-        'Ever worked with BRAC?',
-        'If yes as BRAC CHP?',
-        'Highest Educational',
-        'Community group memberships',
-        'Maths Score',
-        'Reading comprehension',
-        'About You',
-        'Total Marks',
-        'Eligible for Interview',
-        'Interview Completed by,',
-        'Interview: Overall Motivation',
-        'Interview: Ability to work with communities',
-        'Interview: Mentality',
-        'Interview:Selling skills',
-        'Interview: Interest in health',
-        'Interview: Ability to invest',
-        'Interview: Interpersonal skills',
-        'Interview: Ability to commit',
-        'Interview Score',
-        'DO NOT ASK OUTLOUD: Any conditions to prevent joining?',
-        'Comments',
-        'Qualify for Training',
-        'Invite for Training']
-    data.append(header)
-
-    for registration in registrations:
-        # Get Exam
-        exam = Exam.query.filter(Exam.applicant == registration.id).first()
-        math = 0
-        english = 0
-        personality = 0
-        exam_total = 0
-        exam_passed = "N"
-        if exam:
-            math = exam.math
-            english = exam.english
-            personality = exam.personality
-            exam_total = exam.total_score()
-            exam_passed = "Y" if exam.has_passed() and registration.brac != 1 else "N"
-
-        interview = Interview.query.filter(Interview.applicant == registration.id).first()
-        user = ""
-        motivation = 0
-        community = 0
-        mentality = 0
-        selling = 0
-        health = 0
-        investment = '0'
-        interpersonal = '0'
-        commitment = 0
-        total_score = 0
-        canjoin = "N"
-        qualified = "N"
-        comment = ""
-        canjoin = ""
-        selected = ""
-
-        if interview:
-            user = str(interview.user.name)
-            motivation = interview.motivation
-            community = interview.community
-            mentality = interview.mentality
-            selling = interview.selling
-            health = interview.health
-            investment = str(interview.investment)
-            interpersonal = str(interview.interpersonal)
-            commitment = interview.commitment
-            total_score = interview.total_score()
-            qualified = 'Y' if interview.has_passed and exam_passed == 'Y' else 'N'
-            canjoin = 'Y' if interview.canjoin == 1 else 'N'
-            comment = interview.comment.replace(',', ';')
-            canjoin = 'Y' if interview.canjoin == 1 else 'N'
-            selected = 'Y' if interview.selected == 1 else 'N'  # if selected of not
-        # interview= Interview.query.filter(Interview.archived != 1)
-        # Now that we have what we need, we generate the CSV rows
-        row = [
-            registration.referral,
-            registration.referral_title,
-            registration.referral_number,
-            "Y" if registration.vht == 1 else "N",
-            registration.name,
-            registration.phone.replace(',', ':'),
-            registration.gender,
-            registration.age(),
-            registration.district,
-            registration.subcounty,
-            registration.parish,
-            registration.village,
-            registration.feature.replace(',', ':'),
-            "Y" if registration.english == 1 else "N",
-            registration.languages.replace(',', ';'),
-            registration.date_moved,
-            "Y" if registration.brac == 1 else "N",
-            "Y" if registration.brac_chp == 1 else "N",
-            registration.education,
-            "Y" if registration.community_membership == 1 else "N",
-            math,
-            english,
-            personality,
-            exam_total,
-            exam_passed,
-            str(user),
-            str(motivation),
-            str(community),
-            str(mentality),
-            str(selling),
-            str(health),
-            str(investment),
-            str(interpersonal),
-            str(commitment),
-            str(total_score),
-            str(canjoin),
-            str(comment),
-            str(qualified),
-            str(selected),
-        ]
-        data.append(row)
+    recruitment = Recruitments.query.filter_by(id=id).first_or_404()
+    if recruitment.country == 'KE':
+        header = [
+            'CHEW Name',
+            'CHEW Contact',
+            'Candidate Name',
+            'Candidate Mobile',
+            'Gender',
+            'Year of Birth',
+            'Age',
+            'Subcounty',
+            'Ward',
+            'Village/zone/cell',
+            'Landmark',
+            'CU (Community Unit)',
+            'Link Facility',
+            'No of Households',
+            'Read/speak English',
+            'Years at this Location',
+            'Other Languages',
+            'CHV',
+            'GOK Training',
+            'Other Trainings',
+            'Highest education level',
+            'Previous/Current health or business experience',
+            'Community group membership',
+            'Financial Accounts',
+            'Recruitment Comments',
+            'Math Score',
+            'Reading Comprehension',
+            'About you',
+            'Total Score',
+            'Eligible for Interview',
+            'Interview: Overall Motivation',
+            'Interview: Ability to work with communities',
+            'Interview: Mentality',
+            'Interview:Selling skills',
+            'Interview: Interest in health',
+            'Interview: Ability to invest',
+            'Interview: Interpersonal skills',
+            'Interview: Ability to commit',
+            'Interview Score',
+            'DO NOT ASK OUTLOUD: Any conditions to prevent joining?',
+            'Tranport as Per Recruitment',
+            'Comments',
+            'Qualify for Training',
+            'Completed By',
+            'Invite for Training']
+        data.append(header)
+        registrations = Registration.query.filter(Registration.recruitment == id)
+        for registration in registrations:
+            # metadata for registration include:
+            # Exam, Interview, Chew, Recruitment, Link Facility, subcounty, education, added, by, referral, ward
+            # Get Exam
+            
+            exam = Exam.query.filter(Exam.applicant == registration.id).first()
+            interview = Interview.query.filter(Interview.applicant == registration.id).first()
+            if registration.referral is not None and registration.referral != '':
+                chew = Referral.query.filter_by(id=registration.referral).first()
+            else:
+                chew = Referral.query.filter_by(id='0').first()
+            link_facility = LinkFacility.query.filter_by(id=registration.link_facility).first()
+            subcounty = SubCounty.query.filter_by(id=registration.subcounty).first()
+            education = Education.query.filter_by(id=registration.education).first()
+            ward = Ward.query.filter_by(id=registration.ward).first()
+            community_unit = CommunityUnit.query.filter_by(id=registration.cu_name).first()
+            
+            math = 0
+            english = 0
+            personality = 0
+            exam_total = 0
+            exam_passed = "N"
+            if exam:
+                if exam.math == 0 or exam.english == 0 or exam.personality == 0:
+                    exam_passed= "N"
+                elif exam.total_score() < 10:
+                    exam_passed = "N"
+                else:
+                    exam_passed = "Y"
+                exam_total = exam.total_score()
+                math = exam.math
+                english = exam.english
+                personality = exam.personality
+                
+            user = ""
+            motivation = 0
+            community = 0
+            mentality = 0
+            selling = 0
+            health = 0
+            investment = '0'
+            interpersonal = '0'
+            commitment = 0
+            total_score = 0
+            canjoin = "N"
+            qualified = "N"
+            comment = ""
+            selected = ""
+    
+            if interview:
+                user = str(interview.user.name)
+                motivation = interview.motivation
+                community = interview.community
+                mentality = interview.mentality
+                selling = interview.selling
+                health = interview.health
+                investment = str(interview.investment)
+                interpersonal = str(interview.interpersonal)
+                commitment = interview.commitment
+                total_score = interview.total_score()
+                qualified = 'Y' if interview.has_passed and exam_passed == 'Y' else 'N'
+                if total_score > 24 and interview.canjoin == 1 and exam_passed == 'Y':
+                    qualified = 'Y'
+                else:
+                    qualified ='N'
+                canjoin = 'Y' if interview.canjoin == 1 else 'N'
+                comment = interview.comment.replace(',', ';')
+                selected = 'Y' if interview.selected == 1 else 'N'  # if selected of not
+            # Now that we have what we need, we generate the CSV rows
+            row = [
+                chew.name if chew is not None else registration.chew_name,
+                chew.phone if chew is not None else registration.chew_number,
+                registration.name,
+                registration.phone.replace(',', ':'),
+                registration.gender,
+                registration.date_of_birth(),
+                registration.age(),
+                subcounty.name if subcounty is not None else registration.subcounty,
+                ward.name if ward is not None else registration.ward,
+                registration.village.replace(',', ':'),
+                registration.feature.replace(',', ':'),
+                community_unit.name if community_unit is not None else registration.cu_name,
+                link_facility.name if link_facility is not None else registration.link_facility,
+                str(registration.households),
+                "Y" if registration.english == 1 else "N",
+                registration.date_moved,
+                registration.languages.replace(',', ';'),
+                
+                "Y" if registration.is_chv == 1 else "N",
+                "Y" if registration.is_gok_trained == 1 else "N",
+                registration.trainings.replace(',', ':'),
+                education.name if education is not None else registration.education,
+                registration.occupation,
+                "Y" if registration.community_membership == 1 else "N",
+                "Y" if registration.financial_accounts == 1 else "N",
+                registration.comment.replace(',', ';'),
+                math,
+                english,
+                personality,
+                exam_total,
+                exam_passed,
+                str(user),
+                str(motivation),
+                str(community),
+                str(mentality),
+                str(selling),
+                str(health),
+                str(investment),
+                str(interpersonal),
+                str(commitment),
+                str(total_score),
+                str(canjoin),
+                str(registration.recruitment_transport),
+                str(comment),
+                str(qualified),
+                str(user),
+                str(selected),
+            ]
+            data.append(row)
+        
+    else:
+        registrations = Registration.query.filter(Registration.recruitment == id)
+        header = [
+            'Referral Name',
+            'Referral Title',
+            'Referral Mobile No',
+            'VHT?',
+            'Candidate Name',
+            'Candidate Mobile',
+            'Gender',
+            'Age',
+            'District',
+            'Subcounty',
+            'Parish',
+            'Village/zone/cell',
+            'Landmark',
+            'Read/Speak English',
+            'Other Languages',
+            'Years at this location',
+            'Ever worked with BRAC?',
+            'If yes as BRAC CHP?',
+            'Highest Educational',
+            'Community group memberships',
+            'Maths Score',
+            'Reading comprehension',
+            'About You',
+            'Total Marks',
+            'Eligible for Interview',
+            'Interview Completed by,',
+            'Interview: Overall Motivation',
+            'Interview: Ability to work with communities',
+            'Interview: Mentality',
+            'Interview:Selling skills',
+            'Interview: Interest in health',
+            'Interview: Ability to invest',
+            'Interview: Interpersonal skills',
+            'Interview: Ability to commit',
+            'Interview Score',
+            'DO NOT ASK OUTLOUD: Any conditions to prevent joining?',
+            'Comments',
+            'Qualify for Training',
+            'Invite for Training']
+        data.append(header)
+    
+        for registration in registrations:
+            # Get Exam
+            exam = Exam.query.filter(Exam.applicant == registration.id).first()
+            math = 0
+            english = 0
+            personality = 0
+            exam_total = 0
+            exam_passed = "N"
+            if exam:
+                math = exam.math
+                english = exam.english
+                personality = exam.personality
+                exam_total = exam.total_score()
+                exam_passed = "Y" if exam.has_passed() and registration.brac != 1 else "N"
+    
+            interview = Interview.query.filter(Interview.applicant == registration.id).first()
+            user = ""
+            motivation = 0
+            community = 0
+            mentality = 0
+            selling = 0
+            health = 0
+            investment = '0'
+            interpersonal = '0'
+            commitment = 0
+            total_score = 0
+            canjoin = "N"
+            qualified = "N"
+            comment = ""
+            canjoin = ""
+            selected = ""
+    
+            if interview:
+                user = str(interview.user.name)
+                motivation = interview.motivation
+                community = interview.community
+                mentality = interview.mentality
+                selling = interview.selling
+                health = interview.health
+                investment = str(interview.investment)
+                interpersonal = str(interview.interpersonal)
+                commitment = interview.commitment
+                total_score = interview.total_score()
+                qualified = 'Y' if interview.has_passed and exam_passed == 'Y' else 'N'
+                canjoin = 'Y' if interview.canjoin == 1 else 'N'
+                comment = interview.comment.replace(',', ';')
+                canjoin = 'Y' if interview.canjoin == 1 else 'N'
+                selected = 'Y' if interview.selected == 1 else 'N'  # if selected of not
+            # interview= Interview.query.filter(Interview.archived != 1)
+            # Now that we have what we need, we generate the CSV rows
+            row = [
+                registration.referral,
+                registration.referral_title,
+                registration.referral_number,
+                "Y" if registration.vht == 1 else "N",
+                registration.name,
+                registration.phone.replace(',', ':'),
+                registration.gender,
+                registration.age(),
+                registration.district,
+                registration.subcounty,
+                registration.parish,
+                registration.village,
+                registration.feature.replace(',', ':'),
+                "Y" if registration.english == 1 else "N",
+                registration.languages.replace(',', ';'),
+                registration.date_moved,
+                "Y" if registration.brac == 1 else "N",
+                "Y" if registration.brac_chp == 1 else "N",
+                registration.education,
+                "Y" if registration.community_membership == 1 else "N",
+                math,
+                english,
+                personality,
+                exam_total,
+                exam_passed,
+                str(user),
+                str(motivation),
+                str(community),
+                str(mentality),
+                str(selling),
+                str(health),
+                str(investment),
+                str(interpersonal),
+                str(commitment),
+                str(total_score),
+                str(canjoin),
+                str(comment),
+                str(qualified),
+                str(selected),
+            ]
+            data.append(row)
     output = excel.make_response_from_array(data, 'csv')
     output.headers["Content-Disposition"] = "attachment; filename=scoring-tool.csv"
     output.headers["Content-type"] = "text/csv"
