@@ -157,9 +157,51 @@ def sync_registrations():
         record = Registration.from_json(registration)
         saved_record  = Registration.query.filter(Registration.id == record.id).first()
         if saved_record:
-          registration['client_time'] = registration.get('date_added')
-          registration.pop('date_added', None)
-          saved_record = record
+          saved_record.id=registration.get('id')
+          saved_record.name =registration.get('name')
+          saved_record.phone =registration.get('phone')
+          saved_record.gender =registration.get('gender')
+          saved_record.recruitment =registration.get('recruitment')
+          saved_record.country =registration.get('country')
+          saved_record.dob =registration.get('dob')
+          saved_record.district =registration.get('district')
+          saved_record.subcounty =registration.get('subcounty')
+          saved_record.division =registration.get('division')
+          saved_record.village =registration.get('village')
+          saved_record.feature =registration.get('feature')
+          saved_record.english =registration.get('english')
+          saved_record.date_moved =registration.get('date_moved')
+          saved_record.languages =registration.get('languages')
+          saved_record.brac =registration.get('brac')
+          saved_record.brac_chp =registration.get('brac_chp')
+          saved_record.education =registration.get('education')
+          saved_record.occupation =registration.get('occupation')
+          saved_record.community_membership =registration.get('community_membership')
+          saved_record.added_by =registration.get('added_by')
+          saved_record.comment =registration.get('comment')
+          saved_record.proceed =registration.get('proceed')
+          saved_record.client_time =registration.get('client_time')
+          saved_record.date_added =registration.get('date_added')
+          saved_record.synced =registration.get('synced')
+          saved_record.archived =registration.get('archived')
+          saved_record.chew_name =registration.get('chew_name')
+          saved_record.chew_number =registration.get('chew_number')
+          saved_record.ward =registration.get('ward')
+          saved_record.cu_name =registration.get('cu_name')
+          saved_record.link_facility =registration.get('link_facility')
+          saved_record.households =registration.get('households')
+          saved_record.trainings =registration.get('trainings')
+          saved_record.is_chv =registration.get('is_chv')
+          saved_record.is_gok_trained =registration.get('is_gok_trained')
+          saved_record.referral =registration.get('referral')
+          saved_record.referral_number =registration.get('referral_number')
+          saved_record.referral_title =registration.get('referral_title')
+          saved_record.vht =registration.get('vht')
+          saved_record.parish =registration.get('parish')
+          saved_record.financial_accounts =registration.get('financial_accounts')
+          saved_record.recruitment_transport =registration.get('recruitment_transport')
+          saved_record.branch_transport =registration.get('branch_transport')
+          db.session.add(saved_record)
           db.session.commit()
           operation='updated'
         else:
@@ -347,14 +389,14 @@ def sync_partner():
       return jsonify(error="No records posted")
 
 
-@api.route('/sync/community-units', methods=['GET', 'POST'])
+@api.route('/sync/community_unit', methods=['GET', 'POST'])
 def sync_cu():
   if request.method == 'GET':
     records = CommunityUnit.query.filter(CommunityUnit.archived != 1)
     return jsonify({'community_units': [record.to_json() for record in records]})
   else:
     status = []
-    community_unit_list = request.json.get('community_units')
+    community_unit_list = request.json.get('community_unit')
     if community_unit_list is not None:
       for cu in community_unit_list:
         saved_record = CommunityUnit.query.filter(CommunityUnit.id == cu.get('id')).first()
@@ -512,19 +554,20 @@ def sync_gps_data():
     else:
       return jsonify(error="No records posted")
 
-@api.route('/sync/chew-referral', methods=['GET', 'POST'])
+@api.route('/sync/chew_referral', methods=['GET', 'POST'])
 def sync_chew_referral():
   if request.method == 'GET':
     records  = Referral.query.all()
     return jsonify({'referrals':[record.to_json() for record in records]})
   else:
     status = []
-    referral_list = request.json.get('referrals')
+    referral_list = request.json.get('chew_referrals')
     if referral_list is not None:
       for referral in referral_list:
         record = Referral.from_json(referral)
         saved_record  = Referral.query.filter(Referral.id == record.id).first()
         if saved_record:
+          # update the referral
           pass
         else:
           db.session.add(record)
