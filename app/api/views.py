@@ -364,7 +364,6 @@ def sync_village():
     else:
       return jsonify(error="No records posted")
 
-
 @api.route('/sync/partners', methods=['GET', 'POST'])
 def sync_partner():
   if request.method == 'GET':

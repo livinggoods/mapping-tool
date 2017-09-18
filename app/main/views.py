@@ -322,7 +322,6 @@ def export_scoring_tool(id):
                 personality,
                 exam_total,
                 exam_passed,
-                str(user),
                 str(motivation),
                 str(community),
                 str(mentality),
