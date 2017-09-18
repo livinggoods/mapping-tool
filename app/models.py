@@ -14,57 +14,6 @@ import time
 from data import data
 
 ##############################
-class Application(db.Model):
-    __tablename__ = 'application'
-
-    id = Column(Integer, primary_key=True)
-    f_name = Column(String(45))
-    m_name = Column(String(45))
-    l_name = Column(String(45))
-    referral_id = Column(ForeignKey(u'referrals.id'), index=True)
-    date_added = db.Column(db.DateTime(), default=datetime.utcnow)
-    location_id = Column(ForeignKey(u'location.id'), index=True)
-    recruitment_id = Column(ForeignKey(u'recruitments.id'), index=True)
-    education_id = Column(ForeignKey(u'education.id'), index=True)
-    edu_level_id = Column(ForeignKey(u'education_level.id'), index=True)
-    vht = Column(Integer)
-    maths = Column(Integer, server_default=text("'0'"))
-    english = Column(Integer, server_default=text("'0'"))
-    about_you = Column(Integer, server_default=text("'0'"))
-    total_score = Column(Integer, server_default=text("'0'"))
-    gender = Column(String(2))
-    date_of_birth = db.Column(db.DateTime())
-    landmark = Column(String(45))
-    date_moved = db.Column(db.DateTime())
-    languages = Column(String(245))
-    worked_brac = Column(Integer)
-    brac_chp = Column(Integer)
-    community_membership = Column(String(245))
-    read_english = Column(Integer, server_default=text("'0'"))
-    application_score = Column(Integer, server_default=text("'0'"))
-    archived = Column(Integer, server_default=text("'0'"))
-    testing = Column(Integer)
-    niaje = Column(Integer)
-
-
-
-    edu_level = relationship(u'EducationLevel')
-    education = relationship(u'Education')
-    referral = relationship(u'Referral')
-    location = relationship(u'Location')
-    recruitment = relationship(u'Recruitments')
-    
-
-class ApplicationPhone(db.Model):
-    __tablename__ = 'application_phones'
-
-    id = Column(Integer, primary_key=True)
-    application_id = Column(ForeignKey(u'application.id'), index=True)
-    phone = Column(String(45))
-    main_phone = Column(Integer, server_default=text("'0'"))
-    archived = Column(Integer, server_default=text("'0'"))
-
-    application = relationship(u'Application')
 
 class GpsData(db.Model):
     __tablename__ = 'gps_data'
@@ -292,17 +241,6 @@ class Referral(db.Model):
         archived=archived
       )
 
-class SelectedApplication(db.Model):
-    __tablename__ = 'selected_applications'
-
-    id = Column(Integer, primary_key=True)
-    application_id = Column(ForeignKey(u'application.id'), index=True)
-    location_id = Column(ForeignKey(u'location.id'), index=True)
-    date_selected = db.Column(db.DateTime(), default=datetime.utcnow)
-    archived = Column(Integer, server_default=text("'0'"))
-
-    application = relationship(u'Application')
-    location = relationship(u'Location')
 
 
 class Village(db.Model):
