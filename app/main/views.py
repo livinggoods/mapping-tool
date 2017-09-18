@@ -303,7 +303,7 @@ def export_scoring_tool(id):
                 registration.village.replace(',', ':'),
                 registration.feature.replace(',', ':'),
                 community_unit.name if community_unit is not None else registration.cu_name,
-                link_facility.name if link_facility is not None else registration.link_facility,
+                link_facility.facility_name if link_facility is not None else registration.link_facility,
                 str(registration.households),
                 "Y" if registration.english == 1 else "N",
                 registration.date_moved,
