@@ -160,42 +160,6 @@ def new_training():
     form=form
   )
 
-@main.route('/training/new', methods=['GET', 'POST'])
-@login_required
-def new_training():
-  form = TrainingForm()
-  if form.validate_on_submit():
-    new_training = Training(
-      id=uuid.uuid1(),
-      training_name=form.training_name.data,
-      country=form.country.data,
-      county_id=form.county.data,
-      location_id=form.location.data,
-      subcounty_id=form.subcounty.data,
-      ward_id=form.ward.data,
-      district=form.district.data,
-      recruitment_id=form.recruitment.data,
-      parish_id=form.parish.data,
-      lat=form.lat.data,
-      lon=form.lon.data,
-      training_venue_id=form.training_venue.data,
-      training_status_id=form.training_status.data,
-      client_time=2017,
-      created_by=current_user.id,
-      date_created=strftime("%Y-%m-%d", gmtime()),
-      archived=0,
-      comment=form.comment.data,
-      date_commenced=form.date_commenced.data,
-      date_completed=form.date_completed.data
-    )
-    db.session.add(new_training)
-    db.session.commit()
-    return redirect('/trainings')
-  return render_template(
-    'form_training.html',
-    form=form
-  )
-
 
 @main.route('/training/<string:id>/edit', methods=['GET', 'POST'])
 @login_required

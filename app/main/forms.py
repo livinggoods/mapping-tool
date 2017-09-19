@@ -1,8 +1,9 @@
 from flask_wtf import Form
 from wtforms import StringField, TextAreaField, BooleanField, SelectField, \
-    SubmitField, ValidationError, PasswordField
+    SubmitField, ValidationError, PasswordField, IntegerField, FloatField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
-from ..models import Role, User, Geo, UserType
+from ..models import Role, User, Geo, UserType, Ward, County, Location, SubCounty, Parish, TrainingVenues,\
+    Recruitments, TrainingStatus
 from ..utils.utils import RequiredIf
 
 
@@ -98,3 +99,68 @@ class IccmComponentForm(Form):
                                                                Length(1, 64, 'Maximun allowed characters is 64')])
     comment = TextAreaField("Comments")
     submit = SubmitField('Submit')
+
+
+class TrainingForm(Form):
+    """
+    These are the fields that should be filled by the user about the new training
+    """
+
+    # id = StringField('id', validators=[DataRequired()])
+    training_name = StringField('training_name', validators=[DataRequired()])
+    country = SelectField('country', validators=[DataRequired()], coerce=int)
+    county = SelectField('county', validators=[DataRequired()], coerce=int)
+    location = SelectField('location', validators=[DataRequired()], coerce=int)
+    subcounty = SelectField('subcounty', validators=[DataRequired()])
+    ward = SelectField('ward', validators=[DataRequired()])
+    district = StringField('district', validators=[DataRequired()])
+    recruitment = SelectField('recruitment', validators=[DataRequired()])
+    parish = SelectField('parish', validators=[DataRequired()], coerce=str)
+    lat = FloatField('lat', validators=[DataRequired()])
+    lon = FloatField('lon', validators=[DataRequired()])
+    training_venue = SelectField('training_venue', validators=[DataRequired()])
+    training_status = SelectField('training_status', validators=[DataRequired()], coerce=int)
+    # client_time = StringField('client_time', validators=[DataRequired()])
+    # created_by = StringField('created_by', validators=[DataRequired()])
+    # date_created = StringField('date_created', validators=[DataRequired()])
+    archived = SelectField('archived', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
+    comment = TextAreaField('comment', validators=[DataRequired()])
+    date_commenced = IntegerField('Date Commenced', validators=[DataRequired()])
+    date_completed = IntegerField('Date Completed', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+    def __init__(self, *args, **kwargs):
+        super(TrainingForm, self).__init__(*args, **kwargs)
+        self.country.choices = [(geo.id, geo.geo_name)
+                                for geo in Geo.query.order_by(Geo.geo_name).all()]
+        self.county.choices = [(county.id, county.name)
+                               for county in County.query.order_by(County.name).all()]
+        self.location.choices = [(location.id, location.name)
+                                 for location in Location.query.order_by(Location.name).all()]
+        self.subcounty.choices = [(subcounty.id, subcounty.name)
+                                  for subcounty in SubCounty.query.order_by(SubCounty.name).all()]
+        self.ward.choices = [(ward.id, ward.name)
+                             for ward in Ward.query.order_by(Ward.name).all()]
+        self.recruitment.choices = [(recruitment.id, recruitment.name)
+                                    for recruitment in Recruitments.query.order_by(Recruitments.name).all()]
+        self.parish.choices = [(parish.id, parish.name)
+                               for parish in Parish.query.order_by(Parish.name).all()]
+        self.training_venue.choices = [(venue.id, venue.name)
+                                       for venue in TrainingVenues.query.order_by(TrainingVenues.name).all()]
+        self.training_status.choices = [(status.id, status.name)
+                                        for status in TrainingStatus.query.order_by(TrainingStatus.name).all()]
+
+
+class DeleteTrainingForm(Form):
+    submit = SubmitField('Delete')
+
+
+class TrainingClassForm(Form):
+    class_name = StringField('Class name', validators=[DataRequired()])
+    country = SelectField('Country', validators=[DataRequired()])
+    archived = SelectField('Archived', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
+
+    def __init__(self, *args, **kwargs):
+        super(TrainingClassForm, self).__init__(*args, **kwargs)
+        self.country.choices = [(geo.id, geo.geo_name)
+                                for geo in Geo.query.order_by(Geo.geo_name).all()]
