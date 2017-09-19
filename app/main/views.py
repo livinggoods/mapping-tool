@@ -89,7 +89,7 @@ def application_details(id):
 @login_required
 def selected_applications():
     if request.method == 'GET':
-        applications = SelectedApplication.query.all()
+        applications = Registration.query.filter_by(selected=1)
         page = {'title': 'Selected Applications', 'subtitle':'Applications selected for interview'}
         return render_template('selected-applications.html', page=page, applications=applications, currency=currency)
     else:
