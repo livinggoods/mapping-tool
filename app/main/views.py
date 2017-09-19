@@ -8,7 +8,7 @@ from .forms import EditProfileForm, EditProfileAdminForm, PostForm
 from .. import db
 from ..models import (Permission, Role, User, Geo, UserType, Mapping, LocationTargets, Exam, Village, Ward,
     Location, Education, EducationLevel, Referral, Parish, SubCounty, Recruitments, Registration, Interview,
-    Branch, Cohort, RecruitmentUsers, LinkFacility, CommunityUnit)
+    Branch, Cohort, RecruitmentUsers, LinkFacility, CommunityUnit, Training)
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
 from datetime import date, datetime
@@ -41,7 +41,8 @@ def index():
 
     total_recruitments = Recruitments.query.filter_by(archived=0)
     recruitments = total_recruitments.count()
-
+    
+    trainings = Training.query.filter_by(archived=0)
     recruitment = Recruitments.query.filter_by(archived=0).limit(5).all()
 
     villages = Village.query.filter_by(archived=0)
@@ -52,7 +53,7 @@ def index():
                                recruitments=recruitments, villages=villages, currency=currency)
     else:
         return render_template('index.html', page=page, registrations=registrations, mappings=total_mappings,
-                               recruitments=recruitments, villages=villages, currency=currency,
+                               recruitments=recruitments, villages=villages, currency=currency, trainings= trainings,
                                recruitment=recruitment)
 
 
