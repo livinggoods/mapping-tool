@@ -423,9 +423,11 @@ class Registration (db.Model):
     financial_accounts = Column(Integer, server_default=text("'0'"))
     recruitment_transport = Column(Integer, server_default=text("'0'"))
     branch_transport = Column(Integer, server_default=text("'0'"))
+    referral_id = Column(ForeignKey(u'referrals.id'), nullable=True, index=True)
 
     owner = relationship(u'User')
     education_level = relationship(u'Education')
+    chew_referral = relationship(u'Referral')
 
     def age(self):
         birthdate = datetime.strptime(self.date_of_birth(), '%Y-%b-%d')
