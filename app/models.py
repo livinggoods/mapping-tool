@@ -98,6 +98,18 @@ class Education(db.Model):
     country = Column(String(45), server_default=text("'UG'"))
     date_added = db.Column(db.DateTime(), default=datetime.utcnow)
     archived = Column(Integer, server_default=text("'0'"))
+    
+    def to_json(self):
+      json_record = {
+        'id' : self.id,
+        'name' : self.name,
+        'level_type' : self.level_type,
+        'hierachy' : self.hierachy,
+        'country' : self.country,
+        'date_added' : self.date_added,
+        'archived' : self.archived,
+      }
+      return json_record
 
     @staticmethod
     def create_education():
