@@ -477,6 +477,7 @@ class Registration (db.Model):
             'brac':self.brac,
             'brac_chp':self.brac_chp,
             'education':self.education,
+            'education_details':self.education_level.to_json(),
             'occupation':self.occupation,
             'community_membership':self.community_membership,
             'added_by':self.added_by,
