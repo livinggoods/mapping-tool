@@ -505,6 +505,10 @@ class Registration (db.Model):
             'branch_transport' : self.branch_transport,
             'referral_id' : self.referral_id
             }
+        if self.chew_referral is not None:
+          json_record['referral_details'] = self.chew_referral.to_json()
+        else:
+          json_record['referral_details']={}
 
         return json_record
 
