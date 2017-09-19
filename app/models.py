@@ -490,8 +490,7 @@ class Registration (db.Model):
             'financial_accounts' : self.financial_accounts,
             'recruitment_transport' : self.recruitment_transport,
             'branch_transport' : self.branch_transport,
-            'referral_id' : self.referral_id,
-            'referral_details' : self.chew_referral.to_json(),
+            'referral_id' : self.referral_id
             }
 
         return json_record
