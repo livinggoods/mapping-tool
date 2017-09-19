@@ -201,6 +201,7 @@ def sync_registrations():
           saved_record.financial_accounts =registration.get('financial_accounts')
           saved_record.recruitment_transport =registration.get('recruitment_transport')
           saved_record.branch_transport =registration.get('branch_transport')
+          saved_record.referral_id =registration.get('chew_id')
           db.session.add(saved_record)
           db.session.commit()
           operation='updated'
