@@ -496,65 +496,51 @@ class Registration (db.Model):
 
     @staticmethod
     def from_json(json_record):
-        id = json_record.get('id')
-        name = json_record.get('name')
-        phone = json_record.get('phone')
-        gender = json_record.get('gender')
-        recruitment = json_record.get('recruitment')
-        country = json_record.get('country')
-        dob = json_record.get('dob')
-        district = json_record.get('district')
-        subcounty = json_record.get('subcounty')
-        division = json_record.get('division')
-        village = json_record.get('village')
-        feature = json_record.get('feature')
-        english = json_record.get('english')
-        date_moved = json_record.get('date_moved')
-        languages = json_record.get('languages')
-        brac = json_record.get('brac')
-        brac_chp = json_record.get('brac_chp')
-        education = json_record.get('education')
-        occupation = json_record.get('occupation')
-        community_membership = json_record.get('community_membership')
-        added_by = json_record.get('added_by')
-        comment = json_record.get('comment')
-        proceed = json_record.get('proceed')
-        client_time = json_record.get('client_time')
-        synced = json_record.get('synced')
-        chew_name = json_record.get('chew_name')
-        chew_number = json_record.get('chew_number')
-        ward = json_record.get('ward')
-        cu_name = json_record.get('cu_name')
-        link_facility = json_record.get('link_facility')
-        households = json_record.get('households')
-        trainings = json_record.get('trainings')
-        is_chv = json_record.get('is_chv')
-        is_gok_trained = json_record.get('is_gok_trained')
-        referral = json_record.get('referral')
-        referral_number = json_record.get('referral_number')
-        referral_title = json_record.get('referral_title')
-        vht = json_record.get('vht')
-        parish = json_record.get('parish')
-        financial_accounts = json_record.get('financial_accounts')
-        recruitment_transport = json_record.get('recruitment_transport')
-        branch_transport = json_record.get('branch_transport')
-        return Registration (id = id, name = name, phone = phone, gender = gender,
-            recruitment = recruitment, country = country, dob = dob,
-            district = district, subcounty = subcounty, division = division,
-            village = village, feature = feature, english = english,
-            date_moved = date_moved, languages = languages, brac = brac,
-            brac_chp = brac_chp, education = education, occupation = occupation,
-            community_membership = community_membership, added_by = added_by,
-            comment = comment, proceed = proceed, chew_name = chew_name,
-            chew_number = chew_number, ward = ward, cu_name = cu_name,
-            link_facility = link_facility, households = households,
-            trainings = trainings, is_chv = is_chv, is_gok_trained = is_gok_trained,
-            referral = referral, referral_number = referral_number,
-            referral_title = referral_title, vht = vht, parish = parish,
-            financial_accounts = financial_accounts,
-            recruitment_transport = recruitment_transport,
-            branch_transport = branch_transport,
-            client_time = client_time, synced = synced)
+      return Registration (
+        id = json_record.get('id'),
+        name = json_record.get('name'),
+        phone = json_record.get('phone'),
+        gender = json_record.get('gender'),
+        dob = json_record.get('dob'),
+        district = json_record.get('district'),
+        subcounty = json_record.get('subcounty'),
+        recruitment = json_record.get('recruitment'),
+        country = json_record.get('country'),
+        division = json_record.get('division'),
+        village = json_record.get('village'),
+        feature = json_record.get('feature'),
+        english = json_record.get('english'),
+        date_moved = json_record.get('date_moved'),
+        languages = json_record.get('languages'),
+        brac = json_record.get('brac'),
+        brac_chp = json_record.get('brac_chp'),
+        education = json_record.get('education'),
+        occupation = json_record.get('occupation'),
+        community_membership = json_record.get('community_membership'),
+        added_by = json_record.get('added_by'),
+        comment = json_record.get('comment'),
+        proceed = json_record.get('proceed'),
+        client_time = json_record.get('client_time'),
+        chew_name = json_record.get('chew_name'),
+        chew_number = json_record.get('chew_number'),
+        ward = json_record.get('ward'),
+        cu_name = json_record.get('cu_name'),
+        link_facility = json_record.get('link_facility'),
+        households = json_record.get('households'),
+        trainings = json_record.get('trainings'),
+        is_chv = json_record.get('is_chv'),
+        is_gok_trained = json_record.get('is_gok_trained'),
+        referral = json_record.get('referral'),
+        referral_title = json_record.get('referral_title'),
+        referral_number = json_record.get('referral_number'),
+        vht = json_record.get('vht'),
+        parish = json_record.get('parish'),
+        financial_accounts = json_record.get('financial_accounts'),
+        recruitment_transport = json_record.get('recruitment_transport'),
+        branch_transport = json_record.get('branch_transport'),
+        chew_id = json_record.get('chew_id'),
+        synced = json_record.get('synced'),
+        )
     
 
 class Parish(db.Model):
