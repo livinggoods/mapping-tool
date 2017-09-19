@@ -228,8 +228,8 @@ def export_scoring_tool(id):
             
             exam = Exam.query.filter(Exam.applicant == registration.id).first()
             interview = Interview.query.filter(Interview.applicant == registration.id).first()
-            if registration.referral is not None and registration.referral != '':
-                chew = Referral.query.filter_by(id=registration.referral).first()
+            if registration.referral_id is not None and registration.referral_id != '':
+                chew = Referral.query.filter_by(id=registration.referral_id).first()
             else:
                 chew = Referral.query.filter_by(id='0').first()
             link_facility = LinkFacility.query.filter_by(id=registration.link_facility).first()
