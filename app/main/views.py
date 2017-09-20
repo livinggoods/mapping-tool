@@ -337,7 +337,7 @@ def export_scoring_tool(id):
                 str(comment),
                 str(qualified),
                 str(user),
-                str(selected),
+                'Y' if registration.proceed==1 else 'N',
             ]
             data.append(row)
         
