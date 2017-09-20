@@ -66,6 +66,9 @@
                         <tr>
                           <td><a href="/recruitment/{{recruitment.id}}">
                                   {{recruitment.name}}
+                                        {% if recruitment.country =='KE' %}
+                                           <small> {{recruitment.to_json().get('subcounty')|title}}</small>
+                                        {% endif %}
                               </a></td>
                           <td>{{recruitment.owner.name}}</td>
                           <td>{{recruitment.country}}</td>
