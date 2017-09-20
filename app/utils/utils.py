@@ -1,4 +1,5 @@
 from wtforms.validators import Optional, DataRequired
+import re
 
 class RequiredIf(object):
   """Validates field conditionally.
@@ -21,3 +22,7 @@ class RequiredIf(object):
         if condition_field.data == data and not field.data:
           DataRequired()(form, field)
     Optional()(form, field)
+
+def validate_uuid(uuid_string):
+  UUID_RE = re.compile(r'^[a-f\d]{8}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{12}$', re.IGNORECASE)
+  return bool(UUID_RE.search(str(uuid_string)))
