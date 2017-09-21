@@ -558,7 +558,8 @@ class Registration (db.Model):
         recruitment_transport = json_record.get('recruitment_transport'),
         branch_transport = json_record.get('branch_transport'),
         referral_id = json_record.get('chew_id'),
-        synced = json_record.get('synced')
+        synced = json_record.get('synced'),
+        archived = 0
         )
     
 

@@ -183,7 +183,7 @@ def sync_registrations():
           saved_record.client_time =registration.get('client_time')
           saved_record.date_added =registration.get('date_added')
           saved_record.synced =registration.get('synced')
-          saved_record.archived =registration.get('archived')
+          saved_record.archived = 0
           saved_record.chew_name =registration.get('chew_name')
           saved_record.chew_number =registration.get('chew_number')
           saved_record.ward =registration.get('ward')
