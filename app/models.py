@@ -9,6 +9,7 @@ from sqlalchemy import func, Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 import time
+from utils.utils import validate_uuid
 
 
 from data import data
@@ -557,7 +558,8 @@ class Registration (db.Model):
         recruitment_transport = json_record.get('recruitment_transport'),
         branch_transport = json_record.get('branch_transport'),
         referral_id = json_record.get('chew_id'),
-        synced = json_record.get('synced')
+        synced = json_record.get('synced'),
+        archived = 0
         )
     
 
@@ -751,12 +753,19 @@ class Recruitments(db.Model):
     county_id = Column(ForeignKey(u'ke_county.id'), nullable=True, index=True)
     subcounty_id = Column(ForeignKey(u'subcounty.id'), nullable=True, index=True)
     location_id = Column(ForeignKey(u'location.id'), nullable=True, index=True)
-
+    
     owner = relationship(u'User')
 
     def to_json(self):
         # get the number of registrations
         registrations = Registration.query.filter_by(archived=0,recruitment=self.id)
+        sub_county_details = SubCounty.query.filter_by(id=self.subcounty).first()
+        subcounty=''
+        if sub_county_details is None:
+            if not validate_uuid(self.subcounty):
+              subcounty = self.subcounty
+        else:
+          subcounty = sub_county_details.name
         json_record = {
             'id' : self.id,
             'data':{'count': registrations.count(),
@@ -767,7 +776,8 @@ class Recruitments(db.Model):
             'lon' : self.lon,
             'lat' : self.lat,
             'district' : self.district,
-            'subcounty' : self.subcounty,
+            'subcounty' : subcounty,
+            'subcounty_details' : sub_county_details.to_json() if sub_county_details is not None else {},
             'county' : self.county,
             'division' : self.division,
             'country' : self.country,

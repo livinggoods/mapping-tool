@@ -12,8 +12,6 @@ from ..models import (Permission, Role, User, Geo, UserType, Mapping, LocationTa
                       Interview, Branch, Cohort, RecruitmentUsers, LinkFacility, CommunityUnit, Training,
                       TrainingClasses, TrainingSession, SessionAttendance, TrainingTrainers, Trainees, SessionTopic,
                       TrainingSessionType)
-
-
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
 from datetime import date, datetime
@@ -46,7 +44,8 @@ def index():
 
     total_recruitments = Recruitments.query.filter_by(archived=0)
     recruitments = total_recruitments.count()
-
+    
+    trainings = Training.query.filter_by(archived=0)
     recruitment = Recruitments.query.filter_by(archived=0).limit(5).all()
 
     villages = Village.query.filter_by(archived=0)
@@ -57,7 +56,7 @@ def index():
                                recruitments=recruitments, villages=villages, currency=currency)
     else:
         return render_template('index.html', page=page, registrations=registrations, mappings=total_mappings,
-                               recruitments=recruitments, villages=villages, currency=currency,
+                               recruitments=recruitments, villages=villages, currency=currency, trainings= trainings,
                                recruitment=recruitment)
 
 
@@ -670,8 +669,8 @@ def export_scoring_tool(id):
             
             exam = Exam.query.filter(Exam.applicant == registration.id).first()
             interview = Interview.query.filter(Interview.applicant == registration.id).first()
-            if registration.referral is not None and registration.referral != '':
-                chew = Referral.query.filter_by(id=registration.referral).first()
+            if registration.referral_id is not None and registration.referral_id != '':
+                chew = Referral.query.filter_by(id=registration.referral_id).first()
             else:
                 chew = Referral.query.filter_by(id='0').first()
             link_facility = LinkFacility.query.filter_by(id=registration.link_facility).first()
@@ -778,7 +777,7 @@ def export_scoring_tool(id):
                 str(comment),
                 str(qualified),
                 str(user),
-                str(selected),
+                'Y' if registration.proceed==1 else 'N',
             ]
             data.append(row)
         
