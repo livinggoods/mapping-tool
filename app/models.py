@@ -1844,10 +1844,12 @@ class TrainingSession(db.Model):
   date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
 
   training_session_type = relationship(u'TrainingSessionType')
+  session_class = relationship(u'TrainingClasses')
   training = relationship(u'Training')
   lead_trainer = relationship(u'User', foreign_keys=[session_lead_trainer])
   trainer = relationship(u'User', foreign_keys=[trainer_id])
   session_creator = relationship(u'User', foreign_keys=[created_by])
+  session_topic = relationship(u'SessionTopic')
 
 
 class TrainingSessionType(db.Model):
@@ -1924,6 +1926,9 @@ class TrainingClasses(db.Model):
   date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
   archived = Column(Integer, server_default=text("'0'"))
   country = Column(String(20), server_default=text("'UG'"), nullable=False)
+
+  class_creator = relationship(u'User')
+  training = relationship(u'Training')
 
   def to_json(self):
     json_record = {

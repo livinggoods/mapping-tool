@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            {{training_class.class_name}} class
+        </h1>
+    </div>
+</div>
+<div>
+	<label>Class name:</label>
+	<p>{{training_class.class_name}}</p>
+	<label>Country:</label>
+	<p>{{training_class.country}}</p>
+	<label>Date created:</label>
+	<p>{{training_class.date_created}}</p>
+	<label>Created by:</label>
+	<p>{{training_class.class_creator.name}}</p>
+</div>
+<div>
+	<a href="/training/{{training.id}}/classes/{{training_class.id}}/class_sessions" class="btn btn-primary">Sessions</a>
+	<a href="/training/{{training.id}}/classes/{{training_class.id}}/class_attendance" class="btn btn-primary">Attendance</a>
+</div>
+{% endblock %}

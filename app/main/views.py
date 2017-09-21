@@ -1,19 +1,22 @@
-from flask import render_template, redirect, url_for, flash, request, abort, \
-    current_app, jsonify, make_response
+from flask import (render_template, redirect, url_for, flash, request, abort,
+                   current_app, jsonify, make_response)
 from flask_login import current_user, login_required
 from flask.ext import excel
 from sqlalchemy import func, distinct, select, and_
 from . import main
-from .forms import EditProfileForm, EditProfileAdminForm, PostForm
 from .. import db
+from .forms import (EditProfileForm, EditProfileAdminForm, PostForm, TrainingForm,
+                    DeleteTrainingForm, TrainingClassForm, TrainingSessionForm, SessionTopicForm, SessionTypeForm)
 from ..models import (Permission, Role, User, Geo, UserType, Mapping, LocationTargets, Exam, Village, Ward,
-    Location, Education, EducationLevel, Referral, Parish, SubCounty, Recruitments, Registration, Interview,
-    Branch, Cohort, RecruitmentUsers, LinkFacility, CommunityUnit, Training)
+                      Location, Education, EducationLevel, Referral, Parish, SubCounty, Recruitments, Registration,
+                      Interview, Branch, Cohort, RecruitmentUsers, LinkFacility, CommunityUnit, Training,
+                      TrainingClasses, TrainingSession, SessionAttendance, TrainingTrainers, Trainees, SessionTopic,
+                      TrainingSessionType)
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
 from datetime import date, datetime
-import time
-import csv, os, time, calendar
+from time import gmtime, strftime
+import os, time, calendar, uuid
 from ..data import data
 import io
 import csv
@@ -73,95 +76,532 @@ def application_details(id):
         exam = Exam.query.filter_by(applicant=id).first()
         return render_template('registration.html', exam=exam, dob=dob,
             page=page, interview=interview, registration=a, age=age)
-    else:
-        if request.form.get('action') == 'select':
-            # add the application to the selected application
-            # the selected application must be alist
-            application = request.form.get('application_id')
-            location = request.form.get('location_id')
-            selected = SelectedApplication(application_id =application, location_id=location)
-            db.session.add(selected)
-            db.session.commit()
-            return jsonify(status='ok')
-    # fetch application details
 
-
-@main.route('/selected-applications', methods=['GET', 'POST'])
-@login_required
-def selected_applications():
-    if request.method == 'GET':
-        applications = Registration.query.filter_by(selected=1)
-        page = {'title': 'Selected Applications', 'subtitle':'Applications selected for interview'}
-        return render_template('selected-applications.html', page=page, applications=applications, currency=currency)
-    else:
-        applications = request.form.getlist('applications[]')
-        app = []
-        if request.form.get('action') == 'select':
-            for application_id in applications:
-                application = SelectedApplication(
-                    application_id = application_id
-                )
-                db.session.add(application)
-                db.session.commit()
-                app.append(application.id)
-            return jsonify(app)
-        else:
-            return jsonify(status='no action selected')
-        # return jsonify(details=request.form.getlist('applications[]'))@main.route('/selected-applications', methods=['GET', 'POST'])
 
 @main.route('/trainings', methods=['GET', 'POST'])
 @login_required
-def selected_for_training():
-  # the whole point here is to only show the applications that have been invited for training
-  #  and for each application, show whether the person declined the interview or not
-  # 
-    if request.method == 'GET':
-        applications = InterviewScore.query.filter_by(archived=0, invited_training=1)
-        page = {'title': 'Training Selections', 'subtitle':'Applications selected for training'}
-        return render_template('selected-for-training.html', page=page, applications=applications, currency=currency)
-    else:
-        applications = request.form.getlist('applications[]')
-        app = []
-        if request.form.get('action') == 'select':
-            for application_id in applications:
-                application = SelectedApplication(
-                    application_id = application_id
-                )
-                db.session.add(application)
-                db.session.commit()
-                app.append(application.id)
-            return jsonify(app)
-        else:
-            return jsonify(status='no action selected')
-        # return jsonify(details=request.form.getlist('applications[]'))
+def trainings():
+  trainings = Training.query.filter_by(archived=0)
+  page = {'title': 'Trainings', 'subtitle': 'All trainings'}
+  return render_template(
+      'trainings.html',
+      trainings=trainings,
+      page=page
+    )
 
 
-
-@main.route('/training-list', methods=['GET', 'POST'])
+@main.route('/training/new', methods=['GET', 'POST'])
 @login_required
-def training_list():
-  # the whole point here is to only show the applications that have been invited for training
-  #  and for each application, show whether the person declined the interview or not
-  # 
-    if request.method == 'GET':
-        applications = InterviewScore.query.filter_by(archived=0, invited_training=1, confirmed_attendance=1)
-        page = {'title': 'Training Selections', 'subtitle':'Applications selected for training'}
-        return render_template('selected-for-training.html', page=page, applications=applications, currency=currency)
+def new_training():
+  form = TrainingForm()
+  if form.validate_on_submit():
+    new_training = Training(
+      id=uuid.uuid1(),
+      training_name=form.training_name.data,
+      country=Geo.query.filter_by(id=form.country.data).first().geo_code,
+      county_id=form.county.data,
+      location_id=form.location.data,
+      subcounty_id=form.subcounty.data,
+      ward_id=form.ward.data,
+      district=form.district.data,
+      recruitment_id=form.recruitment.data,
+      parish_id=form.parish.data,
+      lat=form.lat.data,
+      lon=form.lon.data,
+      training_venue_id=form.training_venue.data,
+      training_status_id=form.training_status.data,
+      client_time=int(time.time()),
+      created_by=current_user.id,
+      date_created=strftime("%Y-%m-%d %H:%M:%-S", gmtime()),
+      archived=0,
+      comment=form.comment.data,
+      date_commenced=form.date_commenced.data,
+      date_completed=form.date_completed.data
+    )
+    db.session.add(new_training)
+    db.session.commit()
+    return redirect('/trainings')
+  return render_template(
+    'form_training.html',
+    form=form
+  )
+
+
+@main.route('/training/<string:id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_training(id):
+  training = Training.query.filter_by(id=id).first_or_404()
+  form = TrainingForm()
+  if form.validate_on_submit():
+    training.training_name = form.training_name.data
+    training.country = Geo.query.filter_by(id=form.country.data).first().geo_code
+    training.county_id = form.county.data
+    training.location_id = form.location.data
+    training.subcounty_id = form.subcounty.data
+    training.ward_id = form.ward.data
+    training.district = form.district.data
+    training.recruitment_id = form.recruitment.data
+    training.parish_id = form.parish.data
+    training.lat = form.lat.data
+    training.lon = form.lon.data
+    training.training_venue_id = form.training_venue.data
+    training.training_status_id = form.training_status.data
+    training.archived = form.archived.data
+    training.comment = form.comment.data
+    training.date_commenced = form.date_commenced.data
+    training.date_completed = form.date_completed.data
+    db.session.add(training)
+    db.session.commit()
+    return redirect('/trainings')
+  form.training_name.data = training.training_name
+  form.country.data = Geo.query.filter_by(geo_code=training.country).first().id
+  form.county.data = training.county
+  form.location.data = training.location
+  form.subcounty.data = training.subcounty
+  form.ward.data = training.ward
+  form.district.data = training.district
+  form.recruitment.data = training.recruitment
+  form.parish.data = training.parish
+  form.lat.data = training.lat
+  form.lon.data = training.lon
+  form.training_venue.data = training.training_venue_id
+  form.training_status.data = training.training_status_id
+  form.archived.data = training.archived
+  form.comment.data = training.comment
+  form.date_commenced.data = training.date_commenced
+  form.date_completed.data = training.date_completed
+  return render_template(
+      'edit_training.html',
+      form=form,
+      training_id=training.id
+    )
+
+
+@main.route('/training/<string:id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_training(id):
+  training = Training.query.filter_by(id=id).first_or_404()
+  form = DeleteTrainingForm()
+  if form.validate_on_submit():
+    db.session.delete(training)
+    db.session.commit()
+    return redirect('/trainings')
+  return render_template(
+    'form_delete_training.html',
+    form=form,
+    training_id=training.id
+  )
+
+
+@main.route('/training/<string:id>', methods=['GET', 'POST'])
+@login_required
+def training(id):
+  training = Training.query.filter_by(id=id).first_or_404()
+  page = {'title': training.training_name,
+          'subtitle': '{training} training details'\
+                      .format(training=training.training_name)
+          }
+  return render_template(
+      'training.html',
+      training=training,
+      page=page
+    )
+
+
+@main.route('/training/<string:training_id>/sessions')
+@login_required
+def main_training_sessions(training_id):
+  training = Training.query.filter_by(id=training_id).first_or_404()
+  training_sessions = TrainingSession.query.filter_by(training_id=training_id)
+  page = {'title': 'Sessions',
+          'subtitle': 'Sessions in the {training} training'
+            .format(training=training.training_name)}
+  return render_template(
+    'training_sessions.html',
+    training=training,
+    training_sessions=training_sessions,
+    page=page
+  )
+
+
+@main.route('/training/<string:training_id>/attendance')
+@login_required
+def main_training_attendance(training_id):
+  training = Training.query.filter_by(id=training_id).first_or_404()
+  training_attendance = SessionAttendance.query.filter_by(training_id=training_id)
+  page = {'title': 'Classes',
+          'subtitle': 'Classes in the {training} training'
+            .format(training=training.training_name)}
+  return render_template(
+    'training_attendance.html',
+    training_attendance=training_attendance,
+    page=page,
+    training=training
+  )
+
+
+@main.route('/training/<string:training_id>/classes', methods=['GET', 'POST'])
+@login_required
+def training_classes(training_id):
+  training = Training.query.filter_by(id=training_id).first_or_404()
+  training_classes = TrainingClasses.query.filter_by(training_id=training_id)
+  page = {'title': 'Classes',
+          'subtitle':'Classes in the {training} training'
+          .format(training=training.training_name)}
+  return render_template(
+    'training_classes.html',
+    training_classes=training_classes,
+    page=page,
+    training=training
+  )
+
+
+@main.route('/training/<string:training_id>/classes/new', methods=['GET', 'POST'])
+@login_required
+def new_training_class(training_id):
+  training = Training.query.filter_by(id=training_id).first_or_404()
+  form = TrainingClassForm()
+  page = {'title': 'New Class'}
+  if form.validate_on_submit():
+    training_classes_ids = [
+      t_classes_id[0] for t_classes_id in TrainingClasses.query.with_entities(TrainingClasses.id)
+    ]
+    if len(max(training_classes_ids)) == 0:
+      new_id = 0
     else:
-        applications = request.form.getlist('applications[]')
-        app = []
-        if request.form.get('action') == 'select':
-            for application_id in applications:
-                application = SelectedApplication(
-                    application_id = application_id
-                )
-                db.session.add(application)
-                db.session.commit()
-                app.append(application.id)
-            return jsonify(app)
-        else:
-            return jsonify(status='no action selected')
-        # return jsonify(details=request.form.getlist('applications[]'))
+      new_id = max(training_classes_ids)+1
+    new_class = TrainingClasses(
+      id=new_id,  # ask how int ids are generated
+      training_id=training.id,
+      class_name=form.class_name.data,
+      created_by=current_user.id,
+      client_time=int(time.time()),
+      date_created=strftime("%Y-%m-%d %H:%M:%S", gmtime()),
+      archived=form.archived.data,
+      country=Geo.query.filter_by(id=form.country.data).first().geo_code
+    )
+    db.session.add(new_class)
+    db.session.commit()
+    return redirect('/training/' + str(training.id) + '/classes')
+  return render_template(
+    'form_training_class.html',
+    page=page,
+    form=form,
+    training=training
+  )
+
+
+@main.route('/training/<string:training_id>/classes/<string:class_id>/edit_class', methods=['GET', 'POST'])
+@login_required
+def edit_training_class(training_id, class_id):
+  training = Training.query.filter_by(id=training_id).first_or_404()
+  training_class = TrainingClasses.query.filter_by(id=class_id).first_or_404()
+  form = TrainingClassForm()
+  page = {
+    'title': 'Edit class'
+  }
+  if form.validate_on_submit():
+    training_class.class_name = form.class_name.data
+    training_class.country = Geo.query.filter_by(id=form.country.data).first().geo_code
+    training_class.archived = form.archived.data
+    db.session.add(training_class)
+    db.session.commit()
+  form.class_name.data = training_class.class_name
+  form.country.data = Geo.query.filter_by(geo_code=training.country).first().id
+  form.archived.data = training_class.archived
+  return render_template(
+    'edit_training_class.html',
+    training_class=training_class,
+    page=page,
+    form=form
+  )
+
+
+@main.route('/training/<string:training_id>/classes/<string:class_id>/delete_class')
+@login_required
+def delete_training_class(training_id, class_id):
+  training = Training.query.filter_by(id=training_id).first_or_404()
+  training_class = TrainingClasses.query.filter_by(id=class_id).first_or_404()
+  form = DeleteTrainingForm()
+  page = {
+    'title': 'Delete class'
+  }
+  if form.validate_on_submit():
+    db.session.delete(training_class)
+    db.session.commit()
+    return redirect('/training/' + str(training.id) + '/classes/' + str(training_class.id) + '/class')
+  return render_template(
+    'form_delete_training_class.html',
+    training_class=training_class,
+    form=form,
+    page=page
+  )
+
+
+@main.route('/training/<string:training_id>/classes/<string:class_id>')
+@login_required
+def training_class(training_id, class_id):
+  training = Training.query.filter_by(id=training_id).first_or_404()
+  training_class = TrainingClasses.query.filter_by(id=class_id).first_or_404()
+  page = {
+    'title': '{training_class} class'.format(training_class=training_class.class_name),
+    'subtitle': 'Sessions in the {training_class} class'.format(training_class=training_class.class_name)
+  }
+  return render_template(
+    'training_class.html',
+    training_class=training_class,
+    page=page,
+    training=training
+  )
+
+
+@main.route('/training/<string:training_id>/classes/<string:class_id>/class_attendance')
+@login_required
+def training_class_attendance(training_id, class_id):
+  training = Training.query.filter_by(id=training_id).first_or_404()
+  training_class = TrainingClasses.query.filter_by(id=class_id).first_or_404()
+  training_class_attendance = SessionAttendance.query.\
+    join(SessionAttendance.training_session, aliased=True).\
+    filter_by(class_id=class_id)
+  page = {
+    'title': '{training_class} class'.format(training_class=training_class.class_name),
+    'subtitle': 'Sessions in the {training_class} class'.format(training_class=training_class.class_name)
+  }
+  return render_template(
+    'training_class_attendance.html',
+    training_class=training_class,
+    training_class_attendance=training_class_attendance,
+    page=page,
+    training=training
+  )
+
+
+@main.route('/training/<string:training_id>/classes/<string:class_id>/class_sessions')
+@login_required
+def training_sessions(training_id, class_id):
+  training = Training.query.filter_by(id=training_id).first_or_404()
+  training_class = TrainingClasses.query.filter_by(id=class_id).first_or_404()
+  training_class_sessions = TrainingSession.query.filter_by(class_id=class_id)
+  page = {
+    'title': '{training_class} class'.format(training_class=training_class.class_name),
+    'subtitle': 'Sessions in the {training_class} class'.format(training_class=training_class.class_name)
+  }
+  return render_template(
+    'training_class_sessions.html',
+    training_class=training_class,
+    training_class_sessions=training_class_sessions,
+    page=page,
+    training=training
+  )
+
+
+@main.route('/training/<string:training_id>/classes/<string:class_id>/class_sessions/new', methods=['GET', 'POST'])
+@login_required
+def new_training_sessions(training_id, class_id):
+  training = Training.query.filter_by(id=training_id).first_or_404()
+  training_class = TrainingClasses.query.filter_by(id=class_id).first_or_404()
+  form = TrainingSessionForm()
+  page = {
+    'title': '{training_class} class'.format(training_class=training_class.class_name),
+    'subtitle': 'Sessions in the {training_class} class'.format(training_class=training_class.class_name)
+  }
+  if form.validate_on_submit():
+    new_session = TrainingSession(
+      id=uuid.uuid1(),
+      training_session_type_id=form.training_session_type.data,
+      class_id=training_class.id,
+      training_id=training.id,
+      trainer_id=form.trainer.data,
+      country=Geo.query.filter_by(id=form.country.data).first().geo_code,
+      archived=form.archived.data,
+      comment=form.comment.data,
+      session_start_time=0,
+      session_end_time=0,
+      session_topic_id=form.session_topic.data,
+      session_lead_trainer=form.session_lead_trainer.data,
+      client_time=int(time.time()),
+      created_by=current_user.id,
+      date_created=strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    )
+    db.session.add(new_session)
+    db.session.commit()
+    return redirect('/training/' + str(training.id) + '/classes/' + str(training_class.id) + '/class_sessions')
+  return render_template(
+    'form_training_class_session.html',
+    training_class=training_class,
+    form=form,
+    page=page,
+    training=training
+  )
+
+
+@main.route('/training/<string:training_id>/classes/<string:class_id>/class_sessions/<string:session_id>/edit',
+            methods=['GET', 'POST'])
+@login_required
+def edit_training_sessions(training_id, class_id, session_id):
+  training = Training.query.filter_by(id=training_id).first_or_404()
+  training_class = TrainingClasses.query.filter_by(id=class_id).first_or_404()
+  training_class_session = TrainingSession.query.filter_by(id=session_id).first_or_404()
+  page = {
+    'title': 'Edit session'
+  }
+  form = TrainingSessionForm()
+  if form.validate_on_submit():
+    training_class_session.training_session_type_id = form.training_session_type.data
+    training_class_session.country = Geo.query.filter_by(id=form.country.data).first().geo_code
+    training_class_session.trainer_id = form.trainer.data
+    training_class_session.archived = form.archived.data
+    training_class_session.comment = form.comment.data
+    training_class_session.session_topic_id = form.session_topic.data
+    training_class_session.session_lead_trainer = form.session_lead_trainer.data
+    db.session.add(training_class_session)
+    db.session.commit()
+    return redirect('/training/' + training_id + '/classes/' + class_id + '/class_sessions')
+  form.training_session_type.data = training_class_session.training_session_type_id
+  form.trainer.data = training_class_session.trainer_id
+  form.archived.data = training_class_session.archived
+  form.comment.data = training_class_session.comment
+  form.session_topic.data = training_class_session.session_topic_id
+  form.session_lead_trainer.data = training_class_session.session_lead_trainer
+  return render_template(
+    'edit_training_session.html',
+    training_class=training_class,
+    training_session=training_class_session,
+    form=form,
+    training=training
+  )
+
+
+@main.route('/training/<string:training_id>/classes/<string:class_id>/class_sessions/<string:session_id>/delete',
+            methods=['GET', 'POST'])
+@login_required
+def delete_training_sessions(training_id, class_id, session_id):
+  training = Training.query.filter_by(id=training_id).first_or_404()
+  training_class = TrainingClasses.query.filter_by(id=class_id).first_or_404()
+  training_class_session = TrainingSession.query.filter_by(id=session_id).first_or_404()
+  page = {
+    'title': 'Delete session'
+  }
+  form = DeleteTrainingForm()
+  if form.validate_on_submit():
+    db.session.delete(training_class_session)
+    db.session.commit()
+    return redirect('/training/' + training_id + '/classes/' + class_id + '/class_sessions')
+  return render_template(
+    'form_delete_training_session.html',
+    training_class=training_class,
+    training_session=training_class_session,
+    form=form,
+    training=training
+  )
+
+
+@main.route('/training/<string:training_id>/<string:class_id>/new_session_topic', methods=['GET', 'POST'])
+@login_required
+def new_session_topic(training_id, class_id):
+  form = SessionTopicForm()
+  if form.validate_on_submit():
+    session_topic_ids = [
+      sess_t_id[0] for sess_t_id in SessionTopic.query.with_entities(SessionTopic.id)
+    ]
+    if len(max(session_topic_ids)) == 0:
+      new_id = 0
+    else:
+      new_id = max(session_topic_ids)+1
+    new_topic = SessionTopic(
+      id=new_id,
+      name=form.name.data,
+      country=Geo.query.filter_by(id=form.country.data).first().geo_code,
+      archived=form.archived.data,
+      date_added=strftime("%Y-%m-%d %H:%M:%S", gmtime()),
+      added_by=current_user.id
+    )
+    db.session.add(new_topic)
+    db.session.commit()
+    return redirect('/training/' + training_id + '/classes/' + class_id + '/class_sessions')
+  return render_template(
+    'form_session_topic.html',
+    form=form
+  )
+
+
+@main.route('/training/<string:training_id>/<string:class_id>/new_session_type', methods=['GET', 'POST'])
+@login_required
+def new_session_type(training_id, class_id):
+  form = SessionTypeForm()
+  if form.validate_on_submit():
+    training_session_type_ids = [
+      t_sess_id[0] for t_sess_id in TrainingSessionType.query.with_entities(TrainingSessionType.id)
+    ]
+    if len(max(training_session_type_ids)) == 0:
+      new_id = 0
+    else:
+      new_id = max(training_session_type_ids)+1
+    new_type = TrainingSessionType(
+      id=new_id,
+      session_name=form.session_name.data,
+      country=form.country.data,
+      archived=form.archived.data,
+      client_time=int(time.time()),
+      date_created=strftime("%Y-%m-%d %H:%M:%S", gmtime()),
+      created_by=current_user.id
+    )
+    db.session.add(new_type)
+    db.session.commit()
+    return render_template('/training/' + training_id + '/classes/' + class_id + '/class_sessions')
+  return render_template(
+    'form_session_type.html',
+    form=form
+  )
+
+
+@main.route('/training/<string:training_id>/classes/<string:class_id>/class_sessions/<string:session_id>',
+            methods=['GET', 'POST'])
+@login_required
+def training_attendance(training_id, class_id, session_id):
+  training = Training.query.filter_by(id=training_id).first_or_404()
+  training_class = TrainingClasses.query.filter_by(id=class_id).first_or_404()
+  training_session = TrainingSession.query.filter_by(id=session_id).first_or_404()
+  training_attendance = SessionAttendance.query.filter_by(training_session_id=session_id)
+  page = {'title': 'Attendance',
+          'subtitle': 'Attendance for the {training_session} session'
+          .format(
+            training_session=training_session.date_created
+            )
+          }
+  return render_template(
+    'training_class_session.html',
+    training_attendance=training_attendance,
+    training=training,
+    training_class=training_class,
+    training_session=training_session,
+    page=page
+  )
+
+
+@main.route('/training/<string:id>/trainees', methods=['GET', 'POST'])
+@login_required
+def training_trainees():
+  training = Training.query.filter_by(id=id).first_or_404()
+  training_trainees = Trainees.query.filter_by(training_id=id)
+  page = {'title': 'Trainees', 'subtitle':'Trainees in the {training} training'.format(training=training.name)}
+  return render_template(
+      'training_trainees.html',
+      page=page,
+      training_trainees=training_trainees
+    )
+
+
+@main.route('/training/<string:id>/trainers', methods=['GET', 'POST'])
+@login_required
+def training_trainers(id):
+  training = Training.query.filter_by(id=id).first_or_404()
+  training_trainers = 'Training\'s Trainers'
+  page = {'title': 'Trainers', 'subtitle':'Trainers in the {training} training'.format(training=training.name)}
+  return render_template(
+      'training_trainers.html',
+      training_trainers=training_trainers
+    )
 
 
 @main.route('/export-scoring-tool/<string:id>', methods=['GET'])
@@ -483,79 +923,6 @@ def export_scoring_tool(id):
     return output
 
 
-@main.route('/interview-scores', methods=['POST'])
-@login_required
-def interview_score():
-    selection = request.form.get('selection_id')
-    selected = SelectedApplication.query.filter_by(application_id=selection).first()
-    app = {}
-    total = (int(request.form.get('motivation')) + int(request.form.get('community_work')) +
-      int(request.form.get('mentality')) + int(request.form.get('selling')) +
-      int(request.form.get('health')) + int(request.form.get('investment')) +
-      int(request.form.get('interpersonal')) + int(request.form.get('commitment')))
-
-    score = InterviewScore(
-        selection_id = selected.id,
-        recruitment_id = selected.application.recruitment_id,
-        interview_id = request.form.get('interview_id'),
-        motivation = request.form.get('motivation'),
-        community_work = request.form.get('community_work'),
-        mentality = request.form.get('mentality'),
-        selling = request.form.get('selling'),
-        health = request.form.get('health'),
-        investment = request.form.get('investment'),
-        interpersonal = request.form.get('interpersonal'),
-        commitment = request.form.get('commitment'),
-        interview_total_score = total,
-        user_id = current_user.id,
-        location_id = selected.application.location_id,
-        application_id = selection, 
-    )
-    db.session.add(score)
-    db.session.commit()
-    return jsonify(selection=selection, rec=selected.application.recruitment_id)
-
-
-
-@main.route('/interview-score/<int:id>', methods=['GET', 'POST'])
-@login_required
-def get_interview_score(id):
-    if request.method == 'GET':
-      selection = SelectedApplication.query.filter_by(id=id).first_or_404()
-      application = selection.application
-      page = {'title':' '.join([application.l_name, application.m_name, application.f_name]), 'subtitle':'Interview Score'}
-      age = calculate_age(application.date_of_birth)
-      qualified = appplication_status(application)
-      # I this location, what is the target (number of CHPs) needed?
-      target = LocationTargets.query.filter_by(location_id=application.location_id, recruitment_id=application.recruitment_id, archived=0).first()
-      invited = InterviewScore.query.filter_by(location_id=application.location_id, invited_training=1)
-      # target = LocationTargets.query.filter(location_id=selection.location_id, recruitment=application.recruitment_id, archived=0).first()
-      selected = False
-      taken_interview = False
-      if selection:
-        selected = True
-        interview_score = InterviewScore.query.filter_by(selection_id=selection.id).first()
-        taken_interview = True if interview_score else False
-      phones = ApplicationPhone.query.filter_by(application_id=application.id)
-      return render_template('interview-score.html', phones=phones, invited=invited,
-        taken_interview=taken_interview, selected=selected, target = target, currency=currency,
-        selected_application=selection, score=interview_score, interview_score=interview_score,
-        qualified=qualified, age=age, page=page, application=application)
-    else:
-      items = {}
-      if request.form.get('action') == 'select':
-        interview_score = InterviewScore.query.filter_by(id=request.form.get('interview')).first()
-        interview_score.invited_training = 1
-        db.session.add(interview_score)
-        db.session.commit()
-      if request.form.get('action') == 'confirm':
-        interview_score = InterviewScore.query.filter_by(id=request.form.get('interview')).first()
-        interview_score.confirmed_attendance = 1
-        db.session.add(interview_score)
-        db.session.commit()
-      return jsonify(status='ok', data=request.form)
-
-
 @main.route('/recruitments', methods=['GET', 'POST'])
 @login_required
 def recruitments():
@@ -599,73 +966,6 @@ def recruitment(id):
         # also add the recruitment
         recruitment = RecruitmentUsers(user_id=current_user.id, recruitment_id= recruitments.id)
         return jsonify(status='created', id=recruitments.id)
-
-@main.route('/registrations', methods=['GET', 'POST'])
-@login_required
-def applications():
-    if request.method == 'GET':
-        page = {'title': 'applications', 'subtitle': 'manage applications and create new applications'}
-        villages = Location.query.all()
-        referrals = Referral.query.all()
-        educations = Education.query.all()
-        edu_level = EducationLevel.query.all()
-        recruitments = Recruitments.query.filter_by(archived=0)
-        applications = Application.query.all()
-        return render_template('applications.html', recruitments=recruitments, 
-          applications=applications, page=page, villages=villages, currency=currency,
-          referrals= referrals, educations=educations, edu_level=edu_level)
-    else:
-        if request.form.get('action') == 'select':
-            # add the application to the selected application
-            # the selected application must be alist
-            for application in request.form.get('applications'):
-                saved_application = Application.query.filter_by(id=application.id)
-                selected = SelectedApplication(application_id =application.id, location_id=saved_application.location_id)
-                db.session.add_all([selected])
-                db.session.commit()
-            return jsonify(status='ok')
-        else:
-            # save the records
-            about = int(request.form.get('about')) if request.form.get('about') != '' else 0
-            eng = int(request.form.get('english')) if request.form.get('english') != '' else 0
-            maths = int(request.form.get('maths')) if request.form.get('maths') != '' else 0
-            total = about + eng + maths
-
-            application = Application(
-            f_name =  request.form.get('f_name').title() if request.form.get('f_name') != '' else None,
-            m_name = request.form.get('m_name').title() if request.form.get('m_name') != '' else None,
-            l_name = request.form.get('l_name').title() if request.form.get('l_name') != '' else None,
-            maths = request.form.get('maths') if request.form.get('maths') != '' else None,
-            english = request.form.get('english') if request.form.get('english') != '' else None,
-            about_you = request.form.get('about') if request.form.get('about') != '' else None,
-            total_score = total,
-            gender = request.form.get('gender').title() if request.form.get('gender') != '' else None,
-            date_of_birth = request.form.get('date_of_birth').title() if request.form.get('date_of_birth') != '' else None,
-            location_id = request.form.get('village_id').title() if request.form.get('village_id') != '' else None,
-            landmark = request.form.get('landmark').title() if request.form.get('landmark') != '' else None,
-            date_moved = request.form.get('date_moved').title() if request.form.get('date_moved') != '' else None,
-            referral_id = request.form.get('referral_id').title() if request.form.get('referral_id') != '' else None,
-            education_id = request.form.get('education_id').title() if request.form.get('education_id') != '' else None,
-            edu_level_id = request.form.get('edu_level_id').title() if request.form.get('edu_level_id') != '' else None,
-            vht = request.form.get('vht').title() if request.form.get('vht') != '' else None,
-            languages = request.form.get('languages').title() if request.form.get('languages') != '' else None,
-            worked_brac = request.form.get('worked_brac').title() if request.form.get('worked_brac') != '' else None,
-            brac_chp = request.form.get('brac_chp').title() if request.form.get('brac_chp') != '' else None,
-            community_membership = request.form.get('community_membership').title() if request.form.get('community_membership') != '' else None,
-            read_english = request.form.get('read_english').title() if request.form.get('read_english') != '' else None,
-            recruitment_id = request.form.get('recruitment') if request.form.get('recruitment') != '' else None
-            )
-            db.session.add(application)
-            db.session.commit()
-            phones = request.form.getlist('phone[]')
-            for phone in phones:
-                pid = ApplicationPhone(
-                    application_id = application.id,
-                    phone = phone
-                )
-                db.session.add(pid)
-                db.session.commit()
-            return jsonify(status='ok', ref=request.form.get('recruitment') if request.form.get('recruitment') != '' else None,)
 
 @main.route('/country', methods=['GET', 'POST'])
 @main.route('/region', methods=['GET', 'POST'])
@@ -913,32 +1213,6 @@ def user(username):
                            ai_firms=[], su_firms=[])
 
 
-@main.route('/users/<username>')
-@login_required
-def users(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash('Invalid user.', 'error')
-        return redirect(url_for('main.index'))
-
-    # get request arguments
-    followed = request.args.get('followed', 1, type=int)
-
-    # query for users
-    if followed:
-        results = user.followed.order_by(Follow.timestamp.desc()).all()
-        users = [{'user': item.followed, 'timestamp': item.timestamp}
-                 for item in results]
-    else:
-        results = User.query.order_by(User.username.asc()).all()
-        users = [{'user': item, 'timestamp': None}
-                 for item in results]
-    
-
-    return render_template('user_list.html', user=user, users=users,
-                           followed=followed)
-
-
 @main.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -1092,107 +1366,6 @@ def followed_by(username):
                            follows=follows)
 
 
-@main.route('/company/<int:id>')
-@login_required
-def company(id):
-    company = Company.query.join(User).filter(Company.id == id).first()
-    if company is None:
-        flash('Company Does Not Exist.', 'error')
-        return redirect(url_for('main.index'))
-    vc_firms = company.related_firms('vc')
-    ai_firms = company.related_firms('ai')
-    su_orgs = company.related_firms('su')
-    return render_template('startup.html', company=company, vc_firms=vc_firms,
-                           ai_firms=ai_firms, su_orgs=su_orgs)
-
-
-@main.route('/companies/<username>')
-@login_required
-def companies(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash('Invalid user.', 'error')
-        return redirect(url_for('main.index'))
-
-    # get request arguments
-    filter_user = request.args.get('filter_user', 1, type=int)
-
-    # query for companies
-    query = Company.query
-    if filter_user:
-        query = query.filter(Company.user_id == user.id)
-    query = query.order_by(Company.name.asc())
-
-    # build response dataset
-    company_list = query.all()
-    companies = [{'id': item.id,
-                  'name': item.name,
-                  'owner': item.owner,
-                  'city': item.city,
-                  'state': item.state,
-                  'country': item.country}
-                 for item in company_list]
-    return render_template('startup_list.html', user=user,
-                           filter_user=filter_user, companies=companies)
-
-
-@main.route('/firm/<int:id>')
-@login_required
-def firm(id):
-    firm = Firm.query\
-        .join(FirmType).join(FirmTier).join(User)\
-        .filter(Firm.id == id).first()
-    if firm is None:
-        flash('Relationship Does Not Exist.', 'error')
-        return redirect(url_for('main.index'))
-    companies = firm.related_companies()
-    return render_template('firm.html', firm=firm, companies=companies)
-
-@main.route('/firms/<username>')
-@login_required
-def firms(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash('Invalid user.', 'error')
-        return redirect(url_for('main.index'))
-
-    # get request arguments
-    firm_type_code = request.args.get('firm_type_code', 'vc', type=str)
-    filter_user = request.args.get('filter_user', 1, type=int)
-
-    # format firm type
-    firm_type = FirmType.query.filter_by(firm_type_code=firm_type_code).first()
-    from inflect import engine
-    p = engine()
-    firm_type_full = firm_type.firm_type
-    firm_type_code = firm_type.firm_type_code
-    firm_type_p = p.plural(firm_type_full)
-
-    # query for firms
-    query = Firm.query\
-        .join(FirmType, FirmType.id == Firm.firm_type_id)\
-        .join(FirmTier, FirmTier.id == Firm.firm_tier_id)\
-        .filter(FirmType.firm_type == firm_type_full)
-    if filter_user:
-        query = query.filter(Firm.user_id == user.id)
-    query = query.order_by(FirmTier.firm_tier.asc(), Firm.name.asc())
-
-    # build response dataset
-    firm_list = query.all()
-    firms = [{'id': item.id,
-              'name': item.name,
-              'type': item.type.firm_type,
-              'tier': item.tier.firm_tier,
-              'owner': item.owner,
-              'city': item.city,
-              'state': item.state,
-              'country': item.country}
-             for item in firm_list]
-    return render_template('firm_list.html', user=user,
-                           title=firm_type_p, type_code=firm_type_code,
-                           filter_user=filter_user, endpoint='main.firms',
-                           firms=firms)
-
 @main.route('/csv')
 def test_app():
   with open('data.csv', 'r') as f:
@@ -1213,11 +1386,6 @@ def test_app():
         districts[row[1]][row[2]] = []
         districts[row[1]][row[2]].append({'name':row[0], 'number':row[3]})
   return jsonify(districts=districts)
-
-def read_data(file):
-  with open(data, 'r') as f:
-    data = [row for row in csv.reader(f.read().splitlines())]
-  return data
 
 def appplication_status(app):
     status = True
