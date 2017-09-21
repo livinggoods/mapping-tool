@@ -1,9 +1,10 @@
 from flask_wtf import Form
 from wtforms import StringField, TextAreaField, BooleanField, SelectField, \
     SubmitField, ValidationError, PasswordField, IntegerField, FloatField
-from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
-from ..models import Role, User, Geo, UserType, Ward, County, Location, SubCounty, Parish, TrainingVenues,\
-    Recruitments, TrainingStatus
+from wtforms.validators import DataRequired, Length, Email, EqualTo
+from ..models import (Role, User, Geo, UserType, Ward, County, Location, SubCounty, Parish, TrainingVenues,
+                      Recruitments, TrainingStatus, TrainingSessionType, SessionTopic, Trainees, Cohort, Registration,
+                      Branch)
 from ..utils.utils import RequiredIf
 
 
@@ -157,10 +158,97 @@ class DeleteTrainingForm(Form):
 
 class TrainingClassForm(Form):
     class_name = StringField('Class name', validators=[DataRequired()])
-    country = SelectField('Country', validators=[DataRequired()])
+    country = SelectField('Country', validators=[DataRequired()], coerce=int)
     archived = SelectField('Archived', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
+    submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):
         super(TrainingClassForm, self).__init__(*args, **kwargs)
         self.country.choices = [(geo.id, geo.geo_name)
                                 for geo in Geo.query.order_by(Geo.geo_name).all()]
+
+
+class TrainingSessionForm(Form):
+    training_session_type = SelectField('Session type', validators=[DataRequired()], coerce=int)
+    trainer = SelectField('Trainer', validators=[DataRequired()], coerce=int)
+    country = SelectField('Country', validators=[DataRequired()], coerce=int)
+    archived = SelectField('Archived', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
+    comment = TextAreaField('Comment', validators=[DataRequired()])
+    session_topic = SelectField('Session\'s topic', validators=[DataRequired()], coerce=int)
+    session_lead_trainer = SelectField('Lead Trainer', validators=[DataRequired()], coerce=int)
+    submit = SubmitField('Submit')
+
+    def __init__(self, *args, **kwargs):
+        super(TrainingSessionForm, self).__init__(*args, **kwargs)
+        self.training_session_type.choices = [(session_type.id, session_type.session_name)
+                                              for session_type in TrainingSessionType.query.
+                                              order_by(TrainingSessionType.session_name).all()]
+        self.trainer.choices = [(trainer.id, trainer.username)
+                                for trainer in User.query.order_by(User.username).all()]
+        self.country.choices = [(geo.id, geo.geo_name)
+                                for geo in Geo.query.order_by(Geo.geo_name).all()]
+        self.session_topic.choices = [(topic.id, topic.name)
+                              for topic in SessionTopic.query.order_by(SessionTopic.name).all()]
+        self.session_lead_trainer.choices = [(trainer.id, trainer.username)
+                                             for trainer in User.query.order_by(User.username).all()]
+
+
+class SessionTopicForm(Form):
+    name = StringField('Name', validators=[DataRequired()])
+    country = SelectField('Country', validators=[DataRequired()], coerce=int)
+    archived = SelectField('Archived', validators=[], choices=[('0', 'False'), ('1', 'True')])
+    submit = SubmitField('Submit')
+
+    def __init__(self, *args, **kwargs):
+        super(SessionTopicForm, self).__init__(*args, **kwargs)
+        self.country.choices = [(geo.id, geo.geo_name)
+                                for geo in Geo.query.order_by(Geo.geo_name).all()]
+
+
+class SessionTypeForm(Form):
+    session_name = StringField('Name', validators=[DataRequired()])
+    country = SelectField('Country', validators=[DataRequired()], coerce=int)
+    archived = SelectField('Archived', validators=[], choices=[('0', 'False'), ('1', 'True')])
+    submit = SubmitField('Submit')
+
+    def __init__(self, *args, **kwargs):
+        super(SessionTypeForm, self).__init__(*args, **kwargs)
+        self.country.choices = [(geo.id, geo.geo_name)
+                                for geo in Geo.query.order_by(Geo.geo_name).all()]
+
+
+class SessionAttendanceForm(Form):
+    trainee = BooleanField('', validators=[DataRequired()])
+    training_session_type = SelectField('Session Type', validators=[DataRequired()])
+    country = SelectField('', validators=[DataRequired()])
+    archived = SelectField('', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
+    comment = TextAreaField('', validators=[DataRequired()])
+
+    def __init__(self, *args, **kwargs):
+        super(SessionAttendanceForm, self).__init__(*args, **kwargs)
+        self.country.choices = [(geo.id, geo.geo_name)
+                                for geo in Geo.query.order_by(Geo.geo_name).all()]
+        self.trainee.choices = [(trainee.id, trainee.id)
+                                for trainee in Trainees.query.join(Trainees.registration_id)
+                                    .order_by(Registration.name).all()]
+        self.training_session_type.choices = [(session_type.id, session_type.name)
+                                              for session_type in TrainingSessionType.
+                                                  query.order_by(TrainingSessionType.session_name).all()]
+
+
+class TraineeForm(Form):
+    registration = SelectField('Registration', validators=[DataRequired()])
+    country = SelectField('Country', validators=[DataRequired()])
+    branch = SelectField('Branch', validators=[DataRequired()])
+    cohort = SelectField('Cohort', validators=[DataRequired()])
+
+    def __init__(self, *args, **kwargs):
+        super(TraineeForm, self).__init__(*args, **kwargs)
+        self.country.choices = [(geo.id, geo.geo_name)
+                                for geo in Geo.query.order_by(Geo.geo_name).all()]
+        self.registration.choices = [()
+                                     for registration in Registration.query.order_by().all()]
+        self.branch.choices = [(branch.id, branch.branch_name)
+                               for branch in Branch.query.order_by().all()]
+        self.cohort.choices = [(cohort.id, cohort.cohort_name)
+                               for cohort in Cohort.query.order_by().all()]
