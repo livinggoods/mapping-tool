@@ -229,8 +229,12 @@ class Referral(db.Model):
       community_unit=record.get('community_unit')
       village=record.get('village')
       mapping_id=record.get('mapping_id')
-      lat=record.get('lat')
-      lon=record.get('lon')
+      lat = float(0)
+      if record.get('lat') != '':
+        lat= float(record.get('lat'))
+      lon = float(0)
+      if record.get('lon') != '':
+        lon= float(record.get('lon'))
       mobilization=record.get('mobilization')
       synced=record.get('synced')
       archived=record.get('archived')
@@ -1094,13 +1098,62 @@ class CommunityUnit(db.Model):
   subcounty = relationship(u'SubCounty')
   linkfacility = relationship(u'LinkFacility')
 
-  # ForeignKey(u'registrations.id'), nullable=True, index=True
+  @staticmethod
+  def from_json(json):
+    return CommunityUnit(
+        id=json.get('id'),
+        name =json.get('name'),
+        mappingid = json.get('mappingid') if json.get('mappingid') !='' else None,
+        lat =json.get('lat'),
+        lon =json.get('lon'),
+        country =json.get('country'),
+        subcountyid = json.get('subcountyid') if json.get('subcountyid') !='' else None,
+        linkfacilityid = json.get('linkfacilityid') if json.get('linkfacilityid') !='' else None,
+        areachiefname =json.get('areachiefname'),
+        ward =json.get('ward'),
+        economicstatus =json.get('economicstatus'),
+        privatefacilityforact =json.get('privatefacilityforact'),
+        privatefacilityformrdt =json.get('privatefacilityformrdt'),
+        nameofngodoingiccm =json.get('nameofngodoingiccm'),
+        nameofngodoingmhealth =json.get('nameofngodoingmhealth'),
+        client_time =json.get('client_time'),
+        date_added =json.get('date_added'),
+        addedby =json.get('addedby'),
+        numberofchvs =json.get('numberofchvs'),
+        householdperchv =json.get('householdperchv'),
+        numberofvillages =json.get('numberofvillages'),
+        distancetobranch =json.get('distancetobranch'),
+        transportcost =json.get('transportcost'),
+        distancetomainroad =json.get('distancetomainroad'),
+        noofhouseholds =json.get('noofhouseholds'),
+        mohpoplationdensity =json.get('mohpoplationdensity'),
+        estimatedpopulationdensity =json.get('estimatedpopulationdensity'),
+        distancetonearesthealthfacility =json.get('distancetonearesthealthfacility'),
+        actlevels =json.get('actlevels'),
+        actprice =json.get('actprice'),
+        mrdtlevels =json.get('mrdtlevels'),
+        mrdtprice =json.get('mrdtprice'),
+        noofdistibutors =json.get('noofdistibutors'),
+        chvstrained =json.get('chvstrained'),
+        presenceofestates =json.get('presenceofestates'),
+        presenceoffactories =json.get('presenceoffactories'),
+        presenceofhostels =json.get('presenceofhostels'),
+        tradermarket =json.get('tradermarket'),
+        largesupermarket =json.get('largesupermarket'),
+        ngosgivingfreedrugs =json.get('ngosgivingfreedrugs'),
+        ngodoingiccm =json.get('ngodoingiccm'),
+        ngodoingmhealth =json.get('ngodoingmhealth'),
+        comment =json.get('comment'),
+        archived =json.get('archived'),
+    )
+
+  
 
 
 class LinkFacility(db.Model):
   __tablename__ = 'link_facility'
 
-  id= Column(String(64), primary_key=True, nullable=False)
+  id = Column(String(64), primary_key=True, nullable=False)
   facility_name=Column(String(64))
   county=Column(String(64))
   lat=Column(Float, server_default=text("'0'"))
@@ -1114,6 +1167,24 @@ class LinkFacility(db.Model):
   country=Column(String(64))
   facility_id=Column(String(64), nullable=True)
   archived = Column(Integer, nullable=False, server_default=text("'0'"))
+  
+  @staticmethod
+  def from_json(json):
+    return LinkFacility(
+    id = json.get('id'),
+    facility_name = json.get('facility_name'),
+    county = json.get('county'),
+    lat = float(json.get('lat')) if  json.get('lat') != '' else float(0),
+    lon = float(json.get('lon')) if  json.get('lon') != '' else float(0),
+    subcounty = json.get('subcounty'),
+    client_time = json.get('date_added'),
+    addedby = json.get('addedby'),
+    mrdt_levels = json.get('mrdt_levels'),
+    act_levels = json.get('act_levels'),
+    country = json.get('country'),
+    facility_id = json.get('facility_id'),
+    archived = json.get('archived')
+    )
 
   user=relationship(u'User')
 
