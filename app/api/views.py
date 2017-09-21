@@ -225,10 +225,26 @@ def sync_link_facilities():
     if link_facilities_list is not None:
       for link_facility in link_facilities_list:
         saved_record = LinkFacility.query.filter(LinkFacility.id == link_facility.get('id')).first()
+        lon = 0
+        if link_facility.get('lon') !='':
+          lon = float(link_facility.get('lon'))
         if saved_record:
-          saved_record.client_time = link_facility.get('date_added')
+          saved_record.id = link_facility.get('id'),
+          saved_record.facility_name = link_facility.get('facility_name'),
+          saved_record.county = link_facility.get('county'),
+          saved_record.lat = float(link_facility.get('lat')) if link_facility.get('lat') is not '' else float(0),
+          saved_record.lon = lon,
+          saved_record.subcounty = link_facility.get('subcounty'),
+          saved_record.client_time = link_facility.get('date_added'),
+          saved_record.addedby = link_facility.get('addedby'),
+          saved_record.mrdt_levels = link_facility.get('mrdt_levels'),
+          saved_record.act_levels = link_facility.get('act_levels'),
+          saved_record.country = link_facility.get('country'),
+          saved_record.facility_id = link_facility.get('facility_id'),
+          saved_record.archived = 0
           operation = 'updated'
         else:
+          saved_record = LinkFacility.from_json(link_facility)
           operation = 'created'
         db.session.add(saved_record)
         db.session.commit()
@@ -402,8 +418,53 @@ def sync_cu():
         saved_record = CommunityUnit.query.filter(CommunityUnit.id == cu.get('id')).first()
         if saved_record:
           saved_record.client_time = cu.get('date_added')
+          saved_record.id = cu.get('id')
+          saved_record.name = cu.get('name')
+          saved_record.mappingid = cu.get('mappingid') if cu.get('mappingid') !='' else None,
+          saved_record.lat = cu.get('lat')
+          saved_record.lon = cu.get('lon')
+          saved_record.country = cu.get('country')
+          saved_record.subcountyid = cu.get('subcountyid') if cu.get('subcountyid') !='' else None,
+          saved_record.linkfacilityid = cu.get('linkfacilityid') if cu.get('linkfacilityid') !='' else None,
+          saved_record.areachiefname = cu.get('areachiefname')
+          saved_record.ward = cu.get('ward')
+          saved_record.economicstatus = cu.get('economicstatus')
+          saved_record.privatefacilityforact = cu.get('privatefacilityforact')
+          saved_record.privatefacilityformrdt = cu.get('privatefacilityformrdt')
+          saved_record.nameofngodoingiccm = cu.get('nameofngodoingiccm')
+          saved_record.nameofngodoingmhealth = cu.get('nameofngodoingmhealth')
+          saved_record.client_time = cu.get('client_time')
+          saved_record.date_added = cu.get('date_added')
+          saved_record.addedby = cu.get('addedby')
+          saved_record.numberofchvs = cu.get('numberofchvs')
+          saved_record.householdperchv = cu.get('householdperchv')
+          saved_record.numberofvillages = cu.get('numberofvillages')
+          saved_record.distancetobranch = cu.get('distancetobranch')
+          saved_record.transportcost = cu.get('transportcost')
+          saved_record.distancetomainroad = cu.get('distancetomainroad')
+          saved_record.noofhouseholds = cu.get('noofhouseholds')
+          saved_record.mohpoplationdensity = cu.get('mohpoplationdensity')
+          saved_record.estimatedpopulationdensity = cu.get('estimatedpopulationdensity')
+          saved_record.distancetonearesthealthfacility = cu.get('distancetonearesthealthfacility')
+          saved_record.actlevels = cu.get('actlevels')
+          saved_record.actprice = cu.get('actprice')
+          saved_record.mrdtlevels = cu.get('mrdtlevels')
+          saved_record.mrdtprice = cu.get('mrdtprice')
+          saved_record.noofdistibutors = cu.get('noofdistibutors')
+          saved_record.chvstrained = cu.get('chvstrained')
+          saved_record.presenceofestates = cu.get('presenceofestates')
+          saved_record.presenceoffactories = cu.get('presenceoffactories')
+          saved_record.presenceofhostels = cu.get('presenceofhostels')
+          saved_record.tradermarket = cu.get('tradermarket')
+          saved_record.largesupermarket = cu.get('largesupermarket')
+          saved_record.ngosgivingfreedrugs = cu.get('ngosgivingfreedrugs')
+          saved_record.ngodoingiccm = cu.get('ngodoingiccm')
+          saved_record.ngodoingmhealth = cu.get('ngodoingmhealth')
+          saved_record.comment = cu.get('comment')
+          saved_record.archived = cu.get('archived')
           operation = 'updated'
         else:
+          saved_record = CommunityUnit.from_json(cu)
           operation = 'created'
         db.session.add(saved_record)
         db.session.commit()
