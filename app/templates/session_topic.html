@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+    <h1>Details for the {{session_topic.session_name}} session</h1>
+</div>
+<div class="" id="">
+	<label>Session Topic Name:</label>
+	<p> {{session+_topic.session_name}} </p>
+	<label>Date created</label>
+	<p> {{session_topic.date_added}} </p>
+	<label>Created by</label>
+	<p> {{session_topic.created_by}} </p>
+	<label>Country</label>
+	<p> {{session_topic.country}} </p>
+	<label>Archived</label>
+	<p> {{session_topic.arcived}} </p>
+</div>
+{% endblock %}

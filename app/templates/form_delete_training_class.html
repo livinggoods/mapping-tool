@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="page-header">
+    <h2>Are you sure you want to delete the <b>{{training_class.class_name}}</b> class</h2>
+</div>
+<div class="" id="">
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}
