@@ -173,6 +173,7 @@ def edit_training(id):
   return render_template(
       'edit_training.html',
       form=form,
+      training=training,
       training_id=training.id
     )
 

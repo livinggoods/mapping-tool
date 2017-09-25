@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Insights - Edit Training{% endblock %}
+{% block title %}Tremap - Edit {{training.training_name}} {% endblock %}
 
 {% block content %}
 <div class="page-header">
-    <h1>Edit This Training</h1>
+    <h1>Editing <span id="training-title">{{training.training_name}}</span></h1>
 </div>
 <div class="" id="">
     {{ wtf.quick_form(form) }}
