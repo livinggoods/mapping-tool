@@ -5,9 +5,86 @@
 
 {% block content %}
 <div class="page-header">
-    <h1>Editing <span id="training-title">{{training.training_name}}</span></h1>
+    <h1>Editing <span id="training-title">{{training.training_name}}</span>{{training.commences()}} </h1>
 </div>
 <div class="" id="">
-    {{ wtf.quick_form(form) }}
+    {{ wtf.quick_form(form, id='edit-training-form') }}
 </div>
+{% endblock %}
+{% block javascript %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $(document).ready(function() {
+            if($('#country').val() == 2) {
+                $("#location").parent().show();
+                $("#district").parent().show();
+                $("#parish").parent().show();
+                $("#county").parent().hide();
+                $("#subcounty").parent().hide();
+                $("#ward").parent().hide();
+            }else {
+                $("#location").parent().hide();
+                $("#district").parent().hide();
+                $("#parish").parent().hide();
+                $("#county").parent().show();
+                $("#subcounty").parent().show();
+                $("#ward").parent().show();
+            }
+
+            $("#country").change(function() {
+                if($(this).val() == 2) {
+                    $("#location").parent().show();
+                    $("#district").parent().show();
+                    $("#parish").parent().show();
+                    $("#county").parent().hide();
+                    $("#subcounty").parent().hide();
+                    $("#ward").parent().hide();
+                }else {
+                    $("#location").parent().hide();
+                    $("#district").parent().hide();
+                    $("#parish").parent().hide();
+                    $("#county").parent().show();
+                    $("#subcounty").parent().show();
+                    $("#ward").parent().show();
+                }
+            });
+    });
+
+</script>
+<script>
+  $( function() {
+    var dateFormat = "dd/mm/yy",
+      from = $( "#date_commenced" )
+        .datepicker({
+          defaultDate: "+1w",
+          dateFormat: dateFormat,
+          changeMonth: true,
+          numberOfMonths: 3
+        })
+        .on( "change", function() {
+          to.datepicker( "option", "minDate", getDate( this ) );
+        }),
+      to = $( "#date_completed" ).datepicker({
+        defaultDate: "+1w",
+        dateFormat: dateFormat,
+        changeMonth: true,
+        numberOfMonths: 3
+      })
+      .on( "change", function() {
+        from.datepicker( "option", "maxDate", getDate( this ) );
+      });
+
+    function getDate( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+      } catch( error ) {
+        date = null;
+      }
+
+      return date;
+    }
+  } );
+  </script>
 {% endblock %}

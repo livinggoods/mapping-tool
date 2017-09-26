@@ -14,7 +14,7 @@ from ..models import (Permission, Role, User, Geo, UserType, Mapping, LocationTa
                       TrainingSessionType)
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
-from datetime import date, datetime
+from datetime import date, datetime, time
 from time import gmtime, strftime
 import os, time, calendar, uuid
 from ..data import data
@@ -135,24 +135,26 @@ def edit_training(id):
   if form.validate_on_submit():
     training.training_name = form.training_name.data
     training.country = Geo.query.filter_by(id=form.country.data).first().geo_code
-    training.county_id = form.county.data
-    training.location_id = form.location.data
-    training.subcounty_id = form.subcounty.data
-    training.ward_id = form.ward.data
-    training.district = form.district.data
-    training.recruitment_id = form.recruitment.data
-    training.parish_id = form.parish.data
+    training.county_id = form.county.data if training.country == 'KE' else None
+    training.location_id = form.location.data if training.country == 'UG' else None
+    training.subcounty_id = form.subcounty.data if training.country == 'KE' else None
+    training.ward_id = form.ward.data if training.country == 'KE' else None
+    training.district = form.district.data if training.country == 'UG' else None
+    training.recruitment_id = form.recruitment.data if form.recruitment.data != '' else None
+    training.parish_id = form.parish.data if training.country == 'UG' else None
     training.lat = form.lat.data
     training.lon = form.lon.data
-    training.training_venue_id = form.training_venue.data
-    training.training_status_id = form.training_status.data
-    training.archived = form.archived.data
+    training.training_venue_id = None if form.training_venue.data == '-1' else form.training_venue.data
+    training.training_status_id = None if form.training_status.data == -1 else form.training_status.data
+    training.archived = 0
     training.comment = form.comment.data
-    training.date_commenced = form.date_commenced.data
-    training.date_completed = form.date_completed.data
+    training.date_commenced = (datetime.combine(form.date_commenced.data, datetime.min.time()) -
+                               datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
+    training.date_completed = (datetime.combine(form.date_completed.data, datetime.min.time()) -
+                               datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
     db.session.add(training)
     db.session.commit()
-    return redirect('/trainings')
+    return redirect(url_for('main.trainings'))
   form.training_name.data = training.training_name
   form.country.data = Geo.query.filter_by(geo_code=training.country).first().id
   form.county.data = training.county
@@ -166,15 +168,13 @@ def edit_training(id):
   form.lon.data = training.lon
   form.training_venue.data = training.training_venue_id
   form.training_status.data = training.training_status_id
-  form.archived.data = training.archived
   form.comment.data = training.comment
-  form.date_commenced.data = training.date_commenced
-  form.date_completed.data = training.date_completed
+  form.date_commenced.data = datetime.fromtimestamp(training.date_commenced/1000) if training.date_commenced is not None else None
+  form.date_completed.data = datetime.fromtimestamp(training.date_completed/1000) if training.date_completed is not None else None
   return render_template(
       'edit_training.html',
       form=form,
-      training=training,
-      training_id=training.id
+      training=training
     )
 
 

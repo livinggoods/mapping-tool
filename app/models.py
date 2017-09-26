@@ -1719,7 +1719,7 @@ class Training(db.Model):
   user = relationship(u'User')
   recruitment = relationship(u'Recruitments')
   training_venue = relationship(u'TrainingVenues')
-    
+  
   def to_json(self):
     json_record = {
       'id':self.id,
@@ -1768,6 +1768,18 @@ class Training(db.Model):
         archived = json.get('archived'),
         comment = json.get('comment'),
     )
+  
+  def commences(self):
+    if self.date_completed is not None:
+      return time.strftime('%d %b, %Y', time.localtime(self.date_commenced / 1000))
+    else:
+      return None
+  
+  def completes (self):
+    if self.date_completed is not None:
+      return time.strftime('%d %b, %Y', time.localtime(self.date_completed / 1000))
+    else:
+      return None
 
 
 class TrainingVenues(db.Model):
