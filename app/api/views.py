@@ -511,15 +511,34 @@ def sync_interviews():
         record = Interview.from_json(interview)
         saved_record  = Interview.query.filter(Interview.id == record.id).first()
         if saved_record:
-          interview['client_time'] = interview.get('date_added')
-          interview.pop('date_added', None)
-          saved_record = record
-          db.session.commit()
-          operation='updated'
+          saved_record.id = interview.get('id')
+          saved_record.applicant = interview.get('applicant')
+          saved_record.recruitment = interview.get('recruitment')
+          saved_record.motivation = interview.get('motivation')
+          saved_record.community = interview.get('community')
+          saved_record.mentality = interview.get('mentality')
+          saved_record.country = interview.get('country')
+          saved_record.selling = interview.get('selling')
+          saved_record.health = interview.get('health')
+          saved_record.investment = interview.get('investment')
+          saved_record.interpersonal = interview.get('interpersonal')
+          saved_record.canjoin = interview.get('canjoin')
+          saved_record.commitment = interview.get('commitment')
+          saved_record.total = interview.get('total')
+          saved_record.selected = interview.get('selected')
+          saved_record.synced = interview.get('synced')
+          saved_record.added_by = interview.get('added_by')
+          saved_record.comment = interview.get('comment')
+          saved_record.client_time = interview.get('client_time')
+          saved_record.date_added = interview.get('date_added')
+          saved_record.archived = interview.get('archived')
+          operation = 'updated'
+          db.session.add(saved_record)
         else:
+          operation = 'created'
           db.session.add(record)
-          db.session.commit()
-          operation='created'
+        db.session.commit()
+          
         status.append({'id':record.id, 'status':'ok', 'operation':operation})
       return jsonify(status=status)
     else:
