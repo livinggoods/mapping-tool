@@ -730,7 +730,12 @@ def export_scoring_tool(id):
                     qualified ='N'
                 canjoin = 'Y' if interview.canjoin == 1 else 'N'
                 comment = interview.comment.replace(',', ';')
-                selected = 'Y' if interview.selected == 1 else 'N'  # if selected of not
+                if interview.selected ==1:
+                  selected = 'Y'
+                elif interview.selected == 2:
+                  selected='Waiting'
+                else:
+                  selected = 'N'
             # Now that we have what we need, we generate the CSV rows
             row = [
                 chew.name if chew is not None else registration.chew_name,
@@ -778,7 +783,7 @@ def export_scoring_tool(id):
                 str(comment),
                 str(qualified),
                 str(user),
-                'Y' if registration.proceed==1 else 'N',
+                selected,
             ]
             data.append(row)
         
