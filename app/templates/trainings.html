@@ -26,10 +26,23 @@
       <div class="x_title">
         <h2>Trainings <small>List of trainings that have been done so far</small></h2>
         <ul class="nav navbar-right panel_toolbox">
-          <li>
-            <a class="btn btn-primary new-recruitment" href="/training/new" style="color: #fff">
-              New Training
+          <li class="btn-group closed" style="display: inline-block;">
+            <a class="btn btn-primary btn-xs " href="#"><i class="fa fa-file-text fa-fw"></i> New </a>
+            <a class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" href="#">
+              <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
             </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="/trainings/new" class="confirm" action="confirmed">
+                  <i class="fa fa-indent fa-fw"></i> New training
+                </a>
+              </li>
+              <li>
+                <a href="/trainings/training_venues/new" class="confirm" action="confirmed">
+                  <i class="fa fa-list-ul fa-fw"></i> New training venue
+                </a>
+              </li>
+            </ul>
           </li>
           <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
           </li>

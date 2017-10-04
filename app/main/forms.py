@@ -3,8 +3,8 @@ from wtforms import (StringField, TextAreaField, BooleanField, SelectField, Date
     SubmitField, ValidationError, PasswordField, IntegerField, FloatField)
 from wtforms.validators import DataRequired, Length, Email, EqualTo, InputRequired
 from ..models import (Role, User, Geo, UserType, Ward, County, Location, SubCounty, Parish, TrainingVenues,
-                      Recruitments, TrainingStatus, TrainingSessionType, SessionTopic, Trainees, Cohort, Registration,
-                      Branch)
+                      Recruitments, TrainingStatus, TrainingSessionType, SessionTopic, Trainees, Registration,
+                      Mapping)
 from ..utils.utils import RequiredIf
 
 
@@ -106,7 +106,8 @@ class TrainingForm(Form):
     """
     These are the fields that should be filled by the user about the new training
     """
-
+    lat = FloatField('Latitude', validators=[InputRequired()])
+    lon = FloatField('Longitude', validators=[InputRequired()])
     training_name = StringField('Training Name', validators=[DataRequired()])
     country = SelectField('Country', validators=[DataRequired()], coerce=int)
     county = SelectField('County', validators=[RequiredIf(country=1)], coerce=int)
@@ -116,8 +117,6 @@ class TrainingForm(Form):
     district = StringField('District', validators=[RequiredIf(country=2)])
     recruitment = SelectField('Recruitment', coerce=str)
     parish = SelectField('Parish', validators=[RequiredIf(country=2)], coerce=str)
-    lat = FloatField('Latitude', validators=[InputRequired()])
-    lon = FloatField('Longitude', validators=[InputRequired()])
     training_venue = SelectField('Training Venue')
     training_status = SelectField('Training Status', coerce=int)
     comment = TextAreaField('Comment')
@@ -238,19 +237,21 @@ class SessionAttendanceForm(Form):
                                                   query.order_by(TrainingSessionType.session_name).all()]
 
 
-class TraineeForm(Form):
-    registration = SelectField('Registration', validators=[DataRequired()])
-    country = SelectField('Country', validators=[DataRequired()])
-    branch = SelectField('Branch', validators=[DataRequired()])
-    cohort = SelectField('Cohort', validators=[DataRequired()])
+class TrainingVenueForm(Form):
+    lat = FloatField('Latitude', validators=[DataRequired()])
+    lon = FloatField('Longitude', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
+    mapping = SelectField('Mapping', validators=[DataRequired()])
+    inspected = SelectField('Inspected', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
+    country = SelectField('Country', validators=[DataRequired()], coerce=int)
+    selected = SelectField('Selected', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
+    capacity = IntegerField('Capacity', validators=[DataRequired()])
+    archived = SelectField('Archived', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
+    submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):
-        super(TraineeForm, self).__init__(*args, **kwargs)
+        super(TrainingVenueForm, self).__init__(*args, **kwargs)
+        self.mapping.choices = [(mapping.id, mapping.name)
+                                for mapping in Mapping.query.order_by(Mapping.name).all()]
         self.country.choices = [(geo.id, geo.geo_name)
                                 for geo in Geo.query.order_by(Geo.geo_name).all()]
-        self.registration.choices = [()
-                                     for registration in Registration.query.order_by().all()]
-        self.branch.choices = [(branch.id, branch.branch_name)
-                               for branch in Branch.query.order_by().all()]
-        self.cohort.choices = [(cohort.id, cohort.cohort_name)
-                               for cohort in Cohort.query.order_by().all()]

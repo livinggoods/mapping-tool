@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="page-header">
-    <h1>Add a new Training</h1>
+    <h1>Add a new Training venue</h1>
 </div>
 <div class="" id="">
 	<div>
@@ -32,11 +32,12 @@
 			<div id="address"></div>
 		</div>
 	</div>
-    {{ wtf.quick_form(form) }}
+  {{ wtf.quick_form(form) }}
 </div>
 {% endblock %}
+
 {% block javascript %}
-{{ training_map.js }}
+{{ training_venue_map.js }}
 <script type="text/javascript">
 var geocoder = new google.maps.Geocoder();
 

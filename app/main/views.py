@@ -5,12 +5,12 @@ from flask.ext import excel
 from sqlalchemy import func, distinct, select, and_
 from . import main
 from .. import db
-from .forms import (EditProfileForm, EditProfileAdminForm, PostForm, TrainingForm,
+from .forms import (EditProfileForm, EditProfileAdminForm, TrainingVenueForm, TrainingForm,
                     DeleteTrainingForm, TrainingClassForm, TrainingSessionForm, SessionTopicForm, SessionTypeForm)
 from ..models import (Permission, Role, User, Geo, UserType, Mapping, LocationTargets, Exam, Village, Ward,
                       Location, Education, EducationLevel, Referral, Parish, SubCounty, Recruitments, Registration,
                       Interview, Branch, Cohort, RecruitmentUsers, LinkFacility, CommunityUnit, Training,
-                      TrainingClasses, TrainingSession, SessionAttendance, TrainingTrainers, Trainees, SessionTopic,
+                      TrainingClasses, TrainingSession, SessionAttendance, TrainingVenues, Trainees, SessionTopic,
                       TrainingSessionType)
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
@@ -90,11 +90,30 @@ def trainings():
     )
 
 
-@main.route('/training/new', methods=['GET', 'POST'])
+@main.route('/trainings/new', methods=['GET', 'POST'])
 @login_required
 def new_training():
+  training_map = Map(
+    identifier="map",
+    lat=-1.2728,
+    lng=36.7901,
+    zoom=8,
+    markers=[
+      {
+        'icon': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+        'lat': -1.2728,
+        'lng': 36.7901
+      }
+    ]
+  )
   form = TrainingForm()
   if form.validate_on_submit():
+    commenced_date = form.date_commenced.data
+    completed_date = form.date_completed.data
+    pattern = '%Y-%m-%d'
+    commenced_epoch = int(time.mktime(time.strptime(str(commenced_date), pattern)))
+    completed_epoch = int(time.mktime(time.strptime(str(completed_date), pattern)))
+
     new_training = Training(
       id=uuid.uuid1(),
       training_name=form.training_name.data,
@@ -115,15 +134,61 @@ def new_training():
       date_created=strftime("%Y-%m-%d %H:%M:%-S", gmtime()),
       archived=0,
       comment=form.comment.data,
-      date_commenced=form.date_commenced.data,
-      date_completed=form.date_completed.data
+      date_commenced=commenced_epoch,
+      date_completed=completed_epoch
     )
     db.session.add(new_training)
     db.session.commit()
     return redirect('/trainings')
   return render_template(
     'form_training.html',
+    training_map=training_map,
     form=form
+  )
+
+
+@main.route('/trainings/training_venues/new', methods=['GET', 'POST'])
+@login_required
+def new_training_venue():
+  form = TrainingVenueForm()
+  training_venue_map = Map(
+    identifier="map",
+    lat=-1.2728,
+    lng=36.7901,
+    zoom=8,
+    markers=[
+      {
+        'icon': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+        'lat': -1.2728,
+        'lng': 36.7901
+      }
+    ]
+  )
+
+  if form.validate_on_submit():
+    new_training_venue = TrainingVenues(
+      id=uuid.uuid1(),
+      name=form.name.data,
+      mapping=form.mapping.data,
+      lat=form.lat.data,
+      lon=form.lon.data,
+      inspected=form.inspected.data,
+      country=form.country.data,
+      selected=form.selected.data,
+      capacity=form.capacity.data,
+      date_added=strftime("%Y-%m-%d %H:%M:%-S", gmtime()),
+      added_by=current_user.id,
+      client_time=int(time.time()),
+      meta_data='{}',
+      archived=form.archived.data
+    )
+    db.session.add(new_training_venue)
+    db.session.commit()
+    return redirect('/trainings')
+  return render_template(
+    'form_training_venue.html',
+    form=form,
+    training_venue_map=training_venue_map
   )
 
 
