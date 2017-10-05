@@ -1,13 +1,164 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Insights - Edit Training{% endblock %}
+{% block title %}Living goods - Edit Training{% endblock %}
 
 {% block content %}
 <div class="page-header">
-    <h1>Add a new Training</h1>
+	{% if training %}
+    <h1>Edit {{ training.name }} training</h1>
+  {% else %}
+    <h1>Add a new training</h1>
+  {% endif %}
 </div>
-<div class="" id="">
-    {{ wtf.quick_form(form) }}
-</div>
+<form method="POST"
+		{% if training %}
+			action="/trainings/{{ training.id }}/edit_create"
+		{% else %}
+		  action="/trainings/new/edit_create"
+		{% endif %}
+			>
+	{{ form.csrf_token }}
+	{{ wtf.form_field(form.training_name) }}
+	{{ wtf.form_field(form.country) }}
+	{{ wtf.form_field(form.county) }}
+	{{ wtf.form_field(form.location) }}
+	{{ wtf.form_field(form.subcounty) }}
+	{{ wtf.form_field(form.ward) }}
+	{{ wtf.form_field(form.district) }}
+	{{ wtf.form_field(form.recruitment) }}
+	{{ wtf.form_field(form.parish) }}
+	<br>
+	<h3>Training Location</h3>
+	<h5><i>drag the marker to get the training location coordinates</i></h5>
+	<div>
+		<style>
+			#mapCanvas {
+				width: 100%;
+				height: 400px;
+				float: left;
+			}
+			#infoPanel {
+			 	display: none;
+			}
+			#infoPanel div {
+				display: none;
+			}
+		</style>
+      	<div id="mapCanvas"></div>
+		<div id="infoPanel">
+			<b>Marker status:</b>
+			<div id="markerStatus"><i>Click and drag the marker.</i></div>
+			<b>Current position:</b>
+			<div id="info"></div>
+			<b>Closest matching address:</b>
+			<div id="address"></div>
+		</div>
+	</div>
+	{{ wtf.form_field(form.lat) }}
+	{{ wtf.form_field(form.lon) }}
+	<br>
+	{{ wtf.form_field(form.training_venue) }}
+	{{ wtf.form_field(form.training_status) }}
+	{{ wtf.form_field(form.comment) }}
+	{{ wtf.form_field(form.date_commenced) }}
+	{{ wtf.form_field(form.date_completed) }}
+	{{ wtf.form_field(form.submit) }}
+</form>
+{% endblock %}
+
+{% block javascript %}
+{{ training_map.js }}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript">
+	window.addEventListener('load', function(){
+		map_markers[0].setDraggable(true);
+
+		var geocoder = new google.maps.Geocoder();
+
+		function geocodePosition(pos) {
+		  geocoder.geocode({
+		    latLng: pos
+		  }, function(responses) {
+		    if (responses && responses.length > 0) {
+		      updateMarkerAddress(responses[0].formatted_address);
+		    } else {
+		      updateMarkerAddress('Cannot determine address at this location.');
+		    }
+		  });
+		}
+
+		function updateMarkerStatus(str) {
+		  document.getElementById('markerStatus').innerHTML = str;
+		}
+
+		function updateMarkerPosition(latLng) {
+		  document.getElementById('info').innerHTML = [
+		    latLng.lat(),
+		    latLng.lng()
+		  ].join(', ');
+		  $("#lat").val(latLng.lat());
+		  $("#lon").val(latLng.lng());
+		}
+
+		function updateMarkerAddress(str) {
+		  document.getElementById('address').innerHTML = str;
+		}
+
+		// Update current position info.
+	  updateMarkerPosition(map_markers[0].position);
+	  geocodePosition(map_markers[0].position);
+
+	  // Add dragging event listeners.
+	  google.maps.event.addListener(map_markers[0], 'dragstart', function() {
+	    updateMarkerAddress('Dragging...');
+	  });
+
+	  google.maps.event.addListener(map_markers[0], 'drag', function() {
+	    updateMarkerStatus('Dragging...');
+	    updateMarkerPosition(map_markers[0].getPosition());
+	  });
+
+	  google.maps.event.addListener(map_markers[0], 'dragend', function() {
+	    updateMarkerStatus('Drag ended');
+	    geocodePosition(map_markers[0].getPosition());
+	  });
+	});
+</script>
+<script>
+  $( function() {
+    var dateFormat = "dd/mm/yy",
+      from = $( "#date_commenced" )
+        .datepicker({
+          defaultDate: "+1w",
+          dateFormat: dateFormat,
+          changeMonth: true,
+          numberOfMonths: 3
+        })
+        .on( "change", function() {
+          to.datepicker( "option", "minDate", getDate( this ) );
+        }),
+      to = $( "#date_completed" ).datepicker({
+        defaultDate: "+1w",
+        dateFormat: dateFormat,
+        changeMonth: true,
+        numberOfMonths: 3
+      })
+      .on( "change", function() {
+        from.datepicker( "option", "maxDate", getDate( this ) );
+      });
+
+    function getDate( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+      } catch( error ) {
+        date = null;
+      }
+
+      return date;
+    }
+  } );
+ </script>
 {% endblock %}
