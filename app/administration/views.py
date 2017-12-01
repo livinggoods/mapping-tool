@@ -167,7 +167,6 @@ def location_administration():
                                       country='UG')
                     db.session.add(village)
                     db.session.commit()
-                
             return jsonify(status='created')
         else:
             return jsonify(filename='none')
