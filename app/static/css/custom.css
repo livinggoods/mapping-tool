@@ -4042,3 +4042,8 @@ ul.messages li .img-div i{
  #training-title {
     color: #005084;
  }
+
+ .training-info {
+    border-radius: 10px;
+    padding: 6px 35px;
+ }

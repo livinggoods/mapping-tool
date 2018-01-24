@@ -17,6 +17,7 @@
                   <div class="x_content">
                     <p class="text-muted font-13 m-b-30">
                       A list of maped locations to date, icluding their parent location where available
+                        <span id="float-right"><button id="update-locations" class="btn btn-info">Update Locations</button></span>
                     </p>
                     <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                       <thead>
@@ -105,28 +106,6 @@
             }
           };
         }();
-
-        $('#datatable-scroller').DataTable({
-          ajax: "js/datatables/json/scroller-demo.json",
-          deferRender: true,
-          scrollY: 380,
-          scrollCollapse: true,
-          scroller: true
-        });
-
-        var $datatable = $('#datatable-checkbox');
-
-        $datatable.dataTable({
-          'order': [[ 1, 'asc' ]],
-          'columnDefs': [
-            { orderable: false, targets: [0] }
-          ]
-        });
-        $datatable.on('draw.dt', function() {
-          $('input').iCheck({
-            checkboxClass: 'icheckbox_flat-green'
-          });
-        });
 
         TableManageButtons.init();
       });

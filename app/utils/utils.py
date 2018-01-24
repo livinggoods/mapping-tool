@@ -36,5 +36,5 @@ def process_location_csv(path):
     reader = csv.DictReader(csvfile)
     title = reader.fieldnames
     for row in reader:
-      csv_rows.extend([{title[i]:row[title[i]] for i in range(len(title))}])
+      csv_rows.extend([{title[i]:row[title[i]].title() for i in range(len(title))}])
     return csv_rows

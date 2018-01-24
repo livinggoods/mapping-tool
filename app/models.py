@@ -1735,7 +1735,7 @@ class Training(db.Model):
       'parish_id':self.parish_id,
       'lat':self.lat,
       'lon':self.lon,
-      'status':self.status,
+      #'status':self.status,
       'client_time':float(self.client_time),
       'created_by':self.created_by,
       'date_created':self.date_created,
@@ -1938,6 +1938,7 @@ class TrainingClasses(db.Model):
   date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
   archived = Column(Integer, server_default=text("'0'"))
   country = Column(String(20), server_default=text("'UG'"), nullable=False)
+  # lead_trainer = Column(ForeignKey(u'users.id'), nullable=False, index=True)
 
   class_creator = relationship(u'User')
   training = relationship(u'Training')

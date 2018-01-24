@@ -588,6 +588,13 @@ def sync_locations():
   if request.method == 'GET':
     locations = Location.query.filter(Location.archived == 0)
     return jsonify({'locations': [location.to_json() for location in locations]})
+  
+  
+@api.route('/get/locations', methods=['GET', 'POST'])
+def get_locations():
+  if request.method == 'GET':
+    locations = Location.query.filter(Location.archived == 0)
+    return Response(json.dumps([location.to_json() for location in locations]), mimetype='application/json')
 
 
 @api.route('/create/ke/counties')
