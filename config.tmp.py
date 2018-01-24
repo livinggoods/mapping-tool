@@ -15,6 +15,7 @@ class Config(object):
     DASHBOARD_ADMIN = os.environ.get('DASHBOARD_ADMIN', 'you@example.org')
     POSTS_PER_PAGE = 5
     FOLLOWERS_PER_PAGE = 10
+    UPLOAD_FOLDER = 'uploads'
 
     @staticmethod
     def init_app(app):

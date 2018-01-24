@@ -106,6 +106,8 @@ class TrainingForm(Form):
     """
     These are the fields that should be filled by the user about the new training
     """
+    lat = FloatField('Latitude', validators=[InputRequired()])
+    lon = FloatField('Longitude', validators=[InputRequired()])
     training_name = StringField('Training Name', validators=[DataRequired()])
     country = SelectField('Country', validators=[DataRequired()], coerce=int)
     county = SelectField('County', validators=[RequiredIf(country=1)], coerce=int)
@@ -115,8 +117,6 @@ class TrainingForm(Form):
     district = StringField('District', validators=[RequiredIf(country=2)])
     recruitment = SelectField('Recruitment', coerce=str)
     parish = SelectField('Parish', validators=[RequiredIf(country=2)], coerce=str)
-    lat = FloatField('Latitude', validators=[InputRequired()])
-    lon = FloatField('Longitude', validators=[InputRequired()])
     training_venue = SelectField('Training Venue')
     training_status = SelectField('Training Status', coerce=int)
     comment = TextAreaField('Comment')
@@ -159,6 +159,7 @@ class DeleteTrainingForm(Form):
 class TrainingClassForm(Form):
     class_name = StringField('Class name', validators=[DataRequired()])
     country = SelectField('Country', validators=[DataRequired()], coerce=int)
+    archived = SelectField('Archived', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
     submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):
@@ -171,6 +172,7 @@ class TrainingSessionForm(Form):
     training_session_type = SelectField('Session type', validators=[DataRequired()], coerce=int)
     trainer = SelectField('Trainer', validators=[DataRequired()], coerce=int)
     country = SelectField('Country', validators=[DataRequired()], coerce=int)
+    archived = SelectField('Archived', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
     comment = TextAreaField('Comment', validators=[DataRequired()])
     session_topic = SelectField('Session\'s topic', validators=[DataRequired()], coerce=int)
     session_lead_trainer = SelectField('Lead Trainer', validators=[DataRequired()], coerce=int)
@@ -194,6 +196,7 @@ class TrainingSessionForm(Form):
 class SessionTopicForm(Form):
     name = StringField('Name', validators=[DataRequired()])
     country = SelectField('Country', validators=[DataRequired()], coerce=int)
+    archived = SelectField('Archived', validators=[], choices=[('0', 'False'), ('1', 'True')])
     submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):
@@ -205,6 +208,7 @@ class SessionTopicForm(Form):
 class SessionTypeForm(Form):
     session_name = StringField('Name', validators=[DataRequired()])
     country = SelectField('Country', validators=[DataRequired()], coerce=int)
+    archived = SelectField('Archived', validators=[], choices=[('0', 'False'), ('1', 'True')])
     submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):
@@ -217,6 +221,7 @@ class SessionAttendanceForm(Form):
     trainee = BooleanField('', validators=[DataRequired()])
     training_session_type = SelectField('Session Type', validators=[DataRequired()])
     country = SelectField('', validators=[DataRequired()])
+    archived = SelectField('', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
     comment = TextAreaField('', validators=[DataRequired()])
 
     def __init__(self, *args, **kwargs):
@@ -233,14 +238,15 @@ class SessionAttendanceForm(Form):
 
 
 class TrainingVenueForm(Form):
+    lat = FloatField('Latitude', validators=[DataRequired()])
+    lon = FloatField('Longitude', validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired()])
     mapping = SelectField('Mapping', validators=[DataRequired()])
     inspected = SelectField('Inspected', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
     country = SelectField('Country', validators=[DataRequired()], coerce=int)
-    lat = FloatField('Latitude', validators=[DataRequired()])
-    lon = FloatField('Longitude', validators=[DataRequired()])
-    selected = BooleanField('Selected', validators=[DataRequired()])
+    selected = SelectField('Selected', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
     capacity = IntegerField('Capacity', validators=[DataRequired()])
+    archived = SelectField('Archived', validators=[DataRequired()], choices=[('0', 'False'), ('1', 'True')])
     submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):

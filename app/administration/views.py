@@ -1,12 +1,16 @@
 from flask import render_template, redirect, url_for, flash, request, abort, \
-    current_app, jsonify, make_response
+    current_app, jsonify, make_response, json
 from flask_login import current_user, login_required
-from ..models import User, Geo, IccmComponents
+from ..models import User, Location, IccmComponents
 from ..main.forms import IccmComponentForm
 from ..decorators import admin_required, permission_required
+from werkzeug.utils import secure_filename
 from .. import db, admin
 from . import administration
+from .forms import UploadLocationForm
+from ..utils.utils import process_location_csv
 import time
+import os
 
 
 @administration.route('/', methods=['GET'])
@@ -104,3 +108,118 @@ def new_iccm_components():
 def iccm_components():
     iccms = IccmComponents.query.filter_by(archived=0)
     return render_template('iccm.html', iccms=iccms)
+
+@administration.route('/location-update', methods=['GET'])
+@login_required
+def location_test():
+    path = os.path.join(current_app.config['UPLOAD_FOLDER'], 'data', 'ug_locations.csv')
+    data = process_location_csv(path)
+    for phone in data:
+        # check if the Region Exists
+        region = Location.query.filter_by(name=phone.get('Region').title(), admin_name='Region').first()
+        if not region:
+            region = Location(name=phone.get('Region').title(), parent=2, admin_name='Region', country='UG')
+        region.name=phone.get('Region').title()
+        db.session.add(region)
+        db.session.commit()
+
+        district = Location.query.filter_by(name=phone.get('District').title(), admin_name='District').first()
+        if not district:
+            district = Location(name=phone.get('District').title(), parent=region.id, admin_name='District', country='UG')
+        district.name=phone.get('District').title()
+        db.session.add(district)
+        db.session.commit()
+
+        constituency = Location.query.filter_by(name=phone.get('County').title(), admin_name='County').first()
+        if not constituency:
+            constituency = Location(name=phone.get('County').title(), parent=district.id, admin_name='County',
+                                    country='UG')
+        constituency.name=phone.get('County').title()
+        db.session.add(constituency)
+        db.session.commit()
+
+        sub_county = Location.query.filter_by(name=phone.get('Sub-County').title(), admin_name='Sub-County').first()
+        if not sub_county:
+            sub_county = Location(name=phone.get('Sub-County').title(), parent=constituency.id, admin_name='Sub-County',
+                                  country='UG')
+        sub_county.name=phone.get('Sub-County').title()
+        db.session.add(sub_county)
+        db.session.commit()
+
+        parish = Location.query.filter_by(name=phone.get('Parish').title(), admin_name='Parish').first()
+        if not parish:
+            parish = Location(name=phone.get('Parish').title(), parent=sub_county.id, admin_name='Parish',
+                              country='UG')
+        parish.name=phone.get('Parish').title()
+        db.session.add(parish)
+        db.session.commit()
+
+        village = Location.query.filter_by(name=phone.get('Village').title(), admin_name='Village').first()
+        if not village:
+            village = Location(name=phone.get('Village').title(), parent=parish.id, admin_name='Village',
+                               country='UG')
+        village.name=phone.get('Village').title()
+        db.session.add(village)
+        db.session.commit()
+    return jsonify(data=data)
+
+@administration.route('/locations', methods=['GET', 'POST'])
+@login_required
+def location_administration():
+    form = UploadLocationForm()
+    if request.method == 'GET':
+        locations = Location.query.all()
+        return render_template('admin/locations.html', locations=locations, form=form)
+    else:
+        if form.validate_on_submit():
+            f = form.file_field.data
+            filename = secure_filename(f.filename)
+        
+            path = os.path.join(current_app.config['UPLOAD_FOLDER'], 'data', filename)
+            f.save(path)
+            data = process_location_csv(path)
+            for phone in data:
+                # check if the Region Exists
+                region = Location.query.filter_by(name=phone.get('Region'), admin_name='Region')
+                if not region:
+                    region = Location(name=phone.get('Region'), parent=2, admin_name='Region', country='UG')
+                    db.session.add(region)
+                    db.session.commit()
+
+                district = Location.query.filter_by(name=phone.get('District'), admin_name='District')
+                if not district:
+                    district = Location(name=phone.get('District'), parent=region.id, admin_name='District', country='UG')
+                    db.session.add(district)
+                    db.session.commit()
+
+                constituency = Location.query.filter_by(name=phone.get('County'), admin_name='County')
+                if not constituency:
+                    constituency = Location(name=phone.get('County'), parent=district.id, admin_name='County',
+                                        country='UG')
+                    db.session.add(constituency)
+                    db.session.commit()
+
+
+                sub_county = Location.query.filter_by(name=phone.get('Sub-County'), admin_name='Sub-County')
+                if not sub_county:
+                    sub_county = Location(name=phone.get('Sub-County'), parent=constituency.id, admin_name='Sub-County',
+                                        country='UG')
+                    db.session.add(sub_county)
+                    db.session.commit()
+
+                parish = Location.query.filter_by(name=phone.get('Parish'), admin_name='Parish')
+                if not parish:
+                    parish = Location(name=phone.get('Parish'), parent=sub_county.id, admin_name='Parish',
+                                          country='UG')
+                    db.session.add(parish)
+                    db.session.commit()
+
+                village = Location.query.filter_by(name=phone.get('Village'), admin_name='Village')
+                if not village:
+                    village = Location(name=phone.get('Village'), parent=parish.id, admin_name='Village',
+                                      country='UG')
+                    db.session.add(village)
+                    db.session.commit()
+            return jsonify(status='created')
+        else:
+            return jsonify(filename='none')

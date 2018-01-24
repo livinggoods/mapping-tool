@@ -7,47 +7,33 @@
 <div class="page-header">
     <h1>Add a new Training venue</h1>
 </div>
-<form method="POST" action="/trainings/training_venues/new" class="" id="">
-  {{ form.csrf_token }}
-  {{ wtf.form_field(form.name) }}
-  {{ wtf.form_field(form.mapping) }}
-  {{ wtf.form_field(form.inspected) }}
-  {{ wtf.form_field(form.country) }}
-  <br>
-  <h3>Training Location</h3>
-  <h5><i>drag the marker to get the training location coordinates</i></h5>
-  <div>
-    <style>
-      #mapCanvas {
-        width: 100%;
-        height: 400px;
-        float: left;
-      }
-      #infoPanel {
-        display: none;
-      }
-      #infoPanel div {
-        display: none;
-      }
-    </style>
-        <div id="mapCanvas"></div>
-    <div id="infoPanel">
-      <b>Marker status:</b>
-      <div id="markerStatus"><i>Click and drag the marker.</i></div>
-      <b>Current position:</b>
-      <div id="info"></div>
-      <b>Closest matching address:</b>
-      <div id="address"></div>
-    </div>
-  </div>
-  {{ wtf.form_field(form.lat) }}
-  {{ wtf.form_field(form.lon) }}
-  <br>
-  {{ wtf.form_field(form.selected) }}
-  {{ wtf.form_field(form.capacity) }}
-  {{ wtf.form_field(form.archived) }}
-  {{ wtf.form_field(form.submit) }}
-</form>
+<div class="" id="">
+	<div>
+		<style>
+			#mapCanvas {
+				width: 100%;
+				height: 400px;
+				float: left;
+			}
+			#infoPanel {
+			 	display: none;
+			}
+			#infoPanel div {
+				display: none;
+			}
+		</style>
+      	<div id="mapCanvas"></div>
+		<div id="infoPanel">
+			<b>Marker status:</b>
+			<div id="markerStatus"><i>Click and drag the marker.</i></div>
+			<b>Current position:</b>
+			<div id="info"></div>
+			<b>Closest matching address:</b>
+			<div id="address"></div>
+		</div>
+	</div>
+  {{ wtf.quick_form(form) }}
+</div>
 {% endblock %}
 
 {% block javascript %}

@@ -7,15 +7,55 @@
         </h1>
     </div>
 </div>
-<div>
-	<label>Training name:</label>
-	<p>{{training.training_name}}</p>
-	<label>Country:</label>
-	<p>{{training.country}}</p>
-	<label>Date commenced:</label>
-	<p>{{training.date_commenced}}</p>
-	<label>Date completed:</label>
-	<p>{{training.date_completed}}</p>
+<div class="row">
+	<div class="col-md-6 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Details </h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br>
+                    <form class="form-horizontal form-label-left">
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Training name</label>
+                        <div class="col-md-9 col-sm-9 col-xs-9">
+							<span class="fa fa-bookmark form-control-feedback left" aria-hidden="true"></span>
+                          <input type="text" class="form-control training-info" readonly="true" value="{{training.training_name}}">
+                        </div>
+                      </div>
+					  <div class="ln_solid"></div>
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Country</label>
+                        <div class="col-md-9 col-sm-9 col-xs-9">
+							<span class="fa fa-globe form-control-feedback left" aria-hidden="true"></span>
+                          <input type="text" class="form-control training-info" readonly="true" value="{{training.country}}">
+                        </div>
+                      </div>
+                      <div class="ln_solid"></div>
+					  <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Date</label>
+                        <div class="col-md-9 col-sm-9 col-xs-9">
+							<span class="fa fa-hourglass-start form-control-feedback left" aria-hidden="true"></span>
+                          <input type="text" class="form-control training-info" readonly="true" value="{{training.date_commenced}}">
+                        </div>
+                      </div>
+                      <div class="ln_solid"></div>
+					  <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Completed</label>
+                        <div class="col-md-9 col-sm-9 col-xs-9">
+							<span class="fa fa-clock-o form-control-feedback left" aria-hidden="true"></span>
+                          <input type="text" class="form-control training-info" readonly="true" value="
+                          	{{training.date_completed if training.date_completed is not none else '--'}}">
+                        </div>
+                      </div>
+                      <div class="ln_solid"></div>
+                    </form>
+                  </div>
+                </div>
+              </div>
 </div>
 <div>
 	<a href="/training/{{training.id}}/classes" class="btn btn-primary">Classes</a>

@@ -90,6 +90,63 @@ def trainings():
     )
 
 
+@main.route('/trainings/new', methods=['GET', 'POST'])
+@login_required
+def new_training():
+  training_map = Map(
+    identifier="map",
+    lat=-1.2728,
+    lng=36.7901,
+    zoom=8,
+    markers=[
+      {
+        'icon': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+        'lat': -1.2728,
+        'lng': 36.7901
+      }
+    ]
+  )
+  form = TrainingForm()
+  if form.validate_on_submit():
+    commenced_date = form.date_commenced.data
+    completed_date = form.date_completed.data
+    pattern = '%Y-%m-%d'
+    commenced_epoch = int(time.mktime(time.strptime(str(commenced_date), pattern)))
+    completed_epoch = int(time.mktime(time.strptime(str(completed_date), pattern)))
+
+    new_training = Training(
+      id=uuid.uuid1(),
+      training_name=form.training_name.data,
+      country=Geo.query.filter_by(id=form.country.data).first().geo_code,
+      county_id=form.county.data,
+      location_id=form.location.data,
+      subcounty_id=form.subcounty.data,
+      ward_id=form.ward.data,
+      district=form.district.data,
+      recruitment_id=form.recruitment.data,
+      parish_id=form.parish.data,
+      lat=form.lat.data,
+      lon=form.lon.data,
+      training_venue_id=form.training_venue.data,
+      training_status_id=form.training_status.data,
+      client_time=int(time.time()),
+      created_by=current_user.id,
+      date_created=strftime("%Y-%m-%d %H:%M:%-S", gmtime()),
+      archived=0,
+      comment=form.comment.data,
+      date_commenced=commenced_epoch,
+      date_completed=completed_epoch
+    )
+    db.session.add(new_training)
+    db.session.commit()
+    return redirect('/trainings')
+  return render_template(
+    'form_training.html',
+    training_map=training_map,
+    form=form
+  )
+
+
 @main.route('/trainings/training_venues/new', methods=['GET', 'POST'])
 @login_required
 def new_training_venue():
@@ -117,7 +174,7 @@ def new_training_venue():
       lon=form.lon.data,
       inspected=form.inspected.data,
       country=form.country.data,
-      selected=1 if form.selected.data else 0,
+      selected=form.selected.data,
       capacity=form.capacity.data,
       date_added=strftime("%Y-%m-%d %H:%M:%-S", gmtime()),
       added_by=current_user.id,
@@ -135,112 +192,54 @@ def new_training_venue():
   )
 
 
-@main.route('/trainings/<string:id>/edit_create', methods=['GET', 'POST'])
+@main.route('/training/<string:id>/edit', methods=['GET', 'POST'])
 @login_required
-def edit_create_training(id):
-
-  training_map = Map(
-    identifier="mapCanvas",
-    lat=-1.2728,
-    lng=36.7901,
-    zoom=8,
-    style=('height: 400px;'
-           'width: 100%;'),
-    markers=[
-      {
-        'icon': 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
-        'lat': -1.2728,
-        'lng': 36.7901
-      }
-    ]
-  )
-
+def edit_training(id):
+  training = Training.query.filter_by(id=id).first_or_404()
   form = TrainingForm()
-
-  if id != 'new':
-    training = Training.query.filter_by(id=id).first_or_404()
-
-    if form.validate_on_submit():
-      training.training_name = form.training_name.data
-      training.country = Geo.query.filter_by(id=form.country.data).first().geo_code
-      training.county_id = form.county.data if training.country == 'KE' else None
-      training.location_id = form.location.data if training.country == 'UG' else None
-      training.subcounty_id = form.subcounty.data if training.country == 'KE' else None
-      training.ward_id = form.ward.data if training.country == 'KE' else None
-      training.district = form.district.data if training.country == 'UG' else None
-      training.recruitment_id = form.recruitment.data if form.recruitment.data != '' else None
-      training.parish_id = form.parish.data if training.country == 'UG' else None
-      training.lat = form.lat.data
-      training.lon = form.lon.data
-      training.training_venue_id = None if form.training_venue.data == '-1' else form.training_venue.data
-      training.training_status_id = None if form.training_status.data == -1 else form.training_status.data
-      training.archived = 0
-      training.comment = form.comment.data
-      training.date_commenced = (datetime.combine(form.date_commenced.data, datetime.min.time()) -
-                                 datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
-      training.date_completed = (datetime.combine(form.date_completed.data, datetime.min.time()) -
-                                 datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
-      db.session.add(training)
-      db.session.commit()
-      return redirect(url_for('main.trainings'))
-    form.training_name.data = training.training_name
-    form.country.data = Geo.query.filter_by(geo_code=training.country).first().id
-    form.county.data = training.county
-    form.location.data = training.location
-    form.subcounty.data = training.subcounty
-    form.ward.data = training.ward
-    form.district.data = training.district
-    form.recruitment.data = training.recruitment
-    form.parish.data = training.parish
-    form.lat.data = training.lat
-    form.lon.data = training.lon
-    form.training_venue.data = training.training_venue_id
-    form.training_status.data = training.training_status_id
-    form.comment.data = training.comment
-    form.date_commenced.data = datetime.fromtimestamp(
-      training.date_commenced / 1000) if training.date_commenced is not None else None
-    form.date_completed.data = datetime.fromtimestamp(
-      training.date_completed / 1000) if training.date_completed is not None else None
-    return render_template(
-      'form_training.html',
+  if form.validate_on_submit():
+    training.training_name = form.training_name.data
+    training.country = Geo.query.filter_by(id=form.country.data).first().geo_code
+    training.county_id = form.county.data if training.country == 'KE' else None
+    training.location_id = form.location.data if training.country == 'UG' else None
+    training.subcounty_id = form.subcounty.data if training.country == 'KE' else None
+    training.ward_id = form.ward.data if training.country == 'KE' else None
+    training.district = form.district.data if training.country == 'UG' else None
+    training.recruitment_id = form.recruitment.data if form.recruitment.data != '' else None
+    training.parish_id = form.parish.data if training.country == 'UG' else None
+    training.lat = form.lat.data
+    training.lon = form.lon.data
+    training.training_venue_id = None if form.training_venue.data == '-1' else form.training_venue.data
+    training.training_status_id = None if form.training_status.data == -1 else form.training_status.data
+    training.archived = 0
+    training.comment = form.comment.data
+    training.date_commenced = (datetime.combine(form.date_commenced.data, datetime.min.time()) -
+                               datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
+    training.date_completed = (datetime.combine(form.date_completed.data, datetime.min.time()) -
+                               datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
+    db.session.add(training)
+    db.session.commit()
+    return redirect(url_for('main.trainings'))
+  form.training_name.data = training.training_name
+  form.country.data = Geo.query.filter_by(geo_code=training.country).first().id
+  form.county.data = training.county
+  form.location.data = training.location
+  form.subcounty.data = training.subcounty
+  form.ward.data = training.ward
+  form.district.data = training.district
+  form.recruitment.data = training.recruitment
+  form.parish.data = training.parish
+  form.lat.data = training.lat
+  form.lon.data = training.lon
+  form.training_venue.data = training.training_venue_id
+  form.training_status.data = training.training_status_id
+  form.comment.data = training.comment
+  form.date_commenced.data = datetime.fromtimestamp(training.date_commenced/1000) if training.date_commenced is not None else None
+  form.date_completed.data = datetime.fromtimestamp(training.date_completed/1000) if training.date_completed is not None else None
+  return render_template(
+      'edit_training.html',
       form=form,
-      training=training,
-      training_map=training_map
-    )
-  else:
-    if form.validate_on_submit():
-      new_training = Training(
-        id=uuid.uuid1(),
-        training_name=form.training_name.data,
-        country=Geo.query.filter_by(id=form.country.data).first().geo_code,
-        county_id=form.county.data,
-        location_id=form.location.data,
-        subcounty_id=form.subcounty.data,
-        ward_id=form.ward.data,
-        district=form.district.data,
-        recruitment_id=form.recruitment.data,
-        parish_id=form.parish.data,
-        lat=form.lat.data,
-        lon=form.lon.data,
-        training_venue_id=form.training_venue.data,
-        training_status_id=form.training_status.data,
-        client_time=int(time.time()),
-        created_by=current_user.id,
-        date_created=strftime("%Y-%m-%d %H:%M:%-S", gmtime()),
-        archived=0,
-        comment=form.comment.data,
-        date_commenced=(datetime.combine(form.date_commenced.data, datetime.min.time()) -
-                        datetime.utcfromtimestamp(0)).total_seconds() * 1000.0,
-        date_completed=(datetime.combine(form.date_completed.data, datetime.min.time()) -
-                        datetime.utcfromtimestamp(0)).total_seconds() * 1000.0
-      )
-      db.session.add(new_training)
-      db.session.commit()
-      return redirect('/trainings')
-    return render_template(
-      'form_training.html',
-      training_map=training_map,
-      form=form
+      training=training
     )
 
 
