@@ -51,14 +51,24 @@
                     <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                       <thead>
                         <tr>
-                          <!-- <th>Action</th> -->
                           <th>Name</th>
                           <th>Contact Person</th>
                           <th>Phone</th>
                           <th>Date Added</th>
                           <th>Synced</th>
+                          <th>Synced</th>
                         </tr>
                       </thead>
+                        <tfoot>
+                        <tr>
+                          <th>Name</th>
+                          <th>Contact Person</th>
+                          <th>Phone</th>
+                          <th>Date Added</th>
+                          <th>Synced</th>
+                          <th>Synced</th>
+                        </tr>
+                      </tfoot>
                       <tbody>
                         {% for mapping in mappings %}
                         <tr>
@@ -69,6 +79,9 @@
                           <td>{{mapping.phone}}</td>
                           <td>{{mapping.date_added}}</td>
                           <td>{{mapping.synced}}</td>
+                          <td><a href="/mapping/{{mapping.id}}/download">
+                                  <i class="fa fa-download"></i>
+                              </a></td>
                         </tr>
                         {% endfor %}
                       </tbody>
