@@ -835,14 +835,29 @@ class Mapping(db.Model):
     archived = Column(Integer, server_default=text("'0'"))
 
     owner = relationship(u'User')
+    
+    def to_dict(self):
+      return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 
     def to_json(self):
+        if self.country =="KE":
+          county = County.query.filter_by(id=self.county).first()
+          subcounty= SubCounty.query.filter_by(id=self.county).first()
+        else:
+          county= Location.query.filter_by(id=self.county).first()
+          subcounty= Location.query.filter_by(id=self.subcounty).first()
+
+        county_name = county.name if county is not None else None
+        subcounty_name = subcounty.name if subcounty is not None else None
+        
         json_record ={
             'id':self.id,
             'name':self.name,
             'country':self.country,
             'county':self.county,
             'subcounty':self.subcounty,
+            'county_name':county_name,
+            'sub_county_name': subcounty_name,
             'district':self.district,
             'added_by':self.added_by,
             'contact_person':self.contact_person,
