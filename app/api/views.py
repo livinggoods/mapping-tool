@@ -863,3 +863,24 @@ def sync_trainees():
         return jsonify(status=status)
       else:
         return jsonify(message='No records posted')
+
+
+@api.route('/get/mapping-details/<string:id>', methods=['GET', 'POST'])
+def get_mapping_details_summary(id):
+  """
+  Get a summary of the mapping details
+  """
+  if request.method == 'GET':
+    mapping = Mapping.query.filter_by(id=id).first().to_json()
+    mapping['parishes']=[]
+    parishes = Parish.query.filter_by(mapping_id=id)
+    for parish in parishes:
+      parish_data = parish.to_json()
+      villages = Village.query.filter_by(parish_id=parish.id)
+      if not parish_data.has_key('village_data'):
+        parish_data['village_data'] = {}
+      parish_data['village_data']['count'] = villages.count()
+      parish_data['village_data']['villages'] = [village.to_json() for village in villages]
+      mapping['parishes'].append(parish_data)
+    return jsonify(mappings=mapping)
+
