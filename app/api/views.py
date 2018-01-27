@@ -21,6 +21,7 @@ def firm_summary():
     return Response(json.dumps(summary, indent=4), mimetype='application/json')
 
 @api.route('/recruitments.json')
+@api.route('/recruitments.json')
 def recruitments_json():
   if request.method == 'GET':
     records = Recruitments.query.filter(Recruitments.archived != 1)
@@ -32,6 +33,7 @@ def recruitments_json():
     return jsonify(status='ok')
 
 
+@api.route('/syncke-counties')
 @api.route('/sync/ke-counties')
 def get_ke_counties_json():
   if request.method == 'GET':
@@ -103,6 +105,7 @@ def get_test_url():
   else:
     return jsonify(status='post')
 
+@api.route('/syncrecruitments', methods=['GET', 'POST'])
 @api.route('/sync/recruitments', methods=['GET', 'POST'])
 def sync_recruitments():
   if request.method == 'GET':
@@ -143,6 +146,7 @@ def sync_recruitments():
     else:
       return jsonify(error="No records posted")
 
+@api.route('/syncregistrations', methods=['GET', 'POST'])
 @api.route('/sync/registrations', methods=['GET', 'POST'])
 def sync_registrations():
   if request.method == 'GET':
@@ -214,6 +218,7 @@ def sync_registrations():
     else:
       return jsonify(error="No records posted")
     
+@api.route('/synclink_facilities', methods=['GET', 'POST'])
 @api.route('/sync/link_facilities', methods=['GET', 'POST'])
 def sync_link_facilities():
   if request.method == 'GET':
