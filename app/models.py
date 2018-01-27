@@ -323,7 +323,16 @@ class Village(db.Model):
     community_unit = relationship(u'CommunityUnit')
     link_facility = relationship(u'LinkFacility')
     user = relationship(u'User')
-
+    
+    def chps_to_recruit(self):
+      # =ROUNDUP(
+      #     IF([ @ [Est population density]]="Rural", [ @ [Number of HH]] / 150, [ @ [Number of HH]] / 400), 0)
+      if self.economic_status =="Rural":
+        return int(round(self.noofhouseholds /150))
+      else:
+        return int(round(self.noofhouseholds / 400))
+    
+    
     def to_json(self):
       json_record={
         'id':self.id,

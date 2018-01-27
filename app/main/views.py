@@ -736,11 +736,13 @@ def mapping_village_data(id):
         "Comments (summarize)	"
         ]
     csv_data.append(header)
+    cumulative_chps=0
     for village in villages:
       mapping = village.mapping
       subcounty = Location.query.filter_by(id=mapping.subcounty).first()
       county = subcounty.parent1
       district=county.parent1
+      cumulative_chps =village.chps_to_recruit() + cumulative_chps
       rowdata=[
         district.name,
         county.name,
@@ -749,8 +751,8 @@ def mapping_village_data(id):
         village.village_name,
         "Ranking not found",
         "Index Sum",
-        "CHPs to recruit",
-        "Cumulative CHPs",
+        village.chps_to_recruit(),
+        cumulative_chps,
         village.area_chief_name,
         village.area_chief_phone,
         village.user.name,
