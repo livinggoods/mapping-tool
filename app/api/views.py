@@ -555,6 +555,7 @@ def sync_cu():
       return jsonify(error="No records posted")
 
 
+@api.route('/syncpartners/activity', methods=['GET', 'POST'])
 @api.route('/sync/partners/activity', methods=['GET', 'POST'])
 def sync_partner_cu():
   if request.method == 'GET':
@@ -579,6 +580,7 @@ def sync_partner_cu():
       return jsonify(error="No records posted")
 
 
+@api.route('/syncinterviews', methods=['GET', 'POST'])
 @api.route('/sync/interviews', methods=['GET', 'POST'])
 def sync_interviews():
   if request.method == 'GET':
@@ -626,6 +628,7 @@ def sync_interviews():
       return jsonify(error="No records posted")
 
 
+@api.route('/syncexams', methods=['GET', 'POST'])
 @api.route('/sync/exams', methods=['GET', 'POST'])
 def sync_exams():
   if request.method == 'GET':
@@ -664,6 +667,7 @@ def sync_exams():
       return jsonify(error="No records posted")
 
 
+@api.route('/synclocations', methods=['GET', 'POST'])
 @api.route('/sync/locations', methods=['GET', 'POST'])
 def sync_locations():
   if request.method == 'GET':
@@ -688,6 +692,7 @@ def create_ke_counties():
   return jsonify(status='ok')
 
 
+@api.route('/synccounties', methods=['GET', 'POST'])
 @api.route('/sync/counties', methods=['GET', 'POST'])
 def sync_counties():
   if request.method == 'GET':
