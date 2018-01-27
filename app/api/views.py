@@ -258,6 +258,7 @@ def sync_link_facilities():
     else:
       return jsonify(error="No records posted")
 
+@api.route('/syncmapping', methods=['GET', 'POST'])
 @api.route('/sync/mapping', methods=['GET', 'POST'])
 def sync_mapping():
   if request.method == 'GET':
@@ -282,6 +283,7 @@ def sync_mapping():
     else:
       return jsonify(error=mapping_list)
 
+@api.route('/syncparish', methods=['GET', 'POST'])
 @api.route('/sync/parish', methods=['GET', 'POST'])
 def sync_parish():
   if request.method == 'GET':
@@ -294,9 +296,30 @@ def sync_parish():
       for parish in parish_list:
         saved_record = Parish.query.filter(Parish.id == parish.get('id')).first()
         if saved_record:
-          saved_record.client_time = parish.get('date_added')
+          saved_record.id = parish.get('id'),
+          saved_record.name = parish.get('name'),
+          saved_record.parent = parish.get('parent'),
+          saved_record.mapping_id = parish.get('mapping'),
+          saved_record.added_by = parish.get('added_by'),
+          saved_record.contact_person = parish.get('contact_person'),
+          saved_record.phone = parish.get('phone'),
+          saved_record.comment = parish.get('comment'),
+          saved_record.country = parish.get('country'),
+          saved_record.client_time = parish.get('date_added'),
           operation = 'updated'
         else:
+          saved_record = Parish(
+              id=parish.get('id'),
+              name = parish.get('name'),
+              parent = parish.get('parent'),
+              mapping_id = parish.get('mapping'),
+              added_by = parish.get('added_by'),
+              contact_person = parish.get('contact_person'),
+              phone = parish.get('phone'),
+              comment = parish.get('comment'),
+              country = parish.get('country'),
+              client_time = parish.get('date_added'),
+          )
           operation = 'created'
         db.session.add(saved_record)
         db.session.commit()
@@ -305,6 +328,7 @@ def sync_parish():
     else:
       return jsonify(error="No records posted")
 
+@api.route('/syncvillages', methods=['GET', 'POST'])
 @api.route('/sync/villages', methods=['GET', 'POST'])
 def sync_village():
   if request.method == 'GET':
@@ -316,76 +340,127 @@ def sync_village():
     if village_list is not None:
       for village in village_list:
         saved_record = Village.query.filter(Village.id == village.get('id')).first()
-        new_village = Village(
-          id=village.get('id'),
-          village_name =village.get('village_name '),
-          mapping_id =village.get('mapping_id '),
-          lat =village.get('lat '),
-          lon =village.get('lon '),
-          country =village.get('country '),
-          district =village.get('district '),
-          county =village.get('county '),
-          sub_county_id =village.get('sub_county_id '),
-          parish_id =village.get('parish_id '),
-          community_unit_id =village.get('community_unit_id '),
-          ward =village.get('ward '),
-          link_facility_id =village.get('link_facility_id '),
-          area_chief_name =village.get('area_chief_name '),
-          area_chief_phone =village.get('area_chief_phone '),
-          distancetobranch =village.get('distancetobranch '),
-          transportcost =village.get('transportcost '),
-          distancetomainroad =village.get('distancetomainroad '),
-          noofhouseholds =village.get('noofhouseholds '),
-          mohpoplationdensity =village.get('mohpoplationdensity '),
-          estimatedpopulationdensity =village.get('estimatedpopulationdensity '),
-          economic_status =village.get('economic_status '),
-          distancetonearesthealthfacility =village.get('distancetonearesthealthfacility '),
-          actlevels =village.get('actlevels '),
-          actprice =village.get('actprice '),
-          mrdtlevels =village.get('mrdtlevels '),
-          mrdtprice =village.get('mrdtprice '),
-          presenceofhostels =village.get('presenceofhostels '),
-          presenceofestates =village.get('presenceofestates '),
-          number_of_factories =village.get('number_of_factories '),
-          presenceofdistibutors =village.get('presenceofdistibutors '),
-          name_of_distibutors =village.get('name_of_distibutors '),
-          tradermarket =village.get('tradermarket '),
-          largesupermarket =village.get('largesupermarket '),
-          ngosgivingfreedrugs =village.get('ngosgivingfreedrugs '),
-          ngodoingiccm =village.get('ngodoingiccm '),
-          ngodoingmhealth =village.get('ngodoingmhealth '),
-          nameofngodoingiccm =village.get('nameofngodoingiccm '),
-          nameofngodoingmhealth =village.get('nameofngodoingmhealth '),
-          privatefacilityforact =village.get('privatefacilityforact '),
-          privatefacilityformrdt =village.get('privatefacilityformrdt '),
-          synced =village.get('synced '),
-          chvs_trained =village.get('chvs_trained '),
-          client_time =village.get('client_time '),
-          date_added =village.get('date_added '),
-          archived =village.get('archived '),
-          addedby =village.get('addedby '),
-          comment =village.get('comment '),
-          brac_operating =village.get('brac_operating '),
-          mtn_signal =village.get('mtn_signal '),
-          safaricom_signal =village.get('safaricom_signal '),
-          airtel_signal =village.get('airtel_signal '),
-          orange_signal =village.get('orange_signal '),
-          act_stock =village.get('act_stock '),
-        )
         if saved_record:
+          # update
+          saved_record.id = village.get('id')
+          saved_record.village_name = village.get('village_name')
+          saved_record.mapping_id = village.get('mapping_id')
+          saved_record.lat = village.get('lat')
+          saved_record.lon = village.get('lon')
+          saved_record.country = village.get('country')
+          saved_record.district = village.get('district')
+          saved_record.county = village.get('county')
+          saved_record.sub_county_id = village.get('sub_county_id')
+          saved_record.parish_id = village.get('parish')
+          saved_record.community_unit_id = village.get('community_unit') if village.get('community_unit') !="" else None
+          saved_record.ward = village.get('ward')
+          saved_record.link_facility_id = village.get('link_facility_id') if village.get('link_facility_id') !="" else None
+          saved_record.area_chief_name = village.get('area_chief_name')
+          saved_record.area_chief_phone = village.get('area_chief_phone')
+          saved_record.distancetobranch = village.get('distancetobranch')
+          saved_record.transportcost = village.get('transportcost')
+          saved_record.distancetomainroad = village.get('distancetomainroad')
+          saved_record.noofhouseholds = village.get('noofhouseholds')
+          saved_record.mohpoplationdensity = village.get('mohpoplationdensity')
+          saved_record.estimatedpopulationdensity = village.get('estimatedpopulationdensity')
+          saved_record.economic_status = village.get('economic_status')
+          saved_record.distancetonearesthealthfacility = village.get('distancetonearesthealthfacility')
+          saved_record.actlevels = village.get('actlevels')
+          saved_record.actprice = village.get('actprice')
+          saved_record.mrdtlevels = village.get('mrdtlevels')
+          saved_record.mrdtprice = village.get('mrdtprice')
+          saved_record.presenceofhostels = village.get('presenceofhostels')
+          saved_record.presenceofestates = village.get('presenceofestates')
+          saved_record.number_of_factories = village.get('number_of_factories')
+          saved_record.presenceofdistibutors = village.get('presenceofdistibutors')
+          saved_record.name_of_distibutors = village.get('name_of_distibutors')
+          saved_record.tradermarket = village.get('tradermarket')
+          saved_record.largesupermarket = village.get('largesupermarket')
+          saved_record.ngosgivingfreedrugs = village.get('ngosgivingfreedrugs')
+          saved_record.ngodoingiccm = village.get('ngodoingiccm')
+          saved_record.ngodoingmhealth = village.get('ngodoingmhealth')
+          saved_record.nameofngodoingiccm = village.get('nameofngodoingiccm')
+          saved_record.nameofngodoingmhealth = village.get('nameofngodoingmhealth')
+          saved_record.privatefacilityforact = village.get('privatefacilityforact')
+          saved_record.privatefacilityformrdt = village.get('privatefacilityformrdt')
+          saved_record.synced = village.get('synced')
+          saved_record.chvs_trained = village.get('chvs_trained')
+          saved_record.client_time = village.get('dateadded')
+          saved_record.addedby = village.get('addedby')
+          saved_record.comment = village.get('comment')
+          saved_record.brac_operating = village.get('brac_operating')
+          saved_record.mtn_signal = village.get('mtn_signal')
+          saved_record.safaricom_signal = village.get('safaricom_signal')
+          saved_record.airtel_signal = village.get('airtel_signal')
+          saved_record.orange_signal = village.get('orange_signal')
+          saved_record.act_stock = village.get('act_stock')
           operation = 'updated'
         else:
-          operation = 'created'
-          village = Village(
-            
+          saved_record = Village(
+              id = village.get('id'),
+              village_name = village.get('village_name'),
+              mapping_id = village.get('mapping_id'),
+              lat = village.get('lat'),
+              lon = village.get('lon'),
+              country = village.get('country'),
+              district = village.get('district'),
+              county = village.get('county'),
+              sub_county_id = village.get('sub_county_id'),
+              parish_id = village.get('parish'),
+              community_unit_id = village.get('community_unit') if village.get(
+                'community_unit') != "" else None,
+              ward = village.get('ward'),
+              link_facility_id = village.get('link_facility_id') if village.get(
+                'link_facility_id') != "" else None,
+              area_chief_name = village.get('area_chief_name'),
+              area_chief_phone = village.get('area_chief_phone'),
+              distancetobranch = village.get('distancetobranch'),
+              transportcost = village.get('transportcost'),
+              distancetomainroad = village.get('distancetomainroad'),
+              noofhouseholds = village.get('noofhouseholds'),
+              mohpoplationdensity = village.get('mohpoplationdensity'),
+              estimatedpopulationdensity = village.get('estimatedpopulationdensity'),
+              economic_status = village.get('economic_status'),
+              distancetonearesthealthfacility = village.get('distancetonearesthealthfacility'),
+              actlevels = village.get('actlevels'),
+              actprice = village.get('actprice'),
+              mrdtlevels = village.get('mrdtlevels'),
+              mrdtprice = village.get('mrdtprice'),
+              presenceofhostels = village.get('presenceofhostels'),
+              presenceofestates = village.get('presenceofestates'),
+              number_of_factories = village.get('number_of_factories'),
+              presenceofdistibutors = village.get('presenceofdistibutors'),
+              name_of_distibutors = village.get('name_of_distibutors'),
+              tradermarket = village.get('tradermarket'),
+              largesupermarket = village.get('largesupermarket'),
+              ngosgivingfreedrugs = village.get('ngosgivingfreedrugs'),
+              ngodoingiccm = village.get('ngodoingiccm'),
+              ngodoingmhealth = village.get('ngodoingmhealth'),
+              nameofngodoingiccm = village.get('nameofngodoingiccm'),
+              nameofngodoingmhealth = village.get('nameofngodoingmhealth'),
+              privatefacilityforact = village.get('privatefacilityforact'),
+              privatefacilityformrdt = village.get('privatefacilityformrdt'),
+              synced = village.get('synced'),
+              chvs_trained = village.get('chvs_trained'),
+              client_time = village.get('dateadded'),
+              addedby = village.get('addedby'),
+              comment = village.get('comment'),
+              brac_operating = village.get('brac_operating'),
+              mtn_signal = village.get('mtn_signal'),
+              safaricom_signal = village.get('safaricom_signal'),
+              airtel_signal = village.get('airtel_signal'),
+              orange_signal = village.get('orange_signal'),
+              act_stock = village.get('act_stock'),
           )
-        db.session.add(new_village)
+          operation = 'created'
+        db.session.add(saved_record)
         db.session.commit()
         status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
       return jsonify(status=status)
     else:
       return jsonify(error="No records posted")
 
+@api.route('/syncpartners', methods=['GET', 'POST'])
 @api.route('/sync/partners', methods=['GET', 'POST'])
 def sync_partner():
   if request.method == 'GET':
@@ -410,6 +485,7 @@ def sync_partner():
       return jsonify(error="No records posted")
 
 
+@api.route('/synccommunity_unit', methods=['GET', 'POST'])
 @api.route('/sync/community_unit', methods=['GET', 'POST'])
 def sync_cu():
   if request.method == 'GET':
