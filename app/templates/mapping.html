@@ -5,32 +5,19 @@
               <div class="title_left">
                 <h3>{{mapping.name}} <small>{{mapping.name}}</small></h3>
               </div>
-
-              <div class="title_right">
-                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                  <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search for...">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" type="button">Go!</button>
-                    </span>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div class="clearfix"></div>
-
-            <!-- Start -->
               <div class="row">
               <div class="col-md-12">
                 <div class="">
                   <div class="x_content">
                     <div class="row">
 
-                      <div class="col-md-4 col-xs-12 widget_4 widget_tally_box">
-                        <div class="x_panel fixed_height_390">
+                      <div class="col-md-3 col-xs-12 widget_3 widget_tally_box">
+                        <div class="x_panel fixed_height_600">
                           <div class="x_title">
-                            <h2>{{subcounties.count()}} Sub Counties</h2>
+                            <h2>Mapping Details</h2>
                             <div class="clearfix"></div>
                           </div>
                           <div class="x_content">
@@ -39,14 +26,56 @@
                               <ul class="list-inline widget_tally">
                                 <li>
                                   <p>
-                                    <span class="align_text_left  month">County name </span>
-                                    <span class="count">10 Parishes</span>
+                                    <span class="align_text_left month">Contact Person</span>
+                                    <span class="details">{{mapping.contact_person}}</span>
                                   </p>
                                 </li>
                                 <li>
                                   <p>
-                                    <span class="align_text_left month">16 January 2015 </span>
-                                    <span class="count">+1 parish</span>
+                                    <span class="align_text_left month">Contact Person Phone</span>
+                                    <span class="details">{{mapping.phone}}</span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="align_text_left month">Added by</span>
+                                    <span class="details">{{mapping.owner.name}}</span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="align_text_left  month">Country </span>
+                                    <span class="details">{{mapping.country}}</span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="align_text_left month">County</span>
+                                    <span class="details">{{mapping.to_json().county_name}}</span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="align_text_left month">District</span>
+                                    <span class="details">{{mapping.district}}</span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="align_text_left month">Sub County </span>
+                                    <span class="details">{{mapping.to_json().subcounty_name}}</span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="align_text_left month">Date Added </span>
+                                    <span class="details">{{mapping.date_added}}</span>
+                                  </p>
+                                </li>
+                                <li>
+                                  <p>
+                                    <span class="align_text_left month">Client Time</span>
+                                    <span class="details">{{mapping.client_time}}</span>
                                   </p>
                                 </li>
                               </ul>
@@ -56,86 +85,54 @@
                       </div>
 
 
-                      <div class="col-md-4 col-xs-12 widget_4 widget_tally_box">
-                        <div class="x_panel fixed_height_390">
+                      <div class="col-md-6 col-xs-12 widget_6 widget_tally_box">
+                        <div class="x_panel fixed_height_600">
                           <div class="x_title">
                             <h2>{{parishes.count()}} Parishes</h2>
                             <div class="clearfix"></div>
                           </div>
                           <div class="x_content">
-
-                            <div style="text-align: center; margin-bottom: 17px">
-                              <ul class="verticle_bars list-inline">
-                                <li>
-                                  <div class="progress vertical progress_wide bottom">
-                                    <div class="progress-bar progress-bar-dark" role="progressbar" data-transitiongoal="65" aria-valuenow="65" style="height: 65%;"></div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div class="progress vertical progress_wide bottom">
-                                    <div class="progress-bar progress-bar-gray" role="progressbar" data-transitiongoal="85" aria-valuenow="85" style="height: 85%;"></div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div class="progress vertical progress_wide bottom">
-                                    <div class="progress-bar progress-bar-info" role="progressbar" data-transitiongoal="45" aria-valuenow="45" style="height: 45%;"></div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <div class="progress vertical progress_wide bottom">
-                                    <div class="progress-bar progress-bar-success" role="progressbar" data-transitiongoal="75" aria-valuenow="75" style="height: 75%;"></div>
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="divider"></div>
-
-                            <ul class="legend list-unstyled">
-                              <li>
-                                <p>
-                                  <span class="icon"><i class="fa fa-square dark"></i></span> <span class="name">Item One Name</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  <span class="icon"><i class="fa fa-square grey"></i></span> <span class="name">Item Two Name</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  <span class="icon"><i class="fa fa-square blue"></i></span> <span class="name">Item Three Name</span>
-                                </p>
-                              </li>
-                              <li>
-                                <p>
-                                  <span class="icon"><i class="fa fa-square green"></i></span> <span class="name">Item Four Name</span>
-                                </p>
-                              </li>
-                            </ul>
-
+                            <span id="map-chart" data-percent="86"></span>
                           </div>
                         </div>
                       </div>
 
 
-                      <div class="col-md-4 col-xs-12 widget_4 widget_tally_box">
-                        <div class="x_panel ui-ribbon-container fixed_height_390">
+                      <div class="col-md-3 col-xs-12 widget_3 widget_tally_box">
+                        <div class="x_panel ui-ribbon-container fixed_height_600">
                           <div class="ui-ribbon-wrapper">
                             <div class="ui-ribbon">
                               {{villages.count()}} So far
                             </div>
                           </div>
                           <div class="x_title">
-                            <h2>{{villages.count()}} Mapped Villages</h2>
+                            <h2>Mapped Parishes - {{parishes.count()}} </h2>
                             <div class="clearfix"></div>
                           </div>
                           <div class="x_content">
 
-                            <div style="text-align: center; margin-bottom: 17px">
-                              <span class="chart" data-percent="86">
-                                                  <span class="percent">86</span>
-                              <canvas height="220" width="220" style="height: 110px; width: 110px;"></canvas></span>
+                            <ul class="legend list-unstyled">
+                              {% if parishes.count() < 1 %}
+                                <li>
+                                  <p>
+                                    <span class="icon"><i class="fa fa-square dark"></i></span> <span class="name">No Parish Mapped</span>
+                                  </p>
+                                </li>
+                              {% else %}
+                                {% for parish in parishes %}
+                                  <li>
+                                    <p>
+                                      <span class="icon"><i class="fa fa-square dark"></i></span> <span class="name">{{parish.name}}</span>
+                                    </p>
+                                  </li>
+                                {% endfor %}
+                              {% endif %}
+                            </ul>
+                            <div class="x_title">
+                              <h2>Mapped Villages - {{villages.count()}} </h2>
+                              <div class="clearfix"></div>
                             </div>
+
                             <ul class="legend list-unstyled">
                                 {% for village in villages %}
                                   <li>
@@ -148,17 +145,6 @@
                           </div>
                         </div>
                       </div>
-
-
-
-
-
-
-
-
-
-
-
                     </div>
                   </div>
                 </div>
@@ -168,54 +154,9 @@
           </div>
 {% endblock %}
 {% block javascript %}
-<script type="text/javascript">
-$('.confirm').click(function(){
-    recruitmentId = $(this).attr('recruitment');
-    action = $(this).attr('action');
-    $.ajax({
-      url:'/api/v1/recruitment/'+recruitmentId,
-      type: 'post',
-      data: {action:action, id:recruitmentId},
-      dataType:'json',
-      success: function(data){
-        if (data.status=='updated'){
-            window.location.reload(true);
-        }
-      },
-      error: function(xhr){
-        console.log('error');
-      }
-    });
-});
-$('.new-recruitment').click(function(){
-  window.RecruitmentID = (function () { return; })();
-  $('#name').val('');
-  $('#myModalLabel').html('Create new recruitment drive');
-  $('.bs-example-modal-lg').modal('toggle');
-});
-  $('.edit-recruitment').click(function(){
-    console.log($(this).attr('recruitment'));
-    // get the details of the recruitment
-    recruitmentId = $(this).attr('recruitment');
-    $.ajax({
-      url:'/api/v1/recruitment/'+recruitmentId,
-      type: 'get',
-      dataType:'json',
-      success: function(data){
-        console.log(data);
-        window.RecruitmentID = data.id;
-        $('#myModalLabel').html('Editing '+data.name);
-        $('#name').val(data.name);
-        // Show Modal
-        $('.bs-example-modal-lg').modal('toggle');
-      },
-      error: function(xhr){
-        console.log('error');
-      }
-    });
-  });
-</script>
 <script>
+var mappingId='{{mapping.id}}';
+var mappingName='{{mapping.name}}';
       $(document).ready(function() {
         var handleDataTableButtons = function() {
           if ($("#datatable-buttons").length) {
@@ -286,8 +227,12 @@ $('.new-recruitment').click(function(){
     </script>
 {% endblock %}
 {% block additionaljs %}
+
+{% include 'partials/highcharts.html' %}
+<script src="{{ url_for('static', filename='js/mapping-chart.js') }}"></script>
 <!-- Datatables -->
-{{ url_for('static', filename='css/nprogress.css') }}
+
+
     <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dataTables.buttons.min.js') }}"></script>
@@ -305,9 +250,10 @@ $('.new-recruitment').click(function(){
     <script src="{{ url_for('static', filename='js/vfs_fonts.js') }}"></script>
 {% endblock %}
 {% block additionalcss %}
-    <link href="{{ url_for('static', filename='css/flat/green.css') }}"" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/nprogress.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/flat/green.css') }}"rel="stylesheet">
     <!-- Datatables -->
-    <link href="{{ url_for('static', filename='css/dataTables.bootstrap.min.css') }}"" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/buttons.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/responsive.bootstrap.min.css') }}" rel="stylesheet">
