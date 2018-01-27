@@ -5,7 +5,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app, request
 from flask_login import UserMixin, AnonymousUserMixin
 from . import db, login_manager
-from sqlalchemy import func, Column, DateTime, ForeignKey, Integer, String, Text, Numeric, text, Float
+from sqlalchemy import func, Column, DateTime, ForeignKey, Integer, String, Text, Numeric, text, Float, inspect
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 import time
@@ -334,7 +334,7 @@ class Village(db.Model):
         'district':self.district,
         'county':self.county,
         'sub_county_id':self.sub_county_id,
-        'parish':self.parish,
+        'parish':self.parish_id,
         'community_unit':self.community_unit,
         'ward':self.ward,
         'link_facility_id':self.link_facility_id,
