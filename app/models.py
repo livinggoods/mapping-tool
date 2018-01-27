@@ -322,6 +322,7 @@ class Village(db.Model):
     parish = relationship(u'Parish')
     community_unit = relationship(u'CommunityUnit')
     link_facility = relationship(u'LinkFacility')
+    user = relationship(u'User')
 
     def to_json(self):
       json_record={
