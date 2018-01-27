@@ -587,6 +587,9 @@ class Parish(db.Model):
     mapping = relationship(u'Mapping')
     user = relationship(u'User')
     
+    def to_dict(self):
+      return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
+    
     def to_json(self):
       json_record={
         'id':self.id,
