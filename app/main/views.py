@@ -669,6 +669,143 @@ def training_trainers(id):
       training_trainers=training_trainers
     )
 
+@main.route('/mapping/<string:id>/download', methods=['GET', 'POST'])
+@login_required
+def mapping_village_data(id):
+  if request.method == 'GET':
+    villages = Village.query.filter_by(mapping_id=id)
+    dest = io.StringIO()
+    writer=csv.writer(dest)
+    csv_data=[]
+    header = [
+        "District",
+        "County",
+        "Subcounty",
+        "Parish",
+        "Village/zone/cell",
+        "Village Ranking",
+        "Index Sum",
+        "CHPs to recruit",
+        "Cumulative CHPs",
+        "LC Name",
+        "LC Contact Number (don't use leading 0)",
+        "Visit Completed By",
+        "Visit Date",
+        "GPS Lat",
+        "GPS Lon",
+        "Distance to branch",
+        "Distance to branch index",
+        "Est cost of transport to branch",
+        "Est cost of transport to branch index",
+        "Distance to main road",
+        "Distance to main road index",
+        "Number of HH",
+        "Number of HH index",
+        "Est population density",
+        "Est population density index",
+        "Area economic status",
+        "Area economic status index",
+        "Distance to nearest health facility",
+        "Distance to nearest health facility index",
+        "Stock level for ACT",
+        "Stock level for ACT index",
+        "Cost of ACT",
+        "Cost of ACT index",
+        "Presence of estates",
+        "Presence of estates index",
+        "Presence of factories",
+        "Presence of factories index",
+        "Presence of universities",
+        "Presence of universities index",
+        "Presence of distributors",
+        "Presence of distributors index",
+        "Presence trader market",
+        "Presence trader market index",
+        "Presence large super market",
+        "Presence large super market index",
+        "Presence of NGO distributing free drugs",
+        "Presence of NGO distributing free drugs index",
+        "Is BRAC CHP operating in this area?",
+        "BRAC index",
+        "Presence of other NGOs with any connection with LG/ Any other NGOs with ICCM programs?",
+        "Presence of other NGOs with any connection with LG index",
+        "1. Which ones?",
+        "2. Which ones?",
+        "MTN connectivity",
+        "MTN connectivity index",
+        "Comments (summarize)	"
+        ]
+    csv_data.append(header)
+    for village in villages:
+      mapping = village.mapping
+      subcounty = Location.query.filter_by(id=mapping.subcounty).first()
+      county = subcounty.parent1
+      district=county.parent1
+      rowdata=[
+        district.name,
+        county.name,
+        subcounty.name,
+        village.parish.name,
+        village.village_name,
+        "Ranking not found",
+        "Index Sum",
+        "CHPs to recruit",
+        "Cumulative CHPs",
+        village.area_chief_name,
+        village.area_chief_phone,
+        village.user.name,
+        village.client_time,
+        village.lat,
+        village.lon,
+        village.distancetobranch,
+        "Distance to branch index not found",
+        village.transportcost,
+        "Est cost of transport to branch index not found",
+        village.distancetomainroad,
+        "Distance to main road index not found",
+        village.noofhouseholds,
+        "Number of HH index not found",
+        village.estimatedpopulationdensity,
+        "Est population density index not found",
+        village.economic_status,
+        "Area economic status index not found",
+        village.distancetonearesthealthfacility,
+        "Distance to nearest health facility index not found",
+        village.actlevels,
+        "Stock level for ACT index not found",
+        village.actprice,
+        "Cost of ACT index not found",
+        village.presenceofestates,
+        "Presence of estates index not found",
+        village.number_of_factories,
+        "Presence of factories index not found",
+        village.presenceofhostels,
+        "Presence of universities index not found",
+        village.presenceofdistibutors,
+        "Presence of distributors index not found",
+        village.tradermarket,
+        "Presence trader market index not found",
+        village.largesupermarket,
+        "Presence large super market index not found",
+        village.ngosgivingfreedrugs,
+        "Presence of NGO distributing free drugs index not found",
+        village.brac_operating,
+        "BRAC index",
+        village.ngodoingiccm,
+        "Presence of other NGOs with any connection with LG index not found",
+        village.nameofngodoingiccm,
+        village.nameofngodoingmhealth,
+        village.mtn_signal,
+        "MTN connectivity index not found",
+        village.comment
+      ]
+      csv_data.append(rowdata)
+    output = excel.make_response_from_array(csv_data, 'csv')
+    output.headers["Content-Disposition"] = "attachment; filename=mapping-tool.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
+      
+
 
 @main.route('/export-scoring-tool/<string:id>', methods=['GET'])
 @login_required
