@@ -31,8 +31,6 @@ function createChart() {
         rangeSelector: {
             selected: 1
         },
-
-
         title:{text: 'Recruitments to Date'},
 
         plotOptions: {

@@ -460,6 +460,9 @@ body {
 .fixed_height_390 {
   height: 390px; }
 
+  .fixed_height_600 {
+  height: 600px; }
+
 .fixed_height_200 {
   height: 200px; }
 
@@ -2600,11 +2603,19 @@ ul.widget_tally li {
   padding-bottom: 4px; }
 
 ul.widget_tally .month {
-  width: 70%;
+  width: 60%;
+  float: left; }
+
+  ul.widget_tally .mapping {
+  width: 60%;
   float: left; }
 
 ul.widget_tally .count {
   width: 30%;
+  float: left;
+  text-align: right; }
+
+ul.widget_tally .details {
   float: left;
   text-align: right; }
 
