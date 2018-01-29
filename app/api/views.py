@@ -231,13 +231,16 @@ def sync_link_facilities():
       for link_facility in link_facilities_list:
         saved_record = LinkFacility.query.filter(LinkFacility.id == link_facility.get('id')).first()
         lon = 0
+        lat = 0
         if link_facility.get('lon') !='':
           lon = float(link_facility.get('lon'))
+        if link_facility.get('lat') !='':
+          lat = float(link_facility.get('lat'))
         if saved_record:
           saved_record.id = link_facility.get('id'),
           saved_record.facility_name = link_facility.get('facility_name'),
           saved_record.county = link_facility.get('county'),
-          saved_record.lat = float(link_facility.get('lat')) if link_facility.get('lat') is not '' else float(0),
+          saved_record.lat = lat,
           saved_record.lon = lon,
           saved_record.subcounty = link_facility.get('subcounty'),
           saved_record.client_time = link_facility.get('date_added'),
