@@ -674,6 +674,7 @@ def training_trainers(id):
 def mapping_village_data(id):
   if request.method == 'GET':
     villages = Village.query.filter_by(mapping_id=id)
+    map_details = Mapping.query.filter_by(id=id).first()
     dest = io.StringIO()
     writer=csv.writer(dest)
     csv_data=[]
@@ -817,10 +818,9 @@ def mapping_village_data(id):
     for d in csv_data:
       csv_data[i][5] = village_rank.get(csv_data[i][6])
       i+=1
-    #return jsonify(test=csv_data)
     csv_data.insert(0, header)
     output = excel.make_response_from_array(csv_data, 'csv')
-    output.headers["Content-Disposition"] = "attachment; filename=mapping-tool.csv"
+    output.headers["Content-Disposition"] = "attachment; filename="+map_details.name+"-Village-Mapping-tool.csv"
     output.headers["Content-type"] = "text/csv"
     return output
       
