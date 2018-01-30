@@ -39,23 +39,20 @@ def index():
     total_registrations = Registration.query.filter_by(archived=0)
     registrations = total_registrations.count()
 
-    total_mappings = Mapping.query.filter_by(archived=0)
-    mappings = total_mappings.count()
-
+    total_mappings = Mapping.query.filter_by(archived=0).order_by(Mapping.client_time.desc())
+    mapping = total_mappings.count()
+    mappings = total_mappings.limit(5).all()
     total_recruitments = Recruitments.query.filter_by(archived=0)
     recruitments = total_recruitments.count()
     
-    trainings = Training.query.filter_by(archived=0)
-    recruitment = Recruitments.query.filter_by(archived=0).limit(5).all()
+    trainings = Training.query.filter_by(archived=0).limit(current_app.config['FOLLOWERS_PER_PAGE']).all()
+    recruitment = Recruitments.query.filter_by(archived=0).limit(current_app.config['FOLLOWERS_PER_PAGE']).all()
 
-    villages = Village.query.filter_by(archived=0)
+    villages = Village.query.filter_by(archived=0).count()
     if current_user.is_anonymous():
-        # return redirect(url_for('auth.login'))
-
-        return render_template('index.html', page=page, registrations=registrations, mappings=total_mappings,
-                               recruitments=recruitments, villages=villages, currency=currency)
+        return redirect(url_for('auth.login'))
     else:
-        return render_template('index.html', page=page, registrations=registrations, mappings=total_mappings,
+        return render_template('index.html', page=page, registrations=registrations, mapping=mapping, mappings=mappings,
                                recruitments=recruitments, villages=villages, currency=currency, trainings= trainings,
                                recruitment=recruitment)
 
