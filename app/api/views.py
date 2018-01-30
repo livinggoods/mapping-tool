@@ -283,6 +283,7 @@ def sync_mapping():
           saved_record.added_by = mapping.get('added_by')
           saved_record.contact_person = mapping.get('contact_person')
           saved_record.phone = mapping.get('phone')
+          saved_record.synced = 1
           saved_record.comment = mapping.get('comment')
           operation = 'updated'
         else:
