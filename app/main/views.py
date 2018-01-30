@@ -745,7 +745,6 @@ def mapping_village_data(id):
       cumulative_chps =village.chps_to_recruit() + cumulative_chps
       ranks.append(village.village_index_score())
       rowdata=[
-        village.id
         district.name,
         county.name,
         subcounty.name,
