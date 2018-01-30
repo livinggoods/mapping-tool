@@ -43,7 +43,7 @@ def index():
     mapping = total_mappings.count()
     mappings = total_mappings.limit(current_app.config['POSTS_PER_PAGE']).all()
     
-    total_recruitments = Recruitments.query.filter_by(archived=0).order_by(Mapping.client_time.desc())
+    total_recruitments = Recruitments.query.filter_by(archived=0).order_by(Recruitments.client_time.desc())
     recruitments = total_recruitments.count()
     recruitment = total_recruitments.limit(current_app.config['POSTS_PER_PAGE']).all()
     
