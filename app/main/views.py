@@ -732,8 +732,9 @@ def mapping_village_data(id):
         "2. Which ones?",
         "MTN connectivity",
         "MTN connectivity index",
-        "Comments (summarize)	"
-        ]
+        "Comments (summarize)",
+        "UUID"
+    ]
     cumulative_chps=0
     ranks = []
     for village in villages:
@@ -744,6 +745,7 @@ def mapping_village_data(id):
       cumulative_chps =village.chps_to_recruit() + cumulative_chps
       ranks.append(village.village_index_score())
       rowdata=[
+        village.id
         district.name,
         county.name,
         subcounty.name,
@@ -799,7 +801,8 @@ def mapping_village_data(id):
         village.nameofngodoingmhealth,
         village.mtn_signal,
         village.mtn_connectivity_score(),
-        village.comment
+        village.comment,
+        village.id
       ]
       csv_data.append(rowdata)
     ranks.sort(reverse=True)
