@@ -20,7 +20,7 @@ import os, time, calendar, uuid
 from ..data import data
 import io
 import csv
-import random
+import operator
 
 currency = 'UGX '
 
@@ -735,14 +735,15 @@ def mapping_village_data(id):
         "MTN connectivity index",
         "Comments (summarize)	"
         ]
-    csv_data.append(header)
     cumulative_chps=0
+    ranks = []
     for village in villages:
       mapping = village.mapping
       subcounty = Location.query.filter_by(id=mapping.subcounty).first()
       county = subcounty.parent1
       district=county.parent1
       cumulative_chps =village.chps_to_recruit() + cumulative_chps
+      ranks.append(village.village_index_score())
       rowdata=[
         district.name,
         county.name,
@@ -750,58 +751,74 @@ def mapping_village_data(id):
         village.parish.name,
         village.village_name,
         "Ranking not found",
-        "Index Sum",
+        village.village_index_score(),
         village.chps_to_recruit(),
         cumulative_chps,
         village.area_chief_name,
         village.area_chief_phone,
         village.user.name,
-        village.client_time,
+        datetime.fromtimestamp(village.client_time/1000).strftime('%Y-%m-%d %H:%M:%S'),
         village.lat,
         village.lon,
         village.distancetobranch,
-        "Distance to branch index not found",
+        str(village.distance_to_branch_score()),
         village.transportcost,
-        "Est cost of transport to branch index not found",
+        village.est_cost_of_transport_score(),
         village.distancetomainroad,
-        "Distance to main road index not found",
+        village.distance_to_main_road_score(),
         village.noofhouseholds,
-        "Number of HH index not found",
+        village.number_of_hh_score(),
         village.estimatedpopulationdensity,
-        "Est population density index not found",
+        village.number_of_hh_score(),
         village.economic_status,
-        "Area economic status index not found",
+        village.area_economic_status_score(),
         village.distancetonearesthealthfacility,
-        "Distance to nearest health facility index not found",
+        village.distance_to_health_facility_score(),
         village.actlevels,
-        "Stock level for ACT index not found",
+        village.stock_level_for_act_score(),
         village.actprice,
-        "Cost of ACT index not found",
+        village.cost_of_act_score(),
         village.presenceofestates,
-        "Presence of estates index not found",
+        village.presence_of_estates_score(),
         village.number_of_factories,
-        "Presence of factories index not found",
+        village.presence_of_factories_score(),
         village.presenceofhostels,
-        "Presence of universities index not found",
+        village.presence_of_universities_score(),
         village.presenceofdistibutors,
-        "Presence of distributors index not found",
+        village.presence_of_distributors_score(),
         village.tradermarket,
-        "Presence trader market index not found",
+        village.presence_trader_market_score(),
         village.largesupermarket,
-        "Presence large super market index not found",
+        village.presence_large_supermarket_score(),
         village.ngosgivingfreedrugs,
-        "Presence of NGO distributing free drugs index not found",
+        village.presence_of_ngo_distributing_free_drugs_score(),
         village.brac_operating,
-        "BRAC index",
+        "",
         village.ngodoingiccm,
-        "Presence of other NGOs with any connection with LG index not found",
+        village.presence_of_partner_ngos_score(),
         village.nameofngodoingiccm,
         village.nameofngodoingmhealth,
         village.mtn_signal,
-        "MTN connectivity index not found",
+        village.mtn_connectivity_score(),
         village.comment
       ]
       csv_data.append(rowdata)
+    ranks.sort(reverse=True)
+    pos = 1
+    village_rank={}
+    for rank in ranks:
+      if not village_rank.has_key(rank):
+        village_rank[rank]=pos
+        pos+=1
+    
+    csv_data.sort(key=operator.itemgetter(6), reverse=True) # now sorted
+
+    i=0
+    for d in csv_data:
+      csv_data[i][5] = village_rank.get(csv_data[i][6])
+      i+=1
+    #return jsonify(test=csv_data)
+    csv_data.insert(0, header)
     output = excel.make_response_from_array(csv_data, 'csv')
     output.headers["Content-Disposition"] = "attachment; filename=mapping-tool.csv"
     output.headers["Content-type"] = "text/csv"

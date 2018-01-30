@@ -324,14 +324,197 @@ class Village(db.Model):
     link_facility = relationship(u'LinkFacility')
     user = relationship(u'User')
     
+    def village_index_score(self):
+      score = 0
+      score = (self.distance_to_branch_score() + self.est_cost_of_transport_score() +
+               self.distance_to_main_road_score() + self.number_of_hh_score() +
+               self.est_population_density_score() + self.area_economic_status_score() +
+               self.distance_to_health_facility_score() + self.stock_level_for_act_score() +
+               self.cost_of_act_score() + self.presence_of_estates_score() +
+               self.presence_of_factories_score() + self.presence_of_universities_score() +
+               self.presence_of_distributors_score() + self.presence_trader_market_score() +
+               self.presence_large_supermarket_score() +
+               self.presence_of_ngo_distributing_free_drugs_score() +
+               self.presence_of_partner_ngos_score() + self.mtn_connectivity_score())
+      return score
+    
     def chps_to_recruit(self):
-      # =ROUNDUP(
-      #     IF([ @ [Est population density]]="Rural", [ @ [Number of HH]] / 150, [ @ [Number of HH]] / 400), 0)
       if self.economic_status =="Rural":
         return int(round(self.noofhouseholds /150))
       else:
         return int(round(self.noofhouseholds / 400))
     
+    def distance_to_branch_score(self):
+      score = 0
+      if self.distancetobranch < 5:
+        score = 5
+      elif self.distancetobranch < 10:
+        score = 3
+      else:
+        score =0
+      return score
+    
+    def est_cost_of_transport_score(self):
+      score = 0
+      if self.transportcost < 2500:
+        score=15
+      elif self.transportcost < 5000:
+        score = 8
+      else:
+        score =0
+      return score
+    
+    def distance_to_main_road_score(self):
+      score = 0
+      if self.distancetomainroad < 2:
+        score = 0
+      elif self.distancetomainroad < 5:
+        score =0
+      else:
+        score =0
+      return score
+    
+    
+    def number_of_hh_score(self):
+      score =  0
+      if self.noofhouseholds >= 150:
+        score =4
+      else:
+        score =-100
+      return score
+    
+    
+    def est_population_density_score(self):
+      score =  0
+      if self.economic_status == 'Rural':
+        score = 3
+      elif self.economic_status == 'Urban/informal':
+        score=5
+      else:
+        score = 0
+      return score
+    
+    
+    def area_economic_status_score(self):
+      score = 0
+      if self.economic_status == 'Urban / Upper Income':
+        score = -100
+      elif self.economic_status == 'Rural':
+        score = 3
+      else:
+        score = 5
+      return score
+    
+    
+    def distance_to_health_facility_score(self):
+      if self.distancetonearesthealthfacility < 2:
+        score = 0
+      elif self.distancetonearesthealthfacility < 5:
+        score = 3
+      else:
+        score = 5
+      return score
+    
+    
+    def stock_level_for_act_score(self):
+      score =0
+      if self.act_stock < 1:
+        score = 10
+      else:
+        score = 0
+      return score
+    
+    
+    def cost_of_act_score(self):
+      score = 0
+      if self.actprice > 6000:
+        score = 10
+      elif self.actprice > 3000:
+        score = 5
+      else:
+        score = 0
+      return score
+    
+    def presence_of_estates_score(self):
+      if self.presenceofestates ==0:
+        score = 2
+      else:
+        score = 0
+      return score
+    
+    
+    def presence_of_factories_score(self):
+      if self.number_of_factories == 0:
+        score = 2
+      elif self.number_of_factories < 2:
+        score = 1
+      else:
+        score = 0
+      return score
+    
+    
+    def presence_of_universities_score(self):
+      if self.presenceofhostels == 0:
+        score = 2
+      else:
+        score = 0
+      return score
+    
+    
+    def presence_of_distributors_score(self):
+      score = 0
+      if self.presenceofdistibutors == 0:
+        score = 2
+      elif self.presenceofdistibutors <= 2:
+        score = 1
+      else:
+        score = 0
+      return score
+    def presence_trader_market_score(self):
+      score = 0
+      if self.tradermarket ==0:
+        score = 2
+      else:
+        score =0
+      return score
+    
+    
+    def presence_large_supermarket_score(self):
+      score = 0
+      if self.largesupermarket == 0:
+        score = 2
+      else:
+        score = 0
+      return score
+    
+    def presence_of_ngo_distributing_free_drugs_score(self):
+      score = 0
+      if self.ngosgivingfreedrugs == 0:
+        score = 10
+      else:
+        score = 0
+      return score
+    
+    
+    def presence_of_partner_ngos_score(self):
+      score = 0
+      if self.ngodoingiccm == 0:
+        score = 5
+      else:
+        score = 0
+      return score
+    
+    
+    def which_ones_score(self):
+      return 0
+    
+    def mtn_connectivity_score(self):
+      score = 0
+      if self.mtn_signal > 3:
+        score = 5
+      else:
+        score = 0
+      return score
     
     def to_json(self):
       json_record={
