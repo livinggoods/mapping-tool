@@ -340,7 +340,9 @@ class Village(db.Model):
     
     def chps_to_recruit(self):
       if self.economic_status =="Rural":
-        return int(round(self.noofhouseholds /150))
+          return int(round(self.noofhouseholds /150))
+      elif self.economic_status =="Urban/informal":
+        return int(round(self.noofhouseholds / 150))
       else:
         return int(round(self.noofhouseholds / 400))
     
