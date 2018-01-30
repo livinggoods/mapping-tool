@@ -41,13 +41,13 @@ def index():
 
     total_mappings = Mapping.query.filter_by(archived=0).order_by(Mapping.client_time.desc())
     mapping = total_mappings.count()
-    mappings = total_mappings.limit(5).all()
+    mappings = total_mappings.limit(current_app.config['POSTS_PER_PAGE']).all()
     
     total_recruitments = Recruitments.query.filter_by(archived=0).order_by(Mapping.client_time.desc())
     recruitments = total_recruitments.count()
-    recruitment = total_recruitments.limit(5).all()
+    recruitment = total_recruitments.limit(current_app.config['POSTS_PER_PAGE']).all()
     
-    trainings = Training.query.filter_by(archived=0).limit(current_app.config['FOLLOWERS_PER_PAGE']).all()
+    trainings = Training.query.filter_by(archived=0).limit(current_app.config['POSTS_PER_PAGE']).all()
     
     villages = Village.query.filter_by(archived=0).count()
     if current_user.is_anonymous():
