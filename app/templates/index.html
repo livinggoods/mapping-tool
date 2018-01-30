@@ -3,20 +3,24 @@
 <div class="">
             <div class="row top_tiles">
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="tile-stats">
-                  <div class="icon"><i class="fa fa-map-marker"></i></div>
-                  <div class="count">{{mapping}}</div>
-                  <h3>Total Mappings</h3>
-                  <p>Total Mappings done so far</p>
-                </div>
+                <a href="{{url_for('main.create_mappings')}}">
+                  <div class="tile-stats">
+                    <div class="icon"><i class="fa fa-map-marker"></i></div>
+                    <div class="count">{{mapping}}</div>
+                    <a href="{{url_for('main.create_mappings')}}"> <h3>Total Mappings</h3></a>
+                    <p>Total Mappings done so far</p>
+                  </div>
+                </a>
               </div>
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="tile-stats">
-                  <div class="icon"><i class="fa fa-comments-o"></i></div>
-                  <div class="count">{{recruitments}}</div>
-                  <h3>Recruitments</h3>
-                  <p>Total recruitments done</p>
-                </div>
+                 <a href="{{url_for('main.recruitments')}}">
+                  <div class="tile-stats">
+                    <div class="icon"><i class="fa fa-comments-o"></i></div>
+                    <div class="count">{{recruitments}}</div>
+                    <h3>Recruitments</h3>
+                    <p>Total recruitments done</p>
+                  </div>
+                </a>>
               </div>
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
@@ -85,7 +89,7 @@
                                 <i class="fa fa-user aero"></i>
                               </a>
                               <div class="media-body">
-                                <a class="title" href="#">{{r.name}}</a>
+                                <a class="title" href="{{url_for('main.recruitment', id=r.id)}}">{{r.name}}</a>
                                 <p><strong>{{r.to_json().data.count}} registrations</strong></p>
                                 <p> <small>{{r.date_added.strftime("%B %d, %Y")}} </small>
                                 </p>
@@ -157,7 +161,7 @@
                           <p class="day">{{m.date_added.strftime("%d")}} </p>
                         </a>
                         <div class="media-body">
-                          <a class="title" href="#">{{m.name}}</a>
+                          <a class="title" href="{{ url_for('main.get_mapping_data', id=m.id) }}">{{m.name}}</a>
                           <p>{{m.contact_person}}</p>
                         </div>
                       </article>
