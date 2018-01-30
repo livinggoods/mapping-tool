@@ -275,9 +275,19 @@ def sync_mapping():
         record = Mapping.from_json(mapping)
         saved_record = Mapping.query.filter(Mapping.id == record.id).first()
         if saved_record:
-          operation = 'needs update'
+          saved_record.name = mapping.get('name')
+          saved_record.country = mapping.get('country')
+          saved_record.county = mapping.get('county')
+          saved_record.subcounty = mapping.get('subcounty')
+          saved_record.district = mapping.get('district')
+          saved_record.added_by = mapping.get('added_by')
+          saved_record.contact_person = mapping.get('contact_person')
+          saved_record.phone = mapping.get('phone')
+          saved_record.comment = mapping.get('comment')
+          operation = 'updated'
         else:
           operation = 'created'
+          mapping.synced = 1
           db.session.add(record)
           db.session.commit()
           
