@@ -24,11 +24,11 @@
                         <tr>
                           <th>Location Name</th>
                           <th>Parent Location</th>
+                          <th>Admin Name</th>
                           <th>Lat</th>
                           <th>Lon</th>
                           <th>Country Code</th>
-                          <th>Admin Name</th>
-                          <th></th>
+                          <th>Actions</th>
                         </tr>
                       </thead>
 
@@ -38,11 +38,12 @@
                         <tr>
                           <td>{{location.name}}</td>
                           <td>{{location.parent1.name}}</td>
+                          <td>{{location.admin_name}}</td>
                           <td>{{location.lat}}</td>
                           <td>{{location.lon}}</td>
                           <td>{{location.country_code}}</td>
-                          <td>{{location.admin_name}}</td>
-                          <td><a href="/location/{{location.id}}">More</a></td>
+
+                          <td><a href="/location/{{location.id}}"><i class="fa fa-pencil-square"></i></a></td>
                         </tr>
                         {% endfor %}
                       </tbody>
