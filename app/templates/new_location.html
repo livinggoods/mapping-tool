@@ -1,0 +1,37 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends 'base.html' %}
+{% block content %}
+          <div class="">
+            <div class="page-title">
+              <div class="title_left">
+                <h3>Location <small>Uganda Location Structure</small></h3>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Location <small>List of location to be synced to the apps</small></h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    {{ wtf.quick_form(form) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+{% endblock %}
+{% block additionalcss %}
+    <link href="{{ url_for('static', filename='css/flat/green.css') }}" rel="stylesheet">
+    <!-- Datatables -->
+    <link href="{{ url_for('static', filename='css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/buttons.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/responsive.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/scroller.bootstrap.min.css') }}" rel="stylesheet">
+
+{% endblock %}
