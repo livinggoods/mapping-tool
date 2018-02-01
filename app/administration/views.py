@@ -1,14 +1,14 @@
 from flask import render_template, redirect, url_for, flash, request, abort, \
     current_app, jsonify, make_response, json
 from flask_login import current_user, login_required
-from ..models import User, Location, IccmComponents
+from ..models import User, Location, IccmComponents, Geo
 from ..main.forms import IccmComponentForm
 from ..decorators import admin_required, permission_required
 from werkzeug.utils import secure_filename
 from .. import db, admin
 from . import administration
-from .forms import UploadLocationForm
-from ..utils.utils import process_location_csv
+from .forms import UploadLocationForm, LocationUgForm
+from ..utils.utils import process_location_csv, DataTables, Collections
 import time
 import os
 
@@ -223,3 +223,44 @@ def location_administration():
             return jsonify(status='created')
         else:
             return jsonify(filename='none')
+                   
+@administration.route('/location_data', methods=['GET', 'POST'])
+@login_required
+def administration_location_data():
+    if request.method == 'GET':
+        locations = Location.query.filter_by(archived=0)
+        page = request.args.get('page', 1, type=int)
+        pagination=locations.paginate(page, per_page=current_app.config['FOLLOWERS_PER_PAGE'],error_out=False)
+        return render_template('admin/location_data.html',
+                               endpoint='administration.administration_location_data',
+                               pagination=pagination)
+    else:
+        return jsonify(filename='none')
+
+
+@administration.route('/location/new', methods=['GET', 'POST'])
+@administration.route('/location/<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+def location_administration_edit(id=None):
+    form = LocationUgForm()
+    form.parent.choices = [(a.id, a.name) for a in \
+                               Location.query.filter(Location.admin_name.in_(['District','County'])).order_by('name')]
+    if form.validate_on_submit():
+        if id is not None:
+            location = Location.query.filter_by(id=id).first()
+            location.name = form.name.data
+            location.parent = form.parent.data
+            db.session.add(location)
+            db.session.commit()
+        else:
+            location = Location(name=form.name.data,
+                    parent=form.parent.data)
+            db.session.add(location)
+            db.session.commit()
+        return redirect(url_for('administration.administration_location_data'))
+    if id is not None:
+        pass
+        loc = Location.query.filter_by(id=id).first()
+        form.name.data = loc.name
+        form.parent.data = loc.parent
+    return render_template('new_location.html', form=form)
