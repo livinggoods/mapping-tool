@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 from .. import db, admin
 from . import administration
 from .forms import UploadLocationForm, LocationUgForm
-from ..utils.utils import process_location_csv, DataTables, Collections
+from ..utils.utils import process_location_csv
 import time
 import os
 
