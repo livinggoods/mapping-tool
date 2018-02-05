@@ -804,6 +804,13 @@ def get_training_data():
   else:
     return jsonify(message='not allowed'), 403
 
+@api.route('/recruitment-data/<string:id>', methods=['GET', 'POST'])
+def get_recruitmet_data(id):
+  if request.method == 'GET':
+    registrations = Registration.query.filter_by(recruitment=id).all()
+    return jsonify({'qualified_chps': [r.to_json() for r in registrations]})
+  else:
+    return jsonify(error="No records posted")
 
 @api.route('/sync/trainings', methods=['GET', 'POST'])
 def get_trainings():
