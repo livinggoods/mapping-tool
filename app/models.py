@@ -1948,14 +1948,16 @@ class Training(db.Model):
       'parish_id':self.parish_id,
       'lat':self.lat,
       'lon':self.lon,
-      #'status':self.status,
+      'training_status_id':self.training_status_id,
       'client_time':float(self.client_time),
       'created_by':self.created_by,
       'date_created':self.date_created,
       'archived':self.archived,
       'comment':self.comment,
+      'date_commenced':self.date_commenced,
+      'date_completed':self.date_completed,
       'training_venue_id' : self.training_venue_id,
-      'training_venue_details': self.training_venue.to_json()
+      'training_venue_details': self.training_venue.to_json() if self.training_venue else None
     }
     return json_record
     
