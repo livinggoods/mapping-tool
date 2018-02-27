@@ -796,8 +796,9 @@ def get_training_data():
     recruitments={}
     for interview in interviews:
       if interview.recruitment not in recruitments:
+        data_count = Registration.query.filter_by(id=interview.recruitment)
         recruitments[interview.recruitment] = interview.base_recruitment.to_json()
-        recruitments[interview.recruitment]['data']['count'] = interviews.count()
+        recruitments[interview.recruitment]['data']['count'] = data_count.count()
         recruitments[interview.recruitment]['data']['registrations'] = []
       recruitments[interview.recruitment]['data']['registrations'].append(interview.registration.to_json())
     return jsonify(draft_trainings=recruitments)
