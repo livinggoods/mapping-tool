@@ -25,9 +25,11 @@ class RequiredIf(object):
           DataRequired()(form, field)
     Optional()(form, field)
 
+
 def validate_uuid(uuid_string):
   UUID_RE = re.compile(r'^[a-f\d]{8}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{12}$', re.IGNORECASE)
   return bool(UUID_RE.search(str(uuid_string)))
+
 
 def process_location_csv(path):
   csv_rows=[]

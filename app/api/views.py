@@ -12,6 +12,7 @@ from ..models import (Permission, Role, User, IccmComponents, LinkFacility, Vill
 from .. data import data
 import csv
 import uuid
+import random
 
 
 @api.route('/firm_summary')
@@ -69,7 +70,7 @@ def api_recruitment(id):
             country = recruitment.country,
             district = recruitment.district,
             recruitment_id = recruitment.id,
-            status = 1,
+            training_status_id = 1,
             client_time = time.time(),
             created_by = 1,
           )
@@ -88,7 +89,47 @@ def api_recruitment(id):
       # recruitments = Recruitments(name=request.form.get('name'))
       # db.session.add(recruitments)
       # db.session.commit()
-      return jsonify(status='ok')
+      return jsonify(status='ok and settled', test=request.form.get('action'))
+    
+@api.route('/recruitment_training', methods=['GET','POST'])
+def api_recrutiment_trainig():
+  if request.form.get('action') == 'confirmed' or request.form.get('action') == 'draft':
+    recruitment = Recruitments.query.filter_by(id=request.form.get('id')).first()
+    recruitment.status = request.form.get('action')
+    db.session.add(recruitment)
+    db.session.commit()
+    # also create a draft training, that needs to be confirmed by the Training Team.
+    # When training has been confirmed, the person who confirmed it becomes the owner
+    if request.form.get('action') == 'confirmed':
+      training = Training.query.filter_by(recruitment_id=recruitment.id).first()
+      if not training:
+        training = Training(
+            id=uuid.uuid4(),
+            training_name=recruitment.name,
+            country=recruitment.country,
+            district=recruitment.district,
+            recruitment_id=recruitment.id,
+            training_status_id=1,
+            client_time=time.time(),
+        )
+        if recruitment.country == 'KE':
+          if recruitment.subcounty_id is not None:
+            training.subcounty_id = recruitment.subcounty_id
+          if recruitment.county_id is not None:
+            training.county_id = recruitment.county_id
+        else:
+          if recruitment.location_id is not None:
+            training.location_id = recruitment.location_id
+      db.session.add(training)
+      db.session.commit()
+      class_list = generate_training_classes(recruitment.to_json())
+      # create a class
+      
+      return jsonify(status='updated', id=recruitment.id, trainees_classes=class_list)
+    #   create classes
+    return jsonify(status='updated', id=recruitment.id)
+  else:
+    return jsonify(status='ok')
 
 @api.route('/users/json', methods=['GET'])
 def api_users():
@@ -288,7 +329,7 @@ def sync_mapping():
           operation = 'updated'
         else:
           operation = 'created'
-          mapping.synced = 1
+          record.synced = 1
           db.session.add(record)
           db.session.commit()
           
@@ -910,4 +951,55 @@ def get_mapping_details_summary(id):
       parish_data['village_data']['villages'] = [village.to_json() for village in villages]
       mapping['parishes'].append(parish_data)
     return jsonify(mappings=mapping)
+
+
+def generate_training_classes(recruitment):
+  # determine the number of classes
+  # count the number of items in the __dict__
+  # Based on the country, generate the number of classes
+  # The classes in each country have a set numnber of trainees.
+  count = recruitment.get('data').get('count')
+  number_of_classes = 1
+  class_details={}
+  trainees = recruitment.get('data').get('registrations')
+  if recruitment.get('country') == "KE" or recruitment.get('country') == 'UG':
+    if count <= 35:
+      class_details[1]= {[trainee.id for trainee in trainees]}
+    elif count > 35 and count <= 70:
+      number_of_classes = 2
+      class_1 = []
+      class_2 = []
+      x = 1
+      for trainee in trainees:
+        if x==1:
+          class_1.append(trainee.get('id'))
+          x += 1
+        elif x==2:
+          class_2.append(trainee.get('id'))
+          x = 1
+      class_details[1] = class_1
+      class_details[2] = class_2
+    elif count > 70 and count <= 105:
+      number_of_classes = 3
+      class_1= []
+      class_2= []
+      class_3 = []
+      x=1
+      for trainee in trainees:
+        if x == 1:
+          class_1.append(trainee.id)
+          x += 1
+        elif x == 2:
+          class_2.append(trainee.id)
+          x+=1
+        else:
+          class_3.append(trainee.id)
+          x=1
+      class_details[1] = class_1
+      class_details[2] = class_2
+      class_details[3] = class_3
+    return {"classes": number_of_classes, 'details':class_details}
+  else:
+    return {'count': recruitment.get('data').get('count'), 'len': len(recruitment.get('data').get('registrations'))}
+
 

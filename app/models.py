@@ -2153,10 +2153,11 @@ class TrainingClasses(db.Model):
   date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
   archived = Column(Integer, server_default=text("'0'"))
   country = Column(String(20), server_default=text("'UG'"), nullable=False)
-  # lead_trainer = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+  lead_trainer = Column(ForeignKey(u'users.id'), nullable=True, index=False)
 
-  class_creator = relationship(u'User')
+  class_creator = relationship(u'User', foreign_keys=[created_by])
   training = relationship(u'Training')
+  trainer = relationship(u'User', foreign_keys=[lead_trainer])
 
   def to_json(self):
     json_record = {
