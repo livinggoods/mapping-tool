@@ -66,7 +66,7 @@ class GpsData(db.Model):
 class Branch(db.Model):
     __tablename__ = 'branch'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String(64), primary_key=True)
     branch_name = Column(String(45)) # e.g. Busia
     branch_code = Column(String(45)) # BUS
     mapping_id = Column(ForeignKey(u'mapping.id'), nullable=True)

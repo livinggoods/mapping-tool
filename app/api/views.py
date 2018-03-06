@@ -123,9 +123,40 @@ def api_recrutiment_trainig():
       db.session.add(training)
       db.session.commit()
       class_list = generate_training_classes(recruitment.to_json())
-      # create a class
+      # create a class list
+      class_details = class_list.get('details')
+      for k, v in class_details.iteritems():
+        # class is k, trainees = v
+        new_class = TrainingClasses.query.filter_by(training_id=str(training.id),class_name=str(k)).first()
+        if not new_class:
+          new_class = TrainingClasses(
+              training_id = training.id,
+              class_name = k,
+              created_by=1,
+              client_time=int(time.time()),
+              date_created=time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
+              country =recruitment.country
+          )
+          db.session.add(new_class)
+          db.session.commit()
+        #   Create trainees
+        for trainee_id in v:
+          trainee = Trainees.query.filter_by(id=trainee_id).first()
+          if not trainee:
+            trainee = Trainees(
+                id=trainee_id,
+                registration_id = trainee_id,
+                class_id = new_class.id,
+                training_id = training.id,
+                country = recruitment.country,
+                date_created = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
+                added_by = 1,
+                client_time = int(time.time()),
+            )
+            db.session.add(trainee)
+            db.session.commit()
       
-      return jsonify(status='updated', id=recruitment.id, trainees_classes=class_list)
+      return jsonify(status='updated', id=recruitment.id, trainees_classes=class_details)
     #   create classes
     return jsonify(status='updated', id=recruitment.id)
   else:
