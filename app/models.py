@@ -1930,7 +1930,7 @@ class Training(db.Model):
   ward = relationship(u'Ward')
   parish = relationship(u'Parish')
   user = relationship(u'User')
-  recruitment = relationship(u'Recruitments')
+  #recruitment = relationship(u'Recruitments')
   training_venue = relationship(u'TrainingVenues')
   
   def to_json(self):
@@ -1941,7 +1941,6 @@ class Training(db.Model):
       'county_id':self.county_id,
       'location_id':self.location_id,
       'subcounty_id':self.subcounty_id,
-      'recruitment_details':self.recruitment.to_json(),
       'ward_id':self.ward_id,
       'district':self.district,
       'recruitment_id':self.recruitment_id,
