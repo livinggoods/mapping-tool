@@ -232,7 +232,7 @@ def administration_location_data():
                 'subtitle': 'List of location data'}
         locations = Location.query.filter_by(archived=0)
         page = request.args.get('page', 1, type=int)
-        pagination=locations.paginate(page, per_page=current_app.config['FOLLOWERS_PER_PAGE'],error_out=False)
+        pagination=locations.paginate(page, per_page=current_app.config['PER_PAGE'],error_out=False)
         return render_template('admin/location_data.html',
                                endpoint='administration.administration_location_data',
                                pagination=pagination, page=page)
