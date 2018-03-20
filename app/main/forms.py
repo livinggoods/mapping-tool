@@ -195,13 +195,12 @@ class TrainingSessionForm(Form):
 
 class SessionTopicForm(Form):
     name = StringField('Name', validators=[DataRequired()])
-    country = SelectField('Country', validators=[DataRequired()], coerce=int)
-    archived = SelectField('Archived', validators=[], choices=[('0', 'False'), ('1', 'True')])
+    country = SelectField('Country', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):
         super(SessionTopicForm, self).__init__(*args, **kwargs)
-        self.country.choices = [(geo.id, geo.geo_name)
+        self.country.choices = [(geo.geo_code, geo.geo_name)
                                 for geo in Geo.query.order_by(Geo.geo_name).all()]
 
 
