@@ -2105,6 +2105,21 @@ class TrainingStatus(db.Model):
   date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
 
   user = relationship(u'User')
+  
+  
+class TraineeStatus(db.Model):
+  __tablename__ = 'trainee_status'
+
+  id = db.Column(db.Integer, primary_key=True, nullable=False)
+  name = db.Column(db.String(20))
+  archived = Column(Integer, server_default=text("'0'"))
+  readonly = Column(Integer, server_default=text("'0'"))
+  country = db.Column(db.String(20), nullable=False)
+  client_time = db.Column(db.Numeric)
+  created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+  date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=True)
+
+  user = relationship(u'User')
 
 
 class TrainingRoles(db.Model):
