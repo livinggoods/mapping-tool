@@ -122,6 +122,22 @@ def api_recrutiment_trainig():
             training.location_id = recruitment.location_id
       db.session.add(training)
       db.session.commit()
+
+      session_topics = SessionTopic.query.filter_by(country=training.country, archived=0)
+      mytopic = []
+      for topic in session_topics:
+        training_session = TrainingSession.query.filter_by(country=training.country, training_id=training.id,
+                                                        session_topic_id=topic.id, archived=0).first()
+        if not training_session:
+          training_session = TrainingSession(
+              id=uuid.uuid4(),
+              training_id=training.id,
+              session_topic_id=topic.id,
+              country=training.country,
+              created_by=1
+          )
+        db.session.add(training_session)
+        db.session.commit()
       class_list = generate_training_classes(recruitment.to_json())
       # create a class list
       class_details = class_list.get('details')
