@@ -171,6 +171,28 @@ def api_recrutiment_trainig():
             )
             db.session.add(trainee)
             db.session.commit()
+          #Add the trainee to some sessions
+          training_sessions_list = TrainingSession.query.filter_by(training_id=training.id, archived=0)
+          for session in training_sessions_list:
+            sess = SessionAttendance.query.filter_by(trainee_id=trainee_id, training_session_id=session.id, training_id=training.id).first()
+            if not sess:
+              sess = SessionAttendance(
+                  id = uuid.uuid4()
+              )
+            sess.training_session_id = session.id
+            sess.trainee_id = trainee.id
+            sess.training_id = training.id
+            sess.country = training.country
+            sess.client_time = int(time.time())
+            sess.date_created = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+            db.session.add(sess)
+            db.session.commit()
+            
+      # create / generate Sessions
+      #TrainingSessiions, needs to have a training_topic
+      # @TODO  create initial 3 training_sessions
+        
+      #   Create default Trainee attendances here, we export this to the App
       
       return jsonify(status='updated', id=recruitment.id, trainees_classes=class_details)
     #   create classes
@@ -178,6 +200,25 @@ def api_recrutiment_trainig():
   else:
     return jsonify(status='ok')
 
+@api.route('/get/session-topics', methods=['GET'])
+def get_session_topics():
+    return jsonify(topics=[t.to_json() for t in SessionTopic.query.filter_by(archived=0)])
+
+
+@api.route('/get/training/<string:id>', methods=['GET'])
+def get_training(id):
+  training = Training.query.filter_by(id=id).first()
+  training = training.to_json()
+  training['trainees'] = [record.to_json() for record in Trainees.query.filter_by(training_id=id)]
+  training['training_sessions'] = [session.to_json() for session in TrainingSession.query.filter_by(training_id=id)]
+  training['classes'] = [record.to_json() for record in TrainingClasses.query.filter_by(training_id=id)]
+  return jsonify(training=training)
+
+
+@api.route('/get/training/session-attendances/<string:id>')
+def get_training_attendance(id):
+  return jsonify(attendance =[a.to_json() for a in SessionAttendance.query.filter_by(training_id=id)])
+  
 @api.route('/users/json', methods=['GET'])
 def api_users():
   users = User.query.all()
