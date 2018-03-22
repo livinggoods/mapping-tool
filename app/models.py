@@ -1381,6 +1381,23 @@ class LinkFacility(db.Model):
   facility_id=Column(String(64), nullable=True)
   archived = Column(Integer, nullable=False, server_default=text("'0'"))
   
+  def to_json(self):
+    json_record ={
+      'id': self.id if self.id is not None else None,
+      'facility_name': self.facility_name if self.facility_name is not None else None,
+      'county': self.county if self.county is not None else None,
+      'lat': float(self.lat) if self.lat is not None else None,
+      'lon': float(self.lon) if self.lon is not None else None,
+      'subcounty': self.subcounty if self.subcounty is not None else None,
+      'client_time': float(self.client_time) if self.client_time is not None else None,
+      'date_added': self.date_added if self.date_added is not None else None,
+      'addedby': self.addedby if self.addedby is not None else None,
+      'mrdt_levels': float(self.mrdt_levels) if self.mrdt_levels is not None else None,
+      'act_levels': float(self.act_levels) if self.act_levels is not None else None,
+      'country': self.country if self.country is not None else None,
+      'facility_id': self.facility_id if self.facility_id is not None else None,
+      'archived': self.archived if self.archived is not None else None
+    }
   @staticmethod
   def from_json(json):
     return LinkFacility(
