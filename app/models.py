@@ -102,7 +102,7 @@ class Education(db.Model):
     
     def to_json(self):
       json_record = {
-        'id' : self.id,
+        '_id' : self.id,
         'name' : self.name,
         'level_type' : self.level_type,
         'hierachy' : self.hierachy,
