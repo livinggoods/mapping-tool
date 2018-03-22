@@ -6,7 +6,7 @@ import json
 import time
 from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
-from ..models import (Permission, Role, User, IccmComponents, LinkFacility, Village, PartnerActivity, GpsData, Ward, County,
+from ..models import (Education, SessionAttendance, User, IccmComponents, LinkFacility, Village, PartnerActivity, GpsData, Ward, County,
                       Location, SessionTopic, CommunityUnit, Referral, Recruitments, Interview, Exam, TrainingSession,
                       Partner, Mapping, Parish, Training, Trainees, TrainingClasses, Cohort, Registration)
 from .. data import data
