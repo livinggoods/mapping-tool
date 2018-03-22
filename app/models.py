@@ -787,19 +787,19 @@ class Parish(db.Model):
     
     def to_json(self):
       json_record={
-        'id':self.id,
-        'name':self.name,
-        'parent':self.parent,
-        'mapping_id':self.mapping_id,
-        'mapping': self.mapping.to_json(),
-        'added_by':self.added_by,
-        'contact_person':self.contact_person,
-        'phone':self.phone,
-        'comment':self.comment,
-        'synced':self.synced,
-        'country':self.country,
-        'client_time':float(self.client_time),
-        'date_added':self.date_added
+        'id':self.id if self.id is not None else None,
+        'name':self.name if self.name is not None else None,
+        'parent':self.parent if self.parent is not None else None,
+        'mapping_id':self.mapping_id if self.mapping_id is not None else None,
+        'mapping': self.mapping.to_json() if self.mapping_id is not None else None,
+        'added_by':self.added_by if self.added_by is not None else None,
+        'contact_person':self.contact_person if self.contact_person is not None else None,
+        'phone':self.phone if self.phone is not None else None,
+        'comment':self.comment if self.comment is not None else None,
+        'synced':self.synced if self.synced is not None else None,
+        'country':self.country if self.country is not None else None,
+        'client_time':float(self.client_time) if self.client_time is not None else None,
+        'date_added':self.date_added if self.date_added is not None else None
       }
       return json_record
 
