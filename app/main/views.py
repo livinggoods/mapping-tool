@@ -81,9 +81,12 @@ def application_details(id):
 def trainings():
   trainings = Training.query.filter_by(archived=0)
   page = {'title': 'Trainings', 'subtitle': 'All trainings'}
+  count = request.args.get('page', 1, type=int)
+  pagination = trainings.paginate(count, per_page=current_app.config['PER_PAGE'], error_out=False)
   return render_template(
       'trainings.html',
-      trainings=trainings,
+      endpoint='main.trainings',
+      pagination=pagination,
       page=page
     )
 
@@ -113,7 +116,7 @@ def new_training():
     completed_epoch = int(time.mktime(time.strptime(str(completed_date), pattern)))
 
     new_training = Training(
-      id=uuid.uuid1(),
+      id=uuid.uuid4(),
       training_name=form.training_name.data,
       country=Geo.query.filter_by(id=form.country.data).first().geo_code,
       county_id=form.county.data,
@@ -165,7 +168,7 @@ def new_training_venue():
 
   if form.validate_on_submit():
     new_training_venue = TrainingVenues(
-      id=uuid.uuid1(),
+      id=uuid.uuid4(),
       name=form.name.data,
       mapping=form.mapping.data,
       lat=form.lat.data,
@@ -471,7 +474,7 @@ def new_training_sessions(training_id, class_id):
   }
   if form.validate_on_submit():
     new_session = TrainingSession(
-      id=uuid.uuid1(),
+      id=uuid.uuid4(),
       training_session_type_id=form.training_session_type.data,
       class_id=training_class.id,
       training_id=training.id,
@@ -560,33 +563,46 @@ def delete_training_sessions(training_id, class_id, session_id):
   )
 
 
-@main.route('/training/<string:training_id>/<string:class_id>/new_session_topic', methods=['GET', 'POST'])
+@main.route('/training/new_session_topic/<int:topic_id>', methods=['GET', 'POST'])
+@main.route('/training/new_session_topic', methods=['GET', 'POST'])
 @login_required
-def new_session_topic(training_id, class_id):
+def new_session_topic(topic_id = None):
   form = SessionTopicForm()
   if form.validate_on_submit():
-    session_topic_ids = [
-      sess_t_id[0] for sess_t_id in SessionTopic.query.with_entities(SessionTopic.id)
-    ]
-    if len(max(session_topic_ids)) == 0:
-      new_id = 0
+    if topic_id:
+      edit_topic = SessionTopic.query.filter_by(id=topic_id).first()
+      edit_topic.name = form.name.data
+      edit_topic.country = form.country.data
+      db.session.add(edit_topic)
     else:
-      new_id = max(session_topic_ids)+1
-    new_topic = SessionTopic(
-      id=new_id,
-      name=form.name.data,
-      country=Geo.query.filter_by(id=form.country.data).first().geo_code,
-      archived=form.archived.data,
-      date_added=strftime("%Y-%m-%d %H:%M:%S", gmtime()),
-      added_by=current_user.id
-    )
-    db.session.add(new_topic)
+      new_topic = SessionTopic(
+        name=form.name.data,
+        country=form.country.data,
+        date_added=strftime("%Y-%m-%d %H:%M:%S", gmtime()),
+        added_by=current_user.id
+      )
+      db.session.add(new_topic)
     db.session.commit()
-    return redirect('/training/' + training_id + '/classes/' + class_id + '/class_sessions')
+    return redirect('/training/session_topics')
+  if topic_id:
+    topic = SessionTopic.query.filter_by(id=topic_id).first()
+    form.name.data = topic.name
+    form.country.data = topic.country
   return render_template(
     'form_session_topic.html',
     form=form
   )
+  
+@main.route('/training/session_topics', methods=['GET', 'POST'])
+@login_required
+def training_session_topics():
+  topics = SessionTopic.query.filter_by(archived=0)
+  page = {'title': 'Location Data',
+          'subtitle': 'List of location data'}
+  count = request.args.get('page', 1, type=int)
+  pagination = topics.paginate(count, per_page = current_app.config['PER_PAGE'], error_out=False)
+  return render_template(
+    'session_topics.html', endpoint='main.training_session_topics', pagination= pagination, page=page)
 
 
 @main.route('/training/<string:training_id>/<string:class_id>/new_session_type', methods=['GET', 'POST'])
@@ -1567,7 +1583,7 @@ def followers(username):
         return redirect(url_for('main.index'))
     page = request.args.get('page', 1, type=int)
     pagination = user.followers.paginate(
-        page, per_page=current_app.config['FOLLOWERS_PER_PAGE'],
+        page, per_page=current_app.config['PER_PAGE'],
         error_out=False)
     follows = [{'user': item.follower, 'timestamp': item.timestamp}
                for item in pagination.items]
@@ -1584,7 +1600,7 @@ def followed_by(username):
         return redirect(url_for('.index'))
     page = request.args.get('page', 1, type=int)
     pagination = user.followed.paginate(
-        page, per_page=current_app.config['FOLLOWERS_PER_PAGE'],
+        page, per_page=current_app.config['PER_PAGE'],
         error_out=False)
     follows = [{'user': item.followed, 'timestamp': item.timestamp}
                for item in pagination.items]
