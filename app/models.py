@@ -2036,6 +2036,22 @@ class SessionAttendance(db.Model):
   training_session_type = relationship(u'TrainingSessionType')
   training = relationship(u'Training')
   user = relationship(u'User')
+  
+  def to_json(self):
+    return {
+      'id': self.id,
+      'training_session_id': self.training_session_id,
+      'trainee_id': self.trainee_id,
+      'training_session_type_id': self.training_session_type_id,
+      'training_id': self.training_id,
+      'country': self.country,
+      'attended': self.attended,
+      'client_time': float(self.client_time) if self.client_time is not None else None,
+      'created_by': self.created_by,
+      'date_created': self.date_created,
+      'archived': self.archived,
+      'comment': self.comment
+    }
 
 class SessionTopic(db.Model):
   __tablename__ = 'session_topic'
@@ -2048,6 +2064,16 @@ class SessionTopic(db.Model):
   added_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
 
   user = relationship(u'User')
+  
+  def to_json(self):
+    return {
+      'id':self.id,
+      'name':self.name,
+      'country':self.country,
+      'archived':self.archived,
+      'date_added':self.date_added,
+      'added_by':self.added_by
+    }
 
 
 class TrainingSession(db.Model):
@@ -2055,16 +2081,16 @@ class TrainingSession(db.Model):
 
   id = db.Column(db.String(64), primary_key=True, nullable=False, unique=True)
   training_session_type_id = Column(ForeignKey(u'training_session_type.id'), nullable=True, index=True)
-  class_id = Column(ForeignKey(u'training_classes.id'), nullable=False, index=True)
+  class_id = Column(ForeignKey(u'training_classes.id'), nullable=True, index=False)
   training_id = Column(ForeignKey(u'training.id'), nullable=False, index=True)
-  trainer_id = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+  trainer_id = Column(ForeignKey(u'users.id'), nullable=True, index=True)
   country = db.Column(db.String(20))
   archived = Column(Integer, server_default=text("'0'"))
   comment = Column(Text, nullable=True)
   session_start_time = db.Column(db.Numeric)
   session_end_time = db.Column(db.Numeric)
-  session_topic_id = Column(ForeignKey(u'session_topic.id'), nullable=False, index=True)
-  session_lead_trainer = Column(ForeignKey(u'users.id'), nullable=False, index=True)
+  session_topic_id = Column(ForeignKey(u'session_topic.id'), nullable=True, index=True)
+  session_lead_trainer = Column(ForeignKey(u'users.id'), nullable=True, index=True)
   client_time = db.Column(db.Numeric)
   created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
   date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
@@ -2076,6 +2102,25 @@ class TrainingSession(db.Model):
   trainer = relationship(u'User', foreign_keys=[trainer_id])
   session_creator = relationship(u'User', foreign_keys=[created_by])
   session_topic = relationship(u'SessionTopic')
+  
+  def to_json(self):
+    return {
+      'id':self.id,
+    'training_session_type_id':self.training_session_type_id,
+    'class_id':self.class_id,
+    'training_id':self.training_id,
+    'trainer_id':self.trainer_id,
+    'country':self.country,
+    'archived':self.archived,
+    'comment':self.comment,
+    'session_start_time':float(self.session_start_time) if self.session_start_time is not None else None,
+    'session_end_time':float(self.session_end_time) if self.session_end_time is not None else None,
+    'session_topic_id':self.session_topic_id,
+    'session_lead_trainer':self.session_lead_trainer,
+    'client_time': float(self.client_time) if self.client_time is not None else None,
+    'created_by':self.created_by,
+    'date_created': self.date_created,
+    }
 
 
 class TrainingSessionType(db.Model):
@@ -2178,8 +2223,12 @@ class TrainingClasses(db.Model):
       'id': self.id,
       'class_name': self.class_name,
       'created_by': self.created_by,
-      'client_time': self.client_time,
-      'date_created': self.date_created
+      'client_time': float(self.client_time),
+      'training_id': self.training_id,
+      'date_created': self.date_created,
+      'archived': self.archived,
+      'country': self.country,
+      'lead_trainer': self.lead_trainer
     }
     return json_record
 
@@ -2205,17 +2254,29 @@ class Trainees(db.Model):
   date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
   added_by = Column(ForeignKey(u'users.id'), nullable=False, index=True)
   client_time = Column(db.Numeric)
-  branch = Column(ForeignKey(u'branch.id'), nullable=False, index=True)
-  cohort = Column(ForeignKey(u'cohort.id'), nullable=False, index=True)
-  chp_code = Column(String(45), nullable=False)
-
+  branch = Column(ForeignKey(u'branch.id'), nullable=True, index=True)
+  cohort = Column(ForeignKey(u'cohort.id'), nullable=True, index=True)
+  chp_code = Column(String(45), nullable=True)
+  comment = Column(Text, nullable=True)
+  trainee_status = Column(ForeignKey(u'trainee_status.id'), nullable=True)
+  
+  registration = relationship(u'Registration')
 
   def to_json(self):
     json_record = {
       'id': self.id,
       'registration_id': self.registration_id,
+      'registration': self.registration.to_json(),
       'class_id': self.class_id,
-      'training_id': self.training_id
+      'training_id': self.training_id,
+      'country': self.country,
+      'date_created': self.date_created,
+      'added_by': self.added_by,
+      'client_time': float(self.client_time),
+      'branch': self.branch,
+      'cohort': self.cohort,
+      'chp_code': self.chp_code,
+      'comment': self.comment,
     }
     return json_record
 
