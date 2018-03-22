@@ -1398,6 +1398,9 @@ class LinkFacility(db.Model):
       'facility_id': self.facility_id if self.facility_id is not None else None,
       'archived': self.archived if self.archived is not None else None
     }
+    return json_record
+  
+  
   @staticmethod
   def from_json(json):
     return LinkFacility(
