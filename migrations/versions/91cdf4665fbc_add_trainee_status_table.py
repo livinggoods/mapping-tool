@@ -34,7 +34,7 @@ def upgrade():
     
     ## Some seed data:
     op.bulk_insert(status_table, [
-        {'id':1, 'name':'Ongoing', 'archived':0, 'readonly':1, 'country':'KE'},
+        {'id':1, 'name':'Graduate', 'archived':0, 'readonly':1, 'country':'KE'},
         {'id':2, 'name':'Dropped', 'archived':0, 'readonly':1, 'country':'KE'}
     ])
     # ### end Alembic commands ###
