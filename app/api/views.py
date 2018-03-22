@@ -988,14 +988,18 @@ def sync_training_classes():
       return jsonify(message='No records posted')
 
 
+@api.route('/sync/<string:training_id>/trainees', methods=['GET', 'POST'])
 @api.route('/sync/trainees', methods=['GET', 'POST'])
-def sync_trainees():
+def sync_trainees(training_id=None):
   """
   Syncs trainees to and from the cloud
   """
   if request.method == 'GET':
-    records = Trainees.query.all()
-    return jsonify({'trainees': [record.to_json for record in records]})
+    if training_id:
+      records = Trainees.query.filter_by(training_id=training_id).all()
+    else:
+      records = Trainees.query.all()
+    return jsonify({'trainees': [record.to_json() for record in records]})
   else:
     status = []
     trainees = request.json.get('trainees')
