@@ -1359,6 +1359,53 @@ class CommunityUnit(db.Model):
         comment =json.get('comment'),
         archived =json.get('archived'),
     )
+  
+  def to_json(self):
+    return {
+      'name': self.name if self.name is not None else None,
+      'mappingid': self.mappingid if self.mappingid is not None else None,
+      'lat': self.lat if self.lat is not None else None,
+      'lon': self.lon if self.lon is not None else None,
+      'country': self.country if self.country is not None else None,
+      'subcountyid': self.subcountyid if self.subcountyid is not None else None,
+      'linkfacilityid': self.linkfacilityid if self.linkfacilityid is not None else None,
+      'areachiefname': self.areachiefname if self.areachiefname is not None else None,
+      'ward': self.ward if self.ward is not None else None,
+      'economicstatus': self.economicstatus if self.economicstatus is not None else None,
+      'privatefacilityforact': self.privatefacilityforact if self.privatefacilityforact is not None else None,
+      'privatefacilityformrdt': self.privatefacilityformrdt if self.privatefacilityformrdt is not None else None,
+      'nameofngodoingiccm': self.nameofngodoingiccm if self.nameofngodoingiccm is not None else None,
+      'nameofngodoingmhealth': self.nameofngodoingmhealth if self.nameofngodoingmhealth is not None else None,
+      'client_time': self.client_time if self.client_time is not None else None,
+      'date_added': self.date_added if self.date_added is not None else None,
+      'addedby': self.addedby if self.addedby is not None else None,
+      'numberofchvs': self.numberofchvs if self.numberofchvs is not None else None,
+      'householdperchv': self.householdperchv if self.householdperchv is not None else None,
+      'numberofvillages': self.numberofvillages if self.numberofvillages is not None else None,
+      'distancetobranch': self.distancetobranch if self.distancetobranch is not None else None,
+      'transportcost': self.transportcost if self.transportcost is not None else None,
+      'distancetomainroad': self.distancetomainroad if self.distancetomainroad is not None else None,
+      'noofhouseholds': self.noofhouseholds if self.noofhouseholds is not None else None,
+      'mohpoplationdensity': self.mohpoplationdensity if self.mohpoplationdensity is not None else None,
+      'estimatedpopulationdensity': self.estimatedpopulationdensity if self.estimatedpopulationdensity is not None else None,
+      'distancetonearesthealthfacility': self.distancetonearesthealthfacility if self.distancetonearesthealthfacility is not None else None,
+      'actlevels': self.actlevels if self.actlevels is not None else None,
+      'actprice': self.actprice if self.actprice is not None else None,
+      'mrdtlevels': self.mrdtlevels if self.mrdtlevels is not None else None,
+      'mrdtprice': self.mrdtprice if self.mrdtprice is not None else None,
+      'noofdistibutors': self.noofdistibutors if self.noofdistibutors is not None else None,
+      'chvstrained': self.chvstrained if self.chvstrained is not None else None,
+      'presenceofestates': self.presenceofestates if self.presenceofestates is not None else None,
+      'presenceoffactories': self.presenceoffactories if self.presenceoffactories is not None else None,
+      'presenceofhostels': self.presenceofhostels if self.presenceofhostels is not None else None,
+      'tradermarket': self.tradermarket if self.tradermarket is not None else None,
+      'largesupermarket': self.largesupermarket if self.largesupermarket is not None else None,
+      'ngosgivingfreedrugs': self.ngosgivingfreedrugs if self.ngosgivingfreedrugs is not None else None,
+      'ngodoingiccm': self.ngodoingiccm if self.ngodoingiccm is not None else None,
+      'ngodoingmhealth': self.ngodoingmhealth if self.ngodoingmhealth is not None else None,
+      'comment': self.comment if self.comment is not None else None,
+      'archived': self.archived if self.archived is not None else None
+    }
 
   
 
