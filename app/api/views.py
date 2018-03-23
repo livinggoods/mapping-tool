@@ -632,7 +632,7 @@ def sync_partner():
 @api.route('/sync/community_unit', methods=['GET', 'POST'])
 def sync_cu():
   if request.method == 'GET':
-    records = CommunityUnit.query.filter(CommunityUnit.archived != 1)
+    records = CommunityUnit.query.filter_by(archived = 0)
     return jsonify({'community_units': [record.to_json() for record in records]})
   else:
     status = []
