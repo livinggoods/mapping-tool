@@ -228,14 +228,14 @@ def location_administration():
 @login_required
 def administration_location_data():
     if request.method == 'GET':
-        page = {'title': 'Location Data',
+        page_data = {'title': 'Location Data',
                 'subtitle': 'List of location data'}
         locations = Location.query.filter_by(archived=0)
         page = request.args.get('page', 1, type=int)
         pagination=locations.paginate(page, per_page=current_app.config['PER_PAGE'],error_out=False)
         return render_template('admin/location_data.html',
                                endpoint='administration.administration_location_data',
-                               pagination=pagination, page=page)
+                               pagination=pagination, page=page_data)
     else:
         return jsonify(filename='none')
 
