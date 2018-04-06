@@ -756,16 +756,22 @@ def mapping_village_data(id):
     for village in villages:
       mapping = village.mapping
       subcounty = Location.query.filter_by(id=mapping.subcounty).first()
-      county = subcounty.parent1
-      district=county.parent1
+      if subcounty:
+        county = subcounty.parent1
+      else:
+        county = ""
+      if county != "":
+        district=county.parent1
+      else:
+        district = ""
       cumulative_chps =village.chps_to_recruit() + cumulative_chps
       ranks.append(village.village_index_score())
       rowdata=[
-        district.name,
-        county.name,
-        subcounty.name,
-        village.parish.name,
-        village.village_name,
+        district.name if district != "" else "",
+        county.name if county != "" else "",
+        subcounty.name if subcounty != "" else "",
+        village.parish.name if village != "" else "",
+        village.village_name if village != "" else "",
         "Ranking not found",
         village.village_index_score(),
         village.chps_to_recruit(),
