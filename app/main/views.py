@@ -769,7 +769,7 @@ def mapping_village_data(id):
       rowdata=[
         district.name if district != "" else "",
         county.name if county != "" else "",
-        subcounty.name if subcounty != "" else "",
+        subcounty.name if subcounty is not None else "",
         village.parish.name if village != "" else "",
         village.village_name if village != "" else "",
         "Ranking not found",
