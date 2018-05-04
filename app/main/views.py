@@ -1177,7 +1177,7 @@ def export_scoring_tool(id):
 def recruitments():
   if request.method == 'GET':
     page={'title':'Recruitments', 'subtitle':'Recruitments done so far'}
-    recruitments = Recruitments.query.filter_by(archived=0)
+    recruitments = Recruitments.query.filter_by(archived=0).order_by(Recruitments.client_time.desc())
     paging_data = request.args.get('page', 1, type=int)
     pagination = recruitments.paginate(paging_data, per_page=current_app.config['PER_PAGE'], error_out=False)
     return render_template('recruitments.html',
