@@ -228,7 +228,7 @@ def edit_training(id):
   form.subcounty.data = training.subcounty
   form.ward.data = training.ward
   form.district.data = training.district
-  form.recruitment.data = training.recruitment
+  form.recruitment.data = training.recruitment_id
   form.parish.data = training.parish
   form.lat.data = training.lat
   form.lon.data = training.lon
@@ -1178,7 +1178,11 @@ def recruitments():
   if request.method == 'GET':
     page={'title':'Recruitments', 'subtitle':'Recruitments done so far'}
     recruitments = Recruitments.query.filter_by(archived=0)
-    return render_template('recruitments.html', recruitments=recruitments, currency=currency, page=page)
+    paging_data = request.args.get('page', 1, type=int)
+    pagination = recruitments.paginate(paging_data, per_page=current_app.config['PER_PAGE'], error_out=False)
+    return render_template('recruitments.html',
+                           endpoint='main.recruitments',
+                           pagination=pagination, page=page)
   else:
     # check if there is an iD or if the ID is blank
     if 'id' in request.form:
