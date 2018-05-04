@@ -8,7 +8,7 @@ from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
 from ..models import (Education, SessionAttendance, User, IccmComponents, LinkFacility, Village, PartnerActivity, GpsData, Ward, County,
                       Location, SessionTopic, CommunityUnit, Referral, Recruitments, Interview, Exam, TrainingSession,
-                      Partner, Mapping, Parish, Training, Trainees, TrainingClasses, Cohort, Registration)
+                      Partner, Mapping, Parish, Training, Trainees, TrainingClasses, TraineeStatus, Registration)
 from .. data import data
 import csv
 import uuid
