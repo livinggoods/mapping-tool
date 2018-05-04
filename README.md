@@ -15,7 +15,7 @@ This is a simple dashboarding application built using Flask and Bootstrap.  The 
 2. Create a virtualenv in the project directory
 
   ```
-  cd dashboard
+  cd mapping-tool
   virtualenv venv
   source venv/bin/activate
   ```
