@@ -4058,3 +4058,17 @@ ul.messages li .img-div i{
     border-radius: 10px;
     padding: 6px 35px;
  }
+
+ .float-right{
+    float: right;
+ }
+ .float-left{
+ float: left;
+ }
+ .pre-pagination{
+   margin: 0px 0 !important;
+ }
+
+ .pagination{
+   margin: 0px 0 !important;
+ }
