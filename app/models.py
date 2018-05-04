@@ -2218,6 +2218,18 @@ class TrainingStatus(db.Model):
 
   user = relationship(u'User')
   
+  def to_json(self):
+    return{
+      'id': self.id if self.id is not None else None,
+      'name': self.name if self.name is not None else None,
+      'archived': self.archived==1 if self.archived is not None else None,
+      'readonly': self.readonly==1 if self.readonly is not None else None,
+      'country': self.country if self.country is not None else None,
+      'client_time': self.client_time if self.client_time is not None else None,
+      'created_by': self.created_by if self.created_by is not None else None,
+      'date_created': self.date_created if self.date_created is not None else None
+    }
+  
   
 class TraineeStatus(db.Model):
   __tablename__ = 'trainee_status'
@@ -2232,6 +2244,18 @@ class TraineeStatus(db.Model):
   date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=True)
 
   user = relationship(u'User')
+  
+  def to_json(self):
+    return {
+      'id': self.id if self.id is not None else None,
+      'name': self.name if self.name is not None else None,
+      'archived': self.archived==1 if self.archived is not None else None,
+      'readonly': self.readonly if self.readonly is not None else None,
+      'country': self.country if self.country is not None else None,
+      'client_time': self.client_time if self.client_time is not None else None,
+      'created_by': self.created_by if self.created_by is not None else None,
+      'date_created': self.date_created if self.date_created is not None else None
+    }
 
 
 class TrainingRoles(db.Model):
