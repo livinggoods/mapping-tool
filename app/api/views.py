@@ -1048,6 +1048,10 @@ def get_mapping_details_summary(id):
 def get_education():
   return jsonify(education=[e.to_json() for e in Education.query.filter_by(archived=0)])
 
+@api.route('/sync/trainee-status', methods=['GET','POST'])
+def get_training_status():
+  return jsonify(training_status=[st.to_json() for st in TraineeStatus.query.filter_by(archived=0)])
+
 def generate_training_classes(recruitment):
   # determine the number of classes
   # count the number of items in the __dict__
