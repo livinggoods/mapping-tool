@@ -121,7 +121,7 @@ $('.confirm').click(function(){
     recruitmentId = $(this).attr('recruitment');
     action = $(this).attr('action');
     $.ajax({
-      url:'/api/v1/recruitment/'+recruitmentId,
+      url:'/api/v1/recruitment_training,
       type: 'post',
       data: {action:action, id:recruitmentId},
       dataType:'json',
