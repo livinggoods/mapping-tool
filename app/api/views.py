@@ -1063,7 +1063,8 @@ def generate_training_classes(recruitment):
   trainees = recruitment.get('data').get('registrations')
   if recruitment.get('country') == "KE" or recruitment.get('country') == 'UG':
     if count <= 35:
-      class_details[1]= {[trainee.id for trainee in trainees]}
+      if len(trainees) > 0:
+        class_details[1]= {[trainee.id for trainee in trainees]}
     elif count > 35 and count <= 70:
       number_of_classes = 2
       class_1 = []
