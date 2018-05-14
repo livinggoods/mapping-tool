@@ -530,7 +530,7 @@ class Village(db.Model):
         'county':self.county,
         'sub_county_id':self.sub_county_id,
         'parish':self.parish_id,
-        'community_unit':self.community_unit,
+        'community_unit':self.community_unit_id,
         'ward':self.ward,
         'link_facility_id':self.link_facility_id,
         'area_chief_name':self.area_chief_name,

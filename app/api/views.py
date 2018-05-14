@@ -475,8 +475,10 @@ def sync_parish():
 @api.route('/sync/villages', methods=['GET', 'POST'])
 def sync_village():
   if request.method == 'GET':
-    records = Village.query.filter(Village.archived != 1)
-    return jsonify({'villages': [record.to_json() for record in records]})
+    if request.args.get('parish'):
+      return jsonify({'villages':[village.to_json() for village in Village.query.filter_by(archived=0, parish_id=request.args.get('parish'))]})
+    else:
+      return jsonify(villages=[record.to_json() for record in Village.query.filter_by(archived=0)])
   else:
     status = []
     village_list = request.json.get('villages')
