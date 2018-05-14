@@ -1,6 +1,6 @@
 import os
 from . import api
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, login_user
 from flask import Response, request, jsonify
 import json
 import time
@@ -89,6 +89,23 @@ def api_recruitment(id):
       # db.session.add(recruitments)
       # db.session.commit()
       return jsonify(status='ok')
+
+
+@api.route('/users/login', methods=['POST'])
+def users_login():
+    form = request.form
+    email = form.get('email', None)
+    password = form.get('password', None)
+
+    if not email or not password:
+        return jsonify(error='Invalid request'), 400
+
+    user = User.query.filter_by(email=email).first()
+
+    if user is None or not user.verify_password(password):
+        return jsonify(error="Invalid login credentials"), 400
+    login_user(user)
+    return jsonify(user=user.to_json()), 200
 
 @api.route('/users/json', methods=['GET'])
 def api_users():
