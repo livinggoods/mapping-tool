@@ -636,6 +636,8 @@ class Registration (db.Model):
     recruitment_transport = Column(Integer, server_default=text("'0'"))
     branch_transport = Column(Integer, server_default=text("'0'"))
     referral_id = Column(ForeignKey(u'referrals.id'), nullable=True, index=True)
+    assets_tracker_data = Column(Text)
+    posted_to_assets_tracker = db.Column(db.Boolean, default=False, index=True)
 
     owner = relationship(u'User')
     education_level = relationship(u'Education')
@@ -955,6 +957,7 @@ class Recruitments(db.Model):
     county_id = Column(ForeignKey(u'ke_county.id'), nullable=True, index=True)
     subcounty_id = Column(ForeignKey(u'subcounty.id'), nullable=True, index=True)
     location_id = Column(ForeignKey(u'location.id'), nullable=True, index=True)
+    posted_to_assets_tracker = db.Column(db.Boolean, default=False, index=True)
     
     owner = relationship(u'User')
 
@@ -2379,3 +2382,124 @@ class Trainees(db.Model):
       class_id=json_record.get('class_id'),
       training_id=json_record.get('training_id')
     )
+  
+
+class ExamTraining(db.Model):
+    __tablename__ = 'exam_trainings'
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String(45))
+    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    archived = Column(db.Boolean, default=False)
+
+
+class ExamQuestion(db.Model):
+    __tablename__ = 'exam_questions'
+
+    id = Column(Integer, primary_key=True, unique=True)
+    exam_id = Column(ForeignKey(u'exam_trainings.id'), index=True)
+    question_id = Column(ForeignKey(u'questions.id'), index=True)
+    weight = Column(Integer)
+    allocated_marks = Column(Integer)
+    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    archived = Column(db.Boolean, default=False)
+
+    exam = relationship(u'ExamTraining')
+    question = relationship(u'Question')
+
+
+class ExamResult(db.Model):
+    __tablename__ = 'exam_results'
+
+    id = Column(Integer, primary_key=True)
+    training_exam_id = Column(ForeignKey(u'training_exams.id'), index=True)
+    trainee_id = Column(ForeignKey(u'registrations.id'), nullable=False, index=True)
+    question_id = Column(ForeignKey(u'questions.id'), index=True)
+    question_score = Column(Numeric(8, 2))
+    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    archived = Column(db.Boolean, default=False)
+
+    question = relationship(u'Question')
+    training_exam = relationship(u'TrainingExam')
+
+
+class ExamStatus(db.Model):
+    __tablename__ = 'exam_status'
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String(45))
+    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    archived = Column(db.Boolean, default=False)
+
+
+class Question(db.Model):
+    __tablename__ = 'questions'
+
+    id = Column(Integer, primary_key=True)
+    question = Column(String(255), nullable=False)
+    allocated_marks = Column(Numeric(8,2))
+    question_type_id = Column(ForeignKey(u'question_types.id'), nullable=True, index=True)
+    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    archived = Column(db.Boolean, default=False)
+
+    question_type = relationship(u'QuestionType')
+
+
+class QuestionChoice(db.Model):
+    __tablename__ = 'question_choices'
+
+    id = Column(Integer, primary_key=True)
+    question_id = Column(ForeignKey(u'questions.id'), nullable=False, index=False)
+    question_choice = Column(String(64))
+    is_answer = Column(db.Boolean, default=False)
+    allocated_marks = Column(Numeric(8,2), nullable=True)
+    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    archived = Column(db.Boolean, default=False)
+    
+    question = relationship(u'Question')
+
+
+class QuestionTopic(db.Model):
+    __tablename__ = 'question_topics'
+
+    id = Column(Integer, primary_key=True)
+    question_id = Column(ForeignKey(u'questions.id'), index=True)
+    session_topic_id = Column(ForeignKey(u'session_topic.id'), nullable=True, index=True)
+    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    archived = Column(db.Boolean, default=False)
+
+    question = relationship(u'Question')
+    session_topic = relationship(u'SessionTopic')
+
+
+class QuestionType(db.Model):
+    __tablename__ = 'question_types'
+
+    id = Column(Integer, primary_key=True)
+    display_title = Column(String(45))
+    widget_type = Column(String(64))
+    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    archived = Column(db.Boolean, default=False)
+
+
+class TrainingExam(db.Model):
+    __tablename__ = 'training_exams'
+
+    id = Column(Integer, primary_key=True)
+    training_id = Column(ForeignKey(u'training.id'), nullable=False, index=True)
+    exam_id = Column(ForeignKey(u'exam_trainings.id'), index=True)
+    date_administered = Column(db.DateTime(), default=datetime.utcnow, nullable=True)
+    created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
+    date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    archived = Column(db.Boolean, default=False)
+
+    exam = relationship(u'ExamTraining')
+    training = relationship(u'Training')
