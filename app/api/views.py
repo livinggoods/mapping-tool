@@ -1,4 +1,7 @@
 import os
+
+from flask_httpauth import HTTPBasicAuth
+
 from . import api
 from flask_login import login_required, current_user
 from flask import Response, request, jsonify
@@ -13,7 +16,6 @@ from .. data import data
 import csv
 import uuid
 import random
-
 
 @api.route('/firm_summary')
 @login_required
@@ -200,6 +202,7 @@ def api_recrutiment_trainig():
   else:
     return jsonify(status='ok')
 
+
 @api.route('/get/session-topics', methods=['GET'])
 def get_session_topics():
     return jsonify(topics=[t.to_json() for t in SessionTopic.query.filter_by(archived=0)])
@@ -218,7 +221,8 @@ def get_training(id):
 @api.route('/get/training/session-attendances/<string:id>')
 def get_training_attendance(id):
   return jsonify(attendance =[a.to_json() for a in SessionAttendance.query.filter_by(training_id=id)])
-  
+
+
 @api.route('/users/json', methods=['GET'])
 def api_users():
   users = User.query.all()

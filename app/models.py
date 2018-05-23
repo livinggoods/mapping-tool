@@ -1,9 +1,10 @@
 import hashlib
 from datetime import datetime, date
 from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
 from flask import current_app, request
 from flask_login import UserMixin, AnonymousUserMixin
+
 from . import db, login_manager
 from sqlalchemy import func, Column, DateTime, ForeignKey, Integer, String, Text, Numeric, text, Float, inspect
 from sqlalchemy.orm import relationship
@@ -1852,6 +1853,32 @@ class User(UserMixin, db.Model):
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password)
+
+    def generate_auth_token(self, expiration = 3600):
+        """
+        Generates an auth_token to be used for authenticated HTTP requests
+        :param expiration: Expiration time in Seconds. Default = 3600
+        :return:
+        """
+        s = Serializer(current_app.config['SECRET_KEY'], expires_in = expiration)
+        return s.dumps({'id': self.id})
+
+    @staticmethod
+    def verify_auth_token(token):
+        """
+        A static method to verify if an authentication token is legit.
+        :param token: auth_token to verify
+        :return:
+        """
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None
+        except BadSignature:
+            return None
+        user = User.query.get(data['id'])
+        return user
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
