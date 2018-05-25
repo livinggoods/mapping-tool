@@ -4,7 +4,7 @@ import os
 import time
 import uuid
 
-from flask import Response, request, jsonify
+from flask import Response, request, jsonify, current_app
 from flask_login import current_user, login_user
 
 from . import api_v2 as api
@@ -14,7 +14,7 @@ from ..decorators import api_login_required
 from ..models import (User, IccmComponents, LinkFacility, Village, PartnerActivity, GpsData, Ward, County,
                       Location, CommunityUnit, Referral, Recruitments, Interview, Exam, Partner, Mapping, Parish,
                       Training, Trainees, TrainingClasses, Registration, ExamTraining, Question, QuestionChoice)
-from ..utils import utils
+from ..utils.utils import process_csv
 
 
 @api.route('/users/login', methods=['POST'])
@@ -1156,45 +1156,8 @@ def get_questions():
         json_data = request.json
         question_list = request.json.get('questions')
         if question_list is not None:
-            for question_data in question_list:
-                choices = question_data.get('choices')
-                question = Question.query.filter_by(id=question_data.get('id')).first() if question_data.get('id') is not None else None
-                if question:
-                    question.question = question_data.get('question')
-                    question.allocated_marks = question_data.get('allocated_marks')
-                    question.question_type_id = question_data.get('question_type_id')
-                    question.created_by = question_data.get('created_by')
-                    question.date_created = question_data.get('date_created')
-                    question.archived = question_data.get('archived')
-                    question_id = question.id
-                    db.session.commit()
-                else:
-                    new_question = Question(
-                        question = question_data.get('question'),
-                        allocated_marks = question_data.get('allocated_marks'),
-                        question_type_id = question_data.get('question_type_id'),
-                        created_by = question_data.get('created_by'),
-                        date_created = question_data.get('date_created'),
-                        archived = question_data.get('archived'))
-                    db.session.add(new_question)
-                    db.session.commit()
-                    question_id = new_question.id
-                # Create choices
-                for choice in choices:
-                    # check if the choice exists
-                    q_choice = QuestionChoice.query.filter_by(question_id=question_id, question_choice=choice.get('choice'))
-                    new_question_choice = QuestionChoice(
-                        id=choice.get('id') if choice.get('id') is not None else None,
-                        question_id=question_id,
-                        question_choice=choice.get('question_choice'),
-                        is_answer=choice.get('is_answer'),
-                        allocated_marks=choice.get('allocated_marks'),
-                        created_by=choice.get('created_by'),
-                        date_created=choice.get('date_created'),
-                        archived=choice.get('archived'))
-                    db.session.merge(new_question_choice) if q_choice is not None else db.session.add(new_question_choice)
-                    db.session.commit()
-            return jsonify(status='ok')
+            status = save_questions(question_list)
+            return jsonify(status=status)
         return jsonify(message='no question posted')
 
 @api.route('/choices', methods=['GET','POST'])
@@ -1205,3 +1168,75 @@ def get_choices():
         for choice in records:
             choices.append(choice.to_json())
         return jsonify(choices=[c._asdict() for c in records])
+    
+def process_exam_csv(path):
+    questions = process_csv(path, False)
+    csv_questions = []
+    meta_data = Question.__table__.columns.keys()
+    for question in questions:
+        answer = question.get('answer')
+        #also append default meta for the question
+        for meta in meta_data:
+            question[meta] = question.get(meta)
+        choices=[]
+        for key in question.keys():
+            if key not in meta_data:
+                choices.append({'choice':question.get(key), 'is_answer':True if key==answer else False})
+                question.pop(key)
+            question['choices']=choices
+        csv_questions.append(question)
+    return csv_questions
+
+def create_question_list(path):
+    question_list = process_exam_csv(path)
+    return save_questions(question_list)
+def save_questions(question_list):
+    errors = []
+    if question_list is not None:
+        csv_id = uuid.uuid4(),
+        for question_data in question_list:
+            choices = question_data.get('choices')
+            question = Question.query.filter_by(id=question_data.get('id')).first() if question_data.get(
+                'id') is not None else None
+            if question:
+                question.question = question_data.get('question')
+                question.allocated_marks = question_data.get('allocated_marks')
+                question.question_type_id = question_data.get('question_type_id')
+                question.created_by = question_data.get('created_by')
+                question.date_created = question_data.get('date_created')
+                question.archived = question_data.get('archived')
+                question_id = question.id
+                question.csv_id = csv_id
+                db.session.commit()
+            else:
+                new_question = Question(
+                    question=question_data.get('question'),
+                    allocated_marks=question_data.get('allocated_marks'),
+                    question_type_id=question_data.get('question_type_id'),
+                    created_by=question_data.get('created_by'),
+                    date_created=question_data.get('date_created'),
+                    archived=question_data.get('archived'),
+                    csv_id = csv_id
+                )
+                db.session.add(new_question)
+                db.session.commit()
+                question_id = new_question.id
+            # Create choices
+            for choice in choices:
+                # check if the choice exists
+                q_choice = QuestionChoice.query.filter_by(question_id=question_id, question_choice=choice.get('choice'))
+                new_question_choice = QuestionChoice(
+                    id=choice.get('id') if choice.get('id') is not None else None,
+                    question_id=question_id,
+                    question_choice=choice.get('question_choice'),
+                    is_answer=choice.get('is_answer'),
+                    allocated_marks=choice.get('allocated_marks'),
+                    created_by=choice.get('created_by'),
+                    date_created=choice.get('date_created'),
+                    archived=choice.get('archived'))
+                db.session.merge(new_question_choice) if q_choice is not None else db.session.add(new_question_choice)
+                db.session.commit()
+        return {'errors':None, 'status':'ok', 'csv_id':csv_id}
+    else:
+        errors.append('The question list is empty')
+        return {'errors': errors, 'status': 'failed', 'csv_id': None}
