@@ -2,6 +2,8 @@ from wtforms.validators import Optional, DataRequired
 import re
 import os
 import csv
+import decimal
+import datetime
 
 class RequiredIf(object):
   """Validates field conditionally.
@@ -40,3 +42,12 @@ def process_location_csv(path):
     for row in reader:
       csv_rows.extend([{title[i]:row[title[i]].title() for i in range(len(title))}])
     return csv_rows
+
+
+
+def alchemyencoder(obj):
+  """JSON encoder function for SQLAlchemy special classes."""
+  if isinstance(obj, datetime.date):
+    return obj.isoformat()
+  elif isinstance(obj, decimal.Decimal):
+    return float(obj)
