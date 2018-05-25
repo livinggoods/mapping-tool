@@ -2474,6 +2474,7 @@ class Question(db.Model):
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
+    batch_id = Column(String(64), nullable=True)
     choices = relationship(u'QuestionChoice', back_populates='question', lazy='dynamic')
 
     question_type = relationship(u'QuestionType')
