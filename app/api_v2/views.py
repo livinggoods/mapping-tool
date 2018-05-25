@@ -13,7 +13,8 @@ from ..data import data
 from ..decorators import api_login_required
 from ..models import (User, IccmComponents, LinkFacility, Village, PartnerActivity, GpsData, Ward, County,
                       Location, CommunityUnit, Referral, Recruitments, Interview, Exam, Partner, Mapping, Parish,
-                      Training, Trainees, TrainingClasses, Registration)
+                      Training, Trainees, TrainingClasses, Registration, ExamTraining, Question, QuestionChoice)
+from ..utils import utils
 
 
 @api.route('/users/login', methods=['POST'])
@@ -1125,3 +1126,82 @@ def get_mapping_details_summary(id):
             parish_data['village_data']['villages'] = [village.to_json() for village in villages]
             mapping['parishes'].append(parish_data)
         return jsonify(mappings=mapping)
+    
+@api.route('/exams', methods=['GET','POST'])
+def get_exams():
+    if request.method == 'GET':
+        records = ExamTraining.query.filter_by(archived=False)
+        return jsonify({'exams': [{'title': record.title, 'id': record.id, 'created':record.date_created}
+                                     for record in records]})
+    else:
+        json_data = request.json
+        new_exam = ExamTraining(**json_data)
+        exam = ExamTraining.query.filter_by(id=json_data.get('id')).first() if json_data.get('id') is not None else None
+        db.session.merge(new_exam) if exam is not None else db.session.add(new_exam)
+        db.session.commit()
+        return jsonify(status='ok')
+    
+@api.route('/questions', methods=['GET','POST'])
+def get_questions():
+    if request.method == 'GET':
+        records = Question.query.filter_by(archived=False)
+        return jsonify({'questions': [{'question': record.question, 'id': record.id, 'allocated_marks':record.allocated_marks,
+                                       'question_type_id':record.question_type_id,
+                                      'choices': [choice.to_json() for choice in record.choices]}
+                                     for record in records]})
+    else:
+        """
+        Question Object will come in the form of json object, with choices as a list
+        """
+        json_data = request.json
+        question_list = request.json.get('questions')
+        if question_list is not None:
+            for question_data in question_list:
+                choices = question_data.get('choices')
+                question = Question.query.filter_by(id=question_data.get('id')).first() if question_data.get('id') is not None else None
+                if question:
+                    question.question = question_data.get('question')
+                    question.allocated_marks = question_data.get('allocated_marks')
+                    question.question_type_id = question_data.get('question_type_id')
+                    question.created_by = question_data.get('created_by')
+                    question.date_created = question_data.get('date_created')
+                    question.archived = question_data.get('archived')
+                    question_id = question.id
+                    db.session.commit()
+                else:
+                    new_question = Question(
+                        question = question_data.get('question'),
+                        allocated_marks = question_data.get('allocated_marks'),
+                        question_type_id = question_data.get('question_type_id'),
+                        created_by = question_data.get('created_by'),
+                        date_created = question_data.get('date_created'),
+                        archived = question_data.get('archived'))
+                    db.session.add(new_question)
+                    db.session.commit()
+                    question_id = new_question.id
+                # Create choices
+                for choice in choices:
+                    # check if the choice exists
+                    q_choice = QuestionChoice.query.filter_by(question_id=question_id, question_choice=choice.get('choice'))
+                    new_question_choice = QuestionChoice(
+                        id=choice.get('id') if choice.get('id') is not None else None,
+                        question_id=question_id,
+                        question_choice=choice.get('question_choice'),
+                        is_answer=choice.get('is_answer'),
+                        allocated_marks=choice.get('allocated_marks'),
+                        created_by=choice.get('created_by'),
+                        date_created=choice.get('date_created'),
+                        archived=choice.get('archived'))
+                    db.session.merge(new_question_choice) if q_choice is not None else db.session.add(new_question_choice)
+                    db.session.commit()
+            return jsonify(status='ok')
+        return jsonify(message='no question posted')
+
+@api.route('/choices', methods=['GET','POST'])
+def get_choices():
+    if request.method == 'GET':
+        records = QuestionChoice.query.filter_by(archived=False)
+        choices = []
+        for choice in records:
+            choices.append(choice.to_json())
+        return jsonify(choices=[c._asdict() for c in records])
