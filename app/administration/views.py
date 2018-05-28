@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 from .. import db, admin
 from . import administration
 from .forms import UploadLocationForm, LocationUgForm
-from ..utils.utils import process_location_csv
+from ..utils.utils import process_csv
 import time
 import os
 
@@ -113,7 +113,7 @@ def iccm_components():
 @login_required
 def location_test():
     path = os.path.join(current_app.config['UPLOAD_FOLDER'], 'data', 'ug_locations.csv')
-    data = process_location_csv(path)
+    data = process_csv(path)
     for phone in data:
         # check if the Region Exists
         region = Location.query.filter_by(name=phone.get('Region').title(), admin_name='Region').first()
@@ -177,7 +177,7 @@ def location_administration():
         
             path = os.path.join(current_app.config['UPLOAD_FOLDER'], 'data', filename)
             f.save(path)
-            data = process_location_csv(path)
+            data = process_csv(path)
             for phone in data:
                 # check if the Region Exists
                 region = Location.query.filter_by(name=phone.get('Region'), admin_name='Region')

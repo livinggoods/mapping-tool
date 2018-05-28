@@ -11,6 +11,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 import time
 from utils.utils import validate_uuid
+from collections import OrderedDict
 
 
 from data import data
@@ -2473,6 +2474,8 @@ class Question(db.Model):
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
+    batch_id = Column(String(64), nullable=True)
+    choices = relationship(u'QuestionChoice', back_populates='question', lazy='dynamic')
 
     question_type = relationship(u'QuestionType')
 
@@ -2488,9 +2491,16 @@ class QuestionChoice(db.Model):
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
+    question = relationship(u'Question', back_populates='choices')
     
-    question = relationship(u'Question')
+    def to_json(self):
+      return self._asdict()
 
+    def _asdict(self):
+      result = OrderedDict()
+      for key in self.__mapper__.c.keys():
+        result[key] = getattr(self, key)
+      return result
 
 class QuestionTopic(db.Model):
     __tablename__ = 'question_topics'

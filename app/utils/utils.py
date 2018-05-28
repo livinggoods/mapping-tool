@@ -2,6 +2,8 @@ from wtforms.validators import Optional, DataRequired
 import re
 import os
 import csv
+import decimal
+import datetime
 
 class RequiredIf(object):
   """Validates field conditionally.
@@ -31,12 +33,24 @@ def validate_uuid(uuid_string):
   return bool(UUID_RE.search(str(uuid_string)))
 
 
-def process_location_csv(path):
+def process_csv(path, title_case=True):
   csv_rows=[]
   with open(os.path.abspath(path)) as csvfile:
     #expects the csv to be single column
     reader = csv.DictReader(csvfile)
     title = reader.fieldnames
     for row in reader:
-      csv_rows.extend([{title[i]:row[title[i]].title() for i in range(len(title))}])
+      if title_case:
+        csv_rows.extend([{title[i]:row[title[i]].title() for i in range(len(title))}])
+      else:
+        csv_rows.extend([{title[i]:row[title[i]] for i in range(len(title))}])
     return csv_rows
+
+
+
+def alchemyencoder(obj):
+  """JSON encoder function for SQLAlchemy special classes."""
+  if isinstance(obj, datetime.date):
+    return obj.isoformat()
+  elif isinstance(obj, decimal.Decimal):
+    return float(obj)
