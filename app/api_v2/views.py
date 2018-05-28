@@ -1,20 +1,16 @@
 import csv
 import json
 import os
-import time
 import uuid
 
-from flask import Response, request, jsonify, current_app
+from flask import Response, jsonify, abort
 from flask_login import current_user, login_user
 
 from . import api_v2 as api
-from .. import db
-from ..data import data
 from ..decorators import api_login_required
-from ..models import (User, IccmComponents, LinkFacility, Village, PartnerActivity, GpsData, Ward, County,
-                      Location, CommunityUnit, Referral, Recruitments, Interview, Exam, Partner, Mapping, Parish,
-                      Training, Trainees, TrainingClasses, Registration, ExamTraining, Question, QuestionChoice)
+from ..models import *
 from ..utils.utils import process_csv
+from csvvalidator import CSVValidator
 
 
 @api.route('/users/login', methods=['POST'])
@@ -1128,6 +1124,7 @@ def get_mapping_details_summary(id):
         return jsonify(mappings=mapping)
     
 @api.route('/exams', methods=['GET','POST'])
+@api_login_required
 def get_exams():
     if request.method == 'GET':
         records = ExamTraining.query.filter_by(archived=False)
@@ -1135,17 +1132,26 @@ def get_exams():
                                      for record in records]})
     else:
         json_data = request.json
-        new_exam = ExamTraining(**json_data)
+        new_exam = ExamTraining(**json_data) if json_data.get('id') is not None else None
         exam = ExamTraining.query.filter_by(id=json_data.get('id')).first() if json_data.get('id') is not None else None
-        db.session.merge(new_exam) if exam is not None else db.session.add(new_exam)
+        if exam is not None:
+            db.session.merge(new_exam)
+        elif new_exam is not None:
+            db.session.add(new_exam)
         db.session.commit()
         return jsonify(status='ok')
     
 @api.route('/questions', methods=['GET','POST'])
-def get_questions():
+@api.route('/questions/<string:id>', methods=['GET','POST'])
+@api_login_required
+def get_questions(question_id = None):
     if request.method == 'GET':
-        records = Question.query.filter_by(archived=False)
-        return jsonify({'questions': [{'question': record.question, 'id': record.id, 'allocated_marks':record.allocated_marks,
+        if question_id:
+            records = Question.query.filter_by(id = question_id, archived=False)
+        else:
+            records = Question.query.filter_by(archived=False)
+        return jsonify({'questions': [{'question': record.question, 'id': record.id,
+                                       'allocated_marks':record.allocated_marks,
                                        'question_type_id':record.question_type_id,
                                       'choices': [choice.to_json() for choice in record.choices]}
                                      for record in records]})
@@ -1159,16 +1165,86 @@ def get_questions():
             status = save_questions(question_list)
             return jsonify(status=status)
         return jsonify(message='no question posted')
-
-@api.route('/choices', methods=['GET','POST'])
-def get_choices():
-    if request.method == 'GET':
-        records = QuestionChoice.query.filter_by(archived=False)
-        choices = []
-        for choice in records:
-            choices.append(choice.to_json())
-        return jsonify(choices=[c._asdict() for c in records])
     
+
+@api.route('/exam/<string:exam_id>', methods=['GET','POST'])
+@api_login_required
+def get_exam_details(exam_id):
+    if request.method == 'GET':
+        # get the exam
+        exam = ExamTraining.query.filter_by(id = exam_id, archived = False).first_or_404()
+        exam = exam._asdict()
+        exam_questions = ExamQuestion.query.filter_by(exam_id = exam_id, archived = False)
+        exam['questions'] = [{'question': record.question.question, 'id': record.question.id, 'allocated_marks':
+                                record.question.allocated_marks,
+                                'question_type_id': record.question.question_type_id,
+                                'choices': [choice.to_json() for choice in record.question.choices]}
+                                for record in exam_questions]
+        return jsonify(examination=exam)
+
+
+@api.route('/exam/status', methods=['GET','POST'])
+@api_login_required
+def get_exam_status():
+    if request.method == 'GET':
+        # get the exam status
+        return jsonify(exam_statuses=[{'id':status.id, 'title':status.title}
+                                      for status in ExamStatus.query.filter_by(archived = False)])
+    else:
+        data = request.json
+        new_status = ExamStatus(**data)
+        existing_status = ExamStatus.query.filter_by(id=data.get('id')).first() if data.get('id') is not None else None
+        db.session.merge(new_status) if existing_status is not None else db.session.add(new_status)
+        db.session.commit()
+        return jsonify(status='ok')
+    
+    
+@api.route('/question/topics', methods=['GET','POST'])
+@api.route('/question/<string:question_id>/topics', methods=['GET','POST'])
+@api_login_required
+def question_topics(question_id=None):
+    if request.method == 'GET':
+        if question_id is None:
+            question_topics = QuestionTopic.query.filter_by(archived = False)
+        else:
+            question_topics = QuestionTopic.query.filter_by(archived=False, question_id=question_id)
+        return jsonify(question_topics=[{'id':topic.session_topic.id, 'topic':topic.session_topic.name}
+                                      for topic in question_topics])
+    else:
+        data = request.json
+        new_topic = QuestionTopic(**data)
+        existing_topic = QuestionTopic.query.filter_by(id=data.get('id')).first() if data.get('id') is not None else None
+        db.session.merge(new_topic) if existing_topic is not None else db.session.add(new_topic)
+        db.session.commit()
+        return jsonify(status='ok')
+
+
+@api.route('/question_type', methods=['GET', 'POST'])
+@api_login_required
+def question_types():
+    if request.method == 'GET':
+        return jsonify(question_types=[q_type._asdict() for q_type in QuestionType.query.filter_by(archived=False)])
+    else:
+        data = request.json
+        new_type = QuestionType(**data)
+        existing_type = QuestionType.query.filter_by(id=data.get('id')).first() if data.get('id') is not None else None
+        db.session.merge(new_type) if existing_type is not None else db.session.add(new_type)
+        db.session.commit()
+        return jsonify(status='ok')
+
+@api.route('/training/<string:training_id>/exams', methods=['GET', 'POST'])
+@api_login_required
+def training_exams(training_id=None):
+    if request.method == 'GET':
+        if training_id is None:
+            return jsonify(error="training id is required"), 400
+        return jsonify(exams=[e.exam._asdict() for e in TrainingExam.query.filter_by(id=training_id)])
+    else:
+        abort(405)
+
+
+
+
 def process_exam_csv(path):
     questions = process_csv(path, False)
     csv_questions = []
@@ -1188,12 +1264,16 @@ def process_exam_csv(path):
     return csv_questions
 
 def create_question_list(path):
+    # validate the file
+    
+    if not os.path.isfile(path):
+        return {'errors': ['File not valid'], 'status': 'failed', 'batch_id': None}
     question_list = process_exam_csv(path)
     return save_questions(question_list)
 def save_questions(question_list):
     errors = []
     if question_list is not None:
-        csv_id = uuid.uuid4(),
+        batch_id = uuid.uuid4(),
         for question_data in question_list:
             choices = question_data.get('choices')
             question = Question.query.filter_by(id=question_data.get('id')).first() if question_data.get(
@@ -1206,7 +1286,7 @@ def save_questions(question_list):
                 question.date_created = question_data.get('date_created')
                 question.archived = question_data.get('archived')
                 question_id = question.id
-                question.csv_id = csv_id
+                question.batch_id = batch_id
                 db.session.commit()
             else:
                 new_question = Question(
@@ -1216,7 +1296,7 @@ def save_questions(question_list):
                     created_by=question_data.get('created_by'),
                     date_created=question_data.get('date_created'),
                     archived=question_data.get('archived'),
-                    csv_id = csv_id
+                    batch_id = batch_id
                 )
                 db.session.add(new_question)
                 db.session.commit()
@@ -1236,7 +1316,7 @@ def save_questions(question_list):
                     archived=choice.get('archived'))
                 db.session.merge(new_question_choice) if q_choice is not None else db.session.add(new_question_choice)
                 db.session.commit()
-        return {'errors':None, 'status':'ok', 'csv_id':csv_id}
+        return {'errors':None, 'status':'ok', 'batch_id':batch_id}
     else:
         errors.append('The question list is empty')
         return {'errors': errors, 'status': 'failed', 'csv_id': None}

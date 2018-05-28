@@ -2419,7 +2419,18 @@ class ExamTraining(db.Model):
     title = Column(String(45))
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    exam_status_id = Column(ForeignKey(u'exam_status.id'), nullable = True, index = True)
     archived = Column(db.Boolean, default=False)
+    
+    exam_status = relationship(u'ExamStatus')
+    
+    def _asdict(self):
+      result = OrderedDict()
+      for key in self.__mapper__.c.keys():
+        result[key] = getattr(self, key)
+      if not result.has_key('exam_status'):
+        result['exam_status'] = self.exam_status.__asdict()
+      return result
 
 
 class ExamQuestion(db.Model):
@@ -2436,6 +2447,13 @@ class ExamQuestion(db.Model):
 
     exam = relationship(u'ExamTraining')
     question = relationship(u'Question')
+    
+    
+    def _asdict(self):
+      result = OrderedDict()
+      for key in self.__mapper__.c.keys():
+        result[key] = getattr(self, key)
+      return result
 
 
 class ExamResult(db.Model):
@@ -2462,7 +2480,13 @@ class ExamStatus(db.Model):
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
-
+    
+    def _asdict(self):
+      result = OrderedDict()
+      for key in self.__mapper__.c.keys():
+        result[key] = getattr(self, key)
+      return result
+    
 
 class Question(db.Model):
     __tablename__ = 'questions'
@@ -2525,6 +2549,12 @@ class QuestionType(db.Model):
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
+    
+    def _asdict(self):
+      result = OrderedDict()
+      for key in self.__mapper__.c.keys():
+        result[key] = getattr(self, key)
+      return result
 
 
 class TrainingExam(db.Model):
@@ -2540,3 +2570,9 @@ class TrainingExam(db.Model):
 
     exam = relationship(u'ExamTraining')
     training = relationship(u'Training')
+    
+    def _asdict(self):
+      result = OrderedDict()
+      for key in self.__mapper__.c.keys():
+        result[key] = getattr(self, key)
+      return result

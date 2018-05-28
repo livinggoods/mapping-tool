@@ -13,10 +13,15 @@ def unauthorized(e):
 
 
 @api.app_errorhandler(404)
-def unauthorized(e):
-    return jsonify(error='Not found'), 404
+def not_found(e):
+    return jsonify(error='Not found'), 404\
+    
+
+@api.app_errorhandler(405)
+def not_allowed(e):
+    return jsonify(error='Not allowed'), 405
 
 
 @api.app_errorhandler(500)
-def unauthorized(e):
+def server_error(e):
     return jsonify(error='Server error'), 500
