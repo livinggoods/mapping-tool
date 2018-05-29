@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Questions{% endblock %}
+
+{% block content %}
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>{{ title }}
+                    <small>{{ title }}</small>
+                </h3>
+            </div>
+
+            <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Go!</button>
+          </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Add Questions
+                        <small>Upload CSV to add new Questions</small>
+                    </h2>
+
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <p class="text-muted font-13 m-b-30">
+                        Upload CSV file to create questions. You can download a sample CSV file using this link
+                        <a href="/static/sample/questions_sample.csv">Sample CSV Download</a>
+                    </p>
+
+                    {% if errors and errors | length > 0 %}
+                        <div class="center-block bg-danger error" style="padding: 5px; -webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;">
+                            {% for error in errors %}
+                                <p class="text-left" style="padding: 2px; margin: 0;">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {{ wtf.quick_form(form, enctype='multipart/form-data') }}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -16,6 +16,9 @@ class Config(object):
     POSTS_PER_PAGE = 5
     PER_PAGE = 10
     UPLOAD_FOLDER = 'uploads'
+    PER_PAGE = 10
+    ALLOWED_FILE_TYPES = ['csv', 'xls', 'xlsx']
+
 
     @staticmethod
     def init_app(app):

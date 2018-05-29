@@ -4005,7 +4005,6 @@ ul.notifications {
 .borderd-list {
   border-bottom: 2px solid #E6E9ED;
 }
-}
 
 .img-div {
     height: 32px;
@@ -4071,4 +4070,13 @@ ul.messages li .img-div i{
 
  .pagination{
    margin: 0px 0 !important;
+ }
+
+ .add-question-button  {
+   color: white !important;
+ }
+
+ .add-question-button:hover {
+   color: #f5f5f5;
+   background-color: #2e6da4 !important;
  }

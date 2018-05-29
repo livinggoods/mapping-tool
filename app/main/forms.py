@@ -1,6 +1,7 @@
 from flask_wtf import Form
+from flask_wtf.file import FileAllowed
 from wtforms import (StringField, TextAreaField, BooleanField, SelectField, DateField,
-    SubmitField, ValidationError, PasswordField, IntegerField, FloatField)
+                     SubmitField, ValidationError, PasswordField, IntegerField, FloatField, FileField)
 from wtforms.validators import DataRequired, Length, Email, EqualTo, InputRequired
 from ..models import (Role, User, Geo, UserType, Ward, County, Location, SubCounty, Parish, TrainingVenues,
                       Recruitments, TrainingStatus, TrainingSessionType, SessionTopic, Trainees, Registration,
@@ -93,8 +94,8 @@ class EditProfileAdminForm(Form):
 class PostForm(Form):
     body = TextAreaField("What's on your mind?", validators=[DataRequired()])
     submit = SubmitField('Submit')
-    
-    
+
+
 class IccmComponentForm(Form):
     component_name = StringField('Component Name', validators=[DataRequired(),
                                                                Length(1, 64, 'Maximun allowed characters is 64')])
@@ -128,7 +129,7 @@ class TrainingForm(Form):
         super(TrainingForm, self).__init__(*args, **kwargs)
         self.country.choices = [(geo.id, geo.geo_name)
                                 for geo in Geo.query.order_by(Geo.geo_name).all()]
-        
+
         self.county.choices = [(county.id, county.name.title())
                                for county in County.query.order_by(County.name).all()]
         self.location.choices = [(location.id, location.name.title())
@@ -140,18 +141,18 @@ class TrainingForm(Form):
         self.recruitment.choices = [(recruitment.id, recruitment.name)
                                     for recruitment in Recruitments.query.order_by(Recruitments.name).all()]
         self.recruitment.choices.insert(0, ('', '---'))
-        
+
         self.parish.choices = [(parish.id, parish.name)
                                for parish in Parish.query.order_by(Parish.name).all()]
-        
+
         self.training_venue.choices = [(venue.id, venue.name)
                                        for venue in TrainingVenues.query.order_by(TrainingVenues.name).all()]
         self.training_venue.choices.insert(0, ('-1', 'None'))
         self.training_status.choices = [(status.id, status.name)
                                         for status in TrainingStatus.query.order_by(TrainingStatus.name).all()]
         self.training_status.choices.insert(0, (-1, 'None'))
-  
-    
+
+
 class DeleteTrainingForm(Form):
     submit = SubmitField('Delete')
 
@@ -224,7 +225,7 @@ class SessionAttendanceForm(Form):
     comment = TextAreaField('', validators=[DataRequired()])
 
     def __init__(self, *args, **kwargs):
-      
+
         super(SessionAttendanceForm, self).__init__(*args, **kwargs)
         self.country.choices = [(geo.id, geo.geo_name)
                                 for geo in Geo.query.order_by(Geo.geo_name).all()]
@@ -254,3 +255,12 @@ class TrainingVenueForm(Form):
                                 for mapping in Mapping.query.order_by(Mapping.name).all()]
         self.country.choices = [(geo.id, geo.geo_name)
                                 for geo in Geo.query.order_by(Geo.geo_name).all()]
+
+
+class QuestionsCSVUploadForm(Form):
+    csv_file = FileField('CSV File to Upload',
+                         validators=[
+                             DataRequired(),
+                             FileAllowed(['csv', 'xls', 'xlsx'], 'Invalid file format')]
+                         )
+    submit = SubmitField('Submit')

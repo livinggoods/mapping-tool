@@ -3,6 +3,10 @@ from flask import (render_template, redirect, url_for, flash, request, abort,
 from flask_login import current_user, login_required
 from flask.ext import excel
 from sqlalchemy import func, distinct, select, and_
+from werkzeug.utils import secure_filename
+
+from app.api_v2.views import create_question_list
+from app.main.forms import QuestionsCSVUploadForm
 from . import main
 from .. import db
 from .forms import (EditProfileForm, EditProfileAdminForm, TrainingVenueForm, TrainingForm,
@@ -11,7 +15,7 @@ from ..models import (Permission, Role, User, Geo, UserType, Mapping, LocationTa
                       Location, Education, EducationLevel, Referral, Parish, SubCounty, Recruitments, Registration,
                       Interview, Branch, Cohort, RecruitmentUsers, LinkFacility, CommunityUnit, Training,
                       TrainingClasses, TrainingSession, SessionAttendance, TrainingVenues, Trainees, SessionTopic,
-                      TrainingSessionType)
+                      TrainingSessionType, Question)
 from ..decorators import admin_required, permission_required
 from flask_googlemaps import Map, icons
 from datetime import date, datetime, time
@@ -42,13 +46,13 @@ def index():
     total_mappings = Mapping.query.filter_by(archived=0).order_by(Mapping.client_time.desc())
     mapping = total_mappings.count()
     mappings = total_mappings.limit(current_app.config['POSTS_PER_PAGE']).all()
-    
+
     total_recruitments = Recruitments.query.filter_by(archived=0).order_by(Recruitments.client_time.desc())
     recruitments = total_recruitments.count()
     recruitment = total_recruitments.limit(current_app.config['POSTS_PER_PAGE']).all()
-    
+
     trainings = Training.query.filter_by(archived=0).limit(current_app.config['POSTS_PER_PAGE']).all()
-    
+
     villages = Village.query.filter_by(archived=0).count()
     if current_user.is_anonymous():
         return redirect(url_for('auth.login'))
@@ -592,7 +596,7 @@ def new_session_topic(topic_id = None):
     'form_session_topic.html',
     form=form
   )
-  
+
 @main.route('/training/session_topics', methods=['GET', 'POST'])
 @login_required
 def training_session_topics():
@@ -833,7 +837,7 @@ def mapping_village_data(id):
       if not village_rank.has_key(rank):
         village_rank[rank]=pos
         pos+=1
-    
+
     csv_data.sort(key=operator.itemgetter(6), reverse=True) # now sorted
 
     i=0
@@ -845,7 +849,7 @@ def mapping_village_data(id):
     output.headers["Content-Disposition"] = "attachment; filename="+map_details.name+"-Village-Mapping-tool.csv"
     output.headers["Content-type"] = "text/csv"
     return output
-      
+
 
 
 @main.route('/export-scoring-tool/<string:id>', methods=['GET'])
@@ -910,7 +914,7 @@ def export_scoring_tool(id):
             # metadata for registration include:
             # Exam, Interview, Chew, Recruitment, Link Facility, subcounty, education, added, by, referral, ward
             # Get Exam
-            
+
             exam = Exam.query.filter(Exam.applicant == registration.id).first()
             interview = Interview.query.filter(Interview.applicant == registration.id).first()
             if registration.referral_id is not None and registration.referral_id != '':
@@ -922,7 +926,7 @@ def export_scoring_tool(id):
             education = Education.query.filter_by(id=registration.education).first()
             ward = Ward.query.filter_by(id=registration.ward).first()
             community_unit = CommunityUnit.query.filter_by(id=registration.cu_name).first()
-            
+
             math = 0
             english = 0
             personality = 0
@@ -939,7 +943,7 @@ def export_scoring_tool(id):
                 math = exam.math
                 english = exam.english
                 personality = exam.personality
-                
+
             user = ""
             motivation = 0
             community = 0
@@ -954,7 +958,7 @@ def export_scoring_tool(id):
             qualified = "N"
             comment = ""
             selected = ""
-    
+
             if interview:
                 user = str(interview.user.name)
                 motivation = interview.motivation
@@ -998,7 +1002,7 @@ def export_scoring_tool(id):
                 "Y" if registration.english == 1 else "N",
                 registration.date_moved,
                 registration.languages.replace(',', ';'),
-                
+
                 "Y" if registration.is_chv == 1 else "N",
                 "Y" if registration.is_gok_trained == 1 else "N",
                 registration.trainings.replace(',', ':'),
@@ -1029,7 +1033,7 @@ def export_scoring_tool(id):
                 selected,
             ]
             data.append(row)
-        
+
     else:
         registrations = Registration.query.filter(Registration.recruitment == id)
         header = [
@@ -1073,7 +1077,7 @@ def export_scoring_tool(id):
             'Qualify for Training',
             'Invite for Training']
         data.append(header)
-    
+
         for registration in registrations:
             # Get Exam
             exam = Exam.query.filter(Exam.applicant == registration.id).first()
@@ -1088,7 +1092,7 @@ def export_scoring_tool(id):
                 personality = exam.personality
                 exam_total = exam.total_score()
                 exam_passed = "Y" if exam.has_passed() and registration.brac != 1 else "N"
-    
+
             interview = Interview.query.filter(Interview.applicant == registration.id).first()
             user = ""
             motivation = 0
@@ -1105,7 +1109,7 @@ def export_scoring_tool(id):
             comment = ""
             canjoin = ""
             selected = ""
-    
+
             if interview:
                 user = str(interview.user.name)
                 motivation = interview.motivation
@@ -1203,7 +1207,7 @@ def recruitment(id):
     recruitment = Recruitments.query.filter_by(archived=0, id=id).first_or_404()
     registrations = Registration.query.filter_by(recruitment=id)
     page={'title':recruitment.name.title(), 'subtitle':recruitment.name if recruitment else 'Recruitments'}
-    return render_template('recruitment.html', recruitment=recruitment, 
+    return render_template('recruitment.html', recruitment=recruitment,
         registrations=registrations, page=page)
   else:
     if 'id' in request.form:
@@ -1300,8 +1304,8 @@ def create_mappings():
         )
         return render_template('mappings.html', page=page, map=inputmap, currency=currency,
          mappings=mappings)
-    
-    
+
+
 @main.route('/mapping/<string:id>', methods=['GET', 'POST'])
 @login_required
 def get_mapping_data(id):
@@ -1317,8 +1321,8 @@ def get_mapping_data(id):
         villages = Village.query.filter_by(mapping_id=id)
         return render_template('mapping.html', page=page, villages=villages, mapping=mapping, parishes=parishes,
                                subcounties=subcounties, color=color)
-    
-    
+
+
 @main.route('/branches', methods=['GET', 'POST'])
 @login_required
 def branches():
@@ -1359,7 +1363,7 @@ def branches():
             cluster_gridsize = 10
             )
         page = {'title': 'Branches', 'subtitle': 'List of branches'}
-        
+
         locations = Location.query.all()
         return render_template('branches.html', branches=branches, currency=currency, clustermap=branch_maps, locations=locations, page=page)
 
@@ -1619,6 +1623,90 @@ def followed_by(username):
                            follows=follows)
 
 
+@main.route('/training/questions')
+def training_questions():
+    page = { "title": 'Questions', 'subtitle': 'View, Add and edit questions' }
+    questions = Question.query.filter_by(archived=False)
+    pagination_count = request.args.get('page', 1, type=int)
+    pagination = questions.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)
+    return render_template('training_questions.html',
+                           title='Questions',
+                           endpoint='main.training_questions',
+                           questions=questions,
+                           pagination=pagination,
+                           page=page)
+
+
+@main.route('/training/questions/add', methods=['GET', 'POST'])
+def training_questions_add():
+
+    errors = []
+    form = QuestionsCSVUploadForm()
+    page = {'title': 'Add Questions', 'subtitle': 'Upload CSV to add questions'}
+
+    if request.method == 'GET':
+
+        return render_template('training_questions_add.html',
+                               title='Add Questions',
+                               endpoint='main.training_questions_add',
+                               form=form,
+                               page=page,
+                               errors=errors)
+
+    elif request.method == 'POST':
+
+        allowed_types = current_app.config['ALLOWED_FILE_TYPES']
+
+        if 'csv_file' not in request.files:
+            errors.append("Please select atleast one CSV file")
+
+        csv_file = request.files['csv_file']
+
+        abs_path = None
+
+        if csv_file.filename == '' or csv_file.filename.split('.')[-1] not in allowed_types or not len(csv_file.filename.split('.')) > 1:
+            errors.append('Invalid file type')
+        else:
+            try:
+                filename = secure_filename(csv_file.filename)
+                csv_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+                path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+                abs_path = os.path.abspath(path)
+                response = create_question_list(abs_path)
+
+                if response['status'] is not 'ok':
+                    errors = response['errors']
+            except Exception as e:
+                errors = ['Something unexpected happened. Please try again']
+
+        try:
+            if abs_path:
+                os.remove(abs_path)
+        except Exception as e:
+            pass
+
+        if len(errors) > 0:
+            return render_template('training_questions_add.html',
+                                     title='Add Questions',
+                                     endpoint='main.training_questions_add',
+                                     form=form,
+                                     page=page,
+                                     errors=errors)
+        else:
+            return redirect(url_for('main.training_questions'))
+
+
+@main.route('/training/question/<int:id>', methods=['GET', 'POST'])
+def training_question_edit(id):
+    page = {"title": 'Edit Question', 'subtitle': 'Edit Question'}
+    if request.method == 'GET':
+        question = Question.query.get_or_404(id)
+        return render_template('training_question_edit.html',
+                               title='Edit Question',
+                               question=question,
+                               page=page)
+
+
 @main.route('/csv')
 def test_app():
   with open('data.csv', 'r') as f:
@@ -1639,6 +1727,7 @@ def test_app():
         districts[row[1]][row[2]] = []
         districts[row[1]][row[2]].append({'name':row[0], 'number':row[3]})
   return jsonify(districts=districts)
+
 
 def appplication_status(app):
     status = True
