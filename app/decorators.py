@@ -26,12 +26,16 @@ def admin_required(f):
 def api_login_required(f):
     """
     api_login_decorator which checks whether the requests are authenticated.
+    
+    We also need to ensure that if a user is logged in, they should be able to access the API.
     :param f:
     :return:
     """
     def decorator(f):
         @wraps(f)
         def decorated_function(*args, **kwargs):
+            if current_user.is_authenticated():
+                return f(*args, **kwargs)
             token_details = request.headers.get('Authorization', '').split(' ')
             if len(token_details) > 1:
                 token = token_details[1]
