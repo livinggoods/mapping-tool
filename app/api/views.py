@@ -103,43 +103,9 @@ def api_recrutiment_trainig():
     # also create a draft training, that needs to be confirmed by the Training Team.
     # When training has been confirmed, the person who confirmed it becomes the owner
     if request.form.get('action') == 'confirmed':
-      training = Training.query.filter_by(recruitment_id=recruitment.id).first()
-      if not training:
-        training = Training(
-            id=uuid.uuid4(),
-            training_name=recruitment.name,
-            country=recruitment.country,
-            district=recruitment.district,
-            recruitment_id=recruitment.id,
-            training_status_id=1,
-            client_time=time.time(),
-        )
-        if recruitment.country == 'KE':
-          if recruitment.subcounty_id is not None:
-            training.subcounty_id = recruitment.subcounty_id
-          if recruitment.county_id is not None:
-            training.county_id = recruitment.county_id
-        else:
-          if recruitment.location_id is not None:
-            training.location_id = recruitment.location_id
-      db.session.add(training)
-      db.session.commit()
-
-      session_topics = SessionTopic.query.filter_by(country=training.country, archived=0)
-      mytopic = []
-      for topic in session_topics:
-        training_session = TrainingSession.query.filter_by(country=training.country, training_id=training.id,
-                                                        session_topic_id=topic.id, archived=0).first()
-        if not training_session:
-          training_session = TrainingSession(
-              id=uuid.uuid4(),
-              training_id=training.id,
-              session_topic_id=topic.id,
-              country=training.country,
-              created_by=1
-          )
-        db.session.add(training_session)
-        db.session.commit()
+      training = create_training(recruitment.id)
+      create_training_topics(training)
+      
       class_list = generate_training_classes(recruitment.to_json())
       # create a class list
       class_details = class_list.get('details')
@@ -1078,10 +1044,10 @@ def generate_training_classes(recruitment):
       x = 1
       for trainee in trainees:
         if x==1:
-          class_1.append(trainee.get('id'))
+          class_1.append(trainee.id)
           x += 1
         elif x==2:
-          class_2.append(trainee.get('id'))
+          class_2.append(trainee.id)
           x = 1
       class_details[1] = class_1
       class_details[2] = class_2
@@ -1093,13 +1059,13 @@ def generate_training_classes(recruitment):
       x=1
       for trainee in trainees:
         if x == 1:
-          class_1.append(trainee.id)
+          class_1.append(trainee.get('id'))
           x += 1
         elif x == 2:
-          class_2.append(trainee.id)
+          class_2.append(trainee.get('id'))
           x+=1
         else:
-          class_3.append(trainee.id)
+          class_3.append(trainee.get('id'))
           x=1
       class_details[1] = class_1
       class_details[2] = class_2
@@ -1107,5 +1073,47 @@ def generate_training_classes(recruitment):
     return {"classes": number_of_classes, 'details':class_details}
   else:
     return {'count': recruitment.get('data').get('count'), 'len': len(recruitment.get('data').get('registrations'))}
+
+def create_training(recruitment_id):
+  recruitment = Recruitments.query.filter_by(id=recruitment_id).first()
+  training = Training.query.filter_by(recruitment_id=recruitment.id).first()
+  if not training:
+    training = Training(
+        id=uuid.uuid4(),
+        training_name=recruitment.name,
+        country=recruitment.country,
+        district=recruitment.district,
+        recruitment_id=recruitment.id,
+        training_status_id=1,
+        client_time=time.time(),
+    )
+    if recruitment.country == 'KE':
+      if recruitment.subcounty_id is not None:
+        training.subcounty_id = recruitment.subcounty_id
+      if recruitment.county_id is not None:
+        training.county_id = recruitment.county_id
+    else:
+      if recruitment.location_id is not None:
+        training.location_id = recruitment.location_id
+  db.session.add(training)
+  db.session.commit()
+  return training
+
+def create_training_topics(training):
+  session_topics = SessionTopic.query.filter_by(country=training.country, archived=0)
+  for topic in session_topics:
+    training_session = TrainingSession.query.filter_by(country=training.country, training_id=training.id,
+                                                       session_topic_id=topic.id, archived=0).first()
+    if not training_session:
+      training_session = TrainingSession(
+          id=uuid.uuid4(),
+          training_id=training.id,
+          session_topic_id=topic.id,
+          country=training.country,
+          created_by=1
+      )
+    db.session.add(training_session)
+    db.session.commit()
+
 
 
