@@ -1142,7 +1142,7 @@ def get_exams():
         return jsonify(status='ok')
     
 @api.route('/questions', methods=['GET','POST'])
-@api.route('/questions/<string:id>', methods=['GET','POST'])
+@api.route('/questions/<int:question_id>', methods=['GET','POST'])
 @api_login_required
 def get_questions(question_id = None):
     if request.method == 'GET':
@@ -1256,7 +1256,7 @@ def process_exam_csv(path):
             question[meta] = question.get(meta)
         choices=[]
         for key in question.keys():
-            if key not in meta_data:
+            if key not in meta_data and key.startswith('choice'):
                 choices.append({'choice':question.get(key), 'is_answer':True if key==answer else False})
                 question.pop(key)
             question['choices']=choices
@@ -1270,6 +1270,8 @@ def create_question_list(path):
         return {'errors': ['File not valid'], 'status': 'failed', 'batch_id': None}
     question_list = process_exam_csv(path)
     return save_questions(question_list)
+
+
 def save_questions(question_list):
     errors = []
     if question_list is not None:

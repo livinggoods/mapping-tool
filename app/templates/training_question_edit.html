@@ -24,15 +24,17 @@
 
         <div class="clearfix"></div>
     </div>
-    <div class="row">
+    <div class="row" id="question-ui">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
 
                     <ul class="nav navbar-right panel_toolbox">
                         <li class="btn-group closed" style="display: inline-block;">
-                            <a class="add-question-button user-action btn btn-primary btn-xs" href="#">
-                                <i class="fa fa-save"></i> Save Changes</a>
+                            <button rv-on-click="controller.saveChanges"
+                                    class="add-question-button user-action btn btn-primary" href="#">
+                                <i class="fa fa-save"></i> Save Changes
+                            </button>
                         </li>
                     </ul>
 
@@ -42,35 +44,94 @@
 
                     <div class="row">
 
-                        <div class="col-xs-12 col-md-8">
+                        <div class="col-xs-12 col-md-10 col-md-offset-1">
 
-                            <small class="text-info"><i class="fa fa-info"></i> Question</small>
-                            <h2>{{ question.question }}</h2>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <small class="text-info"><i class="fa fa-info"></i> Question</small>
+                                    <textarea name="question" id="question"
+                                              class="form-control" rv-value="data.question"></textarea>
+                                </div>
 
-                            &nbsp;
+                            </div>
 
-                            <small class="text-info"><i class="fa fa-info"></i> Question Options</small>
-                            <ul>
-                                <li>Option 1</li>
-                                <li>Option 2</li>
-                                <li>Option 3</li>
-                                <li>Option 4</li>
-                            </ul>
+                            <div class="row margin-top margin-bottom">
+                                <div class="col-xs-12">
+                                    <small class="text-info"><i class="fa fa-info"></i> Marks</small>
+                                    <input type="number" class="form-control" rv-value="data.allocated_marks">
+                                </div>
+                            </div>
 
-                        </div>
+                            <div class="row margin-top margin-bottom">
 
-                        <div class="col-xs-12 col-md-4">
+                                <div class="col-xs-12">
 
-                            <small class="text-info"><i class="fa fa-info"></i> Question Type</small>
-                            <select class="form-control" name="question_type" id="question_typ">
-                                <option value="none">-- None --</option>
-                            </select>
-                            <hr>
+                                    {#<small class="text-info"><i class="fa fa-info"></i> Question Type</small>
+                                    <select class="form-control" name="question_type" id="question_type"></select>#}
 
-                            <small class="text-info"><i class="fa fa-info"></i> Question Topics</small>
-                            <select class='form-control' name="question_topics" id="question_topics">
-                                <option value="none">-- None --</option>
-                            </select>
+                                    <small class="text-info"><i class="fa fa-info"></i> Question Topics</small>
+                                    <select class='form-control' name="question_topics" id="question_topics"
+                                            multiple="multiple"></select>
+                                </div>
+
+
+                            </div>
+
+                            <div class="row margin-top margin-bottom">
+
+                                <div class="col-xs-12">
+
+                                    <small class="text-info"><i class="fa fa-info"></i> Question Options</small>
+                                    <ul style="margin-left: 0; padding: 0;">
+
+                                        <li rv-each-choice="data.choices"
+                                            style="list-style: none; margin: 0; padding: 10px 0;">
+                                            <div class="row">
+
+                                                <div class="col-xs-8">
+                                                    <input type="text" class="form-control"
+                                                           rv-value="choice.question_choice" placeholder="Enter choice">
+                                                </div>
+
+                                                <div class="col-xs-2">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            <input type="checkbox" rv-checked="choice.is_answer"> Is
+                                                            Answer</label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-xs-2">
+                                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                                        <button rv-on-click="controller.addQuestionOption"
+                                                                class="btn btn-primary btn-xs">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                        <button rv-on-click="controller.deleteQuestionOption"
+                                                                class="btn btn-danger btn-xs">
+                                                            <i class="fa fa-minus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </li>
+
+
+                                    </ul>
+
+                                  <div class="row">
+                                    <div class="col-xs-12">
+                                      <button rv-on-click="controller.addQuestionOption" class="btn btn-primary"><i class="fa fa-plus"></i> Add Question Option</button>
+                                    </div>
+                                  </div>
+
+                                </div>
+
+                            </div>
+
+                            <div></div>
+
                         </div>
 
                     </div>
@@ -79,4 +140,140 @@
             </div>
         </div>
     </div>
+
+{% endblock %}
+
+
+{% block additionalcss %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/select2.min.css') }}">
+{% endblock %}
+
+{% block additionaljs %}
+    <script src="{{ url_for('static', filename='js/rivets.bundled.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/select2.min.js') }}"></script>
+{% endblock %}
+
+{% block javascript %}
+
+    <script>
+
+        var Question_Edit_App = (function ($) {
+
+            var question = JSON.parse('{{ question | safe }}');
+
+            var app = {
+                init: function () {
+                    app.initBindings();
+                    app.init_select();
+                },
+
+                initBindings: function () {
+
+                    rivets.bind(document.querySelector('#question-ui'), {
+                        data: question,
+                        controller: app.getController()
+                    })
+                },
+
+                getController: function () {
+                    return {
+                        addQuestionOption: function (e, model) {
+                            console.log(model);
+                            var index = model.index;
+                            if (typeof index === 'undefined') index = question.choices.length - 1;
+                            question.choices.splice(index + 1, 0, {
+                                allocated_marks: null,
+                                archived: false,
+                                is_answer: false,
+                                question_choice: null,
+                                question_id: question.id
+                            })
+                        },
+
+                        deleteQuestionOption: function (e, model) {
+                            var index = model.index;
+                            question.choices.splice(index, 1);
+                        },
+
+                        saveChanges: function (e, model) {
+                            console.log(e, model, question);
+                        }
+                    }
+                },
+
+                init_select: function () {
+
+                    $('#question_topics').select2({
+                        tags: true,
+                        ajax: {
+                            url: '{{ url_for('api.get_session_topics') }}',
+                            processResults: function (data) {
+                                var topics = data.topics;
+                                topics = topics.map(function (value, index) {
+                                    return {
+                                        text: value.name,
+                                        id: value.id,
+                                    }
+                                });
+
+                                var data = {
+                                    results: topics,
+                                    pagination: {
+                                        more: false
+                                    }
+                                };
+                                return data;
+                            }
+                        }
+                    });
+
+                    $('#question_type').select2({
+                        ajax: {
+                            url: '{{ url_for('api_v2.question_types') }}',
+                            processResults: function (data) {
+                                var question_types = data.question_types;
+                                question_types = question_types.map(function (value, index) {
+                                    console.log(value);
+                                    return {
+                                        text: value.display_title,
+                                        id: value.id
+                                    }
+                                });
+
+                                var data = {
+                                    results: question_types,
+                                    pagination: {
+                                        more: false
+                                    }
+                                };
+
+                                return data;
+                            }
+                        }
+                    });
+
+                    if (question.topics && question.topics.length) {
+                        question.topics.forEach(function (value, index, arr) {
+                            var option = new Option(value.name, value.id, true, true);
+                            $('#question_topics').append(option).trigger('change');
+                        });
+                    }
+
+                    if (!!question.type) {
+                        var option = new Option(question.type.display_title, question.type.id, true, true);
+                        $("#question_type").append(option).trigger('change');
+                    }
+                },
+            };
+
+            return app;
+
+        })(jQuery);
+
+
+        $(document).ready(function () {
+            Question_Edit_App.init();
+        });
+    </script>
+
 {% endblock %}

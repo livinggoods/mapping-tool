@@ -2503,6 +2503,18 @@ class Question(db.Model):
 
     question_type = relationship(u'QuestionType')
 
+    def to_json(self):
+        return self._asdict()
+
+    def _asdict(self):
+        result = OrderedDict()
+        for key in self.__mapper__.c.keys():
+            result[key] = getattr(self, key)
+        result['choices'] = [choice.to_json() for choice in self.choices]
+        result['type'] = self.question_type.to_json() if self.question_type is not None else None
+        result['topics'] = [t.session_topic.to_json() for t in QuestionTopic.query.filter_by(question_id=self.id, archived=False)]
+        return result
+
 
 class QuestionChoice(db.Model):
     __tablename__ = 'question_choices'
@@ -2549,7 +2561,10 @@ class QuestionType(db.Model):
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
-    
+
+    def to_json(self):
+        return self._asdict()
+
     def _asdict(self):
       result = OrderedDict()
       for key in self.__mapper__.c.keys():
