@@ -1238,7 +1238,7 @@ def training_exams(training_id=None):
     if request.method == 'GET':
         if training_id is None:
             return jsonify(error="training id is required"), 400
-        return jsonify(exams=[e.exam._asdict() for e in TrainingExam.query.filter_by(id=training_id)])
+        return jsonify(exams=[e.exam._asdict() for e in TrainingExam.query.filter_by(training_id=training_id)])
     else:
         abort(405)
 

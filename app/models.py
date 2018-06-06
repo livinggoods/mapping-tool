@@ -2421,6 +2421,7 @@ class ExamTraining(db.Model):
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     exam_status_id = Column(ForeignKey(u'exam_status.id'), nullable = True, index = True)
     archived = Column(db.Boolean, default=False)
+    country = Column(String(20), server_default=text("'UG'"), nullable=False)
     
     exam_status = relationship(u'ExamStatus')
     
@@ -2443,6 +2444,7 @@ class ExamQuestion(db.Model):
     allocated_marks = Column(Integer)
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    country = Column(String(20), server_default=text("'UG'"), nullable=False)
     archived = Column(db.Boolean, default=False)
 
     exam = relationship(u'ExamTraining')
@@ -2467,6 +2469,7 @@ class ExamResult(db.Model):
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
+    country = Column(String(20), server_default=text("'UG'"), nullable=False)
 
     question = relationship(u'Question')
     training_exam = relationship(u'TrainingExam')
@@ -2480,6 +2483,7 @@ class ExamStatus(db.Model):
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
+    country = Column(String(20), server_default=text("'UG'"), nullable=False)
     
     def _asdict(self):
       result = OrderedDict()
@@ -2500,6 +2504,7 @@ class Question(db.Model):
     archived = Column(db.Boolean, default=False)
     batch_id = Column(String(64), nullable=True)
     choices = relationship(u'QuestionChoice', back_populates='question', lazy='dynamic')
+    country = Column(String(20), server_default=text("'KE'"), nullable=False)
 
     question_type = relationship(u'QuestionType')
 
@@ -2528,6 +2533,7 @@ class QuestionChoice(db.Model):
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
     question = relationship(u'Question', back_populates='choices')
+    country = Column(String(20), server_default=text("'KE'"), nullable=False)
     
     def to_json(self):
       return self._asdict()
@@ -2547,6 +2553,7 @@ class QuestionTopic(db.Model):
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
+    country = Column(String(20), server_default=text("'KE'"), nullable=False)
 
     question = relationship(u'Question')
     session_topic = relationship(u'SessionTopic')
@@ -2582,6 +2589,7 @@ class TrainingExam(db.Model):
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
+    country = Column(String(20), server_default=text("'KE'"), nullable=False)
 
     exam = relationship(u'ExamTraining')
     training = relationship(u'Training')

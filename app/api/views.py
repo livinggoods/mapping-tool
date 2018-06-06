@@ -374,14 +374,14 @@ def sync_mapping():
         record = Mapping.from_json(mapping)
         saved_record = Mapping.query.filter(Mapping.id == record.id).first()
         if saved_record:
-          saved_record.name = mapping.get('name')
-          saved_record.country = mapping.get('country')
-          saved_record.county = mapping.get('county')
-          saved_record.subcounty = mapping.get('subcounty')
-          saved_record.district = mapping.get('district')
-          saved_record.added_by = mapping.get('added_by')
-          saved_record.contact_person = mapping.get('contact_person')
-          saved_record.phone = mapping.get('phone')
+          saved_record.name = mapping.get('name') if mapping.get('name') != '' else None
+          saved_record.country = mapping.get('country') if mapping.get('country') != '' else None
+          saved_record.county = mapping.get('county') if mapping.get('county') != '' else None
+          saved_record.subcounty = mapping.get('subcounty') if mapping.get('subcounty') != '' else None
+          saved_record.district = mapping.get('district') if mapping.get('district') != '' else None
+          saved_record.added_by = mapping.get('added_by') if mapping.get('added_by') != '' else 1
+          saved_record.contact_person = mapping.get('contact_person') if mapping.get('contact_person') != '' else None
+          saved_record.phone = mapping.get('phone') if mapping.get('phone') != '' else None
           saved_record.synced = 1
           saved_record.comment = mapping.get('comment')
           operation = 'updated'
