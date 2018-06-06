@@ -1306,19 +1306,30 @@ def save_questions(question_list):
             # Create choices
             for choice in choices:
                 # check if the choice exists
-                q_choice = QuestionChoice.query.filter_by(question_id=question_id, question_choice=choice.get('choice'))
-                new_question_choice = QuestionChoice(
-                    id=choice.get('id') if choice.get('id') is not None else None,
-                    question_id=question_id,
-                    question_choice=choice.get('question_choice'),
-                    is_answer=choice.get('is_answer'),
-                    allocated_marks=choice.get('allocated_marks'),
-                    created_by=choice.get('created_by'),
-                    date_created=choice.get('date_created'),
-                    archived=choice.get('archived'))
-                db.session.merge(new_question_choice) if q_choice is not None else db.session.add(new_question_choice)
+                q_choice = QuestionChoice.query.filter_by(question_id=question_id,
+                                                          question_choice=choice.get('choice'))
+                if q_choice is not None:
+                    new_question_choice = QuestionChoice(
+                        id=choice.get('id') if choice.get('id') is not None else None,
+                        question_id=question_id,
+                        question_choice=choice.get('choice'),
+                        is_answer=choice.get('is_answer'),
+                        allocated_marks=choice.get('allocated_marks'),
+                        created_by=choice.get('created_by'),
+                        date_created=choice.get('date_created'),
+                        archived=choice.get('archived'))
+                    db.session.add(new_question_choice)
+                else:
+                    q_choice.question_id = question_id,
+                    q_choice.question_choice = choice.get('choice'),
+                    q_choice.is_answer = choice.get('is_answer'),
+                    q_choice.allocated_marks = choice.get('allocated_marks'),
+                    q_choice.created_by = choice.get('created_by'),
+                    q_choice.date_created = choice.get('date_created'),
+                    q_choice.archived = choice.get('archived')
+                    db.session.add(q_choice)
                 db.session.commit()
-        return {'errors':None, 'status':'ok', 'batch_id':batch_id}
+        return {'errors':None, 'status':'ok', 'batch_id':batch_id, 'data':data}
     else:
         errors.append('The question list is empty')
         return {'errors': errors, 'status': 'failed', 'csv_id': None}

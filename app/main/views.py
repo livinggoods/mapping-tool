@@ -1669,7 +1669,7 @@ def training_questions_add():
         allowed_types = current_app.config['ALLOWED_FILE_TYPES']
 
         if 'csv_file' not in request.files:
-            errors.append("Please select atleast one CSV file")
+            errors.append("Please select at least one CSV file")
 
         csv_file = request.files['csv_file']
 
