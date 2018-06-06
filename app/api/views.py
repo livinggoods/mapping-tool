@@ -409,28 +409,38 @@ def sync_parish():
       for parish in parish_list:
         saved_record = Parish.query.filter(Parish.id == parish.get('id')).first()
         if saved_record:
-          saved_record.id = parish.get('id'),
-          saved_record.name = parish.get('name'),
-          saved_record.parent = parish.get('parent'),
-          saved_record.mapping_id = parish.get('mapping'),
-          saved_record.added_by = parish.get('added_by'),
-          saved_record.contact_person = parish.get('contact_person'),
-          saved_record.phone = parish.get('phone'),
-          saved_record.comment = parish.get('comment'),
-          saved_record.country = parish.get('country'),
-          saved_record.client_time = parish.get('date_added'),
+          if parish.get('id') is not None or parish.get('id') != '':
+            saved_record.id = parish.get('id')
+          if parish.get('name') is not None or parish.get('name') != '':
+            saved_record.name = parish.get('name')
+          if parish.get('parent') is not None or parish.get('parent') != '':
+            saved_record.parent = parish.get('parent')
+          if parish.get('mapping') is not None or parish.get('mapping') != '':
+            saved_record.mapping_id = parish.get('mapping')
+          if parish.get('added_by') is not None or parish.get('added_by') != '':
+            saved_record.added_by = parish.get('added_by')
+          if parish.get('contact_person') is not None or parish.get('contact_person') != '':
+            saved_record.contact_person = parish.get('contact_person')
+          if parish.get('phone') is not None or parish.get('phone') != '':
+            saved_record.phone = parish.get('phone')
+          if parish.get('comment') is not None or parish.get('comment') != '':
+            saved_record.comment = parish.get('comment')
+          if parish.get('country') is not None or parish.get('country') != '':
+            saved_record.country = parish.get('country')
+          if parish.get('date_added') is not None or parish.get('date_added') != '':
+            saved_record.client_time = parish.get('date_added')
           operation = 'updated'
         else:
           saved_record = Parish(
               id=parish.get('id'),
               name = parish.get('name'),
-              parent = parish.get('parent'),
-              mapping_id = parish.get('mapping'),
-              added_by = parish.get('added_by'),
+              parent = parish.get('parent') if parish.get('parent') != '' else None,
+              mapping_id = parish.get('mapping') if parish.get('mapping') != '' else None,
+              added_by = parish.get('added_by') if parish.get('added_by') != '' else None,
               contact_person = parish.get('contact_person'),
               phone = parish.get('phone'),
               comment = parish.get('comment'),
-              country = parish.get('country'),
+              country = parish.get('country') if parish.get('country') != '' else None,
               client_time = parish.get('date_added'),
           )
           operation = 'created'
