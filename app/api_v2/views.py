@@ -1146,10 +1146,16 @@ def get_exams():
 @api_login_required
 def get_questions(question_id = None):
     if request.method == 'GET':
+        
+        term = request.args.get('term', None)
+        
         if question_id:
             records = Question.query.filter_by(id = question_id, archived=False)
         else:
-            records = Question.query.filter_by(archived=False)
+            if term:
+                records = Question.query.filter(Question.archived == False, Question.question.ilike('%{}%'.format(term)))
+            else:
+                records = Question.query.filter_by(archived=False)
         return jsonify({'questions': [{'question': record.question, 'id': record.id,
                                        'allocated_marks':record.allocated_marks,
                                        'question_type_id':record.question_type_id,

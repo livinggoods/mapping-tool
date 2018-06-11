@@ -141,16 +141,58 @@
         </div>
     </div>
 
+    <div id="overlay" style="display: none;">
+        <div>
+            <div class="loader center-block"></div>
+            <h3 class="text-center" style="color: white;">Please wait</h3>
+        </div>
+    </div>
+
 {% endblock %}
 
 
 {% block additionalcss %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/select2.min.css') }}">
+    <style>
+
+        #overlay {
+            z-index: 1000;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loader {
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            opacity: 1;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 {% endblock %}
 
 {% block additionaljs %}
     <script src="{{ url_for('static', filename='js/rivets.bundled.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/select2.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lodash.min.js') }}"></script>
 {% endblock %}
 
 {% block javascript %}
@@ -186,7 +228,8 @@
                                 archived: false,
                                 is_answer: false,
                                 question_choice: null,
-                                question_id: question.id
+                                question_id: question.id,
+                                country: question.country
                             })
                         },
 
@@ -197,7 +240,66 @@
 
                         saveChanges: function (e, model) {
                             console.log(e, model, question);
+                            if (!question.question){
+                                window.alert("Please input the question text");
+                                return;
+                            }
+
+                            var choices = question.choices;
+
+                            var isAnswer = false;
+
+                            for (var i = 0; i < choices.length; i++) {
+                                var choice = choices[i];
+                                if (!choice.question_choice) {
+                                    window.alert("Invalid choice. Please check the choices");
+                                    return;
+                                }
+
+                                isAnswer = isAnswer || choice.is_answer;
+                            }
+
+                            if (!isAnswer) {
+                                window.alert("Please select one correct answer");
+                                return;
+                            }
+
+                            var topics = $("#question_topics").val();
+                            console.log(topics);
+                            var params = $.extend(true, {
+                                topics: _.map(topics, function(item) { return parseInt(item) })
+                            }, question);
+
+                            console.log(params);
+                            console.log("{{ endpoint }}");
+
+                            $.ajax({
+                                type: 'POST',
+                                url: "{{ endpoint }}",
+                                dataType: 'json',
+                                contentType: "application/json; charset=utf-8",
+                                data: JSON.stringify({question: params}),
+                                xhrFields: {
+                                    withCredentials: true
+                                },
+                                beforeSend: function(xhr, settings) {
+                                    $('#overlay').show();
+                                },
+                                error: function(xhr, status, error) {
+                                    $('#overlay').hide();
+                                    window.alert(error);
+                                },
+                                success: function(data, status, xhr) {
+                                    $('#overlay').hide();
+                                    window.alert(data.message);
+
+                                    if (data.status) {
+                                        window.history.back();
+                                    }
+                                }
+                            });
                         }
+
                     }
                 },
 

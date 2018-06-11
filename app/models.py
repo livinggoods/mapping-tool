@@ -1,20 +1,19 @@
 import hashlib
-from datetime import datetime, date
-from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
+import time
+from collections import OrderedDict
+from datetime import datetime
+
 from flask import current_app, request
 from flask_login import UserMixin, AnonymousUserMixin
-
-from . import db, login_manager
-from sqlalchemy import func, Column, DateTime, ForeignKey, Integer, String, Text, Numeric, text, Float, inspect
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text, Numeric, text, Float, inspect
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
-import time
-from utils.utils import validate_uuid
-from collections import OrderedDict
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from data import data
+from utils.utils import validate_uuid
+from . import db, login_manager
+
 
 ##############################
 
@@ -2424,14 +2423,22 @@ class ExamTraining(db.Model):
     country = Column(String(20), server_default=text("'UG'"), nullable=False)
     
     exam_status = relationship(u'ExamStatus')
-    
+
     def _asdict(self):
-      result = OrderedDict()
-      for key in self.__mapper__.c.keys():
-        result[key] = getattr(self, key)
-      if not result.has_key('exam_status'):
-        result['exam_status'] = self.exam_status.__asdict()
-      return result
+        result = OrderedDict()
+        for key in self.__mapper__.c.keys():
+            result[key] = getattr(self, key)
+        if not result.has_key('exam_status'):
+            result['exam_status'] = self.exam_status.to_json() if self.exam_status else None
+            
+        if not result.has_key('questions'):
+            result["questions"] = [exam_question.question.to_json() for exam_question in
+                                   ExamQuestion.query.filter_by(exam_id=self.id, archived=False)]
+            
+        return result
+
+    def to_json(self):
+        return self._asdict()
 
 
 class ExamQuestion(db.Model):
@@ -2490,6 +2497,9 @@ class ExamStatus(db.Model):
       for key in self.__mapper__.c.keys():
         result[key] = getattr(self, key)
       return result
+    
+    def as_json(self):
+      return self._asdict()
     
 
 class Question(db.Model):

@@ -1,32 +1,31 @@
-from flask import json
+import csv
+import io
+import operator
+import os
+import time
+import uuid
+from datetime import date, datetime, time
+from time import gmtime, strftime
 
-from flask import (render_template, redirect, url_for, flash, request, abort,
-                   current_app, jsonify, make_response)
-from flask_login import current_user, login_required
+from flask import json
+from flask import (render_template, redirect, url_for, flash, request, current_app, jsonify)
 from flask.ext import excel
-from sqlalchemy import func, distinct, select, and_
+from flask_googlemaps import Map, icons
+from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
 from app.api_v2.views import create_question_list
 from app.main.forms import QuestionsCSVUploadForm
 from . import main
-from .. import db
 from .forms import (EditProfileForm, EditProfileAdminForm, TrainingVenueForm, TrainingForm,
                     DeleteTrainingForm, TrainingClassForm, TrainingSessionForm, SessionTopicForm, SessionTypeForm)
+from .. import db
+from ..decorators import admin_required, permission_required
 from ..models import (Permission, Role, User, Geo, UserType, Mapping, LocationTargets, Exam, Village, Ward,
                       Location, Education, EducationLevel, Referral, Parish, SubCounty, Recruitments, Registration,
                       Interview, Branch, Cohort, RecruitmentUsers, LinkFacility, CommunityUnit, Training,
                       TrainingClasses, TrainingSession, SessionAttendance, TrainingVenues, Trainees, SessionTopic,
-                      TrainingSessionType, Question, QuestionChoice)
-from ..decorators import admin_required, permission_required
-from flask_googlemaps import Map, icons
-from datetime import date, datetime, time
-from time import gmtime, strftime
-import os, time, calendar, uuid
-from ..data import data
-import io
-import csv
-import operator
+                      TrainingSessionType, Question, QuestionChoice, ExamTraining, QuestionTopic, ExamQuestion)
 
 currency = 'UGX '
 
@@ -1636,6 +1635,7 @@ def followed_by(username):
 
 
 @main.route('/training/questions')
+@login_required
 def training_questions():
     page = {"title": 'Questions', 'subtitle': 'View, Add and edit questions'}
     questions = Question.query.filter_by(archived=False)
@@ -1650,6 +1650,7 @@ def training_questions():
 
 
 @main.route('/training/questions/add', methods=['GET', 'POST'])
+@login_required
 def training_questions_add():
     errors = []
     form = QuestionsCSVUploadForm()
@@ -1709,14 +1710,181 @@ def training_questions_add():
 
 
 @main.route('/training/question/<int:id>', methods=['GET', 'POST'])
+@login_required
 def training_question_edit(id):
     page = {"title": 'Edit Question', 'subtitle': 'Edit Question'}
     if request.method == 'GET':
+        db.session.rollback()
         question = Question.query.filter_by(id=id).first_or_404()
         return render_template('training_question_edit.html',
                                title='Edit Question',
                                question=json.dumps(question.to_json()),
+                               endpoint=url_for('main.training_question_edit', id=question.id),
                                page=page)
+    else:
+        try:
+            data = request.json.get('question', None)
+            
+            if not data:
+                return jsonify(status=False, message="Invalid request"), 400
+        
+            question = Question.query.filter_by(id=data.get('id', None)).first_or_404()
+            if data.get('question', None):
+                question.question = data.get('question')
+            if data.get('allocated_marks', None):
+                question.allocated_marks = data.get('allocated_marks')
+                
+            # db.session.merge(question)
+            
+            if data.get('choices', None):
+                new_choices = data.get('choices')
+                new_choices_ids = [c.get('id') for c in new_choices if c.get('id') is not None]
+                existing_choices = question.choices
+                choices_to_delete = [c for c in existing_choices if c.id not in new_choices_ids]
+                for c in choices_to_delete:
+                    db.session.delete(c)
+                
+                for choice in new_choices:
+                    id = choice.get('id', None)
+                    new_question_choice = QuestionChoice(
+                        id=id,
+                        question_id=question.id,
+                        question_choice=choice.get('question_choice'),
+                        is_answer=choice.get('is_answer'),
+                        allocated_marks=choice.get('allocated_marks'),
+                        created_by=choice.get('created_by'),
+                        date_created=choice.get('date_created'),
+                        archived=choice.get('archived'))
+                    db.session.merge(new_question_choice) if id is not None else db.session.add(new_question_choice)
+                    
+            if data.get('topics', None):
+                new_topics = data.get('topics')
+                print(new_topics)
+                existing_topics = QuestionTopic.query.filter_by(question_id=question.id, archived=False)
+                existing_topics_ids = [t.session_topic_id for t in existing_topics]
+                for t in existing_topics:
+                    if t.session_topic_id not in new_topics:
+                        db.session.delete(t)
+                        db.session.commit()
+                for t in new_topics:
+                    if t not in existing_topics_ids:
+                        new_question_topic = QuestionTopic(
+                            id=None,
+                            question_id=question.id,
+                            session_topic_id=t
+                        )
+                        db.session.add(new_question_topic)
+                        
+            db.session.commit()
+            
+            return jsonify(status=True, message='Saved successfully'), 200
+            
+        except Exception as e:
+            
+            return jsonify(status=False, message='An error occurred while processing your request. Please try again'), 500
+
+
+@main.route('/training/exams')
+@login_required
+def training_exams():
+    page = {'title': 'Exams List', 'subtitle': 'View list of all exams'}
+
+    exams = ExamTraining.query.filter_by(archived=False)
+    
+    pagination_count = request.args.get('page', 1, type=int)
+    pagination = exams.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)
+    return render_template('training_exams.html',
+                           title='Exams',
+                           page=page,
+                           exams=[exam.to_json() for exam in exams],
+                           endpoint='main.training_exams',
+                           pagination=pagination)
+
+
+@main.route('/training/exam/add')
+@login_required
+def training_exam_add():
+    page = {'title': 'Add Exam', 'subtitle': 'Add new Exam'}
+    return render_template('training_exam_add.html',
+                           title='Add Exam',
+                           page=page,
+                           endpoint='main.training_exam_save')
+
+
+@main.route('/training/exam/<int:id>')
+@login_required
+def training_exam_edit(id):
+    page = {'title': 'Edit Exam', 'subtitle': 'Edit Exam'}
+    exam = ExamTraining.query.filter_by(id=id).first_or_404()
+    
+    return render_template('training_exam_edit.html',
+                           title='Edit Exam',
+                           page=page,
+                           endpoint='main.training_exam_save',
+                           exam=json.dumps(exam.to_json()))
+
+@main.route('/training/exam/save', methods=['POST'])
+def training_exam_save():
+    try:
+        
+        if not request.json:
+            return jsonify(status=False, message="Invalid request"), 400
+        
+        data = request.json
+        
+        id = data.get('id', None)
+        title = data.get('title', None)
+        country = data.get('country', None)
+        exam_status_id = data.get('exam_status_id', None)
+        questions = data.get('questions', None)
+        
+        if not title or not questions:
+            return jsonify(status=False, message="Invalid request"), 400
+        
+        exam = ExamTraining(
+            id=id,
+            title=title,
+            country=country,
+            exam_status_id=exam_status_id
+        )
+        
+        db.session.merge(exam) if id is not None else db.session.add(exam)
+        db.session.commit()
+        
+        existing_questions = ExamQuestion.query.filter_by(exam_id=exam.id)
+        existing_questions_ids = [q.question_id for q in existing_questions]
+        new_question_ids = [q.get("id", None) for q in questions if q.get("id", None)]
+        for q in existing_questions:
+            if q.id not in new_question_ids:
+                db.session.delete(q)
+                db.session.commit()
+                
+        for question in questions:
+            question_id = question.get("id", None)
+            if id not in existing_questions_ids:
+                exam_question = ExamQuestion(
+                    id=None,
+                    exam_id=exam.id,
+                    question_id=question_id,
+                    weight=question.get("weight"),
+                    allocated_marks=question.get('allocated_marks'),
+                    country=exam.country,
+                    archived=False
+                )
+                
+                db.session.add(exam_question)
+            else:
+                exam_question = ExamQuestion.query.filter_by(exam_id=exam.id, question_id=question_id).first()
+                exam_question.weight = question.get('weight')
+                exam_question.allocated_marks = question.get('allocated_marks')
+                
+        db.session.commit()
+        
+        return jsonify(status=True, message="Saved successfully"), 200
+        
+    except Exception as e:
+        print e
+        return jsonify(status=False, message='An unexpected error has occurred. Please try again'), 500
 
 
 @main.route('/csv')

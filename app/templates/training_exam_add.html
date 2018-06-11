@@ -1,0 +1,461 @@
+{% extends "base.html" %}
+{% block title %}Questions{% endblock %}
+
+{% block content %}
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>{{ title }}
+                    <small>{{ title }}</small>
+                </h3>
+            </div>
+
+            <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Go!</button>
+          </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+    <div class="row" id="exam-ui">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Add Exam</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <button rv-on-click="controller.save" class="add-question-button btn btn-primary">
+                                <i class="fa fa-save"></i> Save Exam
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    <div class="row">
+
+                        <div class="col-xs-12 col-md-10 col-md-offset-1">
+
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <small class="text-info"><i class="fa fa-info"></i> Exam Title</small>
+                                    <input name="question" id="question" type="text" class="form-control"
+                                           placeholder="Exam Title" rv-value="data.title"/>
+                                </div>
+
+                            </div>
+
+                            <div class="row margin-top margin-bottom">
+                                <div class="col-xs-12">
+                                    <small class="text-info"><i class="fa fa-info"></i> Country</small>
+                                    <select class="form-control" rv-value="data.country">
+                                        <option value="KE">Kenya</option>
+                                        <option value="UG">Uganda</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-xs-12">
+
+                                    <div class="row margin-bottom">
+
+                                        <div class="col-xs-12">
+
+                                            <small class="text-info"><i class="fa fa-info"></i> Selected Questions
+                                            </small>
+
+                                            <div id="questions-panel">
+
+                                                <ul id="sortable">
+
+
+                                                    <li rv-each-question="data.questions"
+                                                        class="ui-state-default question-item">
+
+                                                        <div class="row">
+
+                                                            <div class="col-xs-8">
+
+                                                                <p class="question-title">
+                                                                    <span
+                                                                            rv-text="question.question"></span>
+                                                                </p>
+                                                                <ul class="question-choices">
+                                                                    <li class="question-choice"
+                                                                        rv-each-choice="question.choices">
+                                                                        <p class="question-choice-text">
+                                                                            <span rv-text="choice.question_choice"></span>
+                                                                            <small class="is_answer"
+                                                                                   rv-show="choice.is_answer">Correct
+                                                                                Answer
+                                                                            </small>
+                                                                        </p>
+
+                                                                    </li>
+                                                                </ul>
+
+                                                            </div>
+                                                            <div class="col-xs-4">
+                                                                <p class="question-marks">(
+                                                                    <input class="form-control" type="number" rv-value="question.allocated_marks" style="width: 50px !important; display: inline-block; height: auto; padding: 2px 5px;"> Marks)</p>
+
+                                                                <p>
+                                                                    <button rv-on-click="controller.removeQuestion"
+                                                                            class="btn btn-danger btn-xs pull-right"><i
+                                                                            class="fa fa-remove"></i></button>
+                                                                </p>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </li>
+
+                                                </ul>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row margin-top margin-bottom">
+
+                                        <div class="col-xs-12">
+
+                                            <small class="text-info"><i class="fa fa-info"></i> Search For Questions and
+                                                select to add
+                                            </small>
+                                            <select class='form-control' name="questions_search"
+                                                    id="questions_search" multiple></select>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay" style="display: none;">
+        <div>
+            <div class="loader center-block"></div>
+            <h3 class="text-center" style="color: white;">Please wait</h3>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block additionalcss %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.structure.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.theme.min.css') }}">
+
+    <style>
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            display: none;
+        }
+
+        .select2-results__option[aria-selected=true] {
+            display: none;
+        }
+
+        #sortable {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        #sortable .question-item {
+            margin: 5px;
+            padding: 10px;
+            background: white;
+            border: 1px dashed #ccc;
+        }
+
+        .question-title {
+            font-size: 15px;
+            font-weight: normal;
+            text-align: left;
+            margin: 10px 0;
+        }
+
+        .question-marks {
+            font-size: 15px;
+            font-weight: normal;
+            text-align: right;
+            margin: 10px 0;
+        }
+
+        .is_answer {
+            color: green;
+            font-weight: bold;
+        }
+
+        .ui-state-highlight {
+            height: 1.5em;
+            line-height: 1.2em;
+        }
+
+        #overlay {
+            z-index: 1000;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+    justify-content: center;
+        }
+
+    .loader {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+        opacity: 1;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+    </style>
+{% endblock %}
+
+{% block additionaljs %}
+    <script src="{{ url_for('static', filename='js/rivets.bundled.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/select2.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lodash.min.js') }}"></script>
+{% endblock %}
+
+{% block javascript %}
+
+    <script>
+
+        var Exam_Add_App = (function ($) {
+
+            var cached_questions = [];
+
+            var exam = {
+                id: null,
+                title: null,
+                created_by: null,
+                date_created: null,
+                exam_status_id: null,
+                archived: false,
+                country: null,
+                questions: []
+            };
+
+            var app = {
+                init: function () {
+                    app.initBindings();
+                    app.initQuestionsSearch();
+                    app.initSortable();
+                },
+
+                initSortable: function () {
+                    $("#sortable").sortable({
+                        placeholder: "ui-state-highlight",
+                        start: function (e, ui) {
+                            var start_pos = ui.item.index();
+                            ui.item.data('start_pos', start_pos);
+                        },
+                        stop: function (e, ui) {
+                            var start_pos = ui.item.data('start_pos');
+                            if (start_pos !== ui.item.index()) {
+                                var question = exam.questions[start_pos];
+                                exam.questions[start_pos] = exam.questions[ui.item.index()];
+                                exam.questions[ui.item.index()] = question; // TODO consult on this
+                            }
+                        },
+                        update: function (e, ui) {
+                        }
+                    });
+                },
+
+                initBindings: function () {
+                    rivets.bind(document.querySelector('#exam-ui'), {
+                        data: exam,
+                        controller: app.getController()
+                    })
+                },
+
+                getController: function () {
+                    return {
+                        removeQuestion: function (e, model) {
+                            var index = model.index;
+                            var id = model.question.id;
+                            if (typeof index !== "undefined") {
+                                exam.questions.splice(index, 1);
+                            }
+
+                            if (typeof id !== 'undefined') {
+
+                                var values = $("#questions_search").val();
+                                values = _.map(values, function (value) {
+                                    return parseInt(value)
+                                });
+                                values = _.filter(values, function (value) {
+                                    return value !== id
+                                });
+                                $('#questions_search').val(values).trigger('change');
+                            }
+                        },
+                        save: function(e, model) {
+                            var params = $.extend(true, {}, exam);
+
+                            params.questions = _.map(params.questions, function(q, i) {
+                                return {
+                                    id: q.id,
+                                    allocated_marks: q.allocated_marks,
+                                    weight: i
+                                }
+                            });
+
+                            if (!params.title) {
+                                window.alert("Please input the exam title");
+                                return;
+                            }
+
+                            if (!params.country) {
+                                window.alert("Please select the country");
+                                return;
+                            }
+
+                            if (params.questions.length === 0) {
+                                window.alert("Please select set some questions for this examinations");
+                                return;
+                            }
+
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ url_for('main.training_exam_save')}}",
+                                dataType: 'json',
+                                contentType: "application/json; charset=utf-8",
+                                data: JSON.stringify(params),
+                                xhrFields: {
+                                    withCredentials: true
+                                },
+                                beforeSend: function(xhr, settings) {
+                                    $('#overlay').show();
+                                },
+                                error: function(xhr, status, error) {
+                                    $('#overlay').hide();
+                                    window.alert(error);
+                                },
+                                success: function(data, status, xhr) {
+                                    $('#overlay').hide();
+                                    window.alert(data.message);
+
+                                    if (data.status) {
+                                        window.history.back();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                },
+
+                initQuestionsSearch: function () {
+
+                    var select = $('#questions_search');
+
+                    select.select2({
+                        placeholder: 'Search For Questions',
+                        maximumSelectionLength: 0,
+                        ajax: {
+                            url: '{{ url_for('api_v2.get_questions') }}',
+                            delay: 250,
+                            processResults: function (data) {
+
+                                var questions = data.questions;
+                                cached_questions = questions;
+                                questions = _.map(questions, function (value, index) {
+                                    return {
+                                        text: value.question,
+                                        id: value.id
+                                    }
+                                });
+
+                                return {
+                                    results: questions,
+                                    pagination: {
+                                        more: false
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    select.change(function (e) {
+                        var values = $(e.target).val();
+                        if (values && values.length) {
+                            values = _.map(values, function (value) {
+                                return parseInt(value);
+                            });
+                            var selectedQuestionsIds = _.map(exam.questions, function (value) {
+                                return value.id
+                            });
+                            var toAdd = values.length > selectedQuestionsIds.length;
+                            var diff = _.uniq(_.concat(_.differenceWith(values, selectedQuestionsIds), _.differenceWith(selectedQuestionsIds, values)));
+                            if (diff.length > 0) {
+
+                                diff.forEach(function (id) {
+
+                                    var question = _.filter(cached_questions, function (q, i) {
+                                        return q.id === id
+                                    });
+
+                                    if (question.length > 0) {
+                                        question = question[0];
+                                        if (toAdd)
+                                            exam.questions.push(question);
+                                        else
+                                            exam.questions.splice(exam.questions.indexOf(question), 1)
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            };
+
+            return app;
+
+        })(jQuery);
+
+
+        $(document).ready(function () {
+            Exam_Add_App.init();
+        });
+
+    </script>
+
+{% endblock %}
