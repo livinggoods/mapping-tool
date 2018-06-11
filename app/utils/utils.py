@@ -4,6 +4,7 @@ import os
 import csv
 import decimal
 import datetime
+from collections import OrderedDict
 
 class RequiredIf(object):
   """Validates field conditionally.
@@ -54,3 +55,9 @@ def alchemyencoder(obj):
     return obj.isoformat()
   elif isinstance(obj, decimal.Decimal):
     return float(obj)
+  
+def asdict(model):
+      result = OrderedDict()
+      for key in model.__mapper__.c.keys():
+        result[key] = getattr(model, key)
+      return result

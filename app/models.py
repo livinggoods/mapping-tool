@@ -11,7 +11,7 @@ from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from data import data
-from utils.utils import validate_uuid
+from utils.utils import validate_uuid, asdict
 from . import db, login_manager
 
 
@@ -2425,17 +2425,8 @@ class ExamTraining(db.Model):
     exam_status = relationship(u'ExamStatus')
 
     def _asdict(self):
-        result = OrderedDict()
-        for key in self.__mapper__.c.keys():
-            result[key] = getattr(self, key)
-        if not result.has_key('exam_status'):
-            result['exam_status'] = self.exam_status.to_json() if self.exam_status else None
-            
-        if not result.has_key('questions'):
-            result["questions"] = [exam_question.question.to_json() for exam_question in
-                                   ExamQuestion.query.filter_by(exam_id=self.id, archived=False)]
-            
-        return result
+        return asdict(self)
+    
 
     def to_json(self):
         return self._asdict()

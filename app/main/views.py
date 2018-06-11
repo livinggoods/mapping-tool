@@ -21,11 +21,8 @@ from .forms import (EditProfileForm, EditProfileAdminForm, TrainingVenueForm, Tr
                     DeleteTrainingForm, TrainingClassForm, TrainingSessionForm, SessionTopicForm, SessionTypeForm)
 from .. import db
 from ..decorators import admin_required, permission_required
-from ..models import (Permission, Role, User, Geo, UserType, Mapping, LocationTargets, Exam, Village, Ward,
-                      Location, Education, EducationLevel, Referral, Parish, SubCounty, Recruitments, Registration,
-                      Interview, Branch, Cohort, RecruitmentUsers, LinkFacility, CommunityUnit, Training,
-                      TrainingClasses, TrainingSession, SessionAttendance, TrainingVenues, Trainees, SessionTopic,
-                      TrainingSessionType, Question, QuestionChoice, ExamTraining, QuestionTopic, ExamQuestion)
+from ..utils import asdict
+from ..models import *
 
 currency = 'UGX '
 
@@ -1815,13 +1812,14 @@ def training_exam_add():
 @login_required
 def training_exam_edit(id):
     page = {'title': 'Edit Exam', 'subtitle': 'Edit Exam'}
-    exam = ExamTraining.query.filter_by(id=id).first_or_404()
+    exam =  ExamTraining.query.filter_by(id=id).first_or_404()
+    exam = exam_with_questions_to_dict(exam)
     
     return render_template('training_exam_edit.html',
                            title='Edit Exam',
                            page=page,
                            endpoint='main.training_exam_save',
-                           exam=json.dumps(exam.to_json()))
+                           exam=json.dumps(exam))
 
 @main.route('/training/exam/save', methods=['POST'])
 def training_exam_save():
@@ -1936,3 +1934,21 @@ def interview_pass(interview):
     if interview.commitment > 1 and interview.total_score > 24 and interview.special_condition == 'No':
         status = True
     return status
+
+def exam_with_questions_to_dict(exam):
+    result = asdict(exam)
+    if not result.has_key('exam_status'):
+        result['exam_status'] = exam.exam_status.to_json() if exam.exam_status else None
+
+    if not result.has_key('questions'):
+        questions = []
+        exam_questions = ExamQuestion.query.filter_by(exam_id=exam.id, archived=False).order_by(ExamQuestion.weight)
+        for question in exam_questions:
+            question_as_dict_ = question.question._asdict()
+            question_as_dict_['allocated_marks'] = question.question.allocated_marks \
+                if question.allocated_marks is None else question.allocated_marks
+            questions.append(question_as_dict_)
+    
+        result["questions"] = questions
+
+    return result
