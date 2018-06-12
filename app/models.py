@@ -2418,6 +2418,7 @@ class ExamTraining(db.Model):
     title = Column(String(45))
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
+    passmark = Column(Integer, nullable=True)
     exam_status_id = Column(ForeignKey(u'exam_status.id'), nullable = True, index = True)
     archived = Column(db.Boolean, default=False)
     country = Column(String(20), server_default=text("'UG'"), nullable=False)

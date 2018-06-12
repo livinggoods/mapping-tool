@@ -1837,6 +1837,7 @@ def training_exam_save():
         title = data.get('title', None)
         country = data.get('country', None)
         exam_status_id = data.get('exam_status_id', None)
+        passmark = data.get('passmark', None)
         questions = data.get('questions', None)
         
         if not title or not questions:
@@ -1846,7 +1847,8 @@ def training_exam_save():
             id=id,
             title=title,
             country=country,
-            exam_status_id=exam_status_id
+            exam_status_id=exam_status_id,
+            passmark=passmark
         )
         
         db.session.merge(exam) if id is not None else db.session.add(exam)
