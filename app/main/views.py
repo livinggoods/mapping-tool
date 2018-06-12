@@ -7,7 +7,7 @@ import uuid
 from datetime import date, datetime, time
 from time import gmtime, strftime
 
-from flask import json
+from flask import json, session
 from flask import (render_template, redirect, url_for, flash, request, current_app, jsonify)
 from flask.ext import excel
 from flask_googlemaps import Map, icons
@@ -1693,6 +1693,7 @@ def training_questions_add():
             if abs_path:
                 os.remove(abs_path)
         except Exception as e:
+            # TODO This is a silent error and needs to be logged
             pass
 
         if len(errors) > 0:
@@ -1703,6 +1704,8 @@ def training_questions_add():
                                    page=page,
                                    errors=errors)
         else:
+            session.pop('_flashes', None)
+            flash("Saved successfully")
             return redirect(url_for('main.training_questions'))
 
 

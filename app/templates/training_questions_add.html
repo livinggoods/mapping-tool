@@ -33,19 +33,38 @@
                         <small>Upload CSV to add new Questions</small>
                     </h2>
 
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                        </li>
-                        <li><a class="close-link"><i class="fa fa-close"></i></a>
-                        </li>
-                    </ul>
+
 
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <p class="text-muted font-13 m-b-30">
-                        Upload CSV file to create questions. You can download a sample CSV file using this link
+                    <p>
+                        Upload CSV file to create questions.
+                        You can download a sample CSV through the following link: <a href="/static/sample/questions_sample.csv">Sample CSV Download</a>
+                    </p>
+
+                    <p>
+                        Please note the following:
+                        <ul>
+                    <li>
+                        The <strong>question</strong>, <strong>answer</strong> and <strong>atleast two choices</strong>
+                        are required
+                    </li>
+                    <li>The <strong>allocated_marks</strong> is NOT required</li>
+                    <li>
+                        The choices should be on the colums <strong>choice_a, choice_b, ... </strong> and you can have
+                        as many choices as possible
+                    </li>
+                    <li>The <strong>order of the columns</strong> does not matter.</li>
+                    <li>
+                        For the <strong>system to detect the correct answer</strong>, the answer column should contain
+                        the title of the column with the correct answer i.e. <strong>choice_a or choice_b ...</strong>
+                    </li>
+                    <li>
+                        Please download a <strong>Sample CSV file</strong> using this link:
                         <a href="/static/sample/questions_sample.csv">Sample CSV Download</a>
+                    </li>
+                </ul>
                     </p>
 
                     {% if errors and errors | length > 0 %}
