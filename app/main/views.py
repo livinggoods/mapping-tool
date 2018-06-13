@@ -1635,7 +1635,7 @@ def followed_by(username):
 @login_required
 def training_questions():
     page = {"title": 'Questions', 'subtitle': 'View, Add and edit questions'}
-    questions = Question.query.filter_by(archived=False)
+    questions = Question.query.filter_by(archived=False).order_by(Question.id)
     pagination_count = request.args.get('page', 1, type=int)
     pagination = questions.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)
     return render_template('training_questions.html',
@@ -1789,7 +1789,7 @@ def training_question_edit(id):
 def training_exams():
     page = {'title': 'Exams List', 'subtitle': 'View list of all exams'}
 
-    exams = ExamTraining.query.filter_by(archived=False)
+    exams = ExamTraining.query.filter_by(archived=False).order_by(ExamTraining.id)
     
     pagination_count = request.args.get('page', 1, type=int)
     pagination = exams.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)

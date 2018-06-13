@@ -385,7 +385,7 @@
                                     window.alert(data.message);
 
                                     if (data.status) {
-                                        window.history.back();
+                                        window.location.href = '{{ url_for("main.training_exams") }}';
                                     }
                                 }
                             });
