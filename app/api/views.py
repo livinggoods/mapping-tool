@@ -3,25 +3,46 @@ import os
 from flask_httpauth import HTTPBasicAuth
 
 from . import api
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, login_user, abort
 from flask import Response, request, jsonify
 import json
 import time
 from sqlalchemy import func, distinct, select, exists, and_
 from .. import db
-from ..models import (Education, SessionAttendance, User, IccmComponents, LinkFacility, Village, PartnerActivity, GpsData, Ward, County,
-                      Location, SessionTopic, CommunityUnit, Referral, Recruitments, Interview, Exam, TrainingSession,
-                      Partner, Mapping, Parish, Training, Trainees, TrainingClasses, TraineeStatus, Registration)
+from ..models import *
 from .. data import data
 import csv
 import uuid
-import random
+from ..decorators import api_login_required
+from ..utils.utils import *
 
-@api.route('/firm_summary')
-@login_required
-def firm_summary():
-    summary = current_user.firm_summary()
-    return Response(json.dumps(summary, indent=4), mimetype='application/json')
+
+
+@api.after_request
+def apply_caching(response):
+    response.headers["Content-type"] = "application/json"
+    return response
+
+@api.route('/users/login', methods=['POST'])
+def users_login():
+    """
+    API Endpoint to login user and return their details and authentication token
+    :return:
+    """
+    form = request.form
+    email = form.get('email', None)
+    password = form.get('password', None)
+
+    if not email or not password:
+        return jsonify(error='Invalid request'), 400
+
+    user = User.query.filter_by(email=email).first()
+
+    if user is None or not user.verify_password(password):
+        return jsonify(error="Invalid login credentials"), 400
+    login_user(user)
+    return jsonify(user=user.to_json(), auth_token={"token": user.generate_auth_token(), "expires_in": 3600}), 200
+
 
 @api.route('/recruitments.json')
 @api.route('/recruitments.json')
@@ -50,50 +71,62 @@ def get_ke_counties_json():
 
 
 @api.route('/recruitment/<string:id>', methods=['GET', 'POST'])
+@api_login_required
 def api_recruitment(id):
-  if request.method == 'GET':
-    page={'title':'Recruitments', 'subtitle':'Recruitments done so far'}
-    recruitment = Recruitments.query.filter_by(id=id).first()
-    return jsonify({'name':recruitment.name, 'id':recruitment.id})
-  else:
-    if request.form.get('action') =='confirmed' or request.form.get('action') =='draft':
-      recruitment = Recruitments.query.filter_by(id=request.form.get('id')).first()
-      recruitment.status = request.form.get('action')
-      db.session.add(recruitment)
-      db.session.commit()
-      # also create a draft training, that needs to be confirmed by the Training Team.
-      # When training has been confirmed, the person who confirmeed it becomes the owner
-      if request.form.get('action') == 'confirmed':
-        existing_training = Training.query.filter_by(recruitment_id=recruitment.id).first()
-        if not existing_training:
-          training = Training(
-            id = uuid.uuid4(),
-            training_name = recruitment.name,
-            country = recruitment.country,
-            district = recruitment.district,
-            recruitment_id = recruitment.id,
-            training_status_id = 1,
-            client_time = time.time(),
-            created_by = 1,
-          )
-          if recruitment.country == 'KE':
-            if recruitment.subcounty_id is not None:
-              training.subcounty_id = recruitment.subcounty_id
-            if recruitment.county_id is not None:
-              training.county_id = recruitment.county_id
-          else:
-            if recruitment.location_id is not None:
-              training.location_id = recruitment.location_id
-          db.session.add(training)
-          db.session.commit()
-      return jsonify(status='updated', id=recruitment.id)
+    """
+    GET:
+    Gets recruitment details for a particular `id`
+
+    POST:
+    Updates recruitment details for a particular `id`
+
+    :param id:
+    :return:
+    """
+    if request.method == 'GET':
+        page = {'title': 'Recruitments', 'subtitle': 'Recruitments done so far'}
+        recruitment = Recruitments.query.filter_by(id=id).first()
+        return jsonify({'name': recruitment.name, 'id': recruitment.id})
     else:
-      # recruitments = Recruitments(name=request.form.get('name'))
-      # db.session.add(recruitments)
-      # db.session.commit()
-      return jsonify(status='ok and settled', test=request.form.get('action'))
+        if request.form.get('action') == 'confirmed' or request.form.get('action') == 'draft':
+            recruitment = Recruitments.query.filter_by(id=request.form.get('id')).first()
+            recruitment.status = request.form.get('action')
+            db.session.add(recruitment)
+            db.session.commit()
+            # also create a draft training, that needs to be confirmed by the Training Team.
+            # When training has been confirmed, the person who confirmeed it becomes the owner
+            if request.form.get('action') == 'confirmed':
+                existing_training = Training.query.filter_by(recruitment_id=recruitment.id).first()
+                if not existing_training:
+                    training = Training(
+                        id=uuid.uuid4(),
+                        training_name=recruitment.name,
+                        country=recruitment.country,
+                        district=recruitment.district,
+                        recruitment_id=recruitment.id,
+                        status=1,
+                        client_time=time.time(),
+                        created_by=1,
+                    )
+                    if recruitment.country == 'KE':
+                        if recruitment.subcounty_id is not None:
+                            training.subcounty_id = recruitment.subcounty_id
+                        if recruitment.county_id is not None:
+                            training.county_id = recruitment.county_id
+                    else:
+                        if recruitment.location_id is not None:
+                            training.location_id = recruitment.location_id
+                    db.session.add(training)
+                    db.session.commit()
+            return jsonify(status='updated', id=recruitment.id)
+        else:
+            # recruitments = Recruitments(name=request.form.get('name'))
+            # db.session.add(recruitments)
+            # db.session.commit()
+            return jsonify(status='ok')
     
 @api.route('/recruitment_training', methods=['GET','POST'])
+@api_login_required
 def api_recrutiment_trainig():
   if request.form.get('action') == 'confirmed' or request.form.get('action') == 'draft':
     recruitment = Recruitments.query.filter_by(id=request.form.get('id')).first()
@@ -170,11 +203,13 @@ def api_recrutiment_trainig():
 
 
 @api.route('/get/session-topics', methods=['GET'])
+@api_login_required
 def get_session_topics():
     return jsonify(topics=[t.to_json() for t in SessionTopic.query.filter_by(archived=0)])
 
 
 @api.route('/get/training/<string:id>', methods=['GET'])
+@api_login_required
 def get_training(id):
   training = Training.query.filter_by(id=id).first()
   training = training.to_json()
@@ -185,11 +220,13 @@ def get_training(id):
 
 
 @api.route('/get/training/session-attendances/<string:id>')
+@api_login_required
 def get_training_attendance(id):
   return jsonify(attendance =[a.to_json() for a in SessionAttendance.query.filter_by(training_id=id)])
 
 
 @api.route('/users/json', methods=['GET'])
+@api_login_required
 def api_users():
   users = User.query.all()
   api_data = []
@@ -197,15 +234,10 @@ def api_users():
     api_data.append({'id':user.id, 'name':user.name, 'country':user.location, 'username': user.username, 'app_name': user.app_name, 'email': user.email})
   return jsonify(users=api_data)
 
-@api.route('/test/json', methods=['GET', 'POST'])
-def get_test_url():
-  if request.method == 'GET':
-    return jsonify(status='get')
-  else:
-    return jsonify(status='post')
 
 @api.route('/syncrecruitments', methods=['GET', 'POST'])
 @api.route('/sync/recruitments', methods=['GET', 'POST'])
+@api_login_required
 def sync_recruitments():
   if request.method == 'GET':
     records  = Recruitments.query.order_by(Recruitments.client_time.asc()).filter(Recruitments.archived != 1)
@@ -247,6 +279,7 @@ def sync_recruitments():
 
 @api.route('/syncregistrations', methods=['GET', 'POST'])
 @api.route('/sync/registrations', methods=['GET', 'POST'])
+@api_login_required
 def sync_registrations():
   if request.method == 'GET':
     records  = Registration.query.filter(Registration.archived != 1)
@@ -260,51 +293,97 @@ def sync_registrations():
         record = Registration.from_json(registration)
         saved_record  = Registration.query.filter(Registration.id == record.id).first()
         if saved_record:
-          saved_record.id=registration.get('id')
-          saved_record.name =registration.get('name')
-          saved_record.phone =registration.get('phone')
-          saved_record.gender =registration.get('gender')
-          saved_record.recruitment =registration.get('recruitment')
-          saved_record.country =registration.get('country')
-          saved_record.dob =registration.get('dob')
-          saved_record.district =registration.get('district')
-          saved_record.subcounty =registration.get('subcounty')
-          saved_record.division =registration.get('division')
-          saved_record.village =registration.get('village')
-          saved_record.feature =registration.get('feature')
-          saved_record.english =registration.get('english')
-          saved_record.date_moved =registration.get('date_moved')
-          saved_record.languages =registration.get('languages')
-          saved_record.brac =registration.get('brac')
-          saved_record.brac_chp =registration.get('brac_chp')
-          saved_record.education =registration.get('education')
-          saved_record.occupation =registration.get('occupation')
-          saved_record.community_membership =registration.get('community_membership')
-          saved_record.added_by =registration.get('added_by')
-          saved_record.comment =registration.get('comment')
-          saved_record.proceed =registration.get('proceed')
-          saved_record.client_time =registration.get('client_time')
-          saved_record.date_added =registration.get('date_added')
-          saved_record.synced =registration.get('synced')
+          saved_record.id=registration.get('id') if registration.get('id') != '' \
+                                                    or registration.get('id') is not None else None
+          saved_record.name =registration.get('name') if registration.get('name') != '' \
+                                                         or registration.get('name') is not None else None
+          saved_record.phone =registration.get('phone') if registration.get('phone') != '' \
+                                                           or registration.get('phone') is not None else None
+          saved_record.gender =registration.get('gender') if registration.get('gender') != '' \
+                                                             or registration.get('gender') is not None else None
+          saved_record.recruitment =registration.get('recruitment') if registration.get('recruitment') != '' \
+                                                                       or registration.get('recruitment') is not None else None
+          saved_record.country =registration.get('country') if registration.get('country') != '' \
+                                                               or registration.get('country') is not None else None
+          saved_record.dob =registration.get('dob') if registration.get('dob') != '' \
+                                                       or registration.get('dob') is not None else None
+          saved_record.district =registration.get('district') if registration.get('district') != '' \
+                                                                 or registration.get('district') is not None else None
+          saved_record.subcounty =registration.get('subcounty') if registration.get('subcounty') != '' \
+                                                                   or registration.get('subcounty') is not None else None
+          saved_record.division =registration.get('division') if registration.get('division') != '' \
+                                                                 or registration.get('division') is not None else None
+          saved_record.village =registration.get('village') if registration.get('village') != '' \
+                                                               or registration.get('village') is not None else None
+          saved_record.feature =registration.get('feature') if registration.get('feature') != '' \
+                                                               or registration.get('feature') is not None else None
+          saved_record.english =registration.get('english') if registration.get('english') != '' \
+                                                               or registration.get('english') is not None else None
+          saved_record.date_moved =registration.get('date_moved') if registration.get('date_moved') != '' \
+                                                                     or registration.get('date_moved') is not None else None
+          saved_record.languages =registration.get('languages') if registration.get('languages') != '' \
+                                                                   or registration.get('languages') is not None else None
+          saved_record.brac =registration.get('brac') if registration.get('brac') != '' \
+                                                         or registration.get('brac') is not None else None
+          saved_record.brac_chp =registration.get('brac_chp') if registration.get('brac_chp') != '' \
+                                                                 or registration.get('brac_chp') is not None else None
+          saved_record.education =registration.get('education') if registration.get('education') != '' \
+                                                                   or registration.get('education') is not None else None
+          saved_record.occupation =registration.get('occupation') if registration.get('occupation') != '' \
+                                                                     or registration.get('occupation') is not None else None
+          saved_record.community_membership =registration.get('community_membership') \
+            if registration.get('community_membership') != '' or registration.get('community_membership') is not None else None
+          saved_record.added_by =registration.get('added_by') if registration.get('added_by') != '' \
+                                                                 or registration.get('added_by') is not None else None
+          saved_record.comment =registration.get('comment') if registration.get('comment') != '' \
+                                                               or registration.get('comment') is not None else None
+          saved_record.proceed =registration.get('proceed') if registration.get('proceed') != '' \
+                                                               or registration.get('proceed') is not None else None
+          saved_record.client_time =registration.get('client_time') if registration.get('client_time') != '' \
+                                                                       or registration.get('client_time') is not None else None
+          saved_record.date_added =registration.get('date_added') if registration.get('date_added') != '' \
+                                                                     or registration.get('date_added') is not None else None
+          saved_record.synced =registration.get('synced') if registration.get('synced') != '' \
+                                                             or registration.get('synced') is not None else None
           saved_record.archived = 0
-          saved_record.chew_name =registration.get('chew_name')
-          saved_record.chew_number =registration.get('chew_number')
-          saved_record.ward =registration.get('ward')
-          saved_record.cu_name =registration.get('cu_name')
-          saved_record.link_facility =registration.get('link_facility')
-          saved_record.households =registration.get('households')
-          saved_record.trainings =registration.get('trainings')
-          saved_record.is_chv =registration.get('is_chv')
-          saved_record.is_gok_trained =registration.get('is_gok_trained')
-          saved_record.referral =registration.get('referral')
-          saved_record.referral_number =registration.get('referral_number')
-          saved_record.referral_title =registration.get('referral_title')
-          saved_record.vht =registration.get('vht')
-          saved_record.parish =registration.get('parish')
-          saved_record.financial_accounts =registration.get('financial_accounts')
-          saved_record.recruitment_transport =registration.get('recruitment_transport')
-          saved_record.branch_transport =registration.get('branch_transport')
-          saved_record.referral_id =registration.get('chew_id')
+          saved_record.chew_name =registration.get('chew_name') if registration.get('chew_name') != '' \
+                                                                   or registration.get('chew_name') is not None else None
+          saved_record.chew_number =registration.get('chew_number') if registration.get('chew_number') != '' \
+                                                                       or registration.get('chew_number') is not None else None
+          saved_record.ward =registration.get('ward') if registration.get('ward') != '' \
+                                                         or registration.get('ward') is not None else None
+          saved_record.cu_name =registration.get('cu_name') if registration.get('cu_name') != '' \
+                                                               or registration.get('cu_name') is not None else None
+          saved_record.link_facility =registration.get('link_facility') if registration.get('link_facility') != '' \
+                                                                           or registration.get('link_facility') is not None else None
+          saved_record.households =registration.get('households') if registration.get('households') != '' \
+                                                                     or registration.get('households') is not None else None
+          saved_record.trainings =registration.get('trainings') if registration.get('trainings') != '' \
+                                                                   or registration.get('trainings') is not None else None
+          saved_record.is_chv =registration.get('is_chv') if registration.get('is_chv') != '' \
+                                                             or registration.get('is_chv') is not None else None
+          saved_record.is_gok_trained =registration.get('is_gok_trained') \
+            if registration.get('is_gok_trained') != '' or registration.get('is_gok_trained') is not None else None
+          saved_record.referral =registration.get('referral') if registration.get('referral') != '' \
+                                                                 or registration.get('referral') is not None else None
+          saved_record.referral_number =registration.get('referral_number') \
+            if registration.get('referral_number') != '' or registration.get('referral_number') is not None else None
+          saved_record.referral_title =registration.get('referral_title') \
+            if registration.get('referral_title') != '' or registration.get('referral_title') is not None else None
+          saved_record.vht =registration.get('vht') if registration.get('vht') != '' \
+                                                       or registration.get('vht') is not None else None
+          saved_record.parish =registration.get('parish') if registration.get('parish') != '' \
+                                                             or registration.get('parish') is not None else None
+          saved_record.financial_accounts =registration.get('financial_accounts')\
+            if registration.get('financial_accounts') != '' \
+               or registration.get('financial_accounts') is not None else None
+          saved_record.recruitment_transport =registration.get('recruitment_transport') \
+            if registration.get('recruitment_transport') != '' or registration.get('recruitment_transport') \
+               is not None else None
+          saved_record.branch_transport =registration.get('branch_transport') if registration.get('branch_transport') != '' \
+                                                                                 or registration.get('branch_transport') is not None else None
+          saved_record.referral_id =registration.get('chew_id') if registration.get('chew_id') != '' \
+                                                                   or registration.get('chew_id') is not None else None
           db.session.add(saved_record)
           db.session.commit()
           operation='updated'
@@ -319,6 +398,7 @@ def sync_registrations():
     
 @api.route('/synclink_facilities', methods=['GET', 'POST'])
 @api.route('/sync/link_facilities', methods=['GET', 'POST'])
+@api_login_required
 def sync_link_facilities():
   if request.method == 'GET':
     records = LinkFacility.query.filter(LinkFacility.archived != 1)
@@ -362,6 +442,7 @@ def sync_link_facilities():
 
 @api.route('/syncmapping', methods=['GET', 'POST'])
 @api.route('/sync/mapping', methods=['GET', 'POST'])
+@api_login_required
 def sync_mapping():
   if request.method == 'GET':
     records = Mapping.query.filter(Mapping.archived != 1)
@@ -398,6 +479,7 @@ def sync_mapping():
 
 @api.route('/syncparish', methods=['GET', 'POST'])
 @api.route('/sync/parish', methods=['GET', 'POST'])
+@api_login_required
 def sync_parish():
   if request.method == 'GET':
     records = Parish.query.filter(Parish.archived != 1)
@@ -453,6 +535,7 @@ def sync_parish():
 
 @api.route('/syncvillages', methods=['GET', 'POST'])
 @api.route('/sync/villages', methods=['GET', 'POST'])
+@api_login_required
 def sync_village():
   if request.method == 'GET':
     if request.args.get('parish'):
@@ -587,6 +670,7 @@ def sync_village():
 
 @api.route('/syncpartners', methods=['GET', 'POST'])
 @api.route('/sync/partners', methods=['GET', 'POST'])
+@api_login_required
 def sync_partner():
   if request.method == 'GET':
     records = Partner.query.filter(Partner.archived != 1)
@@ -612,6 +696,7 @@ def sync_partner():
 
 @api.route('/synccommunity_unit', methods=['GET', 'POST'])
 @api.route('/sync/community_unit', methods=['GET', 'POST'])
+@api_login_required
 def sync_cu():
   if request.method == 'GET':
     records = CommunityUnit.query.filter_by(archived = 0)
@@ -682,6 +767,7 @@ def sync_cu():
 
 @api.route('/syncpartners/activity', methods=['GET', 'POST'])
 @api.route('/sync/partners/activity', methods=['GET', 'POST'])
+@api_login_required
 def sync_partner_cu():
   if request.method == 'GET':
     records = PartnerActivity.query.filter(PartnerActivity.archived != 1)
@@ -707,6 +793,7 @@ def sync_partner_cu():
 
 @api.route('/syncinterviews', methods=['GET', 'POST'])
 @api.route('/sync/interviews', methods=['GET', 'POST'])
+@api_login_required
 def sync_interviews():
   if request.method == 'GET':
     records  = Interview.query.filter(Interview.archived != 1)
@@ -755,6 +842,7 @@ def sync_interviews():
 
 @api.route('/syncexams', methods=['GET', 'POST'])
 @api.route('/sync/exams', methods=['GET', 'POST'])
+@api_login_required
 def sync_exams():
   if request.method == 'GET':
     records  = Exam.query.filter(Exam.archived != 1)
@@ -794,6 +882,7 @@ def sync_exams():
 
 @api.route('/synclocations', methods=['GET', 'POST'])
 @api.route('/sync/locations', methods=['GET', 'POST'])
+@api_login_required
 def sync_locations():
   if request.method == 'GET':
     locations = Location.query.filter(Location.archived == 0)
@@ -801,6 +890,7 @@ def sync_locations():
   
   
 @api.route('/get/locations', methods=['GET', 'POST'])
+@api_login_required
 def get_locations():
   if request.method == 'GET':
     locations = Location.query.filter(Location.archived == 0)
@@ -808,6 +898,7 @@ def get_locations():
 
 
 @api.route('/create/ke/counties')
+@api_login_required
 def create_ke_counties():
   with open(os.path.dirname(os.path.abspath(data.__file__))+'/kenya_county.csv', 'r') as f:
     for row in csv.reader(f.read().splitlines()):
@@ -819,6 +910,7 @@ def create_ke_counties():
 
 @api.route('/synccounties', methods=['GET', 'POST'])
 @api.route('/sync/counties', methods=['GET', 'POST'])
+@api_login_required
 def sync_counties():
   if request.method == 'GET':
     locations = Location.query.filter(Location.archived == 0)
@@ -831,6 +923,7 @@ def sync_counties():
     return jsonify({'locations': [location.to_json() for location in locations]})
 
 @api.route('/sync/gpsdata', methods=['GET', 'POST'])
+@api_login_required
 def sync_gps_data():
   if request.method == 'GET':
     records  = GpsData.query.all()
@@ -853,6 +946,7 @@ def sync_gps_data():
       return jsonify(error="No records posted")
 
 @api.route('/sync/chew_referral', methods=['GET', 'POST'])
+@api_login_required
 def sync_chew_referral():
   if request.method == 'GET':
     records  = Referral.query.all()
@@ -876,6 +970,7 @@ def sync_chew_referral():
       return jsonify(error="No records posted")
 
 @api.route('/sync/iccm-components', methods=['GET', 'POST'])
+@api_login_required
 def sync_iccm_components():
   if request.method == 'GET':
     iccms = IccmComponents.query.filter_by(archived=0)
@@ -885,18 +980,21 @@ def sync_iccm_components():
 
 
 @api.route('/sync/ke-subcounties', methods=['GET', 'POST'])
+@api_login_required
 def sync_ke_subcounties():
   ke_subcounties = data.get_ke_subcounties()
   return jsonify(subcounties=ke_subcounties)
 
 
 @api.route('/sync/ke/wards', methods=['GET', 'POST'])
+@api_login_required
 def sync_ke_wards():
   wards = Ward.query.filter_by(archived=0)
   return jsonify(wards=[ward.to_json() for ward in wards])
 
 
 @api.route('/get/training-data', methods=['GET', 'POST'])
+@api_login_required
 def get_training_data():
   """
     Returns Json Payload for the recruitments, and only the selected Applicants
@@ -917,6 +1015,7 @@ def get_training_data():
     return jsonify(message='not allowed'), 403
 
 @api.route('/recruitment-data/<string:id>', methods=['GET', 'POST'])
+@api_login_required
 def get_recruitmet_data(id):
   if request.method == 'GET':
     registrations = Registration.query.filter_by(recruitment=id).all()
@@ -925,6 +1024,7 @@ def get_recruitmet_data(id):
     return jsonify(error="No records posted")
 
 @api.route('/sync/trainings', methods=['GET', 'POST'])
+@api_login_required
 def get_trainings():
   """
     Returns Json Payload for the training data
@@ -937,6 +1037,7 @@ def get_trainings():
 
 
 @api.route('/sync/training-classes', methods=['GET', 'POST'])
+@api_login_required
 def sync_training_classes():
   """
   Syncs training classes at the cloud and in the mobile app
@@ -972,6 +1073,7 @@ def sync_training_classes():
 
 @api.route('/sync/<string:training_id>/trainees', methods=['GET', 'POST'])
 @api.route('/sync/trainees', methods=['GET', 'POST'])
+@api_login_required
 def sync_trainees(training_id=None):
   """
   Syncs trainees to and from the cloud
@@ -1008,6 +1110,7 @@ def sync_trainees(training_id=None):
 
 
 @api.route('/get/mapping-details/<string:id>', methods=['GET', 'POST'])
+@api_login_required
 def get_mapping_details_summary(id):
   """
   Get a summary of the mapping details
@@ -1027,10 +1130,230 @@ def get_mapping_details_summary(id):
     return jsonify(mappings=mapping)
 
 @api.route('/sync/education', methods=['GET','POST'])
+@api_login_required
 def get_education():
   return jsonify(education=[e.to_json() for e in Education.query.filter_by(archived=0)])
 
 @api.route('/sync/trainee-status', methods=['GET','POST'])
+@api.route('/exams', methods=['GET', 'POST'])
+@api_login_required
+def get_exams():
+  if request.method == 'GET':
+    records = ExamTraining.query.filter_by(archived=False)
+    return jsonify({'exams': [{'title': record.title, 'id': record.id, 'created': record.date_created}
+                              for record in records]})
+  else:
+    json_data = request.json
+    new_exam = ExamTraining(**json_data) if json_data.get('id') is not None else None
+    exam = ExamTraining.query.filter_by(id=json_data.get('id')).first() if json_data.get('id') is not None else None
+    if exam is not None:
+      db.session.merge(new_exam)
+    elif new_exam is not None:
+      db.session.add(new_exam)
+    db.session.commit()
+    return jsonify(status='ok')
+
+
+@api.route('/questions', methods=['GET', 'POST'])
+@api.route('/questions/<int:question_id>', methods=['GET', 'POST'])
+@api_login_required
+def get_questions(question_id = None):
+  if request.method == 'GET':
+    
+    term = request.args.get('term', None)
+    
+    if question_id:
+      records = Question.query.filter_by(id=question_id, archived=False)
+    else:
+      if term:
+        records = Question.query.filter(Question.archived == False, Question.question.ilike('%{}%'.format(term)))
+      else:
+        records = Question.query.filter_by(archived=False)
+    return jsonify({'questions': [{'question': record.question, 'id': record.id,
+                                   'allocated_marks': record.allocated_marks,
+                                   'question_type_id': record.question_type_id,
+                                   'choices': [choice.to_json() for choice in record.choices]}
+                                  for record in records]})
+  else:
+    """
+    Question Object will come in the form of json object, with choices as a list
+    """
+    json_data = request.json
+    question_list = request.json.get('questions')
+    if question_list is not None:
+      status = save_questions(question_list)
+      return jsonify(status=status)
+    return jsonify(message='no question posted')
+
+
+@api.route('/exam/<string:exam_id>', methods=['GET', 'POST'])
+@api_login_required
+def get_exam_details(exam_id):
+  if request.method == 'GET':
+    # get the exam
+    exam = ExamTraining.query.filter_by(id=exam_id, archived=False).first_or_404()
+    exam = exam._asdict()
+    exam_questions = ExamQuestion.query.filter_by(exam_id=exam_id, archived=False)
+    exam['questions'] = [{'question': record.question.question, 'id': record.question.id, 'allocated_marks':
+      record.question.allocated_marks,
+                          'question_type_id': record.question.question_type_id,
+                          'choices': [choice.to_json() for choice in record.question.choices]}
+                         for record in exam_questions]
+    return jsonify(examination=exam)
+
+
+@api.route('/exam/status', methods=['GET', 'POST'])
+@api_login_required
+def get_exam_status():
+  if request.method == 'GET':
+    # get the exam status
+    return jsonify(exam_statuses=[{'id': status.id, 'title': status.title}
+                                  for status in ExamStatus.query.filter_by(archived=False)])
+  else:
+    data = request.json
+    new_status = ExamStatus(**data)
+    existing_status = ExamStatus.query.filter_by(id=data.get('id')).first() if data.get('id') is not None else None
+    db.session.merge(new_status) if existing_status is not None else db.session.add(new_status)
+    db.session.commit()
+    return jsonify(status='ok')
+
+
+@api.route('/question/topics', methods=['GET', 'POST'])
+@api.route('/question/<string:question_id>/topics', methods=['GET', 'POST'])
+@api_login_required
+def question_topics(question_id = None):
+  if request.method == 'GET':
+    if question_id is None:
+      question_topics = QuestionTopic.query.filter_by(archived=False)
+    else:
+      question_topics = QuestionTopic.query.filter_by(archived=False, question_id=question_id)
+    return jsonify(question_topics=[{'id': topic.session_topic.id, 'topic': topic.session_topic.name}
+                                    for topic in question_topics])
+  else:
+    data = request.json
+    new_topic = QuestionTopic(**data)
+    existing_topic = QuestionTopic.query.filter_by(id=data.get('id')).first() if data.get('id') is not None else None
+    db.session.merge(new_topic) if existing_topic is not None else db.session.add(new_topic)
+    db.session.commit()
+    return jsonify(status='ok')
+
+
+@api.route('/question_type', methods=['GET', 'POST'])
+@api_login_required
+def question_types():
+  if request.method == 'GET':
+    return jsonify(question_types=[q_type._asdict() for q_type in QuestionType.query.filter_by(archived=False)])
+  else:
+    data = request.json
+    new_type = QuestionType(**data)
+    existing_type = QuestionType.query.filter_by(id=data.get('id')).first() if data.get('id') is not None else None
+    db.session.merge(new_type) if existing_type is not None else db.session.add(new_type)
+    db.session.commit()
+    return jsonify(status='ok')
+
+
+@api.route('/training/<string:training_id>/exams', methods=['GET', 'POST'])
+@api_login_required
+def training_exams(training_id = None):
+  if request.method == 'GET':
+    if training_id is None:
+      return jsonify(error="training id is required"), 400
+    return jsonify(exams=[e.exam._asdict() for e in TrainingExam.query.filter_by(training_id=training_id)])
+  else:
+    abort(405)
+
+
+def process_exam_csv(path):
+  questions = process_csv(path, False)
+  csv_questions = []
+  meta_data = Question.__table__.columns.keys()
+  for question in questions:
+    answer = question.get('answer')
+    # also append default meta for the question
+    for meta in meta_data:
+      question[meta] = question.get(meta)
+    choices = []
+    for key in question.keys():
+      if key not in meta_data and key.startswith('choice'):
+        choices.append({'choice': question.get(key), 'is_answer': True if key == answer else False})
+        question.pop(key)
+      question['choices'] = choices
+    csv_questions.append(question)
+  return csv_questions
+
+
+def create_question_list(path):
+  # validate the file
+  
+  if not os.path.isfile(path):
+    return {'errors': ['File not valid'], 'status': 'failed', 'batch_id': None}
+  question_list = process_exam_csv(path)
+  return save_questions(question_list)
+
+
+def save_questions(question_list):
+  errors = []
+  if question_list is not None:
+    batch_id = uuid.uuid4(),
+    for question_data in question_list:
+      choices = question_data.get('choices')
+      question = Question.query.filter_by(id=question_data.get('id')).first() if question_data.get(
+          'id') is not None else None
+      if question:
+        question.question = question_data.get('question')
+        question.allocated_marks = question_data.get('allocated_marks')
+        question.question_type_id = question_data.get('question_type_id')
+        question.created_by = question_data.get('created_by')
+        question.date_created = question_data.get('date_created')
+        question.archived = question_data.get('archived')
+        question_id = question.id
+        question.batch_id = batch_id
+        db.session.commit()
+      else:
+        new_question = Question(
+            question=question_data.get('question'),
+            allocated_marks=question_data.get('allocated_marks'),
+            question_type_id=question_data.get('question_type_id'),
+            created_by=question_data.get('created_by'),
+            date_created=question_data.get('date_created'),
+            archived=question_data.get('archived'),
+            batch_id=batch_id
+        )
+        db.session.add(new_question)
+        db.session.commit()
+        question_id = new_question.id
+      # Create choices
+      for choice in choices:
+        # check if the choice exists
+        q_choice = QuestionChoice.query.filter_by(question_id=question_id,
+                                                  question_choice=choice.get('choice'))
+        if q_choice is not None:
+          new_question_choice = QuestionChoice(
+              id=choice.get('id') if choice.get('id') is not None else None,
+              question_id=question_id,
+              question_choice=choice.get('choice'),
+              is_answer=choice.get('is_answer'),
+              allocated_marks=choice.get('allocated_marks'),
+              created_by=choice.get('created_by'),
+              date_created=choice.get('date_created'),
+              archived=choice.get('archived'))
+          db.session.add(new_question_choice)
+        else:
+          q_choice.question_id = question_id,
+          q_choice.question_choice = choice.get('choice'),
+          q_choice.is_answer = choice.get('is_answer'),
+          q_choice.allocated_marks = choice.get('allocated_marks'),
+          q_choice.created_by = choice.get('created_by'),
+          q_choice.date_created = choice.get('date_created'),
+          q_choice.archived = choice.get('archived')
+          db.session.add(q_choice)
+        db.session.commit()
+    return {'errors': None, 'status': 'ok', 'batch_id': batch_id, 'data': data}
+  else:
+    errors.append('The question list is empty')
+    return {'errors': errors, 'status': 'failed', 'csv_id': None}
+  
+  
 def get_training_status():
   return jsonify(training_status=[st.to_json() for st in TraineeStatus.query.filter_by(archived=0)])
 

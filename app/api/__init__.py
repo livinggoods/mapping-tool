@@ -10,4 +10,4 @@ api = Blueprint(
 # below are part of the Blueprint.  The views and erros modules must be
 # imported after the Blueprint object is instantiated because they rely on the
 # Blueprint object to define routes and error handles
-from . import views
+from . import views, errors

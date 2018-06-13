@@ -1,4 +1,4 @@
-from . import api_v2 as api
+from . import api as api
 from flask import jsonify
 
 

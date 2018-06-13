@@ -84,11 +84,8 @@ def create_app(config_name):
     # the 'url_prefix' parameter means all routes defined in the blueprint will
     # be registered with the prefix '/api/v1' (e.g., '/api/v1/relationships')
     app.register_blueprint(api_blueprint, url_prefix='/api/v1')
+    # register 'version 2' blueprint with Flask application
+    app.register_blueprint(api_blueprint, url_prefix='/api/v2')
 
-    # register 'api_v2' blueprint with Flask application
-    from .api_v2 import api_v2 as api_v2_blueprint
-    # the 'url_prefix' parameter means all routes defined in the blueprint will
-    # be registered with the prefix '/api/v2' (e.g., '/api/v2/relationships')
-    app.register_blueprint(api_v2_blueprint, url_prefix='/api/v2')
 
     return app

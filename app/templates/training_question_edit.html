@@ -331,7 +331,7 @@
 
                     $('#question_type').select2({
                         ajax: {
-                            url: '{{ url_for('api_v2.question_types') }}',
+                            url: '{{ url_for('api.question_types') }}',
                             processResults: function (data) {
                                 var question_types = data.question_types;
                                 question_types = question_types.map(function (value, index) {

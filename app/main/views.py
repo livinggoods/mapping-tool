@@ -14,7 +14,7 @@ from flask_googlemaps import Map, icons
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
-from app.api_v2.views import create_question_list
+from app.api.views import create_question_list
 from app.main.forms import QuestionsCSVUploadForm
 from . import main
 from .forms import (EditProfileForm, EditProfileAdminForm, TrainingVenueForm, TrainingForm,
