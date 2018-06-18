@@ -99,7 +99,7 @@ def api_recruitment(id):
                 existing_training = Training.query.filter_by(recruitment_id=recruitment.id).first()
                 if not existing_training:
                     training = Training(
-                        id=uuid.uuid4(),
+                        id=str(uuid.uuid4()),
                         training_name=recruitment.name,
                         country=recruitment.country,
                         district=recruitment.district,
@@ -178,7 +178,7 @@ def api_recrutiment_trainig():
             sess = SessionAttendance.query.filter_by(trainee_id=trainee_id, training_session_id=session.id, training_id=training.id).first()
             if not sess:
               sess = SessionAttendance(
-                  id = uuid.uuid4()
+                  id = str(uuid.uuid4())
               )
             sess.training_session_id = session.id
             sess.trainee_id = trainee.id
@@ -1294,7 +1294,7 @@ def create_question_list(path):
 def save_questions(question_list):
   errors = []
   if question_list is not None:
-    batch_id = uuid.uuid4(),
+    batch_id = str(uuid.uuid4()),
     for question_data in question_list:
       choices = question_data.get('choices')
       question = Question.query.filter_by(id=question_data.get('id')).first() if question_data.get(
@@ -1412,7 +1412,7 @@ def create_training(recruitment_id):
   training = Training.query.filter_by(recruitment_id=recruitment.id).first()
   if not training:
     training = Training(
-        id=uuid.uuid4(),
+        id=str(uuid.uuid4()),
         training_name=recruitment.name,
         country=recruitment.country,
         district=recruitment.district,
@@ -1439,7 +1439,7 @@ def create_training_topics(training):
                                                        session_topic_id=topic.id, archived=0).first()
     if not training_session:
       training_session = TrainingSession(
-          id=uuid.uuid4(),
+          id=str(uuid.uuid4()),
           training_id=training.id,
           session_topic_id=topic.id,
           country=training.country,
