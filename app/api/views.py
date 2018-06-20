@@ -1148,7 +1148,7 @@ def get_mapping_details_summary(id):
 def get_education():
   return jsonify(education=[e.to_json() for e in Education.query.filter_by(archived=0)])
 
-@api.route('/sync/trainee-status', methods=['GET','POST'])
+# @api.route('/sync/trainee-status', methods=['GET','POST'])
 @api.route('/exams', methods=['GET', 'POST'])
 @api_login_required
 def get_exams():

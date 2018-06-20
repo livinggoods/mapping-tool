@@ -50,13 +50,19 @@
         </div>
     </div>
     <div class="col-md-4 col-sm-4 col-xs-12">
-        <div class="x_panel tile fixed_height_320 overflow_hidden">
+        <div class="x_panel tile fixed_height_320">
             <div class="x_title">
-                <h2>Details </h2>
+                <h2>Trainees </h2>
                 <div class="clearfix"></div>
             </div>
-            <div class="x_content">
-
+            <div class="x_content training-trainees fixed_height_320">
+                <table class="countries_list">
+                  <tbody>
+                  <tr rv-each-trainee="data.trainees">
+                    <td><span rv-text="trainee.registration.name"></span></td>
+                  </tr>
+                  </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -68,11 +74,31 @@
             </div>
             <div class="x_content">
                 <table class="countries_list">
+                  <thead>
+                  <tr>
+                    <td>Exam</td>
+                    <td>Passmark</td>
+                    <td>Remove</td>
+                  </tr>
+                  </thead>
                   <tbody>
                     <tr rv-each-exam="data.exams">
                       <td><span rv-text="exam.title"></span></td>
-                      <td class="fs15 fw700 text-right"><span rv-text="exam.country"></span></td>
-                      <td class="fs15 fw700 text-right"><span rv-text="exam.date_created"></span></td>
+                      <td class="fs15 fw700 text-right">
+                        <p class="question-marks"><input class="form-control" type="number"
+                                                          rv-value="exam.passmark"
+                                                          style="width: 50px !important; display: inline-block;
+                                                          height: auto; padding: 2px 5px;">
+                        </p>
+
+
+                      </td>
+                      <td class="fs15 fw700 text-right">
+                        <button rv-on-click="controller.deleteExam"
+                                                                class="btn btn-danger btn-xs">
+                                                            <i class="fa fa-minus"></i>
+                                                        </button>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -116,6 +142,12 @@
         .select2-results__option[aria-selected=true] {
             display: none;
         }
+        .training-trainees{
+            margin-bottom: 0px !important;
+            overflow:scroll !important;;
+            -webkit-overflow-scrolling: touch !important;;
+        }
+
     </style>
 {% endblock %}
 {% block javascript %}
@@ -123,6 +155,7 @@
     var TrainingApp = (function ($) {
 
         var training = JSON.parse('{{ data | safe }}');
+        console.log(training);
         var training_exams = [];
         cached_exams = [];
         _.each(training.exams, function(exam) {
@@ -185,7 +218,12 @@
                                  }
                              }
                          });
-                    }
+                    },
+                    deleteExam: function (e, model) {
+                            var index = model.index;
+                            console.log(model.index);
+                            training.exams.splice(index, 1);
+                        },
                 }
             },
 
