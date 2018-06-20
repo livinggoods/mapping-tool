@@ -269,6 +269,11 @@ def delete_training(id):
 @login_required
 def training(id):
     training = Training.query.filter_by(id=id).first_or_404()
+    training_dict = asdict(training)
+    training_dict['exams'] = [e._asdict() for e in TrainingExam.query.filter_by(training_id=training.id, archived=False)]
+    training_dict['trainers'] = [t._asdict() for t in TrainingTrainers.query.filter_by(training_id=training.id, archived=0)]
+    training_dict['trainees'] = [trainee.to_json() for trainee in Trainees.query.filter_by(training_id=training.id)]
+    # return jsonify(training_dict)
     page = {'title': training.training_name,
             'subtitle': '{training} training details' \
                 .format(training=training.training_name)
@@ -276,6 +281,7 @@ def training(id):
     return render_template(
         'training.html',
         training=training,
+        data = json.dumps(training_dict),
         page=page
     )
 
@@ -1824,6 +1830,46 @@ def training_exam_edit(id):
                            endpoint='main.training_exam_save',
                            exam=json.dumps(exam))
 
+@main.route('/exam/training/save', methods=['POST'])
+@login_required
+def exam_training_save():
+    try:
+        if not request.json:
+            return jsonify(status=False, message="Invalid request"), 400
+        data = request.json
+        
+        #in order to save, we will not allow deleting the exams (just in case there are trainees who have taken the exam
+        training_id = request.json.get('training_id')
+        exams = request.json.get('exams')
+        print exams
+        added, updated = []
+        for exam in exams:
+            #check if it exists
+            training_exam = TrainingExam.query.filter_by(training_id=training_id, exam_id=exam.get('exam_id')).first()
+            if not training_exam:
+                # create
+                training = TrainingExam(
+                    training_id=training_id,
+                    exam_id=exam.get('exam_id'),
+                    passmark=exam.get('passmark'),
+                    created_by=current_user.id)
+                db.session.add(training)
+                added.append(exam)
+            else:
+                training_exam.training_id = training_id,
+                training_exam.exam_id = exam.get('exam_id'),
+                training_exam.passmark = exam.get('passmark'),
+                db.session.add(training_exam)
+                updated.append(exam)
+            db.session.commit()
+            
+        return jsonify(added=added, updated=updated)
+        
+    except Exception as e:
+        print e
+        return jsonify(status=False, message='Error has occurred while saving. Please try again', e=e.message), 500
+
+        
 @main.route('/training/exam/save', methods=['POST'])
 def training_exam_save():
     try:

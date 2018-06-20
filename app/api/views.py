@@ -216,6 +216,9 @@ def get_training(id):
   training['trainees'] = [record.to_json() for record in Trainees.query.filter_by(training_id=id)]
   training['training_sessions'] = [session.to_json() for session in TrainingSession.query.filter_by(training_id=id)]
   training['classes'] = [record.to_json() for record in TrainingClasses.query.filter_by(training_id=id)]
+  training['exams'] = [e._asdict() for e in TrainingExam.query.filter_by(training_id=id, archived=False)]
+  training['trainers'] = [t._asdict() for t in
+                               TrainingTrainers.query.filter_by(training_id=id, archived=0)]
   return jsonify(training=training)
 
 
@@ -1034,7 +1037,18 @@ def get_trainings():
     return jsonify(trainings=[r.to_json() for r in trainings])
   else:
     return jsonify(message='not allowed'), 403
-
+  
+@api.route('/get/trainers', methods=['GET'])
+@api_login_required
+def get_trainers():
+  """
+  Get all trainers
+  """
+  if request.args.get('term'):
+    return jsonify(trainers=[trainer.to_json() for trainer in User.query.filter_by(confirmed=True, archived=0)
+                   .filter(User.name.ilike('%{}%'.format(request.args.get('term'))))])
+  else:
+    return jsonify(trainers=[trainer.to_json() for trainer in User.query.filter_by(confirmed=True, archived=0)])
 
 @api.route('/sync/training-classes', methods=['GET', 'POST'])
 @api_login_required
@@ -1134,13 +1148,13 @@ def get_mapping_details_summary(id):
 def get_education():
   return jsonify(education=[e.to_json() for e in Education.query.filter_by(archived=0)])
 
-@api.route('/sync/trainee-status', methods=['GET','POST'])
+# @api.route('/sync/trainee-status', methods=['GET','POST'])
 @api.route('/exams', methods=['GET', 'POST'])
 @api_login_required
 def get_exams():
   if request.method == 'GET':
     records = ExamTraining.query.filter_by(archived=False)
-    return jsonify({'exams': [{'title': record.title, 'id': record.id, 'created': record.date_created}
+    return jsonify({'exams': [record._asdict()
                               for record in records]})
   else:
     json_data = request.json
