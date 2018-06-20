@@ -2598,6 +2598,7 @@ class TrainingExam(db.Model):
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
     country = Column(String(20), server_default=text("'KE'"), nullable=False)
+    passmark = Column(Integer, nullable=True)
 
     exam = relationship(u'ExamTraining')
     training = relationship(u'Training')
@@ -2607,4 +2608,7 @@ class TrainingExam(db.Model):
       for key in self.__mapper__.c.keys():
         result[key] = getattr(self, key)
         result['title'] = self.exam._asdict().get('title')
+        if self.passmark is None:
+          result['passmark'] = self.exam.passmark
+        
       return result
