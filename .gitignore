@@ -1,6 +1,6 @@
 # virtualenv
 venv/
-
+.vscode
 # backup files from vim
 **/*.swp
 
