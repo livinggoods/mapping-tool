@@ -2321,6 +2321,11 @@ class TrainingTrainers(db.Model):
   trainer = relationship(u'User', foreign_keys=[trainer_id])
   user = relationship(u'User', foreign_keys=[created_by])
   training_role = relationship(u'TrainingRoles')
+
+  def _asdict(self):
+    trainer =  asdict(self)
+    trainer['trainer'] = self.trainer.to_json()
+    return trainer
     
 
 class TrainingClasses(db.Model):
@@ -2601,4 +2606,5 @@ class TrainingExam(db.Model):
       result = OrderedDict()
       for key in self.__mapper__.c.keys():
         result[key] = getattr(self, key)
+        result['title'] = self.exam._asdict().get('title')
       return result

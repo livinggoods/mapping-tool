@@ -3,63 +3,315 @@
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">
-            {{training.training_name}} training
+            {{training.training_name}}
         </h1>
     </div>
 </div>
-<div class="row">
-	<div class="col-md-6 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Details </h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <br>
-                    <form class="form-horizontal form-label-left">
+<div class="row" id="training-ui">
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel tile fixed_height_320">
+            <div class="x_title">
+                <h2>Details </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table class="countries_list">
+                  <tbody>
+                    <tr>
+                      <td>Name</td>
+                      <td class="fs15 fw700 text-right">{{training.training_name}}</td>
+                    </tr>
+                    <tr>
+                      <td>Venue</td>
+                      <td class="fs15 fw700 text-right">{{training.training_venue.name  if training.training_venue is not none else '--'}}</td>
+                    </tr>
+                    <tr>
+                      <td>Trainers</td>
+                      <td class="fs15 fw700 text-right">
+                        {% for trainer in training.trainers %}
+                          <!--<li>Trainer 1</li> -->
+                          <li>Trainer 1</li>
+                        {% endfor %}
+                         <select class='form-control' name="trainers_search" id="trainers_search"
+                                            multiple="multiple"></select>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Commenced</td>
+                      <td class="fs15 fw700 text-right" rv-text="data.name"></td>
+                    </tr>
+                    <tr>
+                      <td>Completed</td>
+                      <td class="fs15 fw700 text-right">{{training.date_completed }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel tile fixed_height_320 overflow_hidden">
+            <div class="x_title">
+                <h2>Details </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
 
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Training name</label>
-                        <div class="col-md-9 col-sm-9 col-xs-9">
-							<span class="fa fa-bookmark form-control-feedback left" aria-hidden="true"></span>
-                          <input type="text" class="form-control training-info" readonly="true" value="{{training.training_name}}">
-                        </div>
-                      </div>
-					  <div class="ln_solid"></div>
-
-                      <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Country</label>
-                        <div class="col-md-9 col-sm-9 col-xs-9">
-							<span class="fa fa-globe form-control-feedback left" aria-hidden="true"></span>
-                          <input type="text" class="form-control training-info" readonly="true" value="{{training.country}}">
-                        </div>
-                      </div>
-                      <div class="ln_solid"></div>
-					  <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Date</label>
-                        <div class="col-md-9 col-sm-9 col-xs-9">
-							<span class="fa fa-hourglass-start form-control-feedback left" aria-hidden="true"></span>
-                          <input type="text" class="form-control training-info" readonly="true" value="{{training.date_commenced}}">
-                        </div>
-                      </div>
-                      <div class="ln_solid"></div>
-					  <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-3">Completed</label>
-                        <div class="col-md-9 col-sm-9 col-xs-9">
-							<span class="fa fa-clock-o form-control-feedback left" aria-hidden="true"></span>
-                          <input type="text" class="form-control training-info" readonly="true" value="
-                          	{{training.date_completed if training.date_completed is not none else '--'}}">
-                        </div>
-                      </div>
-                      <div class="ln_solid"></div>
-                    </form>
-                  </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel tile fixed_height_320">
+            <div class="x_title">
+                <h2>Exams </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table class="countries_list">
+                  <tbody>
+                    <tr rv-each-exam="data.exams">
+                      <td><span rv-text="exam.title"></span></td>
+                      <td class="fs15 fw700 text-right"><span rv-text="exam.country"></span></td>
+                      <td class="fs15 fw700 text-right"><span rv-text="exam.date_created"></span></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                    <select class='form-control' name="exams-search" id="exams-search"
+                                            multiple="multiple"></select>
                 </div>
-              </div>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                    <button rv-on-click="controller.saveExams" class="add-question-button btn btn-primary">
+                                <i class="fa fa-save"></i> Save Exam
+                            </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div>
 	<a href="/training/{{training.id}}/classes" class="btn btn-primary">Classes</a>
 	<a href="/training/{{training.id}}/sessions" class="btn btn-primary">Sessions</a>
 	<a href="/training/{{training.id}}/attendance" class="btn btn-primary">Attendance</a>
 </div>
+{% endblock %}
+
+{% block additionaljs %}
+    <script src="{{ url_for('static', filename='js/rivets.bundled.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/select2.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lodash.min.js') }}"></script>
+{% endblock %}
+
+{% block additionalcss %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.structure.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.theme.min.css') }}">
+    <style>
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            display: none;
+        }
+
+        .select2-results__option[aria-selected=true] {
+            display: none;
+        }
+    </style>
+{% endblock %}
+{% block javascript %}
+<script>
+    var TrainingApp = (function ($) {
+
+        var training = JSON.parse('{{ data | safe }}');
+        var training_exams = [];
+        cached_exams = [];
+        _.each(training.exams, function(exam) {
+            training_exams.push(exam);
+        });
+
+      var app = {
+            init: function () {
+                app.initBindings();
+                app.initTrainersSearch();
+                app.searchExams();
+            },
+
+            initBindings: function () {
+                rivets.bind(document.querySelector('#training-ui'), {
+                    data: training,
+                    controller: app.getController()
+                })
+            },
+
+            getController: function () {
+                return {
+
+                    saveExams: function(e, model) {
+                        var params = $.extend(true, {}, training.exams);
+                        _.each(training.exams, function(exam) {
+
+                        });
+                        //
+
+                        data = {
+                          exams: training.exams,
+                          training_id: '{{training.id}}'
+                        }
+
+
+
+                         $.ajax({
+                             type: "POST",
+                             url: "{{ url_for('main.exam_training_save')}}",
+                             dataType: 'json',
+                             contentType: "application/json; charset=utf-8",
+                             data: JSON.stringify(data),
+                             xhrFields: {
+                                 withCredentials: true
+                             },
+                             beforeSend: function(xhr, settings) {
+                                 $('#overlay').show();
+                             },
+                             error: function(xhr, status, error) {
+                                 $('#overlay').hide();
+                                 window.alert(error);
+                             },
+                             success: function(data, status, xhr) {
+                                 $('#overlay').hide();
+                                 console.log(data);
+                                 if (data.status) {
+                                      //update ui
+                                     // window.location.href = '{{ url_for("main.training_exams") }}';
+                                 }
+                             }
+                         });
+                    }
+                }
+            },
+
+            initTrainersSearch: function () {
+
+                var select = $('#trainers_search');
+
+                select.select2({
+                    placeholder: 'Search For Trainers',
+                    maximumSelectionLength: 0,
+                    ajax: {
+                        url: "{{ url_for('api.get_trainers') }}",
+                        delay: 250,
+                        processResults: function (data) {
+
+                            var trainers = data.trainers;
+                            cached_trainers = trainers;
+                            trainers = _.map(trainers, function (value, index) {
+                                return {
+                                    text: value.name,
+                                    id: value.id
+                                }
+                            });
+
+                            return {
+                                results: trainers,
+                                pagination: {
+                                    more: false
+                                }
+                            }
+                        }
+                    }
+                });
+
+                select.change(function (e) {
+                    var values = $(e.target).val();
+                    if (values && values.length) {
+                        values = _.map(values, function (value) {
+                            return parseInt(value);
+                        });
+                        var selectedTrainersIds = _.map(training.trainers, function (value) {
+                            return value.id
+                        });
+                        var toAdd = values.length > selectedTrainersIds.length;
+
+                        var diff = _.uniq(_.concat(_.differenceWith(values, selectedTrainersIds), _.differenceWith(selectedTrainersIds, values)));
+                        if (diff.length > 0) {
+
+                            diff.forEach(function (id) {
+
+                                var trainer = _.filter(cached_trainers, function (t, i) {
+                                    return t.id === id
+                                });
+
+                                if (trainer.length > 0) {
+                                    trainer = trainer[0];
+                                    if (toAdd)
+                                        training.trainers.push(trainer);
+                                    else
+                                        training.trainers.splice(training.trainers.indexOf(trainer), 1)
+                                }
+                            });
+                        }
+                    }
+                });
+            },
+            searchExams: function () {
+                var examSearch = $('#exams-search');
+                examSearch.select2({
+                    placeHolder: 'Search Exam',
+                    maximumSelectionLength: 0,
+                    // Ajax Search
+                    ajax: {
+                        url: '{{ url_for("api.get_exams")}}',
+                        delay: 250,
+                        processResults: function (data){
+                            _.each(data.exams, function(exam) {
+                                exam.exam_id = exam.id;
+                                exam.id = null;
+                            });
+
+                            cached_exams = data.exams;
+                            exams = _.map(cached_exams, function (value, index){
+                                return {
+                                    text: value.title,
+                                    id: value.exam_id
+                                }
+                            });
+                            return {
+                                results: exams,
+                                pagination: {more:false}
+                            }
+                        }
+                    },
+                });
+                examSearch.change(function (e){
+                     var values = $(e.target).val();
+
+                    // // Check if the selected exam is already selected. if already existing and is selected, do nothing
+                    // // _.each(training_exams, function(existingExam) {
+                    // //     if (values.includes(String(existingExam.exam_id))){
+                    // //         values.splice(values.indexOf(String(existingExam.exam_id)), 1);
+                    // //     }
+                    // // });
+
+                    selectedExams = [];
+                    _.each(values, function (exam_id) {
+                        _.filter(cached_exams, function (q, i) {
+                            if (String(q.exam_id) === String(exam_id)){
+                                selectedExams.push(q);
+                            }
+                        });
+                    });
+                    training.exams = selectedExams;
+
+                });
+            }
+        };
+
+        return app;
+
+    })(jQuery);
+
+
+    $(document).ready(function () {
+        TrainingApp.init();
+    });
+</script>
 {% endblock %}
