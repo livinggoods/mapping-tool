@@ -3,10 +3,12 @@ awsebcli==3.3.1
 backports.ssl-match-hostname==3.4.0.2
 blinker==1.3
 cement==2.4.0
+csvvalidator==1.2
 docker-py==1.1.0
 dockerpty==0.3.2
 docopt==0.6.2
 Flask==0.10.1
+Flask-Admin==1.5.1
 Flask-Bootstrap==3.3.2.1
 Flask-Excel==0.0.5
 Flask-GoogleMaps==0.2.4
@@ -28,7 +30,7 @@ jmespath==0.7.1
 Mako==1.0.7
 MarkupSafe==1.0
 pathspec==0.3.3
-psycopg2==2.6
+psycopg2==2.7.5
 pyexcel==0.4.5
 pyexcel-io==0.3.4.1
 pyexcel-webio==0.0.11

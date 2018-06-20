@@ -2,37 +2,41 @@
 
 This is a simple dashboarding application built using Flask and Bootstrap.  The application has been tested with Python 2.7.
 
-
+Prerequisites
+    Git - https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+    PostgreSQL - https://www.postgresql.org/download/
+    Virtualenv - https://virtualenv.pypa.io/en/stable/installation/
 
 # Installation
 
-1. Clone the repository
-
+1. Creating Database named "tremap" using Postgres
+    
   ```
   git clone https://github.com/livinggoods/mapping-tool.git
   ```
 
-2. Create a virtualenv in the project directory
-
+3. Create a virtualenv in the project directory
+  
   ```
   cd mapping-tool
   virtualenv venv
   source venv/bin/activate
   ```
 
-3. Install dependencies
+4. Installing dependencies
 
   ```
   pip install -r requirements.txt
   ```
 
-4. Create database
+5. Create Config File
 
   ```
-  ./manage db_rebuild
+  cp config.tmp.py config.py
   ```
 
-5. Configure the application
+
+6. Configure the application
 
 For your application to run properly, you need to set the following environment variables.
 RDS_USERNAME: The authorized username to the Postgres instance
@@ -47,19 +51,20 @@ To setup the above variables, you can run the following commands. Be sure to cha
   $  export RDS_PASSWORD=password
   $  export RDS_HOSTNAME=localhost
   $  export RDS_PORT=5432
-  $   export RDS_DB_NAME=database
+  $  export RDS_DB_NAME=database
 ```
 
-5. Run tests
+
+7. Building the database
 
   ```
-  ./manage.py test
+  python manage.py db_rebuild
   ```
 
 6. Start development server
 
   ```
-  ./manage.py runserver
+  python manage.py runserver
   ```
 
 # Database Operations
@@ -82,7 +87,7 @@ To setup the above variables, you can run the following commands. Be sure to cha
 1. The positional argument 'db_rebuild' will delete any existing sqlite database and create a new devlopment database populated with fake data.
 
   ```
-  ./manage db_rebuild
+  python manage.py db_rebuild
   ```
 
 **Database Migrations**
@@ -90,13 +95,13 @@ To setup the above variables, you can run the following commands. Be sure to cha
 1. Create an automatic migration upgrade script
 
   ```
-  ./manage db migrate -m "<migration message>"
+  python manage.py db migrate -m "<migration message>"
   ```
 
 2. Apply the migration upgrade script (note, upgrade script should be reviewed before applying changes)
 
   ```
-  ./manage db upgrade
+  python manage.py  db upgrade
   ```
 
 # Resources
@@ -105,30 +110,3 @@ To setup the above variables, you can run the following commands. Be sure to cha
 * [Bootstrap Documentation](http://getbootstrap.com/)
 * [SB Admin 2 Bootstrap Template](http://startbootstrap.com/template-overviews/sb-admin-2/)
 * [Miguel Grinberg Flask Web Development Book](http://www.flaskbook.com/)
-* [Miguel Grinberg Flask Web Development GitHub](https://github.com/miguelgrinberg/flasky)
-
-# Flask Extensions
-* [Flask Bootstrap](http://pythonhosted.org/Flask-Bootstrap/)
-* [Flask Mail](https://pythonhosted.org/Flask-Mail/)
-* [Flask Moment](https://github.com/miguelgrinberg/flask-moment/)
-* [Flask SQLAlchemy](https://pythonhosted.org/Flask-SQLAlchemy/)
-* [Flask Migrate](https://flask-migrate.readthedocs.org/en/latest/)
-* [Flask Login](https://flask-login.readthedocs.org/en/latest/)
-* [Flask Script](http://flask-script.readthedocs.org/en/latest/)
-
-
-# Points to note
-## Installation Errors
-When installing the dependencies, you might experience an error with psycopg2.
-
-```
-
-Command "/usr/bin/python -u -c "import setuptools, tokenize;__file__='/tmp/pip-build-WSjqit/psycopg2/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))" install --record /tmp/pip-db6s9R-record/install-record.txt --single-version-externally-managed --compile" failed with error code 1 in /tmp/pip-build-WSjqit/psycopg2/
-
-```
-To solve this problem you need run the following command (tested on Ubuntu)
-`sudo apt-get install python-dev postgresql-libs postgresql-devel`
-
-
-
-Maintained by [David Kimaru](https://github.com/kimarudg)
