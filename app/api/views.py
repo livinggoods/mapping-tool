@@ -1251,7 +1251,6 @@ def question_topics(question_id = None):
     db.session.commit()
     return jsonify(status='ok')
 
-
 @api.route('/question_type', methods=['GET', 'POST'])
 @api_login_required
 def question_types():
@@ -1284,6 +1283,29 @@ def training_roles():
     return jsonify(roles=[role._asdict() for role in TrainingRoles.query.filter_by(archived=0)])
   else:
     abort(405)
+  
+  
+@api.route("/training/exam/result/save", methods=['POST'])
+@api_login_required
+def exam_result_save():
+  try:
+    data = request.json
+    
+    if not data:
+      return jsonify(status=False, message="Invalid request"), 400
+    
+    for datum in data:
+      exam_result = ExamResult.from_json(datum)
+      db.session.add(exam_result) if exam_result.id is not None else db.session.merge(exam_result)
+      
+    db.session.commit()
+    return jsonify(status=True, message="Saved Successfully"), 200
+    
+  except Exception as e:
+    db.session.rollback()
+    return jsonify(status=False, message="Unexpected error occured. Please try again"), 500
+  finally:
+    db.session.close()
 
 
 @api.route('/training/<string:training_id>/trainers', methods=['GET', 'POST'])
