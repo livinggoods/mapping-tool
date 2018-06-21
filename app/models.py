@@ -2470,10 +2470,22 @@ class ExamResult(db.Model):
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
     country = Column(String(20), server_default=text("'UG'"), nullable=False)
+    answer = Column(String(45), nullable=True)
 
     question = relationship(u'Question')
     training_exam = relationship(u'TrainingExam')
-
+    
+    @staticmethod
+    def from_json(json_record):
+      return ExamResult(
+        id=json_record.get("id", None),
+        training_exam_id=json_record.get("training_exam_id"),
+        trainee_id=json_record.get("trainee_id"),
+        question_id=json_record.get("question_id"),
+        question_score=json_record.get("question_score"),
+        country=json_record.get("country"),
+        answer=json_record.get("answer")
+      )
 
 class ExamStatus(db.Model):
     __tablename__ = 'exam_status'
