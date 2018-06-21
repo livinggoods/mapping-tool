@@ -1266,7 +1266,7 @@ def training_exams(training_id = None):
 @api_login_required
 def exam_result_save():
   try:
-    data = request.data
+    data = request.json
     
     if not data:
       return jsonify(status=False, message="Invalid request"), 400
