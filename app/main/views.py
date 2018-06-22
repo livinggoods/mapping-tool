@@ -15,10 +15,8 @@ from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
 from app.api.views import create_question_list
-from app.main.forms import QuestionsCSVUploadForm
 from . import main
-from .forms import (EditProfileForm, EditProfileAdminForm, TrainingVenueForm, TrainingForm,
-                    DeleteTrainingForm, TrainingClassForm, TrainingSessionForm, SessionTopicForm, SessionTypeForm)
+from .forms import *
 from .. import db
 from ..decorators import admin_required, permission_required
 from ..utils import asdict
@@ -273,6 +271,7 @@ def training(id):
     training_dict['exams'] = [e._asdict() for e in TrainingExam.query.filter_by(training_id=training.id, archived=False)]
     training_dict['trainers'] = [t._asdict() for t in TrainingTrainers.query.filter_by(training_id=training.id, archived=0)]
     training_dict['trainees'] = [trainee.to_json() for trainee in Trainees.query.filter_by(training_id=training.id)]
+    roles = [r._asdict() for r in TrainingRoles.query.filter_by(archived=0)]
     # return jsonify(training_dict)
     page = {'title': training.training_name,
             'subtitle': '{training} training details' \
@@ -281,7 +280,8 @@ def training(id):
     return render_template(
         'training.html',
         training=training,
-        data = json.dumps(training_dict),
+        roles = json.dumps(roles),
+        data = json.dumps(training_dict).replace("'", "\\'"),
         page=page
     )
 
@@ -579,6 +579,8 @@ def delete_training_sessions(training_id, class_id, session_id):
 @login_required
 def new_session_topic(topic_id=None):
     form = SessionTopicForm()
+    title = "Session Topic"
+    action = "Add "
     if form.validate_on_submit():
         if topic_id:
             edit_topic = SessionTopic.query.filter_by(id=topic_id).first()
@@ -599,9 +601,12 @@ def new_session_topic(topic_id=None):
         topic = SessionTopic.query.filter_by(id=topic_id).first()
         form.name.data = topic.name
         form.country.data = topic.country
+        action = "Edit "
     return render_template(
-        'form_session_topic.html',
-        form=form
+        'form.html',
+        form=form,
+        title=title,
+        action=action
     )
 
 
@@ -1842,7 +1847,8 @@ def exam_training_save():
         training_id = request.json.get('training_id')
         exams = request.json.get('exams')
         print exams
-        added, updated = []
+        added = []
+        updated = []
         for exam in exams:
             #check if it exists
             training_exam = TrainingExam.query.filter_by(training_id=training_id, exam_id=exam.get('exam_id')).first()
@@ -1934,6 +1940,71 @@ def training_exam_save():
     except Exception as e:
         print e
         return jsonify(status=False, message='An unexpected error has occurred. Please try again'), 500
+    
+@main.route('/training/roles/add', methods=['GET', 'POST'])
+@main.route('/training/roles/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def add_training_roles(id=None):
+    form = TrainingRoleForm()
+    title = "Training Role"
+    action ="Add"
+    if form.validate_on_submit():
+        geo = Geo.query.filter_by(id=form.country.data).first()
+        if id:
+            training_role = TrainingRoles.query.filter_by(id=id).first()
+            if training_role.readonly == 0:
+                training_role.role_name = form.role_name.data
+                training_role.readonly = form.readonly.data
+                training_role.country = geo.geo_code
+                training_role.created_by = current_user.id
+                flash('Role {} has been updated!'.format(form.role_name.data), 'success')
+            else:
+                flash('The role {} is not editable!'.format(training_role.role_name), 'error')
+                return redirect(request.args.get('next') or url_for('main.training_roles'))
+        else:
+            training_role = TrainingRoles(
+                role_name = form.role_name.data,
+                archived = 0,
+                readonly = form.readonly.data,
+                country = geo.geo_code,
+                created_by = current_user.id,
+            )
+            flash('Role {} has been created!'.format(form.role_name.data), 'success')
+        db.session.add(training_role)
+        return redirect(request.args.get('next') or url_for('main.add_training_roles'))
+    # set inital values
+    if id:
+        role = TrainingRoles.query.filter_by(id=id).first()
+        if role.readonly == 0:
+            form.id.data = role.id
+            form.country.process_data(Geo.query.filter_by(geo_code=role.country).first().id)
+            form.role_name.data = role.role_name
+            form.readonly.process_data(role.readonly)
+        else:
+            flash('The role {} is not editable!'.format(role.role_name), 'error')
+            return redirect(request.args.get('next') or url_for('main.training_roles'))
+    return render_template(
+        'form.html',
+        form=form,
+        title=title,
+        action=action
+    )
+    
+@main.route('/training/roles', methods=['GET', 'POST'])
+@login_required
+def training_roles():
+    page = {'title': 'Training Roles', 'subtitle': 'View all roles'}
+    
+    roles = TrainingRoles.query.filter_by(archived=0)
+    
+    pagination_count = request.args.get('page', 1, type=int)
+    pagination = roles.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)
+    return render_template('listing.html',
+                           title=page.get('title'),
+                           page=page,
+                           data=roles,
+                           endpoint='main.training_roles',
+                           pagination=pagination)
 
 
 @main.route('/csv')

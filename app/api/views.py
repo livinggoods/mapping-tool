@@ -1275,8 +1275,47 @@ def training_exams(training_id = None):
     return jsonify(exams=[e.exam._asdict() for e in TrainingExam.query.filter_by(training_id=training_id)])
   else:
     abort(405)
+    
+    
+@api.route('/training_roles', methods=['GET', 'POST'])
+@api_login_required
+def training_roles():
+  if request.method == 'GET':
+    return jsonify(roles=[role._asdict() for role in TrainingRoles.query.filter_by(archived=0)])
+  else:
+    abort(405)
 
 
+@api.route('/training/<string:training_id>/trainers', methods=['GET', 'POST'])
+@api_login_required
+def training_trainers(training_id = None):
+  if request.method == 'GET':
+    if training_id is None:
+      return jsonify(error="training id is required"), 400
+    return jsonify(trainers=[trainer._asdict() for trainer in TrainingTrainers.query.filter_by(training_id=training_id)])
+  else:
+    trainers = request.json
+    status = []
+    for trainer in trainers:
+      #check if the trainer exits
+      existing_trainer = TrainingTrainers.query.filter_by(training_id=trainer.get('training_id'), trainer_id=trainer.get('trainer_id')).first()
+      if existing_trainer:
+        existing_trainer.archived=0
+        existing_trainer.training_role_id=trainer.get('training_role_id')
+        existing_trainer.country = Training.query.filter_by(id=training_id).first().country
+        db.session.add(existing_trainer)
+        db.session.commit()
+        status.append({'record':trainer, 'operation':"updated"})
+      else:
+        trainer = TrainingTrainers(**trainer)
+        trainer.country = Training.query.filter_by(id=training_id).first().country
+        
+        db.session.add(trainer)
+        db.session.commit()
+        status.append({'record': trainer, 'operation': "created"})
+    return jsonify(status='ok', eperation=status)
+      
+    
 def process_exam_csv(path):
   questions = process_csv(path, False)
   csv_questions = []

@@ -7,7 +7,18 @@
         </h1>
     </div>
 </div>
-<div class="row" id="training-ui">
+<div class="row">
+    <div class="col-md-8 col-sm-8 col-xs-12">
+        <div class="x_panel tile fixed_height_320">
+            <div class="x_title">
+                <h2>Session </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+
+            </div>
+        </div>
+    </div>
     <div class="col-md-4 col-sm-4 col-xs-12">
         <div class="x_panel tile fixed_height_320">
             <div class="x_title">
@@ -26,17 +37,6 @@
                       <td class="fs15 fw700 text-right">{{training.training_venue.name  if training.training_venue is not none else '--'}}</td>
                     </tr>
                     <tr>
-                      <td>Trainers</td>
-                      <td class="fs15 fw700 text-right">
-                        {% for trainer in training.trainers %}
-                          <!--<li>Trainer 1</li> -->
-                          <li>Trainer 1</li>
-                        {% endfor %}
-                         <select class='form-control' name="trainers_search" id="trainers_search"
-                                            multiple="multiple"></select>
-                      </td>
-                    </tr>
-                    <tr>
                       <td>Commenced</td>
                       <td class="fs15 fw700 text-right" rv-text="data.name"></td>
                     </tr>
@@ -46,6 +46,51 @@
                     </tr>
                   </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row" id="training-ui">
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel tile fixed_height_320">
+            <div class="x_title">
+                <h2>Trainers </h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table class="countries_list">
+                  <thead>
+                    <tr>
+                      <td>Name</td>
+                      <td>Role</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr rv-each-trainer="data.trainers">
+                      <td><span rv-text="trainer.trainer.name"></span></td>
+                      <td>
+                        <select class='trainer-role' rv-value="trainer.training_role_id" rv-on-change="controller.onRoleChanged">
+                            <option rv-each-role="roles" rv-value="role.id">{role.role_name}</option>
+                        </select>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-4">
+                        <select class='form-control' name="trainers_search" id="trainers_search"
+                                                multiple="multiple"></select>
+
+
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-2">
+                        <button rv-on-click="controller.saveRoles" class="btn btn-primary" id="save-roles">
+                          <i class="fa fa-save"></i> Save
+                                </button></td>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -78,7 +123,7 @@
                   <tr>
                     <td>Exam</td>
                     <td>Passmark</td>
-                    <td>Remove</td>
+                    <!--<td>Remove</td>-->
                   </tr>
                   </thead>
                   <tbody>
@@ -93,12 +138,12 @@
 
 
                       </td>
-                      <td class="fs15 fw700 text-right">
+                      <!--<td class="fs15 fw700 text-right">
                         <button rv-on-click="controller.deleteExam"
                                                                 class="btn btn-danger btn-xs">
                                                             <i class="fa fa-minus"></i>
                                                         </button>
-                      </td>
+                      </td> -->
                     </tr>
                   </tbody>
                 </table>
@@ -115,6 +160,8 @@
         </div>
     </div>
 </div>
+
+
 <div>
 	<a href="/training/{{training.id}}/classes" class="btn btn-primary">Classes</a>
 	<a href="/training/{{training.id}}/sessions" class="btn btn-primary">Sessions</a>
@@ -153,11 +200,25 @@
 {% block javascript %}
 <script>
     var TrainingApp = (function ($) {
+        function Trainer () {
+          this.archived = 0;
+          this.class_id = null;
+          this.client_time = null;
+          this.country = '{{training.country}}';
+          this.created_by = null;
+          this.date_created = null;
+          this.id = null;
+          this.user = {id:null};
+          this.trainer_id = this.user.id;
+          this.training_id = '{{training.id}}';
+          this.training_role_id = null;
+        };
+        var trainingRoles = JSON.parse('{{roles | safe}}');
 
         var training = JSON.parse('{{ data | safe }}');
-        console.log(training);
         var training_exams = [];
         cached_exams = [];
+        cached_trainers = training.trainers;
         _.each(training.exams, function(exam) {
             training_exams.push(exam);
         });
@@ -172,6 +233,7 @@
             initBindings: function () {
                 rivets.bind(document.querySelector('#training-ui'), {
                     data: training,
+                    roles: trainingRoles,
                     controller: app.getController()
                 })
             },
@@ -189,11 +251,8 @@
                         data = {
                           exams: training.exams,
                           training_id: '{{training.id}}'
-                        }
-
-
-
-                         $.ajax({
+                        };
+                        $.ajax({
                              type: "POST",
                              url: "{{ url_for('main.exam_training_save')}}",
                              dataType: 'json',
@@ -211,19 +270,56 @@
                              },
                              success: function(data, status, xhr) {
                                  $('#overlay').hide();
-                                 console.log(data);
                                  if (data.status) {
                                       //update ui
                                      // window.location.href = '{{ url_for("main.training_exams") }}';
                                  }
                              }
-                         });
+                        });
                     },
                     deleteExam: function (e, model) {
                             var index = model.index;
-                            console.log(model.index);
                             training.exams.splice(index, 1);
-                        },
+                    },
+                    saveRoles: function (e, model) {
+                        // to reduce the json footprint, we will only send the trainer_id, role_id
+                        selectedTrainers = [];
+                        _.each(model.data.trainers, function (trainerRole) {
+                            selectedTrainers.push({
+                                training_role_id:trainerRole.training_role_id,
+                                training_id:trainerRole.training_id,
+                                trainer_id:trainerRole.trainer_id
+                            });
+                        });
+                        $.ajax({
+                             type: "POST",
+                             url: "{{ url_for('api.training_trainers', training_id = training.id)}}",
+                             dataType: 'json',
+                             contentType: "application/json; charset=utf-8",
+                             data: JSON.stringify(trainers = selectedTrainers),
+                             xhrFields: {
+                                 withCredentials: true
+                             },
+                             beforeSend: function(xhr, settings) {
+                                 //$('#save-roles').show();
+                                 $("#save-roles").html('<i class="fa fa-spinner"></i> Saving');
+                             },
+                             error: function(xhr, status, error) {
+                                 $('#overlay').hide();
+                                 window.alert(error);
+                             },
+                             success: function(data, status, xhr) {
+                                 setTimeout(function() {
+                                     $("#save-roles").html('<i class="fa fa-save"></i> Save');
+                                 }, 2000);
+                             }
+                        });
+
+
+                    },
+
+                    onRoleChanged: function(e, model) {
+                    }
                 }
             },
 
@@ -239,15 +335,20 @@
                         delay: 250,
                         processResults: function (data) {
 
+                            _.each(data.trainers, function(trainer, i) {
+                                 var loadedTrainer = new Trainer();
+                                 loadedTrainer.trainer = trainer;
+                                 loadedTrainer.trainer_id = trainer.id;
+                                 data.trainers[i] = loadedTrainer;
+                            });
                             var trainers = data.trainers;
                             cached_trainers = trainers;
                             trainers = _.map(trainers, function (value, index) {
                                 return {
-                                    text: value.name,
-                                    id: value.id
+                                    text: value.trainer.name,
+                                    id: value.trainer.id
                                 }
                             });
-
                             return {
                                 results: trainers,
                                 pagination: {
@@ -260,33 +361,21 @@
 
                 select.change(function (e) {
                     var values = $(e.target).val();
+                    // these are the user IDs.
+                    // for all selected, add to teh Training
                     if (values && values.length) {
-                        values = _.map(values, function (value) {
-                            return parseInt(value);
-                        });
-                        var selectedTrainersIds = _.map(training.trainers, function (value) {
-                            return value.id
-                        });
-                        var toAdd = values.length > selectedTrainersIds.length;
-
-                        var diff = _.uniq(_.concat(_.differenceWith(values, selectedTrainersIds), _.differenceWith(selectedTrainersIds, values)));
-                        if (diff.length > 0) {
-
-                            diff.forEach(function (id) {
-
-                                var trainer = _.filter(cached_trainers, function (t, i) {
-                                    return t.id === id
-                                });
-
-                                if (trainer.length > 0) {
-                                    trainer = trainer[0];
-                                    if (toAdd)
-                                        training.trainers.push(trainer);
-                                    else
-                                        training.trainers.splice(training.trainers.indexOf(trainer), 1)
+                        // for each value, get the corresponding Trainer
+                        _.each(values, function (id) {
+                             _.filter(cached_trainers, function (t, i) {
+                                if (String(t.trainer_id) === String(id)){
+                                    // check if it is already in the training
+                                    var found = training.trainers.some(function(el){
+                                        return el.trainer_id === t.trainer_id;
+                                    });
+                                    if (!found) { training.trainers.push(t); }
                                 }
                             });
-                        }
+                        });
                     }
                 });
             },
@@ -321,14 +410,6 @@
                 });
                 examSearch.change(function (e){
                      var values = $(e.target).val();
-
-                    // // Check if the selected exam is already selected. if already existing and is selected, do nothing
-                    // // _.each(training_exams, function(existingExam) {
-                    // //     if (values.includes(String(existingExam.exam_id))){
-                    // //         values.splice(values.indexOf(String(existingExam.exam_id)), 1);
-                    // //     }
-                    // // });
-
                     selectedExams = [];
                     _.each(values, function (exam_id) {
                         _.filter(cached_exams, function (q, i) {

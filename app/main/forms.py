@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from flask_wtf.file import FileAllowed
-from wtforms import (StringField, TextAreaField, BooleanField, SelectField, DateField,
+from wtforms import (StringField, TextAreaField, BooleanField, SelectField, DateField, HiddenField,
                      SubmitField, ValidationError, PasswordField, IntegerField, FloatField, FileField)
 from wtforms.validators import DataRequired, Length, Email, EqualTo, InputRequired
 from ..models import (Role, User, Geo, UserType, Ward, County, Location, SubCounty, Parish, TrainingVenues,
@@ -264,3 +264,15 @@ class QuestionsCSVUploadForm(Form):
                              FileAllowed(['csv', 'xls', 'xlsx'], 'Invalid file format')]
                          )
     submit = SubmitField('Submit')
+
+class TrainingRoleForm(Form):
+    id = HiddenField("ID")
+    role_name = StringField("Role Name", validators=[DataRequired(), Length(3, 19)])
+    readonly = SelectField('Allow Editing', validators=[DataRequired()], choices=[('0', 'Yes'), ('1', 'No')])
+    country = SelectField('Country', validators=[DataRequired()], coerce=int)
+    submit = SubmitField("Save")
+    
+    def __init__(self, *args, **kwargs):
+        super(TrainingRoleForm, self).__init__(*args, **kwargs)
+        self.country.choices = [(geo.id, geo.geo_name)
+                                for geo in Geo.query.order_by(Geo.geo_name).all()]
