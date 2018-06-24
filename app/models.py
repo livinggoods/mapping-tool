@@ -2302,6 +2302,10 @@ class TrainingRoles(db.Model):
   date_created = db.Column(db.DateTime(), default=datetime.utcnow, nullable=False)
 
   user = relationship(u'User')
+  
+  
+  def _asdict(self):
+    return asdict(self)
     
 
 class TrainingTrainers(db.Model):
@@ -2325,6 +2329,7 @@ class TrainingTrainers(db.Model):
   def _asdict(self):
     trainer =  asdict(self)
     trainer['trainer'] = self.trainer.to_json()
+    trainer['role'] = self.training_role._asdict() if self.training_role is not None else None
     return trainer
     
 
