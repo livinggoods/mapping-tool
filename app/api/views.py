@@ -15,6 +15,7 @@ import csv
 import uuid
 from ..decorators import api_login_required
 from ..utils.utils import *
+from ..commons import exam_with_questions_to_dict
 
 
 
@@ -1271,7 +1272,13 @@ def training_exams(training_id = None):
   if request.method == 'GET':
     if training_id is None:
       return jsonify(error="training id is required"), 400
-    return jsonify(exams=[e._asdict() for e in TrainingExam.query.filter_by(training_id=training_id)])
+    exams = []
+    training_exams = TrainingExam.query.filter_by(training_id=training_id)
+    for training_exam in training_exams:
+      exam = exam_with_questions_to_dict(training_exam.exam)
+      exam.update(training_exam._asdict())
+      exams.append(exam)
+    return jsonify(exams=exams)
   else:
     abort(405)
     
