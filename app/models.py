@@ -2,6 +2,7 @@ import hashlib
 import time
 from collections import OrderedDict
 from datetime import datetime
+from random import randint
 
 from flask import current_app, request
 from flask_login import UserMixin, AnonymousUserMixin
@@ -2521,7 +2522,7 @@ class Question(db.Model):
     __tablename__ = 'questions'
 
     id = Column(Integer, primary_key=True)
-    question = Column(String(255), nullable=False)
+    question = Column(Text, nullable=False)
     allocated_marks = Column(Numeric(8,2))
     question_type_id = Column(ForeignKey(u'question_types.id'), nullable=True, index=True)
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
@@ -2551,7 +2552,7 @@ class QuestionChoice(db.Model):
 
     id = Column(Integer, primary_key=True)
     question_id = Column(ForeignKey(u'questions.id'), nullable=False, index=False)
-    question_choice = Column(String(64))
+    question_choice = Column(String(256))
     is_answer = Column(db.Boolean, default=False)
     allocated_marks = Column(Numeric(8,2), nullable=True)
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
@@ -2616,6 +2617,7 @@ class TrainingExam(db.Model):
     archived = Column(db.Boolean, default=False)
     country = Column(String(20), server_default=text("'KE'"), nullable=False)
     passmark = Column(Integer, nullable=True)
+    unlock_code = Column(Integer, nullable=True)
 
     exam = relationship(u'ExamTraining')
     training = relationship(u'Training')

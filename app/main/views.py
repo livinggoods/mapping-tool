@@ -1860,7 +1860,9 @@ def exam_training_save():
                     training_id=training_id,
                     exam_id=exam.get('exam_id'),
                     passmark=exam.get('passmark'),
-                    created_by=current_user.id)
+                    created_by=current_user.id,
+                    unlock_code=randint(1000,9999)
+                )
                 db.session.add(training)
                 added.append(exam)
             else:
