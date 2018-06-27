@@ -7,7 +7,7 @@ from flask import current_app
 def exam_with_questions_to_dict(exam):
   result = asdict(exam)
   if not result.has_key('exam_status'):
-    result['exam_status'] = exam.exam_status.to_json() if exam.exam_status else None
+    result['exam_status'] = exam.exam_status._asdict() if exam.exam_status else None
   
   if not result.has_key('questions'):
     questions = []

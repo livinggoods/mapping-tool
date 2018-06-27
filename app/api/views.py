@@ -1154,9 +1154,11 @@ def get_education():
 @api_login_required
 def get_exams():
   if request.method == 'GET':
-    records = ExamTraining.query.filter_by(archived=False)
-    return jsonify({'exams': [record._asdict()
-                              for record in records]})
+    exams = []
+    exams_data = ExamTraining.query.filter_by(archived=False)
+    for exam in exams_data:
+      exams.append(exam_with_questions_to_dict(exam))
+    return jsonify(exams=exams)
   else:
     json_data = request.json
     new_exam = ExamTraining(**json_data) if json_data.get('id') is not None else None
