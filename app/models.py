@@ -2481,8 +2481,9 @@ class ExamResult(db.Model):
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     archived = Column(db.Boolean, default=False)
     country = Column(String(20), server_default=text("'UG'"), nullable=False)
-    answer = Column(String(45), nullable=True)
-
+    answer = Column(String(256), nullable=True)
+    choice_id = Column(Integer, nullable=True)
+    
     question = relationship(u'Question')
     training_exam = relationship(u'TrainingExam')
     
@@ -2495,7 +2496,8 @@ class ExamResult(db.Model):
         question_id=json_record.get("question_id"),
         question_score=json_record.get("question_score"),
         country=json_record.get("country"),
-        answer=json_record.get("answer")
+        answer=json_record.get("answer"),
+        choice_id=json_record.get("choice_id")
       )
 
 class ExamStatus(db.Model):
