@@ -1323,6 +1323,17 @@ def exam_result_save():
     db.session.close()
 
 
+@api.route('/exam/<string:exam_id>/results', methods=['GET'])
+@api_login_required
+def training_exam_results(exam_id = None):
+  if request.method == 'GET':
+    if exam_id is None:
+      return jsonify(error="training id is required"), 400
+    return jsonify(
+      results=[asdict(trainer) for trainer in ExamResult.query.filter_by(training_exam_id=exam_id)])
+  else:
+    abort(), 400
+
 @api.route('/training/<string:training_id>/trainers', methods=['GET', 'POST'])
 @api_login_required
 def training_trainers(training_id = None):
