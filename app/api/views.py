@@ -1304,8 +1304,14 @@ def exam_result_save():
       return jsonify(status=False, message="Invalid request"), 400
     
     for datum in data:
-      exam_result = ExamResult.from_json(datum)
-      db.session.add(exam_result) if exam_result.id is not None else db.session.merge(exam_result)
+      existing_result = ExamResult.query.filter_by(trainee_id=datum.get('trainee_id'),
+                                                   training_exam_id=datum.get('training_exam_id'),
+                                                   question_id=datum.get('question_id'))
+      if not existing_result:
+        exam_result = ExamResult.from_json(datum)
+        db.session.add(exam_result) if exam_result.id is not None else db.session.merge(exam_result)
+      else:
+        pass
       
     db.session.commit()
     return jsonify(status=True, message="Saved Successfully"), 200
