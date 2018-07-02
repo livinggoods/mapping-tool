@@ -1835,7 +1835,8 @@ def training_exam_edit(id):
                            title='Edit Exam',
                            page=page,
                            endpoint='main.training_exam_save',
-                           exam=json.dumps(exam))
+                           exam=json.dumps(exam).replace("'", "\\'")
+                           )
 
 @main.route('/exam/training/save', methods=['POST'])
 @login_required
