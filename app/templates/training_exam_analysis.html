@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {{ page.title }}
+            </h1>
+        </div>
+    </div>
+
+    <div class="row" id="exam-analysis-ui">
+
+        <div class="col-xs-12">
+
+            <div class="row">
+
+                <div class="col-xs-12 col-md-3">
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-body">
+
+                            <div id="overview-pie-chart"></div>
+
+                            <div>
+                                <table class="table table-condensed table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Passed</th>
+                                        <th>Failed</th>
+                                        <th>Undone</th>
+                                        <th>Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td rv-text="passed"></td>
+                                        <td rv-text="failed"></td>
+                                        <td rv-text="undone"></td>
+                                        <td rv-text="total"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xs-12 col-md-9">
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+
+                            <div id="bar-graph"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+
+                <div class="col-xs-12">
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            Question Analysis
+                        </div>
+
+                        <div class="panel-body"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block additionaljs %}
+    <script src="{{ url_for('static', filename='js/rivets.bundled.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lodash.min.js') }}"></script>
+{% endblock %}
+
+{% block additionalcss %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.structure.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.theme.min.css') }}">
+{% endblock %}
+{% include 'partials/highcharts.html' %}
+{% block javascript %}
+    <script src="{{ url_for('static', filename='js/histogram-bellcurve.js') }}"></script>
+    <script type="text/javascript">
+
+        var ExamAnalysis = (function ($, _) {
+
+            var examResults = JSON.parse('{{ exam_results | safe }}');
+            var exam = JSON.parse('{{ exam | safe }}');
+            var training = JSON.parse('{{ training | safe }}');
+            var trainees = JSON.parse('{{ trainees | safe }}');
+
+            var app = {
+                examResults: examResults,
+                exam: exam,
+                training: training,
+                trainees: trainees,
+                analytics: null,
+                summary: null,
+
+                passed: 0,
+                failed: 0,
+                undone: trainees.length,
+                total: trainees.length,
+
+
+                init() {
+
+                    app.analytics = app.getAnalytics();
+                    app.drawPieChart();
+                    app.drawBarGraph();
+                    app.initBindings();
+                },
+
+                initBindings: function () {
+                    rivets.bind(document.querySelector('#exam-analysis-ui'), {
+                        passed: app.passed,
+                        failed: app.failed,
+                        undone: app.undone,
+                        total: app.total
+                    })
+                },
+
+                getAnalytics: function () {
+
+                    return _.reduce(examResults, function (result, value, key) {
+
+                        if (!result.traineeAnalysis[value.trainee_id]) {
+                            result.traineeAnalysis[value.trainee_id] = {};
+                            result.traineeAnalysis[value.trainee_id]["totalMarks"] = 0;
+                            result.traineeAnalysis[value.trainee_id]["hasPassed"] = false;
+                        }
+
+                        result.traineeAnalysis[value.trainee_id]["totalMarks"] = result.traineeAnalysis[value.trainee_id]["totalMarks"] + value.question_score;
+                        result.traineeAnalysis[value.trainee_id]["hasPassed"] = result.traineeAnalysis[value.trainee_id]["totalMarks"] >= exam.passmark;
+
+                        // No need of doing the loop twice
+                        if (!result.questionAnalysis[value.question_id]) {
+                            result.questionAnalysis[value.question_id] = {
+                                passed: 0,
+                                failed: 0,
+                                undone: trainees.length
+                            }
+                        }
+
+                        if (typeof value.question_score === 'number') {
+
+
+                            if (value.question_score > 0) {
+
+                                result.questionAnalysis[value.question_id].passed = result.questionAnalysis[value.question_id].passed + 1;
+
+                            } else {
+                                result.questionAnalysis[value.question_id].failed = result.questionAnalysis[value.question_id].failed + 1;
+                            }
+
+                            result.questionAnalysis[value.question_id].undone = result.questionAnalysis[value.question_id].undone - 1;
+                        }
+
+                        return result;
+
+                    }, {
+                        questionAnalysis: {},
+                        traineeAnalysis: {}
+                    });
+                },
+
+                drawBarGraph: function () {
+                    Highcharts.chart('bar-graph', {
+                        chart: {
+                            type: 'bar'
+                        },
+                        title: {
+                            text: 'Question Analysis'
+                        },
+                        xAxis: {
+                            categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania'],
+                            title: {
+                                text: null
+                            }
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: 'Population (millions)',
+                                align: 'high'
+                            },
+                            labels: {
+                                overflow: 'justify'
+                            }
+                        },
+                        tooltip: {
+                            valueSuffix: ' millions'
+                        },
+                        plotOptions: {
+                            bar: {
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            }
+                        },
+                        legend: {
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'top',
+                            x: -40,
+                            y: 80,
+                            floating: true,
+                            borderWidth: 1,
+                            backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                            shadow: true
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        series: [{
+                            name: 'Year 1800',
+                            data: [107, 31, 635, 203, 2]
+                        }, {
+                            name: 'Year 1900',
+                            data: [133, 156, 947, 408, 6]
+                        }, {
+                            name: 'Year 2000',
+                            data: [814, 841, 3714, 727, 31]
+                        }, {
+                            name: 'Year 2016',
+                            data: [1216, 1001, 4436, 738, 40]
+                        }]
+                    });
+                },
+
+                drawPieChart: function () {
+
+                    app.passed = 0;
+                    app.failed = 0;
+                    app.undone = trainees.length;
+                    app.total = trainees.length;
+
+                    for (key in app.analytics.traineeAnalysis) {
+                        if (app.analytics.traineeAnalysis.hasOwnProperty(key)) {
+
+                            var result = app.analytics.traineeAnalysis[key];
+                            if (result.passed) {
+                                app.passed++;
+                            } else {
+                                app.failed++;
+                            }
+
+                            app.undone--;
+                        }
+                    }
+
+                    // Build the chart
+                    Highcharts.chart('overview-pie-chart', {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'Exam Performance Overview'
+                        },
+                        credits: {enabled: false},
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: false
+                                },
+                                showInLegend: true
+                            }
+                        },
+                        series: [{
+                            name: 'Brands',
+                            colorByPoint: true,
+                            data: [{
+                                name: 'Passed',
+                                y: app.passed,
+                            }, {
+                                name: 'Failed',
+                                y: app.failed
+                            }, {
+                                name: 'Undone',
+                                y: app.undone
+                            }]
+                        }]
+                    });
+
+                }
+            };
+
+            return app;
+
+        })(jQuery, _);
+
+        $(document).ready(function () {
+            ExamAnalysis.init();
+        })
+    </script>
+
+{% endblock %}

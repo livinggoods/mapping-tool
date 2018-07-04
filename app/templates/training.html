@@ -118,18 +118,18 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <table class="countries_list">
+                <table class="countries_list table table-condensed">
                   <thead>
                   <tr>
-                    <td>Exam</td>
-                    <td>Passmark</td>
-                    <!--<td>Remove</td>-->
+                    <th>Exam</th>
+                    <th>Passmark</th>
+                    <th>Actions</th>
                   </tr>
                   </thead>
                   <tbody>
                     <tr rv-each-exam="data.exams">
                       <td><span rv-text="exam.title"></span></td>
-                      <td class="fs15 fw700 text-right">
+                      <td class="fs15 fw700 text-left">
                         <p class="question-marks"><input class="form-control" type="number"
                                                           rv-value="exam.passmark"
                                                           style="width: 50px !important; display: inline-block;
@@ -138,12 +138,21 @@
 
 
                       </td>
-                      <!--<td class="fs15 fw700 text-right">
-                        <button rv-on-click="controller.deleteExam"
-                                                                class="btn btn-danger btn-xs">
-                                                            <i class="fa fa-minus"></i>
-                                                        </button>
-                      </td> -->
+                      <td>
+                          <li class="btn-group closed" style="display: inline-block;">
+                              <a class="btn btn-primary btn-xs " rv-href="exam.analysisUrl">View Analysis</a>
+                              <a class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" href="#">
+                                  <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
+                              </a>
+                              <ul class="dropdown-menu">
+                                  <li>
+                                      <a href="#" class="confirm">
+                                          Remove Exam
+                                      </a>
+                                  </li>
+                              </ul>
+                          </li>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -212,7 +221,8 @@
           this.trainer_id = this.user.id;
           this.training_id = '{{training.id}}';
           this.training_role_id = null;
-        };
+        }
+
         var trainingRoles = JSON.parse('{{roles | safe}}');
 
         var training = JSON.parse('{{ data | safe }}');
@@ -221,6 +231,11 @@
         cached_trainers = training.trainers;
         _.each(training.exams, function(exam) {
             training_exams.push(exam);
+        });
+
+        training.exams = _.map(training.exams, function(exam, index) {
+            exam.analysisUrl = training.id + "/" + exam.id;
+            return exam;
         });
 
       var app = {
