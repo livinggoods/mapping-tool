@@ -8,9 +8,52 @@
         </div>
     </div>
 
+
     <div class="row" id="exam-analysis-ui">
 
         <div class="col-xs-12">
+
+            <div class="row">
+
+                <div class="col-xs-12">
+
+                    <div class="panel">
+
+                        <div class="panel-body">
+
+                            <table class="table table-condensed table-hover">
+                                <caption>Exam metadata</caption>
+                                <thead>
+                                <tr>
+                                    <th>Exam Passmark</th>
+                                    <th>Exam Total marks</th>
+                                    <th>Question count</th>
+                                    <th>Passed</th>
+                                    <th>Failed</th>
+                                    <th>Undone</th>
+                                    <th>Total Trainees</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td rv-text="passmark"></td>
+                                    <td rv-text="totalMarks"></td>
+                                    <td rv-text="questionCount"></td>
+                                    <td rv-text="passed"></td>
+                                    <td rv-text="failed"></td>
+                                    <td rv-text="undone"></td>
+                                    <td rv-text="total"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
 
             <div class="row">
 
@@ -21,27 +64,6 @@
                         <div class="panel-body">
 
                             <div id="overview-pie-chart"></div>
-
-                            <div>
-                                <table class="table table-condensed table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>Passed</th>
-                                        <th>Failed</th>
-                                        <th>Undone</th>
-                                        <th>Total</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td rv-text="passed"></td>
-                                        <td rv-text="failed"></td>
-                                        <td rv-text="undone"></td>
-                                        <td rv-text="total"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
 
                         </div>
 
@@ -73,11 +95,33 @@
 
                     <div class="panel panel-default">
 
-                        <div class="panel-heading">
-                            Question Analysis
-                        </div>
+                        <div class="panel-body">
 
-                        <div class="panel-body"></div>
+                            <table class="table table-condensed table-hover">
+                                <caption>Question Analysis</caption>
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Question</th>
+                                    <th>Passed</th>
+                                    <th>Failed</th>
+                                    <th>Undone</th>
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr rv-each-question="questionsSummary">
+                                    <td rv-text="question.shorthand"></td>
+                                    <td rv-text="question.question"></td>
+                                    <td rv-text="question.passed"></td>
+                                    <td rv-text="question.failed"></td>
+                                    <td rv-text="question.undone"></td>
+                                    <td rv-text="question.total"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
 
                     </div>
 
@@ -121,20 +165,68 @@
                 training: training,
                 trainees: trainees,
                 analytics: null,
-                summary: null,
+                questionsSummary: [],
 
                 passed: 0,
                 failed: 0,
                 undone: trainees.length,
                 total: trainees.length,
+                totalMarks: 0,
+                passmark: 0,
+                questionCount: 0,
 
 
-                init() {
+                init: function () {
+
+                    exam.questions = _.map(exam.questions, function (item, index) {
+                        return $.extend(true, item, {
+                            number: index + 1
+                        })
+                    });
+
+                    app.passmark = exam.passmark;
+
+                    app.totalMarks = _.reduce(exam.questions, function(result, value) {
+                        console.log(value);
+                        return (result + value.allocated_marks);
+                    }, 0);
+
+                    app.questionCount = exam.questions.length;
 
                     app.analytics = app.getAnalytics();
                     app.drawPieChart();
+                    app.createQuestionsDf();
                     app.drawBarGraph();
                     app.initBindings();
+
+                },
+
+                getQuestion: function (questionId) {
+
+                    var results = _.find(exam.questions, function (question) {
+                        return question.id === parseInt(questionId)
+                    });
+                    return results;
+                },
+
+                createQuestionsDf: function () {
+
+                    for (key in app.analytics.questionAnalysis) {
+
+                        if (app.analytics.questionAnalysis.hasOwnProperty(key)) {
+
+                            var value = app.analytics.questionAnalysis[key];
+                            var question = app.getQuestion(key);
+
+                            value.question = question.question;
+                            value.shorthand = "Q" + question.number;
+                            value.total = value.passed + value.undone + value.failed;
+
+                            app.questionsSummary.push(value);
+
+                        }
+
+                    }
                 },
 
                 initBindings: function () {
@@ -142,7 +234,11 @@
                         passed: app.passed,
                         failed: app.failed,
                         undone: app.undone,
-                        total: app.total
+                        total: app.total,
+                        questionsSummary: app.questionsSummary,
+                        totalMarks: app.totalMarks,
+                        passmark: app.passmark,
+                        questionCount: app.questionCount
                     })
                 },
 
@@ -191,6 +287,34 @@
                 },
 
                 drawBarGraph: function () {
+
+                    var series = [];
+                    var categories = [];
+                    var passed = [];
+                    var failed = [];
+                    var undone = [];
+                    _.each(app.questionsSummary, function (item) {
+                        categories.push(item.shorthand);
+                        passed.push(item.passed);
+                        failed.push(item.failed);
+                        undone.push(item.undone);
+                    });
+
+                    series.push({
+                        name: "Passed",
+                        data: passed
+                    });
+
+                    series.push({
+                        name: "Failed",
+                        data: failed
+                    });
+
+                    series.push({
+                        name: "Undone",
+                        data: undone
+                    });
+
                     Highcharts.chart('bar-graph', {
                         chart: {
                             type: 'bar'
@@ -199,7 +323,7 @@
                             text: 'Question Analysis'
                         },
                         xAxis: {
-                            categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania'],
+                            categories: categories,
                             title: {
                                 text: null
                             }
@@ -207,20 +331,17 @@
                         yAxis: {
                             min: 0,
                             title: {
-                                text: 'Population (millions)',
+                                text: 'Count',
                                 align: 'high'
                             },
                             labels: {
                                 overflow: 'justify'
                             }
                         },
-                        tooltip: {
-                            valueSuffix: ' millions'
-                        },
                         plotOptions: {
                             bar: {
                                 dataLabels: {
-                                    enabled: true
+                                    enabled: false
                                 }
                             }
                         },
@@ -238,19 +359,7 @@
                         credits: {
                             enabled: false
                         },
-                        series: [{
-                            name: 'Year 1800',
-                            data: [107, 31, 635, 203, 2]
-                        }, {
-                            name: 'Year 1900',
-                            data: [133, 156, 947, 408, 6]
-                        }, {
-                            name: 'Year 2000',
-                            data: [814, 841, 3714, 727, 31]
-                        }, {
-                            name: 'Year 2016',
-                            data: [1216, 1001, 4436, 738, 40]
-                        }]
+                        series: series
                     });
                 },
 
