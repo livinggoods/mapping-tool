@@ -17,6 +17,8 @@
 
                 <div class="col-xs-12">
 
+
+
                     <div class="panel">
 
                         <div class="panel-body">
@@ -317,7 +319,7 @@
 
                     Highcharts.chart('bar-graph', {
                         chart: {
-                            type: 'bar'
+                            type: 'column'
                         },
                         title: {
                             text: 'Question Analysis'
@@ -374,7 +376,7 @@
                         if (app.analytics.traineeAnalysis.hasOwnProperty(key)) {
 
                             var result = app.analytics.traineeAnalysis[key];
-                            if (result.passed) {
+                            if (result.hasPassed) {
                                 app.passed++;
                             } else {
                                 app.failed++;
@@ -406,7 +408,8 @@
                                 dataLabels: {
                                     enabled: false
                                 },
-                                showInLegend: true
+                                showInLegend: true,
+                                innerSize: 100
                             }
                         },
                         series: [{
