@@ -1,0 +1,443 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                {{ page.title }}
+            </h1>
+        </div>
+    </div>
+
+
+    <div class="row" id="exam-analysis-ui">
+
+        <div class="col-xs-12">
+
+            <div class="row">
+
+                <div class="col-xs-12">
+
+
+
+                    <div class="panel">
+
+                        <div class="panel-body">
+
+                            <table class="table table-condensed table-hover">
+                                <caption>Exam metadata</caption>
+                                <thead>
+                                <tr>
+                                    <th>Exam Passmark</th>
+                                    <th>Exam Total marks</th>
+                                    <th>Question count</th>
+                                    <th>Passed</th>
+                                    <th>Failed</th>
+                                    <th>Undone</th>
+                                    <th>Total Trainees</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td rv-text="passmark"></td>
+                                    <td rv-text="totalMarks"></td>
+                                    <td rv-text="questionCount"></td>
+                                    <td rv-text="passed"></td>
+                                    <td rv-text="failed"></td>
+                                    <td rv-text="undone"></td>
+                                    <td rv-text="total"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-xs-12 col-md-3">
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-body">
+
+                            <div id="overview-pie-chart"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-xs-12 col-md-9">
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+
+                            <div id="bar-graph"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+
+                <div class="col-xs-12">
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-body">
+
+                            <table class="table table-condensed table-hover">
+                                <caption>Question Analysis</caption>
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Question</th>
+                                    <th>Passed</th>
+                                    <th>Failed</th>
+                                    <th>Undone</th>
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr rv-each-question="questionsSummary">
+                                    <td rv-text="question.shorthand"></td>
+                                    <td rv-text="question.question"></td>
+                                    <td rv-text="question.passed"></td>
+                                    <td rv-text="question.failed"></td>
+                                    <td rv-text="question.undone"></td>
+                                    <td rv-text="question.total"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block additionaljs %}
+    <script src="{{ url_for('static', filename='js/rivets.bundled.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lodash.min.js') }}"></script>
+{% endblock %}
+
+{% block additionalcss %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.structure.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.theme.min.css') }}">
+{% endblock %}
+{% include 'partials/highcharts.html' %}
+{% block javascript %}
+    <script src="{{ url_for('static', filename='js/histogram-bellcurve.js') }}"></script>
+    <script type="text/javascript">
+
+        var ExamAnalysis = (function ($, _) {
+
+            var examResults = JSON.parse('{{ exam_results | safe }}');
+            var exam = JSON.parse('{{ exam | safe }}');
+            var training = JSON.parse('{{ training | safe }}');
+            var trainees = JSON.parse('{{ trainees | safe }}');
+
+            var app = {
+                examResults: examResults,
+                exam: exam,
+                training: training,
+                trainees: trainees,
+                analytics: null,
+                questionsSummary: [],
+
+                passed: 0,
+                failed: 0,
+                undone: trainees.length,
+                total: trainees.length,
+                totalMarks: 0,
+                passmark: 0,
+                questionCount: 0,
+
+
+                init: function () {
+
+                    exam.questions = _.map(exam.questions, function (item, index) {
+                        return $.extend(true, item, {
+                            number: index + 1
+                        })
+                    });
+
+                    app.passmark = exam.passmark;
+
+                    app.totalMarks = _.reduce(exam.questions, function(result, value) {
+                        console.log(value);
+                        return (result + value.allocated_marks);
+                    }, 0);
+
+                    app.questionCount = exam.questions.length;
+
+                    app.analytics = app.getAnalytics();
+                    app.drawPieChart();
+                    app.createQuestionsDf();
+                    app.drawBarGraph();
+                    app.initBindings();
+
+                },
+
+                getQuestion: function (questionId) {
+
+                    var results = _.find(exam.questions, function (question) {
+                        return question.id === parseInt(questionId)
+                    });
+                    return results;
+                },
+
+                createQuestionsDf: function () {
+
+                    for (key in app.analytics.questionAnalysis) {
+
+                        if (app.analytics.questionAnalysis.hasOwnProperty(key)) {
+
+                            var value = app.analytics.questionAnalysis[key];
+                            var question = app.getQuestion(key);
+
+                            value.question = question.question;
+                            value.shorthand = "Q" + question.number;
+                            value.total = value.passed + value.undone + value.failed;
+
+                            app.questionsSummary.push(value);
+
+                        }
+
+                    }
+                },
+
+                initBindings: function () {
+                    rivets.bind(document.querySelector('#exam-analysis-ui'), {
+                        passed: app.passed,
+                        failed: app.failed,
+                        undone: app.undone,
+                        total: app.total,
+                        questionsSummary: app.questionsSummary,
+                        totalMarks: app.totalMarks,
+                        passmark: app.passmark,
+                        questionCount: app.questionCount
+                    })
+                },
+
+                getAnalytics: function () {
+
+                    return _.reduce(examResults, function (result, value, key) {
+
+                        if (!result.traineeAnalysis[value.trainee_id]) {
+                            result.traineeAnalysis[value.trainee_id] = {};
+                            result.traineeAnalysis[value.trainee_id]["totalMarks"] = 0;
+                            result.traineeAnalysis[value.trainee_id]["hasPassed"] = false;
+                        }
+
+                        result.traineeAnalysis[value.trainee_id]["totalMarks"] = result.traineeAnalysis[value.trainee_id]["totalMarks"] + value.question_score;
+                        result.traineeAnalysis[value.trainee_id]["hasPassed"] = result.traineeAnalysis[value.trainee_id]["totalMarks"] >= exam.passmark;
+
+                        // No need of doing the loop twice
+                        if (!result.questionAnalysis[value.question_id]) {
+                            result.questionAnalysis[value.question_id] = {
+                                passed: 0,
+                                failed: 0,
+                                undone: trainees.length
+                            }
+                        }
+
+                        if (typeof value.question_score === 'number') {
+
+
+                            if (value.question_score > 0) {
+
+                                result.questionAnalysis[value.question_id].passed = result.questionAnalysis[value.question_id].passed + 1;
+
+                            } else {
+                                result.questionAnalysis[value.question_id].failed = result.questionAnalysis[value.question_id].failed + 1;
+                            }
+
+                            result.questionAnalysis[value.question_id].undone = result.questionAnalysis[value.question_id].undone - 1;
+                        }
+
+                        return result;
+
+                    }, {
+                        questionAnalysis: {},
+                        traineeAnalysis: {}
+                    });
+                },
+
+                drawBarGraph: function () {
+
+                    var series = [];
+                    var categories = [];
+                    var passed = [];
+                    var failed = [];
+                    var undone = [];
+                    _.each(app.questionsSummary, function (item) {
+                        categories.push(item.shorthand);
+                        passed.push(item.passed);
+                        failed.push(item.failed);
+                        undone.push(item.undone);
+                    });
+
+                    series.push({
+                        name: "Passed",
+                        data: passed
+                    });
+
+                    series.push({
+                        name: "Failed",
+                        data: failed
+                    });
+
+                    series.push({
+                        name: "Undone",
+                        data: undone
+                    });
+
+                    Highcharts.chart('bar-graph', {
+                        chart: {
+                            type: 'column'
+                        },
+                        title: {
+                            text: 'Question Analysis'
+                        },
+                        xAxis: {
+                            categories: categories,
+                            title: {
+                                text: null
+                            }
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: 'Count',
+                                align: 'high'
+                            },
+                            labels: {
+                                overflow: 'justify'
+                            }
+                        },
+                        plotOptions: {
+                            bar: {
+                                dataLabels: {
+                                    enabled: false
+                                }
+                            }
+                        },
+                        legend: {
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'top',
+                            x: -40,
+                            y: 80,
+                            floating: true,
+                            borderWidth: 1,
+                            backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                            shadow: true
+                        },
+                        credits: {
+                            enabled: false
+                        },
+                        series: series
+                    });
+                },
+
+                drawPieChart: function () {
+
+                    app.passed = 0;
+                    app.failed = 0;
+                    app.undone = trainees.length;
+                    app.total = trainees.length;
+
+                    for (key in app.analytics.traineeAnalysis) {
+                        if (app.analytics.traineeAnalysis.hasOwnProperty(key)) {
+
+                            var result = app.analytics.traineeAnalysis[key];
+                            if (result.hasPassed) {
+                                app.passed++;
+                            } else {
+                                app.failed++;
+                            }
+
+                            app.undone--;
+                        }
+                    }
+
+                    // Build the chart
+                    Highcharts.chart('overview-pie-chart', {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'Exam Performance Overview'
+                        },
+                        credits: {enabled: false},
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: false
+                                },
+                                showInLegend: true,
+                                innerSize: 100
+                            }
+                        },
+                        series: [{
+                            name: 'Brands',
+                            colorByPoint: true,
+                            data: [{
+                                name: 'Passed',
+                                y: app.passed,
+                            }, {
+                                name: 'Failed',
+                                y: app.failed
+                            }, {
+                                name: 'Undone',
+                                y: app.undone
+                            }]
+                        }]
+                    });
+
+                }
+            };
+
+            return app;
+
+        })(jQuery, _);
+
+        $(document).ready(function () {
+            ExamAnalysis.init();
+        })
+    </script>
+
+{% endblock %}

@@ -2,13 +2,12 @@ import csv
 import io
 import operator
 import os
-import time
 import uuid
-from datetime import date, datetime, time
+from datetime import date, time
 from time import gmtime, strftime
 
 from flask import json, session
-from flask import (render_template, redirect, url_for, flash, request, current_app, jsonify)
+from flask import (render_template, redirect, url_for, flash, jsonify)
 from flask.ext import excel
 from flask_googlemaps import Map, icons
 from flask_login import current_user, login_required
@@ -17,12 +16,9 @@ from werkzeug.utils import secure_filename
 from app.api.views import create_question_list
 from . import main
 from .forms import *
-from .. import db
-from ..decorators import admin_required, permission_required
-from ..utils import asdict
-from ..models import *
-
 from ..commons import exam_with_questions_to_dict
+from ..decorators import admin_required, permission_required
+from ..models import *
 
 currency = 'UGX '
 
@@ -286,6 +282,32 @@ def training(id):
         data = json.dumps(training_dict).replace("'", "\\'"),
         page=page
     )
+
+
+@main.route('/training/<string:training_id>/<int:training_exam_id>', methods=['GET'])
+@login_required
+def exam_analysis(training_id, training_exam_id):
+    training = Training.query.filter_by(id=training_id).first_or_404()
+    training_exam = TrainingExam.query.filter_by(id=training_exam_id).first_or_404()
+    trainees = Trainees.query.filter_by(training_id=training_id)
+
+    exam = exam_with_questions_to_dict(training_exam.exam)
+    exam.update(training_exam._asdict())
+
+    page = {
+        'title': 'Exam Analysis',
+        'subtitle': 'Exam analysis'
+    }
+    
+    exam_results = ExamResult.query.filter_by(training_exam_id=training_exam_id)
+    
+    return render_template('training_exam_analysis.html',
+                           page=page,
+                           exam_results=json.dumps([asdict(exam_result) for exam_result in exam_results]).replace("'", "\\'"),
+                           exam=json.dumps(exam).replace("'", "\\'"),
+                           training=json.dumps(asdict(training)).replace("'", "\\'"),
+                           trainees=json.dumps([asdict(trainee) for trainee in trainees]).replace("'", "\\'")
+                           )
 
 
 @main.route('/training/<string:training_id>/sessions')
