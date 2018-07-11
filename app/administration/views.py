@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request, abort, \
     current_app, jsonify, make_response, json
 from flask_login import current_user, login_required
-from ..models import User, Location, IccmComponents, Geo
+from ..models import User, Location, IccmComponents, Geo, ErrorLog
 from ..main.forms import IccmComponentForm
 from ..decorators import admin_required, permission_required
 from werkzeug.utils import secure_filename
@@ -266,3 +266,43 @@ def location_administration_edit(id=None):
         form.name.data = loc.name
         form.parent.data = loc.parent
     return render_template('new_location.html', form=form)
+
+
+@administration.route("/errors")
+@login_required
+def view_api_error_logs():
+    page_data = {
+        'title': 'Unsolved API Errors',
+        'subtitle': 'View API error logs'
+    }
+
+    errors = ErrorLog.query.filter_by(resolved=False)
+    pagination_count = request.args.get('page', 1, type=int)
+    pagination = errors.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)
+    
+    return render_template("admin/api_error_logs.html",
+                           errors=errors,
+                           page=page_data,
+                           endpoint='administration.view_api_error_logs',
+                           pagination=pagination,
+                           )
+
+@administration.route("/error/<int:error_id>", methods=['GET', 'POST'])
+@login_required
+def view_api_error_log(error_id):
+    page_data = {
+        'title': 'Error Details',
+        'subtitle': 'Error Details'
+    }
+
+    error = ErrorLog.query.filter_by(id=error_id).first_or_404()
+    
+    if request.method == 'GET':
+        
+        return render_template('admin/api_error_log.html',
+                               page=page_data,
+                               error=error)
+    else:
+        db.session.delete(error)
+        db.session.commit()
+        return redirect(url_for('administration.view_api_error_logs'))

@@ -669,7 +669,7 @@ class Registration (db.Model):
             'interview': [i.to_json() for i in interview],
             'recruitment':self.recruitment,
             'country':self.country,
-            'dob': float(self.dob),
+            'dob': float(self.dob) if self.dob else self.dob,
             'district':self.district,
             'subcounty':self.subcounty,
             'division':self.division,
@@ -2633,3 +2633,18 @@ class TrainingExam(db.Model):
           result['passmark'] = self.exam.passmark
         
       return result
+    
+
+class ErrorLog(db.Model):
+    __tablename__ = "error_logs"
+
+    id = Column(Integer, primary_key=True)
+    error = Column(String(1024), nullable=False)
+    endpoint = Column(String(1024), nullable=False)
+    payload = Column(Text, nullable=True)
+    datetime = Column(db.DateTime(), default=datetime.utcnow(), nullable=False)
+    user = Column(ForeignKey(u'users.id'), nullable=True)
+    resolved = Column(db.Boolean, default=False, nullable=False)
+    http_method = Column(String(16), nullable=False)
+    http_headers = Column(Text, nullable=True)
+    http_response_status_code = Column(Integer)

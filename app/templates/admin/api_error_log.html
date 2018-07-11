@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% import "partials/_macros.html" as macros %}
+{% block title %}Questions{% endblock %}
+
+{% block content %}
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>{{ title }}
+                    <small>{{ title }}</small>
+                </h3>
+            </div>
+
+            <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Go!</button>
+          </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>{{ page.title }}
+                        <small>{{ page.sub_title }}</small>
+                    </h2>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    <div class="row">
+                        <div class="col-xs-12">
+
+                            <div class="form-group">
+                                <label for="error">Error</label>
+                                <input id="error" type="text" value="{{ error.error }}" class="form-control" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="endpoint">Endpoint</label>
+                                <input id="endpoint" type="text" value="{{ error.endpoint }}" class="form-control" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="datetime">Datetime</label>
+                                <input type="text" disabled class="form-control" value="{{ error.datetime }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="method">Http Method</label>
+                                <input type="text" id="method" value="{{ error.http_method }}" class="form-control" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="headers">Http Headers</label>
+                                <textarea name="headers" id="headers" cols="30" rows="10" disabled class="form-control">{{ error.http_headers }}</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="payload">Payload</label>
+                                <textarea name="payload" id="payload" cols="30" rows="10" class="form-control" disabled>{{ error.payload }}</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="status">Resolution Status</label>
+                                <input type="text" value="{{ error.resolved }}" disabled class="form-control">
+                            </div>
+
+                            <div class="form-group">
+                                <button id="btn-resolve" class="btn btn-primary">Mark As Resolved</button>
+                                <form id="form" method="post">
+                                    <input type="hidden" name="error_id" value="{{ error.id }}" />
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+    $(document).ready(function() {
+        $("#btn-resolve").click(function(e) {
+
+            var status = window.confirm("Mark This Error As Resolved?");
+            if (status) {
+                $("#form").submit();
+            }
+        });
+    });
+    </script>
+{% endblock %}

@@ -30,19 +30,26 @@ def users_login():
     API Endpoint to login user and return their details and authentication token
     :return:
     """
-    form = request.form
-    email = form.get('email', None)
-    password = form.get('password', None)
-
-    if not email or not password:
-        return jsonify(error='Invalid request'), 400
-
-    user = User.query.filter_by(email=email).first()
-
-    if user is None or not user.verify_password(password):
-        return jsonify(error="Invalid login credentials"), 400
-    login_user(user)
-    return jsonify(user=user.to_json(), auth_token={"token": user.generate_auth_token(), "expires_in": 3600}), 200
+    ERROR_TAG = "USER_LOGIN"
+    
+    try:
+        form = request.form
+        email = form.get('email', None)
+        password = form.get('password', None)
+    
+        if not email or not password:
+            return jsonify(error='Invalid request'), 400
+    
+        user = User.query.filter_by(email=email).first()
+    
+        if user is None or not user.verify_password(password):
+            return jsonify(error="Invalid login credentials"), 400
+        login_user(user)
+        return jsonify(user=user.to_json(), auth_token={"token": user.generate_auth_token(), "expires_in": 3600}), 200
+    except Exception as e:
+        
+        db.session.add()
+        return jsonify(status=False, message="Unexpected error has occurred"), 500
 
 
 @api.route('/recruitments.json')
