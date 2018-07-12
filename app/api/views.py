@@ -200,7 +200,7 @@ def api_recrutiment_trainig():
       # create / generate Sessions
       #TrainingSessiions, needs to have a training_topic
       # @TODO  create initial 3 training_sessions
-        
+      
       #   Create default Trainee attendances here, we export this to the App
       
       return jsonify(status='updated', id=recruitment.id, trainees_classes=class_details)
@@ -491,7 +491,31 @@ def sync_parish():
     parish_list = request.json.get('parishes')
     if parish_list is not None:
       for parish in parish_list:
-        saved_record = Parish.query.filter(Parish.id == parish.get('id')).first()
+        parish = dict((k, v) for k, v in parish.iteritems() if v)
+        saved_record = Parish.query.filter_by(id=parish.get('id', None)).first()
+        
+        # Gets the mapping ID
+        mapping_id = None
+        mapping = parish.get('mapping')
+        mapping_json = None
+        try:
+          if bool(mapping):
+            mapping_json = json.loads(mapping)
+            mapping_json = dict((k, v) for k, v in mapping_json.iteritems() if v)
+        except ValueError as e:
+          if len(mapping) <= 64:
+            mapping_id = mapping
+
+        if mapping_json:
+          mapping_obj = Mapping.from_json(mapping_json)
+          saved_mapping = Mapping.query.filter_by(id=mapping_obj.id).first()
+          if saved_mapping:
+            db.session.merge(mapping_obj)
+          else:
+            db.session.add(mapping_obj)
+            db.session.commit()
+          mapping_id = saved_mapping.id if saved_mapping else mapping_obj.id
+
         if saved_record:
           if parish.get('id') is not None or parish.get('id') != '':
             saved_record.id = parish.get('id')
@@ -499,8 +523,8 @@ def sync_parish():
             saved_record.name = parish.get('name')
           if parish.get('parent') is not None or parish.get('parent') != '':
             saved_record.parent = parish.get('parent')
-          if parish.get('mapping') is not None or parish.get('mapping') != '':
-            saved_record.mapping_id = parish.get('mapping')
+          if bool(parish.get('mapping')):
+            saved_record.mapping_id = mapping_id
           if parish.get('added_by') is not None or parish.get('added_by') != '':
             saved_record.added_by = parish.get('added_by')
           if parish.get('contact_person') is not None or parish.get('contact_person') != '':
@@ -519,12 +543,12 @@ def sync_parish():
               id=parish.get('id'),
               name = parish.get('name'),
               parent = parish.get('parent') if parish.get('parent') != '' else None,
-              mapping_id = parish.get('mapping') if parish.get('mapping') != '' else None,
-              added_by = parish.get('added_by') if parish.get('added_by') != '' else None,
+              mapping_id = mapping_id,
+              added_by = parish.get('added_by') if bool(parish.get('added_by')) else None,
               contact_person = parish.get('contact_person'),
               phone = parish.get('phone'),
               comment = parish.get('comment'),
-              country = parish.get('country') if parish.get('country') != '' else None,
+              country = parish.get('country') if bool(parish.get('country')) else None,
               client_time = parish.get('date_added'),
           )
           operation = 'created'
@@ -794,7 +818,7 @@ def sync_interviews():
           operation = 'created'
           db.session.add(record)
         db.session.commit()
-          
+        
         status.append({'id':record.id, 'status':'ok', 'operation':operation})
       return jsonify(status=status)
     else:
@@ -1319,7 +1343,7 @@ def training_trainers(training_id = None):
         db.session.commit()
         status.append({'record': trainer, 'operation': "created"})
     return jsonify(status='ok', eperation=status)
-      
+    
     
 def process_exam_csv(path):
   questions = process_csv(path, False)

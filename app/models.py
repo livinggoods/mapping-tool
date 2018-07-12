@@ -1075,7 +1075,6 @@ class Mapping(db.Model):
 
     @staticmethod
     def from_json(record):
-      
         id = record.get('id', None)
         if id:
             if id.startswith('['):
@@ -2644,8 +2643,8 @@ class ErrorLog(db.Model):
     __tablename__ = "error_logs"
 
     id = Column(Integer, primary_key=True)
-    error = Column(String(1024), nullable=False)
-    endpoint = Column(String(1024), nullable=False)
+    error = Column(Text, nullable=False)
+    endpoint = Column(Text, nullable=False)
     payload = Column(Text, nullable=True)
     datetime = Column(db.DateTime(), default=datetime.utcnow(), nullable=False)
     user = Column(ForeignKey(u'users.id'), nullable=True)
