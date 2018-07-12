@@ -4,7 +4,7 @@ from collections import OrderedDict
 from datetime import datetime
 from random import randint
 
-from flask import current_app, request
+from flask import current_app, request, json
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text, Numeric, text, Float, inspect
@@ -1075,18 +1075,23 @@ class Mapping(db.Model):
 
     @staticmethod
     def from_json(record):
-        id=record.get('id'),
-        name=record.get('name'),
-        country=record.get('country'),
-        county=record.get('county'),
-        subcounty=record.get('subcounty'),
-        district=record.get('district'),
-        added_by=record.get('added_by'),
-        contact_person=record.get('contact_person'),
-        phone=record.get('phone'),
-        comment=record.get('comment'),
-        synced=record.get('synced'),
-        client_time=record.get('date_added')
+      
+        id = record.get('id', None)
+        if id:
+            if id.startswith('['):
+                id = json.loads(id)[0]
+        
+        name=record.get('name') if bool(record.get('name')) else None
+        country=record.get('country') if bool(record.get('country')) else None
+        county=record.get('county') if bool(record.get('county')) else None
+        subcounty=record.get('subcounty') if bool(record.get('subcounty')) else None
+        district=record.get('district') if bool(record.get('district')) else None
+        added_by=record.get('added_by') if bool(record.get('added_by')) else 1
+        contact_person=record.get('contact_person') if bool(record.get('contact_person')) else None
+        phone=record.get('phone') if bool(record.get('phone')) else None
+        comment=record.get('comment') if bool(record.get('comment')) else None
+        synced=record.get('synced')
+        client_time=record.get('client_time') if bool(record.get('client_time')) else None
 
         return Mapping(id=id, name=name, country=country, county=county, subcounty=subcounty, district=district,
                        added_by=added_by, contact_person=contact_person,phone=phone, comment=comment, synced=synced,
