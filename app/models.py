@@ -1267,7 +1267,7 @@ class Interview(db.Model):
 class CommunityUnit(db.Model):
   __tablename__ = 'community_unit'
 
-  id = Column(String(65), primary_key=True)
+  id = Column(String(65), primary_key=True, nullable=False, index=True)
   name = Column(String(45), nullable=False)
   mappingid = Column(ForeignKey(u'mapping.id'), nullable=True, index=True)
   lat = Column(Float, server_default=text("'0'"))
@@ -1322,12 +1322,12 @@ class CommunityUnit(db.Model):
     return CommunityUnit(
         id=json.get('id'),
         name =json.get('name'),
-        mappingid = json.get('mappingid') if json.get('mappingid') !='' else None,
+        mappingid = json.get('mappingid') if bool(json.get('mappingid')) else None,
         lat =json.get('lat'),
         lon =json.get('lon'),
         country =json.get('country'),
-        subcountyid = json.get('subcountyid') if json.get('subcountyid') !='' else None,
-        linkfacilityid = json.get('linkfacilityid') if json.get('linkfacilityid') !='' else None,
+        subcountyid = json.get('subcountyid') if bool(json.get('subcountyid')) else None,
+        linkfacilityid = json.get('linkfacilityid') if bool(json.get('linkfacilityid')) else None,
         areachiefname =json.get('areachiefname'),
         ward =json.get('ward'),
         economicstatus =json.get('economicstatus'),
