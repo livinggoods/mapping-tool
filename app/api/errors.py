@@ -1,3 +1,5 @@
+import traceback
+
 from flask import jsonify, request
 from flask_login import current_user
 
@@ -7,6 +9,9 @@ from .. import db
 
 
 def log_api_error(request, e, code):
+    
+    print e
+    print traceback.format_exc()
     
     payload = request.get_data()
     method = request.method
