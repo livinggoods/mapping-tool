@@ -475,7 +475,7 @@ def sync_mapping():
           db.session.commit()
           
         status.append({'id': record.id, 'status': 'ok', 'operation': operation})
-      return jsonify(status=status)
+      return jsonify(updated=status)
     else:
       return jsonify(error=mapping_list)
 
