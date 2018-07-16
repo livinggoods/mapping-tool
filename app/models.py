@@ -219,48 +219,16 @@ class Referral(db.Model):
 
     @staticmethod
     def from_json(record):
-      id=record.get('id')
-      phone=record.get('phone')
-      title=record.get('title')
-      recruitment_id=record.get('recruitment_id')
-      name=record.get('name')
-      country=record.get('country')
-      county=record.get('county')
-      district=record.get('district')
-      subcounty=record.get('subcounty')
-      community_unit=record.get('community_unit')
-      village=record.get('village')
-      mapping_id=record.get('mapping_id')
-      lat = float(0)
-      if record.get('lat') != '':
-        lat= float(record.get('lat'))
-      lon = float(0)
-      if record.get('lon') != '':
-        lon= float(record.get('lon'))
-      mobilization=record.get('mobilization')
-      synced=record.get('synced')
-      archived=record.get('archived')
-      return Referral(
-        id=id,
-        phone=phone,
-        title=title,
-        recruitment_id=recruitment_id,
-        name=name,
-        country=country,
-        county=county,
-        district=district,
-        subcounty=subcounty,
-        community_unit=community_unit,
-        village=village,
-        mapping_id=mapping_id,
-        lat=lat,
-        lon=lon,
-        mobilization=mobilization,
-        synced=synced,
-        archived=archived
-      )
-
-
+      
+      referral = Referral()
+      
+      for k, v in record.iteritems():
+        if k == 'lat' or k == 'lon':
+          v = float(v) if bool(v) else float(0)
+        
+        setattr(referral, k, v)
+        
+      return referral
 
 class Village(db.Model):
     __tablename__ = 'village'
@@ -687,7 +655,7 @@ class Registration (db.Model):
             'added_by':self.added_by,
             'comment':self.comment,
             'proceed':self.proceed,
-            'client_time':float(self.client_time),
+            'client_time':float(self.client_time) if self.client_time else None,
             'date_added':self.date_added,
             'synced':self.synced,
             'chew_name' : self.chew_name,
@@ -1068,8 +1036,8 @@ class Mapping(db.Model):
             'phone': self.phone,
             'comment':self.comment,
             'synced':self.synced,
-            'date_added':self.date_added,
-            'client_time':float(self.client_time)
+            'date_added': long(time.mktime(self.date_added.timetuple())) if self.date_added else long(0),
+            'client_time':float(self.client_time) if self.client_time else None
         }
         return json_record
 
@@ -1079,22 +1047,16 @@ class Mapping(db.Model):
         if id:
             if id.startswith('['):
                 id = json.loads(id)[0]
+        record['id'] = id
         
-        name=record.get('name') if bool(record.get('name')) else None
-        country=record.get('country') if bool(record.get('country')) else None
-        county=record.get('county') if bool(record.get('county')) else None
-        subcounty=record.get('subcounty') if bool(record.get('subcounty')) else None
-        district=record.get('district') if bool(record.get('district')) else None
-        added_by=record.get('added_by') if bool(record.get('added_by')) else 1
-        contact_person=record.get('contact_person') if bool(record.get('contact_person')) else None
-        phone=record.get('phone') if bool(record.get('phone')) else None
-        comment=record.get('comment') if bool(record.get('comment')) else None
-        synced=record.get('synced')
-        client_time=record.get('client_time') if bool(record.get('client_time')) else None
-
-        return Mapping(id=id, name=name, country=country, county=county, subcounty=subcounty, district=district,
-                       added_by=added_by, contact_person=contact_person,phone=phone, comment=comment, synced=synced,
-                       client_time=client_time)
+        mapping = Mapping()
+        for k, v in record.iteritems():
+          if k == 'date_added':
+            continue
+          else:
+            setattr(mapping, k, v)
+        
+        return mapping
 
 
 class RecruitmentUsers(db.Model):
@@ -1323,52 +1285,15 @@ class CommunityUnit(db.Model):
 
   @staticmethod
   def from_json(json):
-    return CommunityUnit(
-        id=json.get('id'),
-        name =json.get('name'),
-        mappingid = json.get('mappingid') if bool(json.get('mappingid')) else None,
-        lat =json.get('lat'),
-        lon =json.get('lon'),
-        country =json.get('country'),
-        subcountyid = json.get('subcountyid') if bool(json.get('subcountyid')) else None,
-        linkfacilityid = json.get('linkfacilityid') if bool(json.get('linkfacilityid')) else None,
-        areachiefname =json.get('areachiefname'),
-        ward =json.get('ward'),
-        economicstatus =json.get('economicstatus'),
-        privatefacilityforact =json.get('privatefacilityforact'),
-        privatefacilityformrdt =json.get('privatefacilityformrdt'),
-        nameofngodoingiccm =json.get('nameofngodoingiccm'),
-        nameofngodoingmhealth =json.get('nameofngodoingmhealth'),
-        client_time =json.get('client_time'),
-        date_added =json.get('date_added'),
-        addedby =json.get('addedby'),
-        numberofchvs =json.get('numberofchvs'),
-        householdperchv =json.get('householdperchv'),
-        numberofvillages =json.get('numberofvillages'),
-        distancetobranch =json.get('distancetobranch'),
-        transportcost =json.get('transportcost'),
-        distancetomainroad =json.get('distancetomainroad'),
-        noofhouseholds =json.get('noofhouseholds'),
-        mohpoplationdensity =json.get('mohpoplationdensity'),
-        estimatedpopulationdensity =json.get('estimatedpopulationdensity'),
-        distancetonearesthealthfacility =json.get('distancetonearesthealthfacility'),
-        actlevels =json.get('actlevels'),
-        actprice =json.get('actprice'),
-        mrdtlevels =json.get('mrdtlevels'),
-        mrdtprice =json.get('mrdtprice'),
-        noofdistibutors =json.get('noofdistibutors'),
-        chvstrained =json.get('chvstrained'),
-        presenceofestates =json.get('presenceofestates'),
-        presenceoffactories =json.get('presenceoffactories'),
-        presenceofhostels =json.get('presenceofhostels'),
-        tradermarket =json.get('tradermarket'),
-        largesupermarket =json.get('largesupermarket'),
-        ngosgivingfreedrugs =json.get('ngosgivingfreedrugs'),
-        ngodoingiccm =json.get('ngodoingiccm'),
-        ngodoingmhealth =json.get('ngodoingmhealth'),
-        comment =json.get('comment'),
-        archived =json.get('archived'),
-    )
+    cu = CommunityUnit()
+
+    for k, v in json.iteritems():
+      if k == 'date_added':
+        continue
+      else:
+        setattr(cu, k, v)
+        
+    return cu
   
   def to_json(self):
     return {
@@ -1460,21 +1385,19 @@ class LinkFacility(db.Model):
   
   @staticmethod
   def from_json(json):
-    return LinkFacility(
-    id = json.get('id'),
-    facility_name = json.get('facility_name'),
-    county = json.get('county'),
-    lat = float(json.get('lat')) if  json.get('lat') != '' else float(0),
-    lon = float(json.get('lon')) if  json.get('lon') != '' else float(0),
-    subcounty = json.get('subcounty'),
-    client_time = json.get('date_added'),
-    addedby = json.get('addedby'),
-    mrdt_levels = json.get('mrdt_levels'),
-    act_levels = json.get('act_levels'),
-    country = json.get('country'),
-    facility_id = json.get('facility_id'),
-    archived = json.get('archived')
-    )
+    link_facility = LinkFacility()
+
+    for k, v in json.iteritems():
+      if k == 'date_added':
+        continue
+      
+      if k == 'lat' or k == 'lon':
+        v = float(v) if bool(v) else float(0)
+  
+      setattr(link_facility, k, v)
+
+    return link_facility
+    
 
   user=relationship(u'User')
 

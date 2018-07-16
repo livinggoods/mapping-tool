@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 from app import create_app, db
-from app.models import User, Role, Geo, UserType, Location, Education
+from app.models import User, Role, Geo, UserType, Location, Education, ErrorLog
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 from app.data import data
@@ -118,6 +118,45 @@ def deploy():
 
     # insert education data
     Education.create_education()
+    
+@manager.command
+def resolve_errors():
+    
+    import requests
+    
+    errors = iter(ErrorLog.query.filter_by(resolved=False))
+    
+    while True:
+        try:
+
+            error = errors.next()
+
+            base_url = 'https://expansion.lg-apps.com'
+            url = base_url + error.endpoint
+            headers = {}
+            for item in error.http_headers.split("\n"):
+                item = str(item).strip()
+                header = item.split(': ')
+                if len(header) == 2:
+                    headers[header[0]] = header[1]
+                
+            method_type = error.http_method
+            payload = error.payload
+            
+            if method_type == 'POST':
+                r = requests.post(url=url, data=payload.encode('utf-8'), headers=headers)
+                if 200 <= r.status_code < 300:
+                    db.session.delete(error)
+                    db.session.commit()
+                    print "Resolved " + error.error
+                else:
+                    print "Failed to resolve " + error.error
+            
+        except StopIteration as e:
+            break
+        except Exception as e:
+            print str(e)
+            break
 
 
 if __name__ == '__main__':

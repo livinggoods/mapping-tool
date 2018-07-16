@@ -1,5 +1,7 @@
 import os
 
+from geoip import geolite2
+
 from flask_httpauth import HTTPBasicAuth
 
 from . import api
@@ -17,7 +19,60 @@ from ..decorators import api_login_required
 from ..utils.utils import *
 from ..commons import exam_with_questions_to_dict
 
+def remove_empty_values(d, country):
+  """
+  Remove empty values from a dict
+  :param d:
+  :return:
+  """
+  new_dict = {}
+  if isinstance(d, dict):
+    for k, v in d.iteritems():
+      
+      if k == 'added_by' and bool(v):
+        user = User.query.filter_by(id=v).first()
+        if user:
+          country = user.location
+          new_dict['country'] = country
+      
+      if k == 'country' and not bool(v):
+        new_dict[k] = country
+      if bool(v):
+        if isinstance(v, dict):
+          new_dict[k] = remove_empty_values(v, country)[0]
+        else:
+          if isinstance(v, list):
+            v = [remove_empty_values(item, country)[0] if isinstance(item, dict) else item for item in v]
+            new_dict[k] = v
+          else:
+            new_dict[k] = v
+    return new_dict, d.keys()
+  elif isinstance(d, list):
+    return [remove_empty_values(item, country)[0] if isinstance(item, dict) else item for item in d], []
+  else:
+    return d, []
 
+@api.before_request
+def pre_request():
+  content_type = request.headers.get('Content-Type', None)
+  if content_type == 'application/json':
+    ip_address = request.headers.get('X-Real-IP', '0.0.0.0')
+    match = geolite2.lookup(ip_address)
+    
+    # Detect country request is coming from
+    country = 'UG'
+    if match is not None:
+      country = match.country if match.country == 'KE' or match.country == 'UG' else 'UG'
+      
+    payload = request.json
+    
+    # Remove empty values in dict
+    results = remove_empty_values(payload, country)
+    params = results[0]
+    keys = results[1]
+    for key in keys:
+      request.json[key] = params.get(key, None)
+    
 
 @api.after_request
 def apply_caching(response):
@@ -30,8 +85,6 @@ def users_login():
     API Endpoint to login user and return their details and authentication token
     :return:
     """
-    ERROR_TAG = "USER_LOGIN"
-    
     try:
         form = request.form
         email = form.get('email', None)
@@ -47,8 +100,6 @@ def users_login():
         login_user(user)
         return jsonify(user=user.to_json(), auth_token={"token": user.generate_auth_token(), "expires_in": 3600}), 200
     except Exception as e:
-        
-        db.session.add()
         return jsonify(status=False, message="Unexpected error has occurred"), 500
 
 
@@ -427,26 +478,14 @@ def sync_link_facilities():
         if link_facility.get('lat') !='':
           lat = float(link_facility.get('lat'))
         if saved_record:
-          saved_record.id = link_facility.get('id'),
-          saved_record.facility_name = link_facility.get('facility_name'),
-          saved_record.county = link_facility.get('county'),
-          saved_record.lat = lat,
-          saved_record.lon = lon,
-          saved_record.subcounty = link_facility.get('subcounty'),
-          saved_record.client_time = link_facility.get('date_added'),
-          saved_record.addedby = link_facility.get('addedby'),
-          saved_record.mrdt_levels = link_facility.get('mrdt_levels'),
-          saved_record.act_levels = link_facility.get('act_levels'),
-          saved_record.country = link_facility.get('country'),
-          saved_record.facility_id = link_facility.get('facility_id'),
-          saved_record.archived = 0
+          db.session.merge(LinkFacility.from_json(link_facility))
           operation = 'updated'
         else:
           saved_record = LinkFacility.from_json(link_facility)
           operation = 'created'
         db.session.add(saved_record)
         db.session.commit()
-        status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
+        status.append(saved_record.to_json())
       return jsonify(status=status)
     else:
       return jsonify(error="No records posted")
@@ -460,22 +499,28 @@ def sync_mapping():
     return jsonify({'mappings': [record.to_json() for record in records]})
   else:
     status = []
+    
     mapping_list = request.json.get('mappings')
     if mapping_list is not None:
       for mapping in mapping_list:
         record = Mapping.from_json(mapping)
         saved_record = Mapping.query.filter(Mapping.id == record.id).first()
         if saved_record:
+          record.synced = 1
           db.session.merge(record)
           operation = 'updated'
         else:
           operation = 'created'
           record.synced = 1
+          
+          if not record.name or not record.country or not record.county:
+            continue
+          
           db.session.add(record)
           db.session.commit()
           
-        status.append({'id': record.id, 'status': 'ok', 'operation': operation})
-      return jsonify(updated=status)
+        status.append(saved_record.to_json() if saved_record else record.to_json())
+      return jsonify(status=status)
     else:
       return jsonify(error=mapping_list)
 
@@ -491,7 +536,6 @@ def sync_parish():
     parish_list = request.json.get('parishes')
     if parish_list is not None:
       for parish in parish_list:
-        parish = dict((k, v) for k, v in parish.iteritems() if v)
         saved_record = Parish.query.filter_by(id=parish.get('id', None)).first()
         
         # Gets the mapping ID
@@ -517,26 +561,26 @@ def sync_parish():
           mapping_id = saved_mapping.id if saved_mapping else mapping_obj.id
 
         if saved_record:
-          if parish.get('id') is not None or parish.get('id') != '':
+          if parish.get('id') is not None and parish.get('id') != '':
             saved_record.id = parish.get('id')
-          if parish.get('name') is not None or parish.get('name') != '':
+          if parish.get('name') is not None and parish.get('name') != '':
             saved_record.name = parish.get('name')
-          if parish.get('parent') is not None or parish.get('parent') != '':
+          if parish.get('parent') is not None and parish.get('parent') != '':
             saved_record.parent = parish.get('parent')
           if bool(parish.get('mapping')):
             saved_record.mapping_id = mapping_id
-          if parish.get('added_by') is not None or parish.get('added_by') != '':
+          if parish.get('added_by') is not None and parish.get('added_by') != '':
             saved_record.added_by = parish.get('added_by')
-          if parish.get('contact_person') is not None or parish.get('contact_person') != '':
+          if parish.get('contact_person') is not None and parish.get('contact_person') != '':
             saved_record.contact_person = parish.get('contact_person')
-          if parish.get('phone') is not None or parish.get('phone') != '':
+          if parish.get('phone') is not None and parish.get('phone') != '':
             saved_record.phone = parish.get('phone')
-          if parish.get('comment') is not None or parish.get('comment') != '':
+          if parish.get('comment') is not None and parish.get('comment') != '':
             saved_record.comment = parish.get('comment')
-          if parish.get('country') is not None or parish.get('country') != '':
+          if parish.get('country') is not None and parish.get('country') != '':
             saved_record.country = parish.get('country')
-          if parish.get('date_added') is not None or parish.get('date_added') != '':
-            saved_record.client_time = parish.get('date_added')
+          if parish.get('client_time') is not None and parish.get('client_time') != '':
+            saved_record.client_time = parish.get('client_time')
           operation = 'updated'
         else:
           saved_record = Parish(
@@ -549,12 +593,12 @@ def sync_parish():
               phone = parish.get('phone'),
               comment = parish.get('comment'),
               country = parish.get('country') if bool(parish.get('country')) else None,
-              client_time = parish.get('date_added'),
+              client_time = parish.get('client_time'),
           )
           operation = 'created'
         db.session.add(saved_record)
         db.session.commit()
-        status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
+        status.append(saved_record.to_json())
       return jsonify(status=status)
     else:
       return jsonify(error="No records posted")
@@ -744,7 +788,7 @@ def sync_cu():
           db.session.add(cu_obj)
           db.session.commit()
           id = cu_obj.id
-        status.append({'id': id, 'status': 'ok', 'operation': operation})
+        status.append(saved_record.to_json() if saved_record else cu_obj.to_json())
       return jsonify(status=status)
     else:
       return jsonify(error="No records posted")
@@ -855,7 +899,6 @@ def sync_exams():
           db.session.commit()
           operation='updated'
         else:
-          print 'Creating exam'
           db.session.add(record)
           db.session.commit()
           operation='created'
@@ -949,7 +992,7 @@ def sync_chew_referral():
         else:
           db.session.add(record)
           db.session.commit()
-        status.append({'id':record.id, 'status':'ok', 'operation':'saved'})
+        status.append(saved_record.to_json() if saved_record else record.to_json())
       return jsonify(status=status)
     else:
       return jsonify(error="No records posted")
