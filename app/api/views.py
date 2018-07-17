@@ -471,12 +471,6 @@ def sync_link_facilities():
     if link_facilities_list is not None:
       for link_facility in link_facilities_list:
         saved_record = LinkFacility.query.filter(LinkFacility.id == link_facility.get('id')).first()
-        lon = 0
-        lat = 0
-        if link_facility.get('lon') !='':
-          lon = float(link_facility.get('lon'))
-        if link_facility.get('lat') !='':
-          lat = float(link_facility.get('lat'))
         if saved_record:
           db.session.merge(LinkFacility.from_json(link_facility))
           operation = 'updated'
@@ -982,14 +976,22 @@ def sync_chew_referral():
   else:
     status = []
     referral_list = request.json.get('chew_referrals')
+    
     if referral_list is not None:
       for referral in referral_list:
         record = Referral.from_json(referral)
-        saved_record  = Referral.query.filter(Referral.id == record.id).first()
+        
+        if record is None:
+          continue
+        
+        saved_record = Referral.query.filter_by(id=record.id).first()
         if saved_record:
-          # update the referral
-          pass
+          db.session.merge(record)
         else:
+          
+          if record.id is None or record.name is None or record.country is None:
+            continue
+          
           db.session.add(record)
           db.session.commit()
         status.append(saved_record.to_json() if saved_record else record.to_json())

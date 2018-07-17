@@ -221,13 +221,20 @@ class Referral(db.Model):
     def from_json(record):
       
       referral = Referral()
-      
+  
       for k, v in record.iteritems():
         if k == 'lat' or k == 'lon':
           v = float(v) if bool(v) else float(0)
+          
+        if k == 'mapping' or k == 'recruitment':
+          setattr(referral, '%s_id'%k, v)
+          continue
         
         setattr(referral, k, v)
-        
+
+      if referral.id is None:
+        return None
+
       return referral
 
 class Village(db.Model):
@@ -771,7 +778,7 @@ class Parish(db.Model):
         'comment':self.comment if self.comment is not None else None,
         'synced':self.synced if self.synced is not None else None,
         'country':self.country if self.country is not None else None,
-        'client_time':float(self.client_time) if self.client_time is not None else None,
+        'client_time':float(self.client_time) if bool(self.client_time) else None,
         'date_added':self.date_added if self.date_added is not None else None
       }
       return json_record
@@ -959,7 +966,7 @@ class Recruitments(db.Model):
             'country' : self.country,
             'added_by' : self.added_by,
             'comment' : self.comment,
-            'client_time' : float(self.client_time),
+            'client_time' : float(self.client_time) if self.client_time else None,
             'synced' : self.synced,
             'status': self.status
         }
@@ -1366,19 +1373,19 @@ class LinkFacility(db.Model):
   def to_json(self):
     json_record ={
       'id': self.id if self.id is not None else None,
-      'facility_name': self.facility_name if self.facility_name is not None else None,
-      'county': self.county if self.county is not None else None,
-      'lat': float(self.lat) if self.lat is not None else None,
-      'lon': float(self.lon) if self.lon is not None else None,
-      'subcounty': self.subcounty if self.subcounty is not None else None,
-      'client_time': float(self.client_time) if self.client_time is not None else None,
-      'date_added': self.date_added if self.date_added is not None else None,
-      'addedby': self.addedby if self.addedby is not None else None,
-      'mrdt_levels': float(self.mrdt_levels) if self.mrdt_levels is not None else None,
-      'act_levels': float(self.act_levels) if self.act_levels is not None else None,
-      'country': self.country if self.country is not None else None,
-      'facility_id': self.facility_id if self.facility_id is not None else None,
-      'archived': self.archived if self.archived is not None else None
+      'facility_name': self.facility_name if self.facility_name else None,
+      'county': self.county if self.county else None,
+      'lat': float(self.lat) if self.lat else None,
+      'lon': float(self.lon) if self.lon else None,
+      'subcounty': self.subcounty if self.subcounty else None,
+      'client_time': float(self.client_time) if self.client_time else None,
+      'date_added': self.date_added if self.date_added else None,
+      'addedby': self.addedby if self.addedby else None,
+      'mrdt_levels': float(self.mrdt_levels) if self.mrdt_levels else None,
+      'act_levels': float(self.act_levels) if self.act_levels else None,
+      'country': self.country if self.country else None,
+      'facility_id': self.facility_id if self.facility_id else None,
+      'archived': self.archived if self.archived else None
     }
     return json_record
   
