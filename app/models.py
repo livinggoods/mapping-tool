@@ -2086,6 +2086,25 @@ class SessionAttendance(db.Model):
       'comment': self.comment
     }
 
+  @staticmethod
+  def from_json(json_record):
+    return SessionAttendance(
+        id=json_record.get('id') if json_record.get('id') is not None else None,
+        training_session_id=json_record.get('training_session_id') if json_record.get(
+          'training_session_id') is not None else None,
+        trainee_id=json_record.get('trainee_id') if json_record.get('trainee_id') is not None else None,
+        training_session_type_id=json_record.get('training_session_type_id') if json_record.get(
+          'training_session_type_id') is not None else None,
+        training_id=json_record.get('training_id') if json_record.get('training_id') is not None else None,
+        country=json_record.get('country') if json_record.get('country') is not None else None,
+        attended=json_record.get('attended') if json_record.get('attended') is not None else None,
+        client_time=json_record.get('client_time') if json_record.get('client_time') is not None else None,
+        created_by=json_record.get('created_by') if json_record.get('created_by') is not None else None,
+        date_created=json_record.get('date_created') if json_record.get('date_created') is not None else None,
+        archived=json_record.get('archived') if json_record.get('archived') is not None else None,
+        comment=json_record.get('comment') if json_record.get('comment') is not None else None
+    )
+
 class SessionTopic(db.Model):
   __tablename__ = 'session_topic'
 

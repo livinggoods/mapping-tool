@@ -286,6 +286,48 @@ def get_training(id):
 def get_training_attendance(id):
   return jsonify(attendance =[a.to_json() for a in SessionAttendance.query.filter_by(training_id=id)])
 
+@api.route('/sync/training/session-attendances', methods=['GET', 'POST'])
+@api.route('/sync/training/session-attendances/<string:id>', methods=['GET', 'POST'])
+@api_login_required
+def sync_training_attendance(id=None):
+  if request.method == 'GET':
+    if id is not None:
+      return jsonify(attendance =[a.to_json() for a in SessionAttendance.query.filter_by(training_id=id)])
+    else:
+      return jsonify(attendance=[a.to_json() for a in SessionAttendance.query.filter_by(archived=0)])
+  else:
+    submissions_list = request.json.get('session_attendance')
+    if submissions_list is not None:
+      for attendance in submissions_list:
+        print '*' * 30
+        print attendance
+        print '*' * 30
+        if attendance.get('created_by') == '0':
+          attendance['created_by'] = None
+        if attendance.get('training_session_type_id') == '0':
+          attendance['training_session_type_id'] = None
+        record = SessionAttendance.from_json(attendance)
+        saved_record = SessionAttendance.query.filter_by(id = record.id).first()
+        if saved_record:
+          saved_record.id =record.id
+          saved_record.training_session_id =record.training_session_id
+          saved_record.trainee_id =record.trainee_id
+          saved_record.training_session_type_id =record.training_session_type_id
+          saved_record.training_id =record.training_id
+          saved_record.country =record.country
+          saved_record.attended =record.attended
+          saved_record.client_time =record.client_time
+          saved_record.created_by =record.created_by
+          saved_record.date_created =record.date_created
+          saved_record.archived =record.archived
+          saved_record.comment =record.comment
+          db.session.add(saved_record)
+          db.session.commit()
+        else:
+          db.session.add(record)
+          db.session.commit()
+  return jsonify(status=request.json)
+
 
 @api.route('/users/json', methods=['GET'])
 @api_login_required
