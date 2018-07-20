@@ -74,6 +74,29 @@
 
                             <div class="row">
 
+                                <div class="col-xs-12 col-md-4">
+                                    <small class="text-info"><i class="fa fa-info"></i> is Certification</small>
+                                    <div class="checkbox">
+                                        <label for="is_certification">
+                                            <input name="is_certification" id="is_certification" type="checkbox"
+                                                   rv-checked="data.is_certification"/>
+                                            is Certification
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-md-8" rv-show="data.is_certification">
+
+                                    <small class="text-info"><i class="fa fa-info"></i> Certification Type</small>
+                                    <select name="certification_type" id="certification_type" class="form-control">
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
                                 <div class="col-xs-12">
 
                                     <div class="row margin-bottom">
@@ -163,33 +186,33 @@
 
                         <div class="col-xs-12 col-md-3">
 
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-hover table-condensed">
-                                        <caption class="text-center">Exam Meta Data</caption>
-                                        <thead>
-                                        <tr>
-                                            <th>Item</th>
-                                            <th>Value</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>Total Marks</td>
-                                            <td rv-text="examMeta.totalMarks"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Questions Count</td>
-                                            <td rv-text="examMeta.totalQuestions"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Topics</td>
-                                            <td rv-html="examMeta.topics"></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover table-condensed">
+                                    <caption class="text-center">Exam Meta Data</caption>
+                                    <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Value</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Total Marks</td>
+                                        <td rv-text="examMeta.totalMarks"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Questions Count</td>
+                                        <td rv-text="examMeta.totalQuestions"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Topics</td>
+                                        <td rv-html="examMeta.topics"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
+
+                        </div>
 
                     </div>
 
@@ -328,7 +351,8 @@
                 exam_status_id: null,
                 archived: false,
                 country: null,
-                questions: []
+                questions: [],
+                is_certification: false
             };
 
             var examMeta = {
@@ -341,6 +365,7 @@
                 init: function () {
                     app.initBindings();
                     app.initQuestionsSearch();
+                    app.initCertificationTypes();
                     app.initSortable();
                     app.updateExamMeta();
                 },
@@ -433,7 +458,11 @@
                             }
                         },
                         save: function (e, model) {
-                            var params = $.extend(true, {}, exam);
+                            var certificationType = $("#certification_type").val();
+
+                            var params = $.extend(true, {
+                                certification_type: certificationType
+                            }, exam);
 
                             params.questions = _.map(params.questions, function (q, i) {
                                 return {
@@ -487,6 +516,35 @@
                     }
                 },
 
+                initCertificationTypes: function() {
+
+                    var select = $("#certification_type");
+
+                    select.select2({
+                        ajax: {
+                            url: '{{ url_for("api.certification_type") }}',
+                            delay: 250,
+                            processResults: function(data) {
+
+                                var types = data.certification_types;
+                                types = _.map(types, function(value, index) {
+                                    return {
+                                        text: value.name,
+                                        id: value.id
+                                    }
+                                });
+
+                                return {
+                                    results: types,
+                                    pagination: {
+                                        more: false
+                                    }
+                                }
+                            }
+                        }
+                    });
+                },
+
                 initQuestionsSearch: function () {
 
                     var select = $('#questions_search');
@@ -518,7 +576,7 @@
                         }
                     });
 
-                     _.each(exam.questions, function (value, key) {
+                    _.each(exam.questions, function (value, key) {
                         var option = new Option(value.question, value.id, true, true);
                         console.log(value.question);
                         select.append(option)

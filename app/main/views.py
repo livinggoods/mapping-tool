@@ -1918,6 +1918,8 @@ def training_exam_save():
         exam_status_id = data.get('exam_status_id', None)
         passmark = data.get('passmark', None)
         questions = data.get('questions', None)
+        is_certification = data.get('is_certification', False)
+        certification_type = data.get('certification_type', None)
         
         if not title or not questions:
             return jsonify(status=False, message="Invalid request"), 400
@@ -1927,7 +1929,8 @@ def training_exam_save():
             title=title,
             country=country,
             exam_status_id=exam_status_id,
-            passmark=passmark
+            passmark=passmark,
+            certification_type_id=certification_type if is_certification else None
         )
         
         db.session.merge(exam) if id is not None else db.session.add(exam)

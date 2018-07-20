@@ -2374,7 +2374,20 @@ class Trainees(db.Model):
       class_id=json_record.get('class_id'),
       training_id=json_record.get('training_id')
     )
+
+
+class CertificationType(db.Model):
+    __tablename__ = 'certification_types'
   
+    id = Column(Integer, primary_key=True)
+    name = Column(String(64))
+    proportion = Column(Float, nullable=False, server_default=text("'0'"))
+    archived = Column(db.Boolean, default=False)
+    country = Column(String(20), server_default=text("'UG'"), nullable=False)
+    
+    def to_json(self):
+        return asdict(self)
+
 
 class ExamTraining(db.Model):
     __tablename__ = 'exam_trainings'
@@ -2385,10 +2398,12 @@ class ExamTraining(db.Model):
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
     passmark = Column(Integer, nullable=True)
     exam_status_id = Column(ForeignKey(u'exam_status.id'), nullable = True, index = True)
+    certification_type_id = Column(ForeignKey(u'certification_types.id'), nullable=True, index=True)
     archived = Column(db.Boolean, default=False)
     country = Column(String(20), server_default=text("'UG'"), nullable=False)
     
     exam_status = relationship(u'ExamStatus')
+    certification_type = relationship(u'CertificationType')
 
     def _asdict(self):
         return asdict(self)
@@ -2396,7 +2411,10 @@ class ExamTraining(db.Model):
 
     def to_json(self):
         return self._asdict()
-
+    
+    def is_certification(self):
+      return bool(self.certification_type_id)
+    
 
 class ExamQuestion(db.Model):
     __tablename__ = 'exam_questions'

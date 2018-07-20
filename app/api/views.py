@@ -1334,6 +1334,21 @@ def question_types():
     db.session.merge(new_type) if existing_type is not None else db.session.add(new_type)
     db.session.commit()
     return jsonify(status='ok')
+  
+  
+@api.route('/certification_type', methods=['GET', 'POST'])
+@api_login_required
+def certification_type():
+  if request.method == 'GET':
+    return jsonify(certification_types=[c_type.to_json() for c_type in CertificationType.query.filter_by(archived=False)])
+  
+  else:
+    data = request.json
+    new_type = CertificationType(**data)
+    existing_type = CertificationType.query.filter_by(id=data.get('id')).first() if data.get('id') else None
+    db.session.merge(new_type) if existing_type else db.session.add(new_type)
+    db.session.commit()
+    return jsonify(status='ok')
 
 
 @api.route('/training/<string:training_id>/exams', methods=['GET', 'POST'])
@@ -1345,12 +1360,30 @@ def training_exams(training_id = None):
     exams = []
     training_exams = TrainingExam.query.filter_by(training_id=training_id)
     for training_exam in training_exams:
+      if training_exam.exam.is_certification():
+        continue
       exam = exam_with_questions_to_dict(training_exam.exam)
       exam.update(training_exam._asdict())
       exams.append(exam)
     return jsonify(exams=exams)
   else:
     abort(405)
+    
+
+@api.route('/training/<string:training_id>/certifications', methods=['GET'])
+@api_login_required
+def training_certifications(training_id = None):
+  if training_id is None:
+    return jsonify(error="training id is required"), 400
+  exams = []
+  training_exams = TrainingExam.query.filter_by(training_id=training_id)
+  for training_exam in training_exams:
+    if not training_exam.exam.is_certification():
+      continue
+    exam = exam_with_questions_to_dict(training_exam.exam)
+    exam.update(training_exam._asdict())
+    exams.append(exam)
+  return jsonify(exams=exams)
     
     
 @api.route('/training_roles', methods=['GET', 'POST'])
