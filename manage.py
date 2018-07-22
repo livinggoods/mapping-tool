@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import os
 from app import create_app, db
-from app.models import User, Role, Geo, UserType, Location, Education, ErrorLog
+from app.models import User, Role, Geo, UserType, Location, Education, ErrorLog, ExamResult
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
 from app.data import data
+import uuid
 
 application = create_app(os.getenv('FLASK_CONFIG', 'default'))
 manager = Manager(application)
@@ -158,6 +159,21 @@ def resolve_errors():
             print str(e)
             break
 
-
+@manager.command
+def migrate_to_uuid():
+    # select * records in the table
+    records = ExamResult.query.all()
+    total = str(len(records))
+    i = 1
+    for record in records:
+        print "Migrating {} of {}".format(str(i), total)
+        record.id = str(uuid.uuid4())
+        db.session.commit()
+        i = i +1
+    print "Migration complete. {} records migrated".format(total)
+        
+        
+    
+    
 if __name__ == '__main__':
     manager.run()

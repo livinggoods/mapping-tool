@@ -2443,7 +2443,7 @@ class ExamQuestion(db.Model):
 class ExamResult(db.Model):
     __tablename__ = 'exam_results'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String(64), primary_key=True, nullable=False, index=True)
     training_exam_id = Column(ForeignKey(u'training_exams.id'), index=True)
     trainee_id = Column(ForeignKey(u'registrations.id'), nullable=False, index=True)
     question_id = Column(ForeignKey(u'questions.id'), index=True)
