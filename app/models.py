@@ -3,6 +3,7 @@ import time
 from collections import OrderedDict
 from datetime import datetime
 from random import randint
+import uuid
 
 from flask import current_app, request, json
 from flask_login import UserMixin, AnonymousUserMixin
@@ -2460,7 +2461,7 @@ class ExamResult(db.Model):
     
     @staticmethod
     def from_json(json_record):
-      return ExamResult(
+      exam_result =  ExamResult(
         id=json_record.get("id", None),
         training_exam_id=json_record.get("training_exam_id"),
         trainee_id=json_record.get("trainee_id"),
@@ -2470,6 +2471,11 @@ class ExamResult(db.Model):
         answer=json_record.get("answer"),
         choice_id=json_record.get("choice_id")
       )
+      
+      if exam_result.id is None:
+        exam_result.id = str(uuid.uuid4())
+        
+      return exam_result
 
 class ExamStatus(db.Model):
     __tablename__ = 'exam_status'

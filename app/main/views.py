@@ -1871,7 +1871,6 @@ def exam_training_save():
         #in order to save, we will not allow deleting the exams (just in case there are trainees who have taken the exam
         training_id = request.json.get('training_id')
         exams = request.json.get('exams')
-        print exams
         added = []
         updated = []
         for exam in exams:

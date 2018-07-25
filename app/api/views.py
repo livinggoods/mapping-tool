@@ -1406,13 +1406,11 @@ def exam_result_save():
     
     for datum in data:
       existing_result = ExamResult.query.filter_by(trainee_id=datum.get('trainee_id'),
-                                                   training_exam_id=datum.get('training_exam_id'),
+                                                   training_exam_id=int(datum.get('training_exam_id')),
                                                    question_id=datum.get('question_id')).first()
       if not existing_result:
         exam_result = ExamResult.from_json(datum)
-        db.session.add(exam_result) if exam_result.id is not None else db.session.merge(exam_result)
-      else:
-        pass
+        db.session.add(exam_result)
       
     db.session.commit()
     return jsonify(status=True, message="Saved Successfully"), 200
