@@ -1584,7 +1584,7 @@ def generate_training_classes(recruitment):
           x = 1
       class_details[1] = class_1
       class_details[2] = class_2
-    elif count > 70 and count <= 105:
+    elif count > 70 and count <= 110:
       number_of_classes = 3
       class_1= []
       class_2= []
