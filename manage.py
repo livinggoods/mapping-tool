@@ -7,6 +7,8 @@ from flask_migrate import Migrate, MigrateCommand
 from app.data import data
 import uuid
 
+from app.utils.generate_registrations_command import GenerateRegistrations
+
 application = create_app(os.getenv('FLASK_CONFIG', 'default'))
 manager = Manager(application)
 migrate = Migrate(application, db)
@@ -20,7 +22,7 @@ def make_shell_context():
     return dict(application=application, db=db, User=User, Geo=Geo, Role=Role, UserType=UserType)
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
-
+manager.add_command("fake_registrations", GenerateRegistrations())
 
 @manager.command
 def test():
