@@ -11,6 +11,9 @@ Prerequisites
 
 1. Creating Database named "tremap" using Postgres
     
+
+2. Clone project from git repo
+
   ```
   git clone https://github.com/livinggoods/mapping-tool.git
   ```
