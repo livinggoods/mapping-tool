@@ -5,6 +5,8 @@ from datetime import datetime
 from random import randint
 import uuid
 
+import redis
+import rq
 from flask import current_app, request, json
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
@@ -2625,3 +2627,26 @@ class ErrorLog(db.Model):
     http_method = Column(String(16), nullable=False)
     http_headers = Column(Text, nullable=True)
     http_response_status_code = Column(Integer)
+    
+
+class Task(db.Model):
+    __tablename__ = 'tasks'
+    
+    id = db.Column(db.String(36), primary_key=True)
+    name = db.Column(db.String(128), index=True)
+    description = db.Column(db.String(128))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    complete = db.Column(db.Boolean, default=False)
+    
+    user = db.relationship(u'User')
+
+    def get_rq_job(self):
+        try:
+            rq_job = rq.job.Job.fetch(self.id, connection=current_app.redis)
+        except (redis.exceptions.RedisError, rq.exceptions.NoSuchJobError):
+            return None
+        return rq_job
+
+    def get_progress(self):
+        job = self.get_rq_job()
+        return job.meta.get('progress', 0) if job is not None else 100
