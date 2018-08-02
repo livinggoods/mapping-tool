@@ -1032,7 +1032,7 @@ def sync_chew_referral():
           db.session.merge(record)
         else:
           
-          if record.id is None or record.name is None or record.country is None:
+          if record.id is None or record.country is None:
             continue
           
           db.session.add(record)
