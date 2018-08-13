@@ -71,8 +71,11 @@ def application_details(id):
         qualified = a.dob
         interview = Interview.query.filter_by(applicant=id).first()
         exam = Exam.query.filter_by(applicant=id).first()
+        district_name = ""
+        if a.district:
+            district_name = Location.query.filter_by(id=a.district).first().name
         return render_template('registration.html', exam=exam, dob=dob,
-                               page=page, interview=interview, registration=a, age=age)
+                               page=page, interview=interview, registration=a, age=age, district_name = district_name)
 
 
 @main.route('/trainings', methods=['GET', 'POST'])
