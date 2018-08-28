@@ -5,6 +5,32 @@
     {% block additionalcss %}{% endblock %}
 
     <!-- Custom Theme Style -->
+    <!-- firebase analytics -->
+    <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyBFk7ehHlwPa4tveiC2ONuGX6fzwAqZ4Vw",
+        authDomain: "tremap-expansion.firebaseapp.com",
+        databaseURL: "https://tremap-expansion.firebaseio.com",
+        projectId: "tremap-expansion",
+        storageBucket: "tremap-expansion.appspot.com",
+        messagingSenderId: "654505625570"
+      };
+      firebase.initializeApp(config);
+    </script>
+
+    <!-- google tracking -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-124447569-2"></script>
+    <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+
+     gtag('config', 'UA-124447569-2');
+    </script>
+
+
     <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"> </script>
     <title>{% block title %} {% endblock %}</title>

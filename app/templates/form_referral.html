@@ -60,28 +60,28 @@
                                   </div>
 
                                 </div>
-                              </div>
+        </div>
     <script>
-    $('#save-referral').click(function(){
-      data={
-        'name': $('#name').val(),
-        'phone': $('#phone').val(),
-        'title': $('#title').val(),
-        'location': $('#location').val()
-      }
-      console.log(data);
-       $.ajax({
-        url: '/refferals',
-        type: 'POST',
-        datatType: 'json',
-        data: data,
-        success: function(response) {
-          console.log(response);
-          $('.bs-example-modal-lg').modal('hide')
-        },
-        error: function(xhr) {
-          console.log('error');
-        }
-       });
-    });
+        $('#save-referral').click(function(){
+          data={
+            'name': $('#name').val(),
+            'phone': $('#phone').val(),
+            'title': $('#title').val(),
+            'location': $('#location').val()
+          }
+          console.log(data);
+           $.ajax({
+            url: '/refferals',
+            type: 'POST',
+            datatType: 'json',
+            data: data,
+            success: function(response) {
+              console.log(response);
+              $('.bs-example-modal-lg').modal('hide')
+            },
+            error: function(xhr) {
+              console.log('error');
+            }
+           });
+        });
     </script>

@@ -115,7 +115,13 @@
             </div>
           </div>
 {% endblock %}
-{% block javascript %}
+
+{% block scripts %}
+
+<script>
+
+
+
 <script type="text/javascript">
 $('.confirm').click(function(){
     recruitmentId = $(this).attr('recruitment');
@@ -163,7 +169,9 @@ $('.new-recruitment').click(function(){
     });
   });
 </script>
-{% endblock %}
+
+{% endblock scripts %}
+
 {% block additionaljs %}
 <!-- Datatables -->
 {{ url_for('static', filename='css/nprogress.css') }}
@@ -184,9 +192,9 @@ $('.new-recruitment').click(function(){
     <script src="{{ url_for('static', filename='js/vfs_fonts.js') }}"></script>
 {% endblock %}
 {% block additionalcss %}
-    <link href="{{ url_for('static', filename='css/flat/green.css') }}"" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/flat/green.css') }}" rel="stylesheet">
     <!-- Datatables -->
-    <link href="{{ url_for('static', filename='css/dataTables.bootstrap.min.css') }}"" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/buttons.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/responsive.bootstrap.min.css') }}" rel="stylesheet">
