@@ -126,8 +126,8 @@ def deploy():
 def resolve_errors():
     
     import requests
-    
-    errors = iter(ErrorLog.query.filter_by(resolved=False))
+    endpoint = '/api/v1/sync/mapping?'
+    errors = iter(ErrorLog.query.filter_by(resolved=False, endpoint=endpoint).order_by(ErrorLog.id.desc()))
     
     while True:
         try:
