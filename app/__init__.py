@@ -1,3 +1,4 @@
+import rq
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
@@ -6,6 +7,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from redis import Redis
+
 from config import config
 from flask_googlemaps import GoogleMaps, Map
 
@@ -45,6 +48,10 @@ def create_app(config_name):
     admin = Admin(app, name='Admin', template_mode='bootstrap3')
     GoogleMaps(app)
     login_manager.init_app(app)
+    
+    # Tasks Management
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    app.task_queue = rq.Queue('expansion-tasks', connection=app.redis)
     
     ## Add admin
     from admins import TrainingStatusAdmin

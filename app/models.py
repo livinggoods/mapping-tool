@@ -1729,6 +1729,8 @@ class User(UserMixin, db.Model):
     geo_id = db.Column(db.Integer, db.ForeignKey('geos.id'))
     user_type_id = db.Column(db.Integer, db.ForeignKey('user_types.id'))
 
+    tasks = db.relationship('Task', backref='user', lazy='dynamic')
+
     @staticmethod
     def generate_fake(count=100):
         from sqlalchemy.exc import IntegrityError
@@ -1906,6 +1908,7 @@ class User(UserMixin, db.Model):
 
     def __str__(self):
       return '%s (%s)' % (self.username, self.name)
+
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
@@ -2634,11 +2637,9 @@ class Task(db.Model):
     
     id = db.Column(db.String(36), primary_key=True)
     name = db.Column(db.String(128), index=True)
-    description = db.Column(db.String(128))
-    user_id = db.Column(ForeignKey('users.id'), nullable=True)
+    description = db.Column(db.String(128), nullable=True)
+    user_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=True)
     complete = db.Column(db.Boolean, default=False)
-    
-    user = relationship(u'User')
 
     def get_rq_job(self):
         try:

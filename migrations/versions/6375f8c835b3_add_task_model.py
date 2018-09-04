@@ -1,13 +1,13 @@
-"""Added task model
+"""Add task model
 
-Revision ID: c2777d0f1d18
+Revision ID: 6375f8c835b3
 Revises: 9be7d90b854f
-Create Date: 2018-08-01 14:16:52.058471
+Create Date: 2018-08-06 16:49:32.935130
 
 """
 
 # revision identifiers, used by Alembic.
-revision = 'c2777d0f1d18'
+revision = '6375f8c835b3'
 down_revision = '9be7d90b854f'
 
 from alembic import op

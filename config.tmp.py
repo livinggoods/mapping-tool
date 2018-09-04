@@ -18,6 +18,7 @@ class Config(object):
     UPLOAD_FOLDER = 'uploads'
     PER_PAGE = 10
     ALLOWED_FILE_TYPES = ['csv', 'xls', 'xlsx']
+    REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
 
 
     @staticmethod

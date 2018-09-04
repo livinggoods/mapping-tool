@@ -14,6 +14,7 @@ from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
 from app.api.views import create_question_list
+from app.tasks.task_utils import TaskManager
 from . import main
 from .forms import *
 from ..commons import exam_with_questions_to_dict
@@ -2057,6 +2058,21 @@ def test_app():
                 districts[row[1]][row[2]].append({'name': row[0], 'number': row[3]})
     return jsonify(districts=districts)
 
+
+@main.route('/tasks')
+def test_task_manager():
+    user = current_user
+    if not isinstance(user, User):
+        user = None
+        
+    task_manager = TaskManager(user=user)
+    task_manager.launch_task('app.tasks.tasks.example_task', 200)
+    
+    db.session.commit()
+    
+    return jsonify(status="Working on this")
+    
+    
 
 def appplication_status(app):
     status = True

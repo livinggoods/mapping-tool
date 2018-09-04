@@ -41,3 +41,4 @@ logs/**
 config.py
 
 .DS_Store
+*.rdb
