@@ -1750,12 +1750,12 @@ def training_questions_add():
 @main.route('/training/question/<int:id>', methods=['GET', 'POST'])
 @login_required
 def training_question_edit(id):
-    page = {"title": 'Edit Question', 'subtitle': 'Edit Question'}
+    page = {"title": 'View Question', 'subtitle': 'View Question'}
     if request.method == 'GET':
         db.session.rollback()
         question = Question.query.filter_by(id=id).first_or_404()
         return render_template('training_question_edit.html',
-                               title='Edit Question',
+                               title='View Question',
                                question=json.dumps(question.to_json()),
                                endpoint=url_for('main.training_question_edit', id=question.id),
                                page=page)
