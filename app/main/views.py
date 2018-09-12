@@ -14,6 +14,7 @@ from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
 from app.api.views import create_question_list
+from app.tasks.task_utils import TaskManager
 from . import main
 from .forms import *
 from ..commons import exam_with_questions_to_dict
@@ -2061,7 +2062,24 @@ def test_app():
     return jsonify(districts=districts)
 
 
-def appplication_status(app):
+@main.route('/tasks')
+def test_task_manager():
+    user = current_user
+    if not isinstance(user, User):
+        user = None
+        
+    task_manager = TaskManager(user=user)
+    task = task_manager.launch_task('app.tasks.tasks.example_task', seconds=20)
+    print(task)
+    db.session.add(task)
+    db.session.commit()
+    db.session.close()
+    
+    return jsonify(status="Working on this")
+    
+    
+
+def application_status(app):
     status = True
     if calculate_age(app.date_of_birth) < 12 or calculate_age(app.date_of_birth) > 55:
         status = False

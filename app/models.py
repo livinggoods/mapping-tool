@@ -5,6 +5,8 @@ from datetime import datetime
 from random import randint
 import uuid
 
+import redis
+import rq
 from flask import current_app, request, json
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
@@ -1730,6 +1732,8 @@ class User(UserMixin, db.Model):
     geo_id = db.Column(db.Integer, db.ForeignKey('geos.id'))
     user_type_id = db.Column(db.Integer, db.ForeignKey('user_types.id'))
 
+    tasks = db.relationship('Task', backref='user', lazy='dynamic')
+
     @staticmethod
     def generate_fake(count=100):
         from sqlalchemy.exc import IntegrityError
@@ -1907,6 +1911,7 @@ class User(UserMixin, db.Model):
 
     def __str__(self):
       return '%s (%s)' % (self.username, self.name)
+
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
@@ -2628,3 +2633,24 @@ class ErrorLog(db.Model):
     http_method = Column(String(16), nullable=False)
     http_headers = Column(Text, nullable=True)
     http_response_status_code = Column(Integer)
+    
+
+class Task(db.Model):
+    __tablename__ = 'tasks'
+    
+    id = db.Column(db.String(36), primary_key=True)
+    name = db.Column(db.String(128), index=True)
+    description = db.Column(db.String(128), nullable=True)
+    user_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=True)
+    complete = db.Column(db.Boolean, default=False)
+
+    def get_rq_job(self):
+        try:
+            rq_job = rq.job.Job.fetch(self.id, connection=current_app.redis)
+        except (redis.exceptions.RedisError, rq.exceptions.NoSuchJobError):
+            return None
+        return rq_job
+
+    def get_progress(self):
+        job = self.get_rq_job()
+        return job.meta.get('progress', 0) if job is not None else 100
