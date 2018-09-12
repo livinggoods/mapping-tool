@@ -27,6 +27,7 @@ class TaskManager:
         :param kwargs:
         :return:
         """
+        print(args, kwargs)
         rq_job = current_app.task_queue.enqueue(task, *args, **kwargs)
         task = Task(
             id=rq_job.get_id(),
@@ -34,7 +35,6 @@ class TaskManager:
             description=description,
             user_id=self.user.id if self.user else None
         )
-        db.session.add(task)
         return task
         
     def get_tasks_in_progress(self):

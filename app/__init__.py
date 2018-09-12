@@ -51,7 +51,7 @@ def create_app(config_name):
     
     # Tasks Management
     app.redis = Redis.from_url(app.config['REDIS_URL'])
-    app.task_queue = rq.Queue('expansion-tasks', connection=app.redis)
+    app.task_queue = rq.Queue('expansion-tasks', connection=app.redis, default_timeout=5000)
     
     ## Add admin
     from admins import TrainingStatusAdmin

@@ -2066,15 +2066,17 @@ def test_task_manager():
         user = None
         
     task_manager = TaskManager(user=user)
-    task_manager.launch_task('app.tasks.tasks.example_task', 200)
-    
+    task = task_manager.launch_task('app.tasks.tasks.example_task', seconds=20)
+    print(task)
+    db.session.add(task)
     db.session.commit()
+    db.session.close()
     
     return jsonify(status="Working on this")
     
     
 
-def appplication_status(app):
+def application_status(app):
     status = True
     if calculate_age(app.date_of_birth) < 12 or calculate_age(app.date_of_birth) > 55:
         status = False
