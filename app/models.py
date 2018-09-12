@@ -1027,7 +1027,10 @@ class Mapping(db.Model):
           subcounty= SubCounty.query.filter_by(id=self.county).first()
         else:
           county= Location.query.filter_by(id=self.county).first()
-          subcounty= Location.query.filter_by(id=self.subcounty).first()
+          if self.subcounty:
+            subcounty= Location.query.filter_by(id=self.subcounty).first()
+          else:
+            subcounty = None
 
         county_name = county.name if county is not None else None
         subcounty_name = subcounty.name if subcounty is not None else None

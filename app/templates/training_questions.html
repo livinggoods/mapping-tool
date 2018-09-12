@@ -61,7 +61,7 @@
                 </div>
                 <div class="x_content">
 
-                    <div class="row" style="margin-bottom: 16px; padding: 10px !important; background-color: #f9f9f9;">
+                   {# <div class="row" style="margin-bottom: 16px; padding: 10px !important; background-color: #f9f9f9;">
 
                         <div class="col-xs-12">
                             <small class="text-primary"><i class="fa fa-filter"></i> Filters</small>
@@ -82,7 +82,7 @@
 
                         </div>
 
-                    </div>
+                    </div>#}
 
                     <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap"
                            cellspacing="0" width="100%">
@@ -106,8 +106,8 @@
                                 <td>{{ question.created_by }}</td>
                                 <td>
                                     <a href="{{ url_for('main.training_question_edit', id=question.id) }}" class="btn btn-primary btn-xs">
-                                        <i class="fa fa-edit"></i>
-                                        Edit
+                                        <i class="fa fa-file"></i>
+                                        View
                                     </a>
                                 </td>
 

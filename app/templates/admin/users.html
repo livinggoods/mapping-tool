@@ -99,7 +99,7 @@
             var elementId = $(this);
             action = 'block';
             $.ajax({
-                url: '/admin/user',
+                url: "{{url_for('administration.user_action')}}",
                 type:'POST',
                 data:{user:userId},
                 dataType:'json',
@@ -120,6 +120,11 @@
         $('.unblock-user').click(function(){
             console.log('un block class user immediately');
         });
+
+
+       <!-- added confirmation function -->
+
+
     </script>
 
 {% endblock %}

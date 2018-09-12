@@ -1,6 +1,4 @@
 import json
-import uuid
-from threading import Thread
 
 from flask import Response, jsonify
 from flask_login import login_user, abort, current_user
@@ -9,7 +7,6 @@ from geoip import geolite2
 from app.tasks.task_utils import TaskManager
 from . import api
 from ..commons import exam_with_questions_to_dict
-from ..data import data
 from ..decorators import api_login_required
 from ..models import *
 from ..utils.utils import *
@@ -197,7 +194,7 @@ def api_recrutiment_trainig():
             user = current_user
             if not isinstance(user, User):
                 user = None
-    
+            
             task_manager = TaskManager(user=user)
             task = task_manager.launch_task('app.tasks.tasks.confirm_recruitment_task', recruitment_id=recruitment.id)
             db.session.add(task)
@@ -561,14 +558,14 @@ def sync_parish():
         user = current_user
         if not isinstance(user, User):
             user = None
-
+        
         task_manager = TaskManager(user=user)
         task = task_manager.launch_task('app.tasks.tasks.sync_parishes_task', parish_list=request.json.get('parishes'))
         db.session.add(task)
         db.session.commit()
         db.session.close()
         return jsonify(status=status)
-       
+
 
 @api.route('/syncvillages', methods=['GET', 'POST'])
 @api.route('/sync/villages', methods=['GET', 'POST'])
@@ -585,7 +582,7 @@ def sync_village():
         user = current_user
         if not isinstance(user, User):
             user = None
-            
+        
         task_manager = TaskManager(user=user)
         task = task_manager.launch_task('app.tasks.tasks.sync_villages_task', village_list=request.json.get('villages'))
         db.session.add(task)
@@ -853,7 +850,7 @@ def sync_chew_referral():
                     db.session.merge(record)
                 else:
                     
-                    if record.id is None or record.name is None or record.country is None:
+                    if record.id is None or record.country is None:
                         continue
                     
                     db.session.add(record)

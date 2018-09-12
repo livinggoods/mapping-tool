@@ -72,8 +72,11 @@ def application_details(id):
         qualified = a.dob
         interview = Interview.query.filter_by(applicant=id).first()
         exam = Exam.query.filter_by(applicant=id).first()
+        district_name = ""
+        if a.district:
+            district_name = Location.query.filter_by(id=a.district).first().name
         return render_template('registration.html', exam=exam, dob=dob,
-                               page=page, interview=interview, registration=a, age=age)
+                               page=page, interview=interview, registration=a, age=age, district_name = district_name)
 
 
 @main.route('/trainings', methods=['GET', 'POST'])
@@ -1043,12 +1046,12 @@ def export_scoring_tool(id):
 
                 "Y" if registration.is_chv == 1 else "N",
                 "Y" if registration.is_gok_trained == 1 else "N",
-                registration.trainings.replace(',', ':'),
+                registration.trainings.replace(',', ':') if registration.trainings else "",
                 education.name if education is not None else registration.education,
                 registration.occupation,
                 "Y" if registration.community_membership == 1 else "N",
                 "Y" if registration.financial_accounts == 1 else "N",
-                registration.comment.replace(',', ';'),
+                registration.comment.replace(',', ';') if registration.comment else "",
                 math,
                 english,
                 personality,
@@ -1748,12 +1751,12 @@ def training_questions_add():
 @main.route('/training/question/<int:id>', methods=['GET', 'POST'])
 @login_required
 def training_question_edit(id):
-    page = {"title": 'Edit Question', 'subtitle': 'Edit Question'}
+    page = {"title": 'View Question', 'subtitle': 'View Question'}
     if request.method == 'GET':
         db.session.rollback()
         question = Question.query.filter_by(id=id).first_or_404()
         return render_template('training_question_edit.html',
-                               title='Edit Question',
+                               title='View Question',
                                question=json.dumps(question.to_json()),
                                endpoint=url_for('main.training_question_edit', id=question.id),
                                page=page)
