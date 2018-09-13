@@ -1,136 +1,139 @@
 <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
+    <div class="modal-content">
 
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                          </button>
-                          <h4 class="modal-title" id="myModalLabel">Add a new village</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="x_panel">
-                              <div class="x_title">
-                                <h2>Ensure the required fields are filled out<small>* required</small></h2>
-                                <div class="clearfix"></div>
-                              </div>
-                              <div class="x_content">
-                                <br>
-                                <form class="form-horizontal form-label-left">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Add a new village</h4>
+        </div>
+        <div class="modal-body">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Ensure the required fields are filled out
+                        <small>* required</small>
+                    </h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <br>
+                    <form class="form-horizontal form-label-left">
 
-                                  <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Location Name</label>
-                                    <div class="col-md-9 col-sm-9 col-xs-12">
-                                      <input type="text" id="name" class="form-control" placeholder="Location Name is required">
-                                    </div>
-                                  </div>
-                                  <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Parent Location</label>
-                                    <div class="col-md-9 col-sm-9 col-xs-12">
-                                      <select class="form-control" id="parent">
-                                        <option value="0">None</option>
-                                        {% for location_ in all_locations %}
-                                        <option value="{{location_.id}}">{{location_.name}} - {{location_.admin_name | title}})</option>
-                                        {% endfor %}
-                                      </select>
-                                    </div>
-                                  </div>
-                                  <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Administrative Name</label>
-                                    <div class="col-md-9 col-sm-9 col-xs-12">
-                                      <select class="form-control" id="admin_name">
-                                        <option value="country">Country</option>
-                                        <option value="region">Region</option>
-                                        <option value="county">County</option>
-                                        <option value="sub-county">Sub-county</option>
-                                        <option value="ward">Ward</option>
-                                        <option value="parish">Parish</option>
-                                        <option value="village">Village</option>
-                                        <option value="location">Location</option>
-                                        <option value="sub-location">Sub-location</option>
-                                      </select>
-                                    </div>
-                                  </div>
-                                  <div class="form-group">
-                                      {{map.js}}
-                                        <div><h5>Drag the marker to get the GPS coordinates</h5></div>
-                                        <div>
-                                          <style>
-                                            #mapCanvas {
-                                              width: 100%;
-                                              height: 400px;
-                                              float: left;
-                                            }
-                                            #infoPanel {
-                                              display: none;
-                                            }
-                                            #infoPanel div {
-                                              display: none;
-                                            }
-                                          </style>
-                                          <div id="mapCanvas"></div>
-                                          <div id="infoPanel">
-                                            <b>Marker status:</b>
-                                            <div id="markerStatus"><i>Click and drag the marker.</i></div>
-                                            <b>Current position:</b>
-                                            <div id="info"></div>
-                                            <b>Closest matching address:</b>
-                                            <div id="address"></div>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Lat</label>
-                                    <div class="col-md-9 col-sm-9 col-xs-12">
-                                      <input type="text" id="lat" class="form-control" placeholder="1.3483">
-                                    </div>
-                                  </div>
-                                  <div class="form-group">
-                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Lon</label>
-                                    <div class="col-md-9 col-sm-9 col-xs-12">
-                                      <input type="text" id="lon" class="form-control" placeholder="Eg 36.1223">
-                                    </div>
-                                  </div>
-                                </form>
-                              </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Location Name</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="text" id="name" class="form-control"
+                                       placeholder="Location Name is required">
                             </div>
-
                         </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                          <button type="button" id="save-village" class="btn btn-primary">Save changes</button>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Parent Location</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <select class="form-control" id="parent">
+                                    <option value="0">None</option>
+                                    {% for location_ in all_locations %}
+                                        <option value="{{ location_.id }}">{{ location_.name }}
+                                            - {{ location_.admin_name | title }})
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Administrative Name</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <select class="form-control" id="admin_name">
+                                    <option value="country">Country</option>
+                                    <option value="region">Region</option>
+                                    <option value="county">County</option>
+                                    <option value="sub-county">Sub-county</option>
+                                    <option value="ward">Ward</option>
+                                    <option value="parish">Parish</option>
+                                    <option value="village">Village</option>
+                                    <option value="location">Location</option>
+                                    <option value="sub-location">Sub-location</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ map.js }}
+                            <div><h5>Drag the marker to get the GPS coordinates</h5></div>
+                            <div>
+                                <style>
+                                    #mapCanvas {
+                                        width: 100%;
+                                        height: 400px;
+                                        float: left;
+                                    }
 
-                      </div>
-                    </div>
+                                    #infoPanel {
+                                        display: none;
+                                    }
+
+                                    #infoPanel div {
+                                        display: none;
+                                    }
+                                </style>
+                                <div id="mapCanvas"></div>
+                                <div id="infoPanel">
+                                    <b>Marker status:</b>
+                                    <div id="markerStatus"><i>Click and drag the marker.</i></div>
+                                    <b>Current position:</b>
+                                    <div id="info"></div>
+                                    <b>Closest matching address:</b>
+                                    <div id="address"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Lat</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="text" id="lat" class="form-control" placeholder="1.3483">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Lon</label>
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input type="text" id="lon" class="form-control" placeholder="Eg 36.1223">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="save-village" class="btn btn-primary">Save changes</button>
+        </div>
+
+    </div>
+</div>
 
 <script type="text/javascript">
 
 
-
-  $('#save-village').click(function(){
-    data={
-      "name": $('#name').val(),
-      "parent": $('#parent').val(),
-      "admin_name": $('#admin_name').val(),
-      "lat": $('#lat').val(),
-      "lon": $('#lon').val(),
-    }
-     $.ajax({
-      url: '/locations',
-      type: 'POST',
-      datatType: 'json',
-      data: data,
-      success: function(response) {
-        window.location.reload();
-      },
-      error: function(xhr) {
-        console.log('error');
-      }
-     });
-  });
+    $('#save-village').click(function () {
+        data = {
+            "name": $('#name').val(),
+            "parent": $('#parent').val(),
+            "admin_name": $('#admin_name').val(),
+            "lat": $('#lat').val(),
+            "lon": $('#lon').val(),
+        };
+        $.ajax({
+            url: '/locations',
+            type: 'POST',
+            datatType: 'json',
+            data: data,
+            success: function (response) {
+                window.location.reload();
+            },
+            error: function (xhr) {
+                console.log('error');
+            }
+        });
+    });
 </script>
-
-
-{% block scripts %}
 
 
 
