@@ -563,7 +563,6 @@ def sync_parish():
         task = task_manager.launch_task('app.tasks.tasks.sync_parishes_task', parish_list=request.json.get('parishes'))
         db.session.add(task)
         db.session.commit()
-        db.session.close()
         return jsonify(status=status)
 
 
@@ -587,7 +586,6 @@ def sync_village():
         task = task_manager.launch_task('app.tasks.tasks.sync_villages_task', village_list=request.json.get('villages'))
         db.session.add(task)
         db.session.commit()
-        db.session.close()
         return jsonify(status=status)
 
 

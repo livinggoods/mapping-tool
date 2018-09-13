@@ -229,7 +229,6 @@ class ConfirmRecruitmentTask:
         self.task.complete = True
         db.session.add(self.task)
         db.session.commit()
-        db.session.close()
     
     def run(self):
         """
