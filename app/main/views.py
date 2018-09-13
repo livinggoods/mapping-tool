@@ -1227,7 +1227,7 @@ def recruitments():
         pagination = recruitments.paginate(paging_data, per_page=current_app.config['PER_PAGE'], error_out=False)
         return render_template('recruitments.html',
                                endpoint='main.recruitments',
-                               pagination=pagination, page=page, recruitments=recruitments)
+                               pagination=pagination, page=page)
     else:
         # check if there is an iD or if the ID is blank
         if 'id' in request.form:
