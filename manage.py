@@ -1,12 +1,14 @@
 #!/usr/bin/env python
 import os
-from app import create_app, db
-from app.models import User, Role, Geo, UserType, Location, Education, ErrorLog, ExamResult
-from flask_script import Manager, Shell
-from flask_migrate import Migrate, MigrateCommand
-from app.data import data
 import uuid
 
+import rq
+from flask import current_app
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager, Shell
+
+from app import create_app, db
+from app.models import User, Role, Geo, UserType, Location, Education, ErrorLog, ExamResult, Task
 from app.utils.generate_registrations_command import GenerateRegistrations
 
 application = create_app(os.getenv('FLASK_CONFIG', 'default'))
@@ -174,7 +176,12 @@ def migrate_to_uuid():
         i = i +1
     print "Migration complete. {} records migrated".format(total)
         
-        
+
+@manager.command
+def requeue_tasks():
+    tasks = Task.query.filter_by(complete=False)
+    for task in tasks:
+        rq.requeue_job(task.id, connection=current_app.redis)
     
     
 if __name__ == '__main__':

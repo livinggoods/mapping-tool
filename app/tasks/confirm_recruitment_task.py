@@ -226,8 +226,8 @@ class ConfirmRecruitmentTask:
         recruitment.status = "confirmed"
         db.session.add(recruitment)
         
-        self.task.complete = True
-        db.session.add(self.task)
+        # Task has completed successfully. Delete it.
+        db.session.delete(self.task)
         db.session.commit()
     
     def run(self):

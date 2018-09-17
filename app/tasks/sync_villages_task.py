@@ -144,8 +144,7 @@ class SyncVillagesTask:
             db.session.add(saved_record)
             db.session.commit()
         
-        self.task.complete = True
-        db.session.add(self.task)
+        db.session.delete(self.task)
         db.session.commit()
     
     def run(self, village_list=None):
