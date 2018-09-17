@@ -101,10 +101,8 @@ class SyncParishTask:
                 )
             db.session.add(saved_record)
             
-        self.task.complete = True
-        db.session.add(self.task)
+        db.session.delete(self.task)
         db.session.commit()
-        db.session.close()
     
     def run(self, parish_list=None):
         if parish_list is None:
