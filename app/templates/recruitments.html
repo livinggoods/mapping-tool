@@ -52,7 +52,7 @@
                       <div class="pre-pagination float-right">
                         {{ macros.pagination_widget(pagination, endpoint) }}
                       </div>
-                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                    <table id="recruitment-list" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                       <thead>
                         <tr>
                           <!-- <th>Action</th> -->
@@ -119,6 +119,13 @@
 {% block javascript %}
 
 <script type="text/javascript">
+
+
+$(document).ready(function(){
+        $('#recruitment-list').DataTable();
+
+ });
+
 $('.confirm').click(function(){
     recruitmentId = $(this).attr('recruitment');
     action = $(this).attr('action');
@@ -168,7 +175,7 @@ $('.new-recruitment').click(function(){
 
 </script>
 
-{% endblock %}
+{% endblock javascript %}
 
 {% block additionaljs %}
 <!-- Datatables -->
