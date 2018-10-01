@@ -9,12 +9,8 @@ application = create_app(os.getenv('FLASK_CONFIG', 'default'))
 
 
 class SyncParishTask:
-    def __init__(self, job=None, task=None):
-        if job is None or task is None:
-            raise Exception("Invalid state")
-        
-        self.job = job
-        self.task = task
+    def __init__(self):
+        pass
     
     def save_mapping(self, mapping_json=None):
         """
@@ -43,6 +39,7 @@ class SyncParishTask:
         :param parish_list:
         :return:
         """
+        results = []
         if parish_list is None:
             raise Exception("Invalid arguments")
         
@@ -100,12 +97,13 @@ class SyncParishTask:
                     client_time=parish.get('client_time'),
                 )
             db.session.add(saved_record)
-            
-        db.session.delete(self.task)
+            results.append(saved_record.to_json())
         db.session.commit()
+        
+        return results
     
     def run(self, parish_list=None):
         if parish_list is None:
             raise Exception("Invalid arguments")
         
-        self.sync_parishes(parish_list=parish_list)
+        return self.sync_parishes(parish_list=parish_list)

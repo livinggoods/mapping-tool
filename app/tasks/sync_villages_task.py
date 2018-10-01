@@ -7,12 +7,8 @@ application = create_app(os.getenv('FLASK_CONFIG', 'default'))
 
 
 class SyncVillagesTask:
-    def __init__(self, job=None, task=None):
-        if job is None or task is None:
-            raise Exception("Invalid state")
-        
-        self.job = job
-        self.task = task
+    def __init__(self):
+        pass
     
     def sync_villages(self, village_list=None):
         """
@@ -20,7 +16,7 @@ class SyncVillagesTask:
         :param village_list:
         :return:
         """
-        
+        results = []
         if village_list is None:
             raise Exception("Invalid arguments")
         
@@ -82,7 +78,6 @@ class SyncVillagesTask:
                 saved_record.airtel_signal = village.get('airtel_signal')
                 saved_record.orange_signal = village.get('orange_signal')
                 saved_record.act_stock = village.get('act_stock')
-                operation = 'updated'
             else:
                 saved_record = Village(
                     id=village.get('id'),
@@ -140,15 +135,13 @@ class SyncVillagesTask:
                     orange_signal=village.get('orange_signal'),
                     act_stock=village.get('act_stock'),
                 )
-                operation = 'created'
             db.session.add(saved_record)
-            db.session.commit()
-        
-        db.session.delete(self.task)
+            results.append(saved_record.to_json())
         db.session.commit()
+        return results
     
     def run(self, village_list=None):
         if village_list is None:
             raise Exception("Invalid arguments")
         
-        self.sync_villages(village_list=village_list)
+        return self.sync_villages(village_list=village_list)
