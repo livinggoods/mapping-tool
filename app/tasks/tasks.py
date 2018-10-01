@@ -37,15 +37,3 @@ def confirm_recruitment_task(recruitment_id=None):
     job = rq.get_current_job()
     task = Task.query.filter_by(id=job.id).first()
     ConfirmRecruitmentTask(recruitment_id=recruitment_id, task=task, job=job).run()
-
-
-def sync_parishes_task(parish_list=None):
-    job = rq.get_current_job()
-    task = Task.query.filter_by(id=job.id).first()
-    SyncParishTask(job=job, task=task).run(parish_list=parish_list)
-
-
-def sync_villages_task(village_list=None):
-    job = rq.get_current_job()
-    task = Task.query.filter_by(id=job.id).first()
-    SyncVillagesTask(job=job, task=task).run(village_list=village_list)

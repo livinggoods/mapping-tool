@@ -4,6 +4,8 @@ from flask import Response, jsonify
 from flask_login import login_user, abort, current_user
 from geoip import geolite2
 
+from app.tasks.sync_parish_task import SyncParishTask
+from app.tasks.sync_villages_task import SyncVillagesTask
 from app.tasks.task_utils import TaskManager
 from . import api
 from ..commons import exam_with_questions_to_dict
@@ -30,7 +32,7 @@ def remove_empty_values(d, country):
             
             if k == 'country' and not bool(v):
                 new_dict[k] = country
-            if bool(v):
+            if v is not None and v is not "":
                 if isinstance(v, dict):
                     new_dict[k] = remove_empty_values(v, country)[0]
                 else:
@@ -554,15 +556,7 @@ def sync_parish():
         records = Parish.query.filter(Parish.archived != 1)
         return jsonify({'parish': [record.to_json() for record in records]})
     else:
-        status = []
-        user = current_user
-        if not isinstance(user, User):
-            user = None
-        
-        task_manager = TaskManager(user=user)
-        task = task_manager.launch_task('app.tasks.tasks.sync_parishes_task', parish_list=request.json.get('parishes'))
-        db.session.add(task)
-        db.session.commit()
+        status = SyncParishTask().run(parish_list=request.json.get('parishes'))
         return jsonify(status=status)
 
 
@@ -577,15 +571,7 @@ def sync_village():
         else:
             return jsonify(villages=[record.to_json() for record in Village.query.filter_by(archived=0)])
     else:
-        status = []
-        user = current_user
-        if not isinstance(user, User):
-            user = None
-        
-        task_manager = TaskManager(user=user)
-        task = task_manager.launch_task('app.tasks.tasks.sync_villages_task', village_list=request.json.get('villages'))
-        db.session.add(task)
-        db.session.commit()
+        status = SyncVillagesTask().run(village_list=request.json.get('villages'))
         return jsonify(status=status)
 
 
