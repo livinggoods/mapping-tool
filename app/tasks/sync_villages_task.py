@@ -1,10 +1,7 @@
 import os
 
-from app import create_app, db
+from app import db
 from app.models import Village
-
-application = create_app(os.getenv('FLASK_CONFIG', 'default'))
-
 
 class SyncVillagesTask:
     def __init__(self):
@@ -142,6 +139,6 @@ class SyncVillagesTask:
     
     def run(self, village_list=None):
         if village_list is None:
-            raise Exception("Invalid arguments")
+            return []
         
         return self.sync_villages(village_list=village_list)

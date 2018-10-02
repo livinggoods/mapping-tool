@@ -5,9 +5,6 @@ from flask import json
 from app import create_app, db
 from app.models import Parish, Mapping
 
-application = create_app(os.getenv('FLASK_CONFIG', 'default'))
-
-
 class SyncParishTask:
     def __init__(self):
         pass
@@ -83,6 +80,8 @@ class SyncParishTask:
                     saved_record.country = parish.get('country')
                 if parish.get('client_time') is not None and parish.get('client_time') != '':
                     saved_record.client_time = parish.get('client_time')
+                
+                db.session.merge(saved_record)
             else:
                 saved_record = Parish(
                     id=parish.get('id'),
@@ -96,7 +95,7 @@ class SyncParishTask:
                     country=parish.get('country') if bool(parish.get('country')) else None,
                     client_time=parish.get('client_time'),
                 )
-            db.session.add(saved_record)
+                db.session.add(saved_record)
             results.append(saved_record.to_json())
         db.session.commit()
         
@@ -104,6 +103,6 @@ class SyncParishTask:
     
     def run(self, parish_list=None):
         if parish_list is None:
-            raise Exception("Invalid arguments")
+            return []
         
         return self.sync_parishes(parish_list=parish_list)
