@@ -773,8 +773,8 @@ class Parish(db.Model):
         'id':self.id if self.id is not None else None,
         'name':self.name if self.name is not None else None,
         'parent':self.parent if self.parent is not None else None,
-        'mapping_id':self.mapping_id if self.mapping_id is not None else None,
-        'mapping': self.mapping.to_json() if self.mapping_id is not None and self.mapping is not None else None,
+        'mapping_id':self.mapping_id if self.mapping_id else None,
+        'mapping': self.mapping.to_json() if self.mapping_id and self.mapping else None,
         'added_by':self.added_by if self.added_by is not None else None,
         'contact_person':self.contact_person if self.contact_person is not None else None,
         'phone':self.phone if self.phone is not None else None,
@@ -1304,7 +1304,8 @@ class CommunityUnit(db.Model):
       if k == 'date_added':
         continue
       else:
-        setattr(cu, k, v)
+        if v != '':
+          setattr(cu, k, v)
         
     return cu
   
