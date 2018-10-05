@@ -32,7 +32,7 @@ def remove_empty_values(d, country):
             
             if k == 'country' and not bool(v):
                 new_dict[k] = country
-            if v is not None and v is not "":
+            if v is not None and str(v) is not "":
                 if isinstance(v, dict):
                     new_dict[k] = remove_empty_values(v, country)[0]
                 else:
