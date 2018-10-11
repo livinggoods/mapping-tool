@@ -80,6 +80,8 @@ class SyncParishTask:
                     saved_record.country = parish.get('country')
                 if parish.get('client_time') is not None and parish.get('client_time') != '':
                     saved_record.client_time = parish.get('client_time')
+                    
+                saved_record.synced = 1
                 
                 db.session.merge(saved_record)
             else:
@@ -95,6 +97,8 @@ class SyncParishTask:
                     country=parish.get('country') if bool(parish.get('country')) else None,
                     client_time=parish.get('client_time'),
                 )
+                
+                saved_record.synced = 1
                 db.session.add(saved_record)
             results.append(saved_record.to_json())
         db.session.commit()

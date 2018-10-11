@@ -587,13 +587,14 @@ def sync_partner():
         partner_list = request.json.get('partners')
         if partner_list is not None:
             for partner in partner_list:
+                partner_obj = Partner.from_json(partner)
                 saved_record = Partner.query.filter(Partner.id == partner.get('id')).first()
                 if saved_record:
-                    saved_record.client_time = partner.get('date_added')
+                    db.session.merge(partner_obj)
                     operation = 'updated'
                 else:
                     operation = 'created'
-                db.session.add(saved_record)
+                    db.session.add(partner_obj)
                 db.session.commit()
                 status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
             return jsonify(status=status)
@@ -637,19 +638,21 @@ def sync_cu():
 def sync_partner_cu():
     if request.method == 'GET':
         records = PartnerActivity.query.filter(PartnerActivity.archived != 1)
-        return jsonify({'partner_cu': [record.to_json() for record in records]})
+        return jsonify({'partners_cu': [record.to_json() for record in records]})
     else:
         status = []
         partner_cu_list = request.json.get('partners_cu')
         if partner_cu_list is not None:
             for partner_cu in partner_cu_list:
+                partner_cu_obj = PartnerActivity.from_json(partner_cu)
                 saved_record = PartnerActivity.query.filter(PartnerActivity.id == partner_cu.get('id')).first()
                 if saved_record:
                     saved_record.client_time = partner_cu.get('date_added')
                     operation = 'updated'
+                    db.session.merge(partner_cu_obj)
                 else:
                     operation = 'created'
-                db.session.add(saved_record)
+                    db.session.add(partner_cu_obj)
                 db.session.commit()
                 status.append({'id': saved_record.id, 'status': 'ok', 'operation': operation})
             return jsonify(status=status)

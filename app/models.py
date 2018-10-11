@@ -807,6 +807,14 @@ class Partner(db.Model):
     user = relationship(u'User')
     mapping = relationship(u'Mapping')
     
+    @staticmethod
+    def from_json(json):
+      pa = Partner()
+      for k, v in json.iteritems():
+        if v != '':
+          setattr(pa, k, v)
+      return pa
+    
     def to_json(self):
       json_record={
         'id':self.id,
@@ -849,12 +857,24 @@ class PartnerActivity(db.Model): # @TODO create an endpoint that we can use to c
     activities = Column(Text)
     synced = Column(Integer, server_default=text("'0'"))
     archived = Column(Integer, server_default=text("'0'"))
+    other = Column(Text, nullable=True, server_default=text("'{}'"))
     
     user = relationship(u'User')
     mapping = relationship(u'Mapping')
     village = relationship(u'Village')
     community_unit = relationship(u'CommunityUnit')
     partner = relationship(u'Partner')
+
+    @staticmethod
+    def from_json(json):
+      pa = PartnerActivity()
+      for k, v in json.iteritems():
+        if k == 'date_added':
+          continue
+        else:
+          if v != '':
+            setattr(pa, k, v)
+      return pa
     
     def to_json(self):
       json_record={
@@ -882,7 +902,8 @@ class PartnerActivity(db.Model): # @TODO create an endpoint that we can use to c
         'added_by':self.added_by,
         'activities':self.activities,
         'synced':self.synced,
-        'archived':self.archived
+        'archived':self.archived,
+        'other': self.other
       }
       return json_record
 
@@ -1290,6 +1311,7 @@ class CommunityUnit(db.Model):
   ngodoingmhealth = Column(Integer, server_default=text("'0'"))
   comment = Column(Text)
   archived = Column(Integer, server_default=text("'0'"))
+  other = Column(Text, nullable=True, server_default=text("'{}'"))
 
   mapping = relationship(u'Mapping')
   user = relationship(u'User')
@@ -1311,6 +1333,7 @@ class CommunityUnit(db.Model):
   
   def to_json(self):
     return {
+      'id': self.id,
       'name': self.name if self.name is not None else None,
       'mappingid': self.mappingid if self.mappingid is not None else None,
       'lat': self.lat if self.lat is not None else None,
@@ -1353,7 +1376,8 @@ class CommunityUnit(db.Model):
       'ngodoingiccm': self.ngodoingiccm if self.ngodoingiccm is not None else None,
       'ngodoingmhealth': self.ngodoingmhealth if self.ngodoingmhealth is not None else None,
       'comment': self.comment if self.comment is not None else None,
-      'archived': self.archived if self.archived is not None else None
+      'archived': self.archived if self.archived is not None else None,
+      'other': self.other
     }
 
   
@@ -1376,6 +1400,7 @@ class LinkFacility(db.Model):
   country=Column(String(64))
   facility_id=Column(String(64), nullable=True)
   archived = Column(Integer, nullable=False, server_default=text("'0'"))
+  other = Column(Text, nullable=True, server_default=text("'{}'"))
   
   def to_json(self):
     json_record ={
@@ -1392,7 +1417,8 @@ class LinkFacility(db.Model):
       'act_levels': float(self.act_levels) if self.act_levels else None,
       'country': self.country if self.country else None,
       'facility_id': self.facility_id if self.facility_id else None,
-      'archived': self.archived if self.archived else None
+      'archived': self.archived if self.archived else None,
+      'other': self.other
     }
     return json_record
   
