@@ -902,6 +902,8 @@ def export_scoring_tool(id):
     writer = csv.writer(dest)
     data = []
     recruitment = Recruitments.query.filter_by(id=id).first_or_404()
+    #print(recruitment.proceed)
+
     if recruitment.country == 'KE':
         header = [
             'CHEW Name',
@@ -1077,6 +1079,7 @@ def export_scoring_tool(id):
 
     else:
         registrations = Registration.query.filter(Registration.recruitment == id)
+
         header = [
             'Referral Name',
             'Referral Title',
@@ -1120,6 +1123,7 @@ def export_scoring_tool(id):
         data.append(header)
 
         for registration in registrations:
+            print(registration.proceed)
             # Get Exam
             exam = Exam.query.filter(Exam.applicant == registration.id).first()
             math = 0
@@ -1164,11 +1168,11 @@ def export_scoring_tool(id):
                 total_score = interview.total_score()
                 qualified = 'Y' if interview.has_passed and exam_passed == 'Y' else 'N'
                 canjoin = 'Y' if interview.canjoin == 1 else 'N'
-                comment = interview.comment.replace(',', ';')
+                #comment = interview.comment.replace(',', ';')
                 canjoin = 'Y' if interview.canjoin == 1 else 'N'
                 selected = 'Y' if interview.selected == 1 else 'N'  # if selected of not
-            # interview= Interview.query.filter(Interview.archived != 1)
-            # Now that we have what we need, we generate the CSV rows
+                # interview= Interview.query.filter(Interview.archived != 1)
+                # Now that we have what we need, we generate the CSV rows
             row = [
                 registration.referral,
                 registration.referral_title,
@@ -1209,7 +1213,7 @@ def export_scoring_tool(id):
                 str(comment),
                 str(qualified),
                 str(selected),
-            ]
+                ]
             data.append(row)
     output = excel.make_response_from_array(data, 'csv')
     output.headers["Content-Disposition"] = "attachment; filename=scoring-tool.csv"
@@ -1266,6 +1270,20 @@ def recruitment(id):
             recruitment = RecruitmentUsers(user_id=current_user.id, recruitment_id=recruitments.id)
             return jsonify(status='created', id=recruitments.id)
 
+@main.route('/candidates', methods=['POST','GET'])
+def selectCandidate():
+    if(request.data is None):
+        return jsonify({"status":"Error","message":"Candidate Id is Invalid"})
+    else:
+        candidate_obj = Registration.query.filter_by(id=request.form.get('id')).first_or_404()
+        if(candidate_obj.proceed == 0):
+            candidate_obj.proceed = 1
+            return jsonify({"status": "ok", "message": "candidate selected"})
+        elif(candidate_obj.proceed == 1):
+            candidate_obj.proceed = 0
+            return jsonify({"status": "error", "message": "candidate deselected"})
+        else:
+            return jsonify({"status":"error","message":"candidate proceed is set to null"})
 
 @main.route('/country', methods=['GET', 'POST'])
 @main.route('/region', methods=['GET', 'POST'])

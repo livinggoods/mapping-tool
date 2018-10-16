@@ -1,0 +1,317 @@
+                <!-- control modal -->
+                        
+                <div id="controls-modal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content"> <!-- Modal content-->
+                        <div class="modal-header">
+                            <div class="btn-group" role="group" aria-label="Basic example" >
+                                 
+                                
+                                <button class="btn btn-info" id="achieve-control-button" type="button" aria-expanded="false">Achieve Records</button>
+                                <!--<button class="btn btn-primary" id="user-control-button" type="button"  aria-expanded="false" > User Roles </button> -->
+                                <button class="btn btn-primary" id="location-control-button" type="button"  aria-expanded="false" > Achieved Records</button> 
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                          <!-- start of modal body -->
+                          <div class="row">
+                              <div class="col"> 
+                                <div class="collapse multi-collapse" id="users-control-body">
+                                  <div class="card card-body">
+                                    
+                                      <table id="parish-table" class="display" style="width:100%">
+                                          <thead>
+                                              <tr>
+                                                  <th>User Name</th>
+                                                  <th>User Role</th>
+                                                  <th> Other </th>
+                                                  <th> Permissions </th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                              <tr>
+                                                  <td>
+                                                    <li id="#" href="#" onClick=""> name  </li>   
+                                                  </td>
+                                                  <td>
+                                                      <li id="#" href="#" onClick=""> role </li>   
+                                                    </td>
+                                                  <td>
+                                                      <li id="#" href="#" onClick=""> achieve </li>   
+                                                  </td>
+                                                  <td>
+                                                      <li id="#" href="#" onClick=""> Permissions </li>   
+                                                  </td>
+                                              </tr>
+              
+                                          </tbody>
+                                      </table>
+
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="col"> 
+                                  <div class="collapse multi-collapse" id="location-control-body">
+                                    <div class="card card-body">
+                                      <!-- start of table -->
+
+
+                                      <div class="col-sm-3"> 
+                                        <div class="list-group">
+                                            <a href="#" class="list-group-item list-group-item-action" id="user-archieved-user-link">Users</a>
+                                            <a href="#" class="list-group-item list-group-item-action" id="user-archieved-mapping-link">Mapping</a>
+                                            <a href="#" class="list-group-item list-group-item-action" id="user-archieved-recruitment-link">Recruitment</a>
+                                            <a href="#" class="list-group-item list-group-item-action" id="user-archieved-training-link">Training</a>
+                                          </div>
+                                    </div>
+                                    <div class="col-sm-9">
+
+                                        <!-- start of body -->
+                                        <div class="col"> 
+                                            <div class="collapse multi-collapse" id="user-archieved-user-body">
+                                              <div class="card card-body">
+                                                Users 
+                                                <!-- start of table -->      
+                                                  <table class="table .table-hover">
+                                                    <thead>
+                                                      <tr>
+                                                        <th><h3> username </h3></th>
+                                                        <th><h3> archieve </h3></th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody id='user-archieved-row'>
+                                                      
+                                                    </tbody>
+                                                  </table>
+                                                <!-- end of table -->
+                                              </div>
+                                            </div>
+                                          </div> 
+                                          <!-- end of body -->
+                                        <!-- start of body -->
+                                        <div class="col"> 
+                                            <div class="collapse multi-collapse" id="user-archieved-mapping-body">
+                                              <div class="card card-body">
+                                                Mappings
+                                                <!-- start of table -->      
+                                                  <table class="table .table-hover">
+                                                    <thead>
+                                                      <tr>
+                                                        <th><h3> username </h3></th>
+                                                        <th><h3> archieve </h3></th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody id='mapping-archieved-row'>
+                                                      
+                                                    </tbody>
+                                                  </table>
+                                                <!-- end of table -->
+                                              </div>
+                                            </div>
+                                          </div> 
+                                          <!-- end of body -->
+                                        <!-- start of body -->
+                                        <div class="col"> 
+                                            <div class="collapse multi-collapse" id="user-archieved-recruitment-body">
+                                              <div class="card card-body">
+                                                Recruitments
+                                                <!-- start of table -->      
+                                                  <table class="table .table-hover">
+                                                    <thead>
+                                                      <tr>
+                                                        <th><h3> username </h3></th>
+                                                        <th><h3> archieve </h3></th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody id='recruitment-archieved-row'>
+                                                      
+                                                    </tbody>
+                                                  </table>
+                                                <!-- end of table -->
+                                              </div>
+                                            </div>
+                                          </div> 
+                                          <!-- end of body -->
+                                        <!-- start of body -->
+                                        <div class="col"> 
+                                            <div class="collapse multi-collapse" id="user-archieved-training-body">
+                                              <div class="card card-body">
+                                                Trainings
+                                                <!-- start of table -->      
+                                                  <table class="table .table-hover">
+                                                    <thead>
+                                                      <tr>
+                                                        <th><h3> username </h3></th>
+                                                        <th><h3> archieve </h3></th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody id='training-archieved-row'>
+                                                      
+                                                    </tbody>
+                                                  </table>
+                                                <!-- end of table -->
+                                              </div>
+                                            </div>
+                                          </div> 
+                                          <!-- end of body -->
+
+
+                                    </div>
+
+
+                                      <!-- end of table -->
+                                    </div>
+                                  </div>
+                                </div>
+
+
+                                <div class="col"> 
+                                    <div class="collapse multi-collapse" id="achieve-control-body">
+                                      <div class="card card-body">
+
+                                      <div class="row">
+                                        <div class="col-sm-3"> 
+                                            <div class="list-group">
+                                                <a href="#" class="list-group-item list-group-item-action" id="user-control-user-link">Users</a>
+                                                <a href="#" class="list-group-item list-group-item-action" id="user-control-mapping-link">Mapping</a>
+                                                <a href="#" class="list-group-item list-group-item-action" id="user-control-recruitment-link">Recruitment</a>
+                                                <a href="#" class="list-group-item list-group-item-action" id="user-control-training-link">Training</a>
+                                              </div>
+                                        </div>
+                                        <div class="col-sm-9">
+
+                                         <!-- start of collapsable user tab -->
+                                         <div class="col"> 
+                                            <div class="collapse multi-collapse" id="user-control-user-body">
+                                              <div class="card card-body">
+                                                Users
+                                                <!-- start of table -->      
+                                                  <table class="table .table-hover">
+                                                    <thead>
+                                                      <tr>
+                                                        <th><h3> username </h3></th>
+                                                        <th><h3> archieve </h3></th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody id='user-archieve-row'>
+                                                      
+                                                    </tbody>
+                                                  </table>
+                                                <!-- end of table -->
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="col"> 
+                                              <div class="collapse multi-collapse" id="user-control-mapping-body">
+                                                <div class="card card-body">
+                                                  Mappings
+                                                <!-- start of table -->      
+                                                <table class="table .table-hover">
+                                                  <thead>
+                                                    <tr>
+                                                      <th><h3> name </h3></th>
+                                                      <th><h3> archieve </h3></th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody id='mapping-archieve-row'>
+                                                    
+                                                  </tbody>
+                                                </table>
+                                              <!-- end of table -->
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="col"> 
+                                                <div class="collapse multi-collapse" id="user-control-recruitment-body">
+                                                  <div class="card card-body">
+                                                    Recruitments
+                                                <!-- start of table -->      
+                                                <table class="table .table-hover">
+                                                  <thead>
+                                                    <tr>
+                                                      <th><h3> name </h3></th>
+                                                      <th><h3> archieve </h3></th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody id='recruitment-archieve-row'>
+                                                    
+                                                  </tbody>
+                                                </table>
+                                              <!-- end of table -->
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="col"> 
+                                                  <div class="collapse multi-collapse" id="user-control-training-body">
+                                                    <div class="card card-body">
+                                                      Trainings
+                                                <!-- start of table -->      
+                                                <table class="table .table-hover">
+                                                  <thead>
+                                                    <tr>
+                                                      <th><h3> name </h3></th>
+                                                      <th><h3> archieve </h3></th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody id='training-archieve-row'>
+                                                    
+                                                  </tbody>
+                                                </table>
+                                              <!-- end of table -->
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                         <!-- end -->
+                                          <!-- start of table -->
+
+                                          
+                                            <!--<table class="table">
+                                                <thead>
+                                                  <tr>
+                                                    <th>Firstname</th>
+                                                    <th>Lastname</th>
+                                                    <th>Email</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr>
+                                                    <td>John</td>
+                                                    <td>Doe</td>
+                                                    <td>john@example.com</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td>Mary</td>
+                                                    <td>Moe</td>
+                                                    <td>mary@example.com</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td>July</td>
+                                                    <td>Dooley</td>
+                                                    <td>july@example.com</td>
+                                                  </tr>
+                                                </tbody>
+                                              </table> -->
+                                          <!-- end of table -->
+                                        </div>
+                                      </div>
+                                      
+
+                                      </div>
+                                    </div>
+                                  </div>
+                          </div>
+                              
+                          <!-- end of modal body -->
+                          
+                        </div>
+                        <div class="modal-footer"> <!-- footer -->
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+      
+                    </div>
+                  </div>
+      
+                
+                  <!-- end of control modal -->

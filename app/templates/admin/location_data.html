@@ -4,7 +4,7 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>Administrative Ugands<small>Admin Units in Uganda</small></h3>
+                <h3>Administrative Units </h3>
               </div>
             </div>
 
@@ -16,12 +16,29 @@
                   <div class="x_content">
                     <p class="text-muted font-13 m-b-30">
                       A list of maped locations to date, icluding their parent location where available
-                        <span id="float-right"><a href="{{url_for('administration.location_administration_edit')}}">
-                            <button id="update-locations" class="btn btn-info">Create New Location</button>
-                            </a>
-                        </span>
+
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                              <span id="float-left">
+                                  <a href="{{url_for('administration.location_administration_edit')}}">
+                                    <button onclick="displayLocations" class="btn btn-info">Create New Location</button>
+                                  </a>
+                                </span>
+                            </div>
+                            <div class="col-md-4 text-center">
+
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <span id="float-right">
+                                    <a href="#">
+                                        <button class="btn btn-info" data-toggle="modal" data-target="#country-modal"> Display Locations </button>
+                                    </a>
+                                </span>
+
+                            </div>
+                        </div>
                     </p>
-                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                    <table id="location-table" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                       <thead>
                         <tr>
                           <th>Location Name</th>
@@ -61,7 +78,430 @@
               </div>
             </div>
           </div>
+          <!-- locations modal -->
+
+          <!-- country modal -->
+            <div id="country-modal" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                  <div class="modal-content"> <!-- Modal content-->
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"> Country </h4>
+                  </div>
+                  <div class="modal-body">
+
+                      <table id="country-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Location Name</th>
+                                    <th>Admin Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for location in pagination.items %}
+                                    <tr>
+
+                                        <td>
+                                            {% if location.admin_name == 'Country'%}
+                                                <li id="{{ location.name }}" href="#" onClick="findRegions(this.id)"> {{ location.name }} </li>
+                                            {% endif%}
+                                        </td>
+                                        <td>
+                                            {% if location.admin_name == 'Country'%}
+                                                {{location.admin_name}}
+                                            {% endif%}
+                                        </td>
+
+
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                  </div>
+                  <div class="modal-footer"> <!-- footer -->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          <!-- end of country modal -->
+          <!-- region modal -->
+          <div id="regions-modal" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                  <div class="modal-content"> <!-- Modal content-->
+                  <div class="modal-header">
+                      <div class="row">
+                          <div class="col-sm-2">
+                                <button type="button" class="btn btn-info btn-sm" id="back-button">
+                                  <span class="glyphicon glyphicon-arrow-left"></span> Back
+                                </button>
+                          </div>
+                          <div class="col-sm-10">
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                              <h4 class="modal-title"> <span id="regions-modal-title"> </span> </h4>
+                          </div>
+
+
+                      </div>
+                  </div>
+                  <div class="modal-body">
+
+                      <table id="region-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Location Name</th>
+                                    <th>Admin Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for location in locations %}
+
+                                    <tr id="regions-row">
+
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                  </div>
+                  <div class="modal-footer"> <!-- footer -->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          <!-- end of region modal -->
+          <!-- district modal -->
+            <div id="districts-modal" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                  <div class="modal-content"> <!-- Modal content-->
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="districts-modal-title"> Districts </h4>
+                  </div>
+                  <div class="modal-body">
+
+                      <table id="districts-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Location Name</th>
+                                    <th>Admin Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="districts-row">
+
+                                </tr>
+                            </tbody>
+                        </table>
+
+                  </div>
+                  <div class="modal-footer"> <!-- footer -->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          <!-- end of district modal -->
+          <!-- county modal -->
+            <div id="county-modal" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                  <div class="modal-content"> <!-- Modal content-->
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="counties-modal-title"> Counties </h4>
+                  </div>
+                  <div class="modal-body">
+
+                      <table id="county-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Location Name</th>
+                                    <th>Admin Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="counties-row">
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                  </div>
+                  <div class="modal-footer"> <!-- footer -->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          <!-- end of county modal -->
+          <!-- subcounty modal -->
+            <div id="subcounty-modal" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                  <div class="modal-content"> <!-- Modal content-->
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="subcounties-modal-title"> SubCounties </h4>
+                  </div>
+                  <div class="modal-body">
+
+                      <table id="subcounty-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Location Name</th>
+                                    <th>Admin Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="subcounties-row">
+
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                  </div>
+                  <div class="modal-footer"> <!-- footer -->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          <!-- end of subcounty modal -->
+          <!-- parish modal -->
+            <div id="parish-modal" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                  <div class="modal-content"> <!-- Modal content-->
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="parishes-modal-title"> Parishes </h4>
+                  </div>
+                  <div class="modal-body">
+
+                      <table id="parish-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Location Name</th>
+                                    <th>Admin Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="parishes-row">
+
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                  </div>
+                  <div class="modal-footer"> <!-- footer -->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          <!-- end of parish modal -->
+          <!-- village modal -->
+            <div id="village-modal" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                  <div class="modal-content"> <!-- Modal content-->
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="villages-modal-title"> Villages </h4>
+                  </div>
+                  <div class="modal-body">
+
+                      <table id="village-table" class="display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Location Name</th>
+                                    <th>Admin Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="villages-row">
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                  </div>
+                  <div class="modal-footer"> <!-- footer -->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          <!-- end of village modal -->
+
 {% endblock %}
+
+{% block javascript%}
+
+    <script>
+            $(document).ready(function(){
+                    $('#location-table').DataTable()
+                       /* "scrollY":        "200px",
+                        "scrollCollapse": true,
+                        "paging":         false
+                    } );*/
+            });
+
+            
+
+           $('#back-button').on('click',function(){
+                console.log('back clicked')
+           })
+
+            function findRegions(id){ // display country regions
+                if(id){
+                    $('#regions-modal-title').text('Country: '+id)
+                    request_location(id,'regions')
+                }else{ console.log('Error: null region id !!!')}
+
+                if($('#country-modal').modal('show')){
+                    $('#country-modal').modal('hide')
+                    if($('#regions-modal').modal('hide')){
+                       $('#regions-modal').modal('show')
+                    }else{console.log('Error: regions modal !!!')}
+                }else{console.log('Error: country modal !!!')}
+
+            } // end
+            function findDistricts(id){ // display district regions
+                 if(id){
+                    $('#districts-modal-title').text('Region: '+id)
+                    request_location(id,'districts')
+                 }else{console.log('Error : null district id !!!')}
+
+                 if($('#regions-modal').modal('show')){
+                       $('#regions-modal').modal('hide')
+                       if($('#districts-modal').modal('hide')){
+                           $('#districts-modal').modal('show')
+                       }else{console.log('Error: districts modal !!!')}
+                 }
+            } // end
+            function findCounties(id){
+                 if(id){
+                    $('#counties-modal-title').text('District: '+id)
+                    request_location(id,'counties')
+                 }else{console.log('Error : null county id !!!')}
+                 if($('#districts-modal').modal('show')){
+                       $('#districts-modal').modal('hide')
+                       if($('#county-modal').modal('hide')){
+                           $('#county-modal').modal('show')
+                       }else{console.log('Error: county modal !!!')}
+                 }
+            }// end
+            function findSubCounties(id){
+                 if(id){
+                    $('#subcounties-modal-title').text('County: '+id)
+                    request_location(id,'subcounties')
+                 }else{console.log('Error: null subcounties id !!!')}
+                 if($('#county-modal').modal('show')){
+                       $('#county-modal').modal('hide')
+                       if($('#subcounty-modal').modal('hide')){
+                           $('#subcounty-modal').modal('show')
+                       }else{console.log('Error: county modal !!!')}
+                 }
+            } //end
+            function findParishes(id){
+                 if(id){
+                    $('#parishes-modal-title').text('SubCounty: '+id)
+                    request_location(id,'parishes')
+                 }else{console.log('Error: null parish id !!!')}
+                 if($('#subcounty-modal').modal('show')){
+                       $('#subcounty-modal').modal('hide')
+                       if($('#parish-modal').modal('hide')){
+                           $('#parish-modal').modal('show')
+                       }else{console.log('Error: county modal !!!')}
+                 }
+            } //end
+            function findVillages(id){
+                 if(id){
+                    $('#villages-modal-title').text('Parish: '+id)
+                    request_location(id,'villages')
+                 }else{console.log('Error: null village id !!!')}
+                 if($('#parish-modal').modal('show')){
+                       $('#parish-modal').modal('hide')
+                       if($('#village-modal').modal('hide')){
+                           $('#village-modal').modal('show')
+                       }else{console.log('Error: county modal !!!')}
+                 }
+            } //end
+
+            function request_location(location_name,location){
+                json = {"name":location_name}
+                listHTML = '';
+                $.ajax({
+                type: "POST",
+                url: "{{url_for('administration.locations_display')}}",
+                data: json,
+                success: function (data) {
+                    console.log('**** '+location+'****')
+                    var obj = JSON.stringify(data)
+                    obj = JSON.parse(obj)
+
+                    if(location == 'regions'){
+                        for(var i = 0; i < obj.locations.length; i++){
+                            listHTML += '<li id="'+ obj.locations[i].name  +'" onClick="findDistricts(id)" >'+ obj.locations[i].name +'</li>'
+                            console.log(obj.locations[i].name)
+                        }
+                        $('#regions-row').append(listHTML)
+                    }else if(location == 'districts'){
+                        for(var i = 0; i < obj.locations.length; i++){
+                        listHTML += '<li id="'+ obj.locations[i].name  +'" onClick="findCounties(id)" >'+ obj.locations[i].name +'</li>'
+                        console.log(obj.locations[i].name)
+                        }
+                        $('#districts-row').append(listHTML)
+                    }else if(location == 'counties'){
+                        for(var i = 0; i < obj.locations.length; i++){
+                        listHTML += '<li id="'+ obj.locations[i].name  +'" onClick="findSubCounties(id)" >'+ obj.locations[i].name +'</li>'
+                        console.log(obj.locations[i].name)
+                        }
+                        $('#counties-row').append(listHTML)
+                    }else if(location == 'subcounties'){
+                        for(var i = 0; i < obj.locations.length; i++){
+                        listHTML += '<li id="'+ obj.locations[i].name  +'" onClick="findParishes(id)" >'+ obj.locations[i].name +'</li>'
+                        console.log(obj.locations[i].name)
+                        }
+                        $('#subcounties-row').append(listHTML)
+                    }else if(location == 'parishes'){
+                        for(var i = 0; i < obj.locations.length; i++){
+                        listHTML += '<li id="'+ obj.locations[i].name  +'" onClick="findVillages(id)" >'+ obj.locations[i].name +'</li>'
+                        console.log(obj.locations[i].name)
+                        }
+                        $('#parishes-row').append(listHTML)
+                    }
+                },
+                error: function(jqXHR){
+                  console.log(jqXHR)
+                }
+            });
+            console.log(listHTML)
+
+            return listHTML
+            }
+    </script>
+
+
+
+
+
+{% endblock javascript %}
 
 {% block additionaljs %}
 <!-- Datatables -->

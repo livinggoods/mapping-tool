@@ -33,6 +33,7 @@
 
     <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"> </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"> </script>
     <title>{% block title %} {% endblock %}</title>
   </head>
 
@@ -79,6 +80,9 @@
         <!-- /footer content -->
       </div>
     </div>
+
+    <!-- admin modals -->
+    {% include 'admin/control-modals.html'%}
 
     {% include 'javascripts.html' %}
     {% block additionaljs %}{% endblock %}

@@ -77,9 +77,7 @@
                           <td>{{recruitment.owner.name}}</td>
                           <td>{{recruitment.country}}</td>
                           <td>{{recruitment.date_added}}</td>
-                          <td>{{recruitment.status|title}}
-
-                          </td>
+                          <td>{{recruitment.status|title}}</td>
                           <td>{{recruitment.to_json().data.count}}</td>
                           <td>
                             <div class="btn-group closed">
@@ -123,7 +121,6 @@
 
 $(document).ready(function(){
         $('#recruitment-list').DataTable();
-
  });
 
 $('.confirm').click(function(){

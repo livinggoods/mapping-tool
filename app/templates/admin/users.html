@@ -11,10 +11,7 @@
             <div class="title_right">
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for...">
-                        <span class="input-group-btn">
-                      <button class="btn btn-default" type="button">Go!</button>
-                    </span>
+                        <!-- top col -->
                     </div>
                 </div>
             </div>
@@ -59,20 +56,22 @@
                             <tr>
                                 <!-- <th>Action</th> -->
                                 <th>Full Name</th>
-                                <th>Email</th>
+                                <th> User Name </th>
                                 <th>Country</th>
                                 <th>Confirmed</th>
                                 <th>Last Seen</th>
                                 <th></th>
+                                <th>Permission</th>
+                                
                             </tr>
                             </thead>
                             <tbody>
                             {% for user in users %}
                                 <tr>
-                                    <td><a href="/user/{{ user.id }}">
+                                    <td><a href="#">
                                         {{ user.name }}
                                     </a></td>
-                                    <td>{{ user.email }}</td>
+                                    <td> {{ user.username }} </td>
                                     <td>{{ user.location }}</td>
                                     <td id="user-status-{{ user.id }}">{{ user.confirmed }}</td>
                                     <td>{{ user.last_seen.strftime('%Y-%b-%d') }}</td>
@@ -86,8 +85,19 @@
                                         </a>
                                         <a href="/user/{{ user.username }}" class="btn btn-info btn-xs"><i
                                                 class="fa fa-info-circle"></i> Info </a>
-                                        <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete
-                                        </a>
+                                        <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete</a>
+
+                                    </td>
+                                    <td>
+                                        <select class="user-roles">
+                                            {% for role in roles %}
+                                                {% if user.role_id == role.id %}
+                                                    <option selected="selected">{{ role.name}}</option>
+                                                {% else %}
+                                                    <option>{{ role.name}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -98,39 +108,442 @@
             </div>
         </div>
     </div>
+
+    <!-- user change role control modal -->
+
+    
+<!-- Modal -->
+<div id="user-roles-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                <!-- start of table -->
+
+                <table class="table .table-hover">
+                        <thead>
+                          <tr>
+                            <th> username </th>
+                            <th> role </th>
+                            <th> description</th>
+                          </tr>
+                        </thead>
+                        <tbody id='user-role-modal-row'>
+                          
+                        </tbody>
+                </table>
+
+              <!-- end of table -->
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+      
+        </div>
+</div>
+          
+          <!-- end of body -->
+
+ <!-- end of user change role control modal -->
 {% endblock %}
 {% block javascript %}
     <script>
-        $('.user-action').click(function () {
-            var userId = $(this).attr('user');
-            var elementId = $(this);
-            action = 'block';
-            $.ajax({
-                url: "{{url_for('administration.user_action')}}",
-                type: 'POST',
-                data: {user: userId},
-                dataType: 'json',
-                success: function (data) {
-                    if (data.status == 'confirmed') {
-                        elementId.html('<i class="fa fa-times"></i> Un-confirm');
-                        $('#user-status-' + userId).html('True');
-                    } else {
-                        elementId.html('<i class="fa fa-check"></i> Confirm');
-                        $('#user-status-' + userId).html('False');
-                    }
-                },
-                error: function (xhr) {
-                    console.log(xhr);
-                }
+
+
+
+        $('.user-roles').change(function(){
+                var action = 'change_user_role'
+                var role  = $(this).val()
+                var user = ''
+                
+                var $row = $(this).closest("tr"), // Finds the closest row <tr> 
+                 $tds = $row.find("td:nth-child(2)"); // Finds all children <td> elements
+                
+                $.each($tds, function() {               // Visits every single <td> element
+                    user =   $(this).text()     // Prints out the text within the <td>
+                });
+                user = user.split(' ').join('')
+                changeUserRole(action,role,user)
+ 
             })
+        /** added confirmation function */
+
+        function changeUserRole(action,role,user){
+            json = {"action":action,"role":role,"user":user}
+            console.log(json)
+            $.ajax({
+                    type: "POST",
+                    url: "{{url_for('administration.admin_action')}}",
+                    data: json,
+                    success: function (data) {
+                        console.log(JSON.stringify(json))
+                        if(data.status == 'ok'){
+                            console.log("ok !!!")
+                        }else{console.log('Error !!! ')}
+                    },
+                    error: function(jqXHR){
+                    console.log(jqXHR)
+                    }
+                });
+        }
+
+        /** achieve records */
+
+
+        $('#achieve-control-button').on('click',function(){
+
+                $('#users-control-body').collapse('hide')
+                $('#location-control-body').collapse('hide')
+
+                $('#achieve-control-body').collapse('toggle')
+
+                json = {"action":"user_records"}
+                listHTML = '';
+                $.ajax({
+                    type: "POST",
+                    url: "{{url_for('administration.admin_action')}}",
+                    data: json,
+                    success: function (data) {
+
+                        if(data.status == 'ok'){
+                            for(var i = 0; i < data.users.length; i++){
+                                listHTML += '<tr> <td> <li>'+ data.users[i].username +'</li> </td> <td class="text-center">  <input id="'+data.users[i].id+'" type="checkbox" class="mycheckbox"  aria-label="Checkbox for following text input" onClick="ArchieveUser(id)"> <td> </tr>'
+                            }
+                            $('#user-archieve-row').append(listHTML)
+                            
+                        }else{console.log('Error !!! ')}
+                    },
+                    error: function(jqXHR){
+                    console.log(jqXHR)
+                    }
+                });
         });
-        $('.unblock-user').click(function () {
-            console.log('un block class user immediately');
-        });
 
 
-        <!-- added confirmation function -->
+        $('#user-control-user-link').on('click', function(){
+        
+        $('#user-control-mapping-body').collapse('hide')
+        $('#user-control-recruitment-body').collapse('hide')
+        $('#user-control-training-body').collapse('hide')
+        // show mapping list
+        json = {"action":"user_records"}
+            listHTML = '';
+            $.ajax({
+                type: "POST",
+                url: "{{url_for('administration.admin_action')}}",
+                data: json,
+                success: function (data) {
+                        
+                    if(data.status == 'ok'){
+                        
+                        for(var i = 0; i < data.users.length; i++){
+                        
+                            listHTML = '<tr> <td> hello <td> </tr>'
+                        }
+                        $('#user-archieve-row').append(listHTML)
+                        
+                        
+                    }else{console.log('Error !!! ')}
+                },
+                error: function(jqXHR){
+                console.log(jqXHR)
+                }
+            });
+        $('#user-control-user-body').collapse('show')
+       
+    })
 
+        $('#user-control-mapping-link').on('click', function(){
+        
+            $('#user-control-user-body').collapse('hide')
+            $('#user-control-recruitment-body').collapse('hide')
+            $('#user-control-training-body').collapse('hide')
+            // show mapping list
+            json = {"action":"mapping_records"}
+                listHTML = '';
+                $.ajax({
+                    type: "POST",
+                    url: "{{url_for('administration.admin_action')}}",
+                    data: json,
+                    success: function (data) {
+
+                        if(data.status == 'ok'){
+                            
+                            for(var i = 0; i < data.mappings.length; i++){
+                                listHTML += '<tr> <td> <li>'+ data.mappings[i].name +'</li> </td> <td class="text-center">  <input id="'+data.mappings[i].id+'" type="checkbox" class="mycheckbox"  aria-label="Checkbox for following text input" onClick="ArchieveMapping(id)"> <td> </tr>'
+                            }
+                            $('#mapping-archieve-row').append(listHTML)
+                            
+                            
+                        }else{console.log('Error !!! ')}
+                    },
+                    error: function(jqXHR){
+                    console.log(jqXHR)
+                    }
+                });
+            $('#user-control-mapping-body').collapse('show')
+           
+        })
+
+
+        $('#user-control-recruitment-link').on('click', function(){
+            $('#user-control-user-body').collapse('hide')
+            $('#user-control-mapping-body').collapse('hide')
+            $('#user-control-training-body').collapse('hide')
+            // show recruitment list
+            json = {"action":"recruitment_records"}
+                listHTML = '';
+                $.ajax({
+                    type: "POST",
+                    url: "{{url_for('administration.admin_action')}}",
+                    data: json,
+                    success: function (data) {
+
+                        if(data.status == 'ok'){
+                            console.log('ok')
+                            for(var i = 0; i < data.recruitments.length; i++){
+                                listHTML += '<tr> <td> <li>'+ data.recruitments[i].name +'</li> </td> <td class="text-center">  <input id="'+data.recruitments[i].id+'" type="checkbox" class="mycheckbox"  aria-label="Checkbox for following text input" onClick="ArchieveRecruitment(id)"> <td> </tr>'
+                            }
+                            $('#recruitment-archieve-row').append(listHTML)
+                            
+                            
+                        }else{console.log('Error !!! ')}
+                    },
+                    error: function(jqXHR){
+                    console.log(jqXHR)
+                    }
+                });    
+            $('#user-control-recruitment-body').collapse('show')
+        })
+        $('#user-control-training-link').on('click', function(){
+            $('#user-control-user-body').collapse('hide')
+            $('#user-control-mapping-body').collapse('hide')
+            $('#user-control-recruitment-body').collapse('hide')
+            // show training list
+            json = {"action":"training_records"}
+                listHTML = '';
+                $.ajax({
+                    type: "POST",
+                    url: "{{url_for('administration.admin_action')}}",
+                    data: json,
+                    success: function (data) {
+
+                        if(data.status == 'ok'){
+                            console.log('ok')
+                            for(var i = 0; i < data.trainings.length; i++){
+                                listHTML += '<tr> <td> <li>'+ data.trainings[i].name +'</li> </td> <td class="text-center">  <input id="'+data.trainings[i].id+'" type="checkbox" class="mycheckbox"  aria-label="Checkbox for following text input" onClick="ArchieveTraining(id)"> <td> </tr>'
+                            }
+                            $('#training-archieve-row').append(listHTML)
+                            
+                            
+                        }else{console.log('Error !!! ')}
+                    },
+                    error: function(jqXHR){
+                    console.log(jqXHR)
+                    }
+                });   
+            $('#user-control-training-body').collapse('show')
+        })
+
+
+
+        function ArchieveUser(id){
+            ArchieveRecord(id,'archieve','user')
+        }
+        function ArchieveMapping(id){
+            ArchieveRecord(id,'archieve','mapping')
+        }
+        function ArchieveTraining(id){
+            ArchieveRecord(id,'archieve','training')
+        }
+        function ArchieveRecruitment(id){
+            ArchieveRecord(id,'archieve','recruitment')
+        }
+        function ArchieveRecord(id,action,entity){
+            json = {'id':id,'action':action,'entity':entity}                
+            $.ajax({
+                type: "POST",
+                url: "{{url_for('administration.admin_action')}}",
+                data: json,
+                success: function (data) {
+                    console.log('response: '+JSON.stringify(data))
+                },
+                error: function(jqXHR){
+                    console.log(jqXHR)
+                }
+            });  
+
+        }
+
+        /*unarchieve records*/
+
+        $('#location-control-button').on('click',function(){
+
+            $('#users-control-body').collapse('hide')
+            $('#achieve-control-body').collapse('hide')
+
+            $('#location-control-body').collapse('toggle')
+        })
+
+
+    $('#user-archieved-user-link').on('click', function(){
+        //alert('user list clicked ')
+        $('#user-archieved-mapping-body').collapse('hide')
+        $('#user-archieved-recruitment-body').collapse('hide')
+        $('#user-archieved-training-body').collapse('hide')
+        
+        json = {"action":"archieved","entity":"users"}
+                listHTML = '';
+                $.ajax({
+                    type: "POST",
+                    url: "{{url_for('administration.admin_action')}}",
+                    data: json,
+                    success: function (data) {
+                        //console.log(JSON.stringify(data))
+                        if(data.status == 'ok'){
+                            for(var i = 0; i < data.users.length; i++){
+                                //console.log(data.recruitments[i].name)
+                                listHTML += '<tr> <td> <li>'+ data.users[i].name +'</li> </td> <td class="text-center">  <input id="'+data.users[i].id+'" type="checkbox" class="mycheckbox" checked aria-label="Checkbox for following text input" onClick="UnArchieveUser(id)"> <td> </tr>'
+                            }
+                            $('#user-archieved-row').append(listHTML)
+                            
+                            
+                        }else{console.log('Error Client Side !!! ')}
+                        
+                    },
+                    error: function(jqXHR){
+                    console.log(jqXHR)
+                    }
+                });   
+        // show user list
+        $('#user-archieved-user-body').collapse('show')
+    })
+    $('#user-archieved-mapping-link').on('click', function(){
+        //alert('user list clicked ')
+        $('#user-archieved-user-body').collapse('hide')
+        $('#user-archieved-recruitment-body').collapse('hide')
+        $('#user-archieved-training-body').collapse('hide')
+        
+        json = {"action":"archieved","entity":"mappings"}
+        listHTML = '';
+        $.ajax({
+            type: "POST",
+            url: "{{url_for('administration.admin_action')}}",
+            data: json,
+            success: function (data) {
+                //console.log(JSON.stringify(data))
+            if(data.status == 'ok'){
+                    console.log('ok')
+                    for(var i = 0; i < data.mappings.length; i++){
+                        listHTML += '<tr> <td> <li>'+ data.mappings[i].name +'</li> </td> <td class="text-center">  <input id="'+data.mappings[i].id+'" type="checkbox" class="mycheckbox" checked aria-label="Checkbox for following text input" onClick="UnArchieveMapping(id)"> <td> </tr>'
+                    }
+                    $('#mapping-archieved-row').append(listHTML)            
+                }else{console.log('Error Client Side !!! ')}
+                        
+            },
+                error: function(jqXHR){
+                console.log(jqXHR)
+                }
+            });   
+        // show user list
+        $('#user-archieved-mapping-body').collapse('show')
+    })
+    $('#user-archieved-recruitment-link').on('click', function(){
+        //alert('user list clicked ')
+        $('#user-archieved-mapping-body').collapse('hide')
+        $('#user-archieved-user-body').collapse('hide')
+        $('#user-archieved-training-body').collapse('hide')
+        // show user list
+        json = {"action":"archieved","entity":"recruitments"}
+        listHTML = '';
+        $.ajax({
+                    type: "POST",
+                    url: "{{url_for('administration.admin_action')}}",
+                    data: json,
+                    success: function (data) {
+                        //console.log(JSON.stringify(data))
+                        if(data.status == 'ok'){
+                            console.log('ok')
+                            for(var i = 0; i < data.recruitments.length; i++){
+                                listHTML += '<tr> <td> <li>'+ data.recruitments[i].name +'</li> </td> <td class="text-center">  <input id="'+data.recruitments[i].id+'" type="checkbox" class="mycheckbox" checked aria-label="Checkbox for following text input" onClick="UnArchieveRecruitment(id)"> <td> </tr>'
+                            }
+                            $('#recruitment-archieved-row').append(listHTML)
+                            
+                            
+                        }else{console.log('Error Client Side !!! ')}
+                        
+                    },
+                    error: function(jqXHR){
+                    console.log(jqXHR)
+                    }
+            }); 
+        $('#user-archieved-recruitment-body').collapse('show')
+    })
+    $('#user-archieved-training-link').on('click', function(){
+
+        $('#user-archieved-mapping-body').collapse('hide')
+        $('#user-archieved-recruitment-body').collapse('hide')
+        $('#user-archieved-user-body').collapse('hide')
+        // show user list
+        json = {"action":"archieved","entity":"trainings"}
+        listHTML = '';
+        $.ajax({
+                    type: "POST",
+                    url: "{{url_for('administration.admin_action')}}",
+                    data: json,
+                    success: function (data) {
+                        //console.log(JSON.stringify(data))
+                        if(data.status == 'ok'){
+                            console.log('ok')
+                            for(var i = 0; i < data.trainings.length; i++){
+                                listHTML += '<tr> <td> <li>'+ data.trainings[i].name +'</li> </td> <td class="text-center">  <input id="'+data.trainings[i].id+'" type="checkbox" class="mycheckbox" checked aria-label="Checkbox for following text input" onClick="UnArchieveTraining(id)"> <td> </tr>'
+                            }
+                            $('#training-archieved-row').append(listHTML)
+                                
+                        }else{console.log('Error Client Side !!! ')}
+                        
+                    },
+                    error: function(jqXHR){
+                    console.log(jqXHR)
+                    }
+            }); 
+        $('#user-archieved-training-body').collapse('show')
+    })
+        function UnArchieveUser(id){
+            UnArchieveRecord(id,'unachieve','user')
+        }
+        function UnArchieveMapping(id){
+            UnArchieveRecord(id,'unachieve','mapping')
+        }
+        function UnArchieveRecruitment(id){
+            UnArchieveRecord(id,'unachieve','recruitment')
+        }
+        function UnArchieveTraining(id){
+            UnArchieveRecord(id,'unachieve','training')
+        }
+
+
+        function UnArchieveRecord(id,action,entity){
+            json = {'id':id,'action':action,'entity':entity}
+            //console.log(json)             
+            $.ajax({
+                type: "POST",
+                url: "{{url_for('administration.admin_action')}}",
+                data: json,
+                success: function (data) {
+                    console.log('response: '+JSON.stringify(data))
+                },
+                error: function(jqXHR){
+                    console.log(jqXHR)
+                }
+            });
+        }
 
     </script>
 

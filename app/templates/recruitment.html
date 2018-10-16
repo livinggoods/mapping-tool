@@ -60,7 +60,7 @@
                           <th>Country</th>
                           <th>Status</th>
                           <th>Status</th>
-                          <th></th>
+                          <th>Proceed</th>
                         </tr>
                       </thead>
 
@@ -74,9 +74,17 @@
                           <td>{{registration.date_of_birth()}}</td>
                           <td>{{registration.feature}}</td>
                           <td>{{registration.country}}</td>
-                          <td>{{'Yes' if registration.proceed == 1 else 'No'}}</td>
+                          <td id="candidate_status">
+                              {{'Yes' if registration.proceed == 1 else 'No'}}
+                          </td>
                           <td>{{registration.to_json().interview.selected}}</td>
-                          <td><a href="/registration/{{registration.id}}">More</a></td>
+                          <td id="proceed">
+                              {% if registration.proceed == 1 %}
+                                <input id="{{registration.id}}" type="checkbox" class="mycheckbox"  checked aria-label="Checkbox for following text input" onClick="candidateSelected(this.id)">
+                              {%else%}
+                                <input id="{{registration.id}}" type="checkbox" class="mycheckbox"  aria-label="Checkbox for following text input" onClick="candidateSelected(this.id)">
+                              {% endif %}
+                          </td>
                         </tr>
                         {% endfor %}
                       </tbody>
@@ -97,6 +105,7 @@
 {% block javascript %}
 <script>
       $(document).ready(function() {
+
         var handleDataTableButtons = function() {
           if ($("#datatable-buttons").length) {
             $("#datatable-buttons").DataTable({
@@ -125,6 +134,7 @@
                   className: "btn-sm"
                 },
               ],
+              select:true,
               responsive: true
             });
           }
@@ -163,6 +173,30 @@
 
         TableManageButtons.init();
       });
+
+
+
+      function candidateSelected(candidate_id){ // selection of candidates
+                json = {"id":candidate_id}
+                $.ajax({
+                type: "POST",
+                url: "{{url_for('main.selectCandidate')}}",
+                data: json,
+                success: function (data) {
+                    console.log('Response: '+ JSON.stringify(data))
+                    if($('#candidate_status').text() == 'Yes'){
+                        $('#candidate_status').text('No')
+                    }else {
+                        $('#candidate_status').text('Yes')
+                    }
+
+                },
+                error: function(jqXHR){
+                  console.log(jqXHR)
+                }
+            });
+
+      }
     </script>
     
 {% endblock %}
@@ -186,12 +220,13 @@
     <script src="{{ url_for('static', filename='js/vfs_fonts.js') }}"></script>
 {% endblock %}
 {% block additionalcss %}
-    <link href="{{ url_for('static', filename='css/flat/green.css') }}"" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/flat/green.css') }}" rel="stylesheet">
     <!-- Datatables -->
-    <link href="{{ url_for('static', filename='css/dataTables.bootstrap.min.css') }}"" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/buttons.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/responsive.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/scroller.bootstrap.min.css') }}" rel="stylesheet">
 
 {% endblock %}
+</div>

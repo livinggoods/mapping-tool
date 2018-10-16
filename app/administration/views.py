@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request, abort, \
     current_app, jsonify, make_response, json
 from flask_login import current_user, login_required
-from ..models import User, Location, IccmComponents, Geo, ErrorLog
+from ..models import User, Location, IccmComponents, Geo, ErrorLog, Role, Mapping, Training, Recruitments
 from ..main.forms import IccmComponentForm
 from ..decorators import admin_required, permission_required
 from werkzeug.utils import secure_filename
@@ -23,11 +23,12 @@ def admin_dashboard():
 def admin_users():
     page={'title':'Users','subtitle':'Registered Users'}
     users = User.query.order_by(User.username.asc()).all()
+    roles = Role.query.all()
     usr = []
     for user in users:
-        usr.append({'name':user.name, 'email':user.email})
+        usr.append({'name':user.name, 'email':user.email, 'role':user.role_id})
     # return jsonify(users=usr)
-    return render_template('admin/users.html', page=page, users=users)
+    return render_template('admin/users.html', page=page, users=users, roles=roles)
 
 
 @administration.route('/user', methods=['POST'])
@@ -235,7 +236,7 @@ def administration_location_data():
         pagination=locations.paginate(page, per_page=current_app.config['PER_PAGE'],error_out=False)
         return render_template('admin/location_data.html',
                                endpoint='administration.administration_location_data',
-                               pagination=pagination, page=page_data)
+                               pagination=pagination, page=page_data, locations = locations)
     else:
         return jsonify(filename='none')
 
@@ -266,6 +267,21 @@ def location_administration_edit(id=None):
         form.name.data = loc.name
         form.parent.data = loc.parent
     return render_template('new_location.html', form=form)
+
+@administration.route('/locations-displays', methods=['POST'])
+def locations_display():
+    if request.data is None:
+        return jsonify({"status":"error"})
+    location_obj = Location.query.filter_by(name=str(request.form.get('name'))).first_or_404()
+    response_obj = []
+    response = {}
+    locations = Location.query.filter_by(parent=location_obj.id).all()
+    for location in locations:
+        response_obj.append({
+            'name': location.name, 'id': location.id
+        })
+    response['locations'] = response_obj
+    return jsonify(response)
 
 
 @administration.route("/errors")
@@ -306,3 +322,145 @@ def view_api_error_log(error_id):
         db.session.delete(error)
         db.session.commit()
         return redirect(url_for('administration.view_api_error_logs'))
+
+@administration.route("/other", methods=['GET', 'POST'])
+@login_required
+def view_other():
+    page_data = {
+        'title': 'Control',
+        'subtitle': 'Error Details'
+    }
+    
+    if request.method == 'GET':
+        
+        return render_template('admin/other.html',
+                               page=page_data)
+    else:
+        return jsonify({
+            'status':'Development !!!'
+        })
+
+@administration.route('/adminapi', methods=['POST'])
+def admin_action():
+    if request.method == 'POST':
+        if request.data is None:
+            return jsonify({'status':'empty'})
+        else:
+            if request.form.get('action') == 'user_records':
+                usr_objs = User.query.filter_by(archived=0).all()
+                response = {}
+                response_obj = []
+                for user in usr_objs:
+                    response_obj.append({'username':user.username,'id':user.id})
+                response['status'] = 'ok'
+                response['users'] = response_obj
+                return jsonify(response)
+            elif request.form.get('action') == 'mapping_records':
+                mapping_objs = Mapping.query.filter_by(archived=0).all()
+                response = {}
+                response_obj = []
+                for mapping in mapping_objs:
+                    response_obj.append({'name':mapping.name,'id':mapping.id})
+                response['status'] = 'ok'
+                response['mappings'] = response_obj
+                return jsonify(response)
+            elif request.form.get('action') == 'recruitment_records':
+                recruitment_objs = Recruitments.query.filter_by(archived=0).all()
+                response = {}
+                response_obj = []
+                for recruitment in recruitment_objs:
+                    response_obj.append({'name':recruitment.name,'id':recruitment.id})
+                response['status'] = 'ok'
+                response['recruitments'] = response_obj
+                return jsonify(response)
+            elif request.form.get('action') == 'training_records':
+                training_objs = Training.query.filter_by(archived=0).all()
+                response = {}
+                response_obj = []
+                for training in training_objs:
+                    response_obj.append({'name':training.training_name,'id':training.id})
+                response['status'] = 'ok'
+                response['trainings'] = response_obj
+                return jsonify(response)
+            elif request.form.get('action') == 'archieve':#achieve records
+                if request.form.get('entity') == 'user':
+                    usr_obj = User.query.filter_by(id=request.form.get('id')).first_or_404()
+                    usr_obj.archived = 1
+                    return jsonify({'status':'ok','message':'record updated !!!'})
+                elif request.form.get('entity') == 'mapping':
+                    mapping_obj = Mapping.query.filter_by(id=request.form.get('id')).first_or_404()
+                    mapping_obj.archived = 1
+                    return jsonify({'status':'ok','message':'record archieved !!!'})
+                elif request.form.get('entity') == 'recruitment':
+                    recruitment_obj = Recruitments.query.filter_by(id=request.form.get('id')).first_or_404()
+                    recruitment_obj.archived = 1
+                    return jsonify({'status':'ok','message':'record updated !!!'})
+                elif request.form.get('entity') == 'training':
+                    training_obj = Training.query.filter_by(id=request.form.get('id')).first_or_404()
+                    training_obj.archived = 1
+                    return jsonify({'status':'ok','message':'record updated !!!'})
+            elif request.form.get('action') == 'archieved':
+                if request.form.get('entity') == 'users':
+                    usr_obj = User.query.filter_by(archived=1).all()
+                    response = {}
+                    response_obj = []
+                    for recruitment in usr_obj:
+                        response_obj.append({'name':recruitment.username,'id':recruitment.id})
+                    response['status'] = 'ok'
+                    response['users'] = response_obj
+                    return jsonify(response)
+                elif request.form.get('entity') == 'mappings':
+                    mapping_obj = Mapping.query.filter_by(archived=1).all()
+                    response = {}
+                    response_obj = []
+                    for mapping in mapping_obj:
+                        response_obj.append({'name':mapping.name,'id':mapping.id})
+                    response['status'] = 'ok'
+                    response['mappings'] = response_obj
+                    return jsonify(response)
+                elif request.form.get('entity') == 'recruitments':
+                    recruitment_obj = Recruitments.query.filter_by(archived=1).all()
+                    response = {}
+                    response_obj = []
+                    for recruitment in recruitment_obj:
+                        response_obj.append({'name':recruitment.name,'id':recruitment.id})
+                    response['status'] = 'ok'
+                    response['recruitments'] = response_obj
+                    return jsonify(response)
+                elif request.form.get('entity') == 'trainings':
+                    training_obj = Training.query.filter_by(archived=1).all()
+                    response = {}
+                    response_obj = []
+                    for training in training_obj:
+                        response_obj.append({'name':training.training_name,'id':training.id})
+                    response['status'] = 'ok'
+                    response['trainings'] = response_obj
+                    return jsonify(response)
+                else: 
+                    return jsonify({'status':'Error Archieved !!!'})
+            elif request.form.get('action') == 'unachieve':#unachieve records
+                if request.form.get('entity')  == 'user':
+                    usr_obj = User.query.filter_by(id=request.form.get('id')).first_or_404()
+                    usr_obj.archived = 0
+                    return jsonify({'status':'ok','message':'record unachieved !!!'})
+                elif request.form.get('entity') == 'mapping':
+                    mapping_obj = Mapping.query.filter_by(id=request.form.get('id')).first_or_404()
+                    mapping_obj.archived = 0
+                    return jsonify({'status':'ok','message':'record unachieved !!!'})
+                elif request.form.get('entity') == 'recruitment':
+                    recruitment_obj = Recruitments.query.filter_by(id=request.form.get('id')).first_or_404()
+                    recruitment_obj.archived = 0
+                    return jsonify({'status':'ok','message':'record unachieved !!!'})
+                elif request.form.get('entity') == 'training':
+                    training_obj = Training.query.filter_by(id=request.form.get('id')).first_or_404()
+                    training_obj.archived = 0
+                    return jsonify({'status':'ok','message':'record unachieved !!!'})
+            elif request.form.get('action') == 'change_user_role':
+                role_obj = Role.query.filter_by(name = request.form.get('role')).first_or_404()
+                usr_obj = User.query.filter_by(username = request.form.get('user')).first_or_404()
+                usr_obj.role_id = role_obj.id
+                return jsonify({"status":"ok","message":"user role changed !!!"})
+            else:
+                return jsonify({'status':'no action specified'})
+    else:
+        return jsonify({'status':'get action'})

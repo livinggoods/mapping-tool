@@ -1376,3 +1376,5 @@ def save_questions(question_list):
 
 def get_training_status():
     return jsonify(training_status=[st.to_json() for st in TraineeStatus.query.filter_by(archived=0)])
+
+
