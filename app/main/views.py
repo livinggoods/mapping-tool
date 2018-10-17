@@ -6,7 +6,7 @@ import uuid
 from datetime import date, time
 from time import gmtime, strftime
 
-from flask import json, session
+from flask import json, session, abort
 from flask import (render_template, redirect, url_for, flash, jsonify)
 from flask.ext import excel
 from flask_googlemaps import Map, icons
@@ -82,7 +82,7 @@ def application_details(id):
 @main.route('/trainings', methods=['GET', 'POST'])
 @login_required
 def trainings():
-    trainings = Training.query.filter_by(archived=0)
+    trainings = Training.query.filter_by(archived=0, country=current_user.location)
     page = {'title': 'Trainings', 'subtitle': 'All trainings'}
     count = request.args.get('page', 1, type=int)
     pagination = trainings.paginate(count, per_page=current_app.config['PER_PAGE'], error_out=False)
@@ -641,7 +641,7 @@ def new_session_topic(topic_id=None):
 @main.route('/training/session_topics', methods=['GET', 'POST'])
 @login_required
 def training_session_topics():
-    topics = SessionTopic.query.filter_by(archived=0)
+    topics = SessionTopic.query.filter_by(archived=0, country=current_user.location)
     page = {'title': 'Location Data',
             'subtitle': 'List of location data'}
     count = request.args.get('page', 1, type=int)
@@ -1226,7 +1226,7 @@ def export_scoring_tool(id):
 def recruitments():
     if request.method == 'GET':
         page = {'title': 'Recruitments', 'subtitle': 'Recruitments done so far'}
-        recruitments = Recruitments.query.filter_by(archived=0).order_by(Recruitments.client_time.desc())
+        recruitments = Recruitments.query.filter_by(archived=0, country=current_user.location).order_by(Recruitments.date_added.desc())
         paging_data = request.args.get('page', 1, type=int)
         pagination = recruitments.paginate(paging_data, per_page=current_app.config['PER_PAGE'], error_out=False)
         return render_template('recruitments.html',
@@ -1355,7 +1355,7 @@ def create_mappings():
         pass
     else:
         page = {'title': 'Mappings', 'subtitle': ' Mappings'}
-        mappings = Mapping.query.all()
+        mappings = Mapping.query.filter_by(country=current_user.location, archived=0).order_by(Mapping.date_added.desc())
         inputmap = Map(
             identifier="view-side",
             lat=-1.2728,
@@ -1846,7 +1846,7 @@ def training_question_edit(id):
 def training_exams():
     page = {'title': 'Exams List', 'subtitle': 'View list of all exams'}
 
-    exams = ExamTraining.query.filter_by(archived=False).order_by(ExamTraining.id)
+    exams = ExamTraining.query.filter_by(archived=False, country=current_user.location).order_by(ExamTraining.id)
     
     pagination_count = request.args.get('page', 1, type=int)
     pagination = exams.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)

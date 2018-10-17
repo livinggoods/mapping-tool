@@ -11,6 +11,8 @@
                     </ul>
                   </li>
 
+                    {% if current_user.role_id == 2 %}
+
                   <li><a><i class="fa fa-home"></i> Administration <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{{ url_for('administration.admin_users') }}">Users</a></li>
@@ -19,6 +21,8 @@
                       <li><a href="#" id="settings"> Archieve  </a></li>
                     </ul>
                   </li>
+
+                    {% endif %}
                   <li><a><i class="fa fa-desktop"></i> Mappings <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="/mappings">Mappings</a></li>
