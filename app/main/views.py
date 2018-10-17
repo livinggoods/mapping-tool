@@ -35,26 +35,28 @@ currency = 'UGX '
 @main.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
+    if current_user.is_anonymous():
+        return redirect(url_for('auth.login'))
+    
     page = {'title': 'Home'}
-    total_registrations = Registration.query.filter_by(archived=0)
+    total_registrations = Registration.query.filter_by(archived=0, country=current_user.location)
     registrations = total_registrations.count()
 
-    total_mappings = Mapping.query.filter_by(archived=0).order_by(Mapping.client_time.desc())
+    total_mappings = Mapping.query.filter_by(archived=0, country=current_user.location).order_by(Mapping.date_added.desc())
     mapping = total_mappings.count()
     mappings = total_mappings.limit(current_app.config['POSTS_PER_PAGE']).all()
 
-    total_recruitments = Recruitments.query.filter_by(archived=0).order_by(Recruitments.client_time.desc())
+    total_recruitments = Recruitments.query.filter_by(archived=0, country=current_user.location).order_by(Recruitments.date_added.desc())
     recruitments = total_recruitments.count()
     recruitment = total_recruitments.limit(current_app.config['POSTS_PER_PAGE']).all()
 
-    trainings = Training.query.filter_by(archived=0).limit(current_app.config['POSTS_PER_PAGE']).all()
+    trainings = Training.query.filter_by(archived=0, country=current_user.location).order_by(Training.date_created.desc())
+    trainings_count = trainings.count()
+    trainings = trainings.limit(current_app.config['POSTS_PER_PAGE']).all()
 
-    villages = Village.query.filter_by(archived=0).count()
-    if current_user.is_anonymous():
-        return redirect(url_for('auth.login'))
-    else:
-        return render_template('index.html', page=page, registrations=registrations, mapping=mapping, mappings=mappings,
-                               recruitments=recruitments, villages=villages, currency=currency, trainings=trainings,
+    
+    return render_template('index.html', page=page, registrations=registrations, mapping=mapping, mappings=mappings,
+                               recruitments=recruitments, training_count=trainings_count, currency=currency, trainings=trainings,
                                recruitment=recruitment)
 
 
@@ -1038,13 +1040,13 @@ def export_scoring_tool(id):
                 subcounty.name if subcounty is not None else registration.subcounty,
                 ward.name if ward is not None else registration.ward,
                 registration.village.replace(',', ':'),
-                registration.feature.replace(',', ':'),
+                registration.feature.replace(',', ':') if registration.feature else "",
                 community_unit.name if community_unit is not None else registration.cu_name,
                 link_facility.facility_name if link_facility is not None else registration.link_facility,
                 str(registration.households),
                 "Y" if registration.english == 1 else "N",
                 registration.date_moved,
-                registration.languages.replace(',', ';'),
+                registration.languages.replace(',', ';') if registration.languages else "",
 
                 "Y" if registration.is_chv == 1 else "N",
                 "Y" if registration.is_gok_trained == 1 else "N",
@@ -1186,9 +1188,9 @@ def export_scoring_tool(id):
                 registration.subcounty,
                 registration.parish,
                 registration.village,
-                registration.feature.replace(',', ':'),
+                registration.feature.replace(',', ':') if registration.feature else "",
                 "Y" if registration.english == 1 else "N",
-                registration.languages.replace(',', ';'),
+                registration.languages.replace(',', ';') if registration.languages else "",
                 registration.date_moved,
                 "Y" if registration.brac == 1 else "N",
                 "Y" if registration.brac_chp == 1 else "N",

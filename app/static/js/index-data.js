@@ -39,7 +39,7 @@ function createChart() {
                 showInNavigator: true
             }
         },
-        credits:{href:"mailto:dkimaru@livingggoods.org", text:"David Kimaru"},
+        credits:{href:"mailto:dkimaru@livingggoods.org", text:" "},
 
         series: [{
             name:'Total Registrations',

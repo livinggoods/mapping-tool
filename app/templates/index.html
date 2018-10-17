@@ -1,452 +1,410 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="">
-            <div class="row top_tiles">
-              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <a href="{{url_for('main.create_mappings')}}">
-                  <div class="tile-stats">
-                    <div class="icon"><i class="fa fa-map-marker"></i></div>
-                    <div class="count">{{mapping}}</div>
-                    <a href="{{url_for('main.create_mappings')}}"> <h3>Total Mappings</h3></a>
-                    <p>Total Mappings done so far</p>
-                  </div>
+    <div class="">
+        <div class="row top_tiles">
+            <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <a href="{{ url_for('main.create_mappings') }}">
+                    <div class="tile-stats">
+                        <div class="icon"><i class="fa fa-map-marker"></i></div>
+                        <div class="count">{{ mapping }}</div>
+                        <a href="{{ url_for('main.create_mappings') }}"><h3>Total Mappings</h3></a>
+                        <p>Total Mappings done so far</p>
+                    </div>
                 </a>
-              </div>
-              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                 <a href="{{url_for('main.recruitments')}}">
-                  <div class="tile-stats">
-                    <div class="icon"><i class="fa fa-comments-o"></i></div>
-                    <div class="count">{{recruitments}}</div>
-                    <h3>Recruitments</h3>
-                    <p>Total recruitments done</p>
-                  </div>
+            </div>
+            <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <a href="{{ url_for('main.recruitments') }}">
+                    <div class="tile-stats">
+                        <div class="icon"><i class="fa fa-list-ol"></i></div>
+                        <div class="count">{{ recruitments }}</div>
+                        <h3>Recruitments</h3>
+                        <p>Total recruitments done</p>
+                    </div>
                 </a>
-              </div>
-              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            </div>
+            <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
-                  <div class="icon"><i class="fa fa-list-ol"></i></div>
-                  <div class="count">{{registrations}}</div>
-                  <h3>Registrations</h3>
-                  <p>Total Registrations done.</p>
+                    <div class="icon"><i class="fa fa-users"></i></div>
+                    <div class="count">{{ registrations }}</div>
+                    <h3>Registrations</h3>
+                    <p>Total Registrations done.</p>
                 </div>
-              </div>
-              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            </div>
+            <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
-                  <div class="icon"><i class="fa fa-object-group"></i></div>
-                  <div class="count">{{villages}}</div>
-                  <h3>Villages Mapped</h3>
-                  <p>Villages mapped so far.</p>
+                    <div class="icon"><i class="fa fa-graduation-cap"></i></div>
+                    <div class="count">{{ training_count }}</div>
+                    <h3>Trainings</h3>
+                    <p>Trainings done so far.</p>
                 </div>
-              </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Recruitments Summary
+                            <small>Registrations per recruitment</small>
+                        </h2>
+                        <div class="filter">
+                            <div id="reportrange" class="pull-right"
+                                 style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                <span>November 21, 2016 - December 21, 2016</span> <b class="caret"></b>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="col-md-9 col-sm-12 col-xs-12">
+                            <div class="demo-container">
+                                <div id="placeholder33x" class="demo-placeholder"><i
+                                        class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                                    <span class="sr-only">Loading...</span></div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3 col-sm-12 col-xs-12">
+                            <div>
+                                <div class="x_title">
+                                    <h2>Recent Recruitments</h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <ul class="list-group">
+                                    {% for r in recruitment %}
+                                        <li class="list-group-item">
+                                            <a href="{{ url_for('main.recruitment', id=r.id) }}">
+                                                <div class="">
+                                                    <h4>{{ r.name }}</h4>
+                                                    <small>{{ r.date_added.strftime("%B %d, %Y") }} </small>
+                                                    <span class="badge pull-right">{{ r.to_json().data.count }} registrations</span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Mapping
+                            <small>Latest Mappings</small>
+                        </h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        {% for m in mappings %}
+                            <article class="media event">
+                                <a class="pull-left date">
+                                    {% if m.date_added %}
+                                        <p class="month">{{ m.date_added.strftime("%B") }}</p>
+                                        <p class="day">{{ m.date_added.strftime("%d") }} </p>
+                                    {% else %}<p class="month">{{ m.date_added }}</p>
+                                        <p class="day">{{ m.date_added }} </p>{% endif %}
+                                </a>
+                                <div class="media-body">
+                                    <a class="title"
+                                       href="{{ url_for('main.get_mapping_data', id=m.id) }}">{{ m.name }}</a>
+                                    <p>{{ m.contact_person }}</p>
+                                </div>
+                            </article>
+                        {% endfor %}
+
+                    </div>
+                </div>
             </div>
 
-            <div class="row">
-              <div class="col-md-12">
+            <div class="col-md-4">
                 <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Recruitments Summary <small>Registrations per recruitment</small></h2>
-                    <div class="filter">
-                      <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
-                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                        <span>November 21, 2016 - December 21, 2016</span> <b class="caret"></b>
-                      </div>
+                    <div class="x_title">
+                        <h2>Latest Recruitments
+                            <small> Recent recruitments</small>
+                        </h2>
+                        <div class="clearfix"></div>
                     </div>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    <div class="col-md-9 col-sm-12 col-xs-12">
-                      <div class="demo-container">
-                        <div id="placeholder33x" class="demo-placeholder"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-                            <span class="sr-only">Loading...</span></div>
-                      </div>
-
+                    <div class="x_content">
+                        {% for r in recruitment %}
+                            <article class="media event">
+                                <a class="pull-left date">
+                                    <p class="month">{{ r.date_added.strftime("%B") }} </p>
+                                    <p class="day">{{ r.date_added.strftime("%d") }} </p>
+                                </a>
+                                <div class="media-body">
+                                    <a class="title" href="#">{{ r.title }}</a>
+                                    <p>{{ r.name }}<br>{{ r.county }} {{ r.district }}, {{ r.country_name() }}<br>
+                                        <small>{{ r.owner.name }}</small>
+                                    </p>
+                                </div>
+                            </article>
+                        {% endfor %}
                     </div>
-
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                      <div>
-                        <div class="x_title">
-                          <h2>Recent Recruitments</h2>
-                          <ul class="nav navbar-right panel_toolbox">
-                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                            <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                              <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Settings 1</a>
-                                </li>
-                                <li><a href="#">Settings 2</a>
-                                </li>
-                              </ul>
-                            </li>
-                            <li><a class="close-link"><i class="fa fa-close"></i></a>
-                            </li>
-                          </ul>
-                          <div class="clearfix"></div>
-                        </div>
-                        <ul class="list-unstyled top_profiles scroll-view">
-                          {% for r in recruitment %}
-                            <li class="media event">
-                              <a class="pull-left border-aero profile_thumb">
-                                <i class="fa fa-user aero"></i>
-                              </a>
-                              <div class="media-body">
-                                <a class="title" href="{{url_for('main.recruitment', id=r.id)}}">{{r.name}}</a>
-                                <p><strong>{{r.to_json().data.count}} registrations</strong></p>
-                                <p> <small>{{r.date_added.strftime("%B %d, %Y")}} </small>
-                                </p>
-                              </div>
-                            </li>
-                          {% endfor %}
-                        </ul>
-                      </div>
-                    </div>
-
-                  </div>
                 </div>
-              </div>
             </div>
 
-            <div class="row" id="sales-summary">
-              <div class="col-md-12">
+            <div class="col-md-4">
                 <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Weekly Summary <small>Sales Data</small></h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-
-                    <div class="row" style="border-bottom: 1px solid #E0E0E0; padding-bottom: 5px; margin-bottom: 5px;">
-                      <div class="col-md-7" style="overflow:hidden;">
-                        <span class="sparkline_one" style="height: 160px; padding: 10px 25px;">
-                                      <canvas width="200" height="60" style="display: inline-block; vertical-align: top; width: 94px; height: 30px;"></canvas>
-                                  </span>
-                        <h4 style="margin:18px">Weekly sales progress</h4>
-                      </div>
-
-                      <div class="col-md-5">
-                        <div class="row" style="text-align: center;">
-                          <div class="col-md-4">
-                            <canvas id="canvas1i" height="110" width="110" style="margin: 5px 10px 10px 0"></canvas>
-                            <h4 style="margin:0">Bounce Rates</h4>
-                          </div>
-                          <div class="col-md-4">
-                            <canvas id="canvas1i2" height="110" width="110" style="margin: 5px 10px 10px 0"></canvas>
-                            <h4 style="margin:0">New Traffic</h4>
-                          </div>
-                          <div class="col-md-4">
-                            <canvas id="canvas1i3" height="110" width="110" style="margin: 5px 10px 10px 0"></canvas>
-                            <h4 style="margin:0">Device Share</h4>
-                          </div>
-                        </div>
-                      </div>
+                    <div class="x_title">
+                        <h2>Latest Trainings
+                            <small>Trainings</small>
+                        </h2>
+                        <div class="clearfix"></div>
                     </div>
-                  </div>
+                    <div class="x_content">
+                        {% for t in trainings %}
+                            <article class="media event">
+                                <a class="pull-left date">
+                                    <p class="month">{{ t.date_created.strftime("%B") }}</p>
+                                    <p class="day">{{ t.date_created.strftime("%d") }}</p>
+                                </a>
+                                <div class="media-body">
+                                    <a class="title" href="#">{{ t.training_name }}</a>
+                                    <p>{{ t.county.name }} {{ t.subcounty.name }}</p>
+                                    <small>{{ t.user.name }}</small>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
                 </div>
-              </div>
             </div>
-
-
-
-            <div class="row">
-              <div class="col-md-4">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Mapping<small>Latest Mappings</small></h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    {% for m in mappings %}
-                      <article class="media event">
-                        <a class="pull-left date">
-                          <p class="month">{{m.date_added.strftime("%B")}}</p>
-                          <p class="day">{{m.date_added.strftime("%d")}} </p>
-                        </a>
-                        <div class="media-body">
-                          <a class="title" href="{{ url_for('main.get_mapping_data', id=m.id) }}">{{m.name}}</a>
-                          <p>{{m.contact_person}}</p>
-                        </div>
-                      </article>
-                    {% endfor %}
-
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Latest Recruitments <small> Recent recruitments</small></h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    {% for r in recruitment %}
-                      <article class="media event">
-                        <a class="pull-left date">
-                          <p class="month">{{r.date_added.strftime("%B")}} </p>
-                          <p class="day">{{r.date_added.strftime("%d")}} </p>
-                        </a>
-                        <div class="media-body">
-                          <a class="title" href="#">{{r.title}}</a>
-                          <p>{{r.name}}<br>{{r.county}} {{r.district}}, {{r.country_name()}}<br>
-                            <small>{{r.owner.name}}</small>
-                          </p>
-                        </div>
-                      </article>
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="x_panel">
-                  <div class="x_title">
-                    <h2>Latest Trainings<small>Trainings</small></h2>
-                    <div class="clearfix"></div>
-                  </div>
-                  <div class="x_content">
-                    {% for t in trainings %}
-                      <article class="media event">
-                        <a class="pull-left date">
-                          <p class="month">{{t.date_created.strftime("%B")}}</p>
-                          <p class="day">{{t.date_created.strftime("%d")}}</p>
-                        </a>
-                        <div class="media-body">
-                          <a class="title" href="#">{{t.training_name}}</a>
-                          <p>{{t.county.name}} {{t.subcounty.name}}</p>
-                          <small>{{t.user.name}}</small>
-                        </div>
-                      </article>
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascript %}
 
     <!-- jQuery Sparklines -->
     <script>
-      $(document).ready(function() {
-        $(".sparkline_one").sparkline([2, 4, 3, 4, 5, 4, 5, 4, 3, 4, 5, 6, 4, 5, 6, 3, 5, 4, 5, 4, 5, 4, 3, 4, 5, 6, 7, 5, 4, 3, 5, 6], {
-          type: 'bar',
-          height: '125',
-          barWidth: 13,
-          colorMap: {
-            '7': '#a1a1a1'
-          },
-          barSpacing: 2,
-          barColor: '#26B99A'
-        });
+        $(document).ready(function () {
+            $(".sparkline_one").sparkline([2, 4, 3, 4, 5, 4, 5, 4, 3, 4, 5, 6, 4, 5, 6, 3, 5, 4, 5, 4, 5, 4, 3, 4, 5, 6, 7, 5, 4, 3, 5, 6], {
+                type: 'bar',
+                height: '125',
+                barWidth: 13,
+                colorMap: {
+                    '7': '#a1a1a1'
+                },
+                barSpacing: 2,
+                barColor: '#26B99A'
+            });
 
-        $(".sparkline11").sparkline([2, 4, 3, 4, 5, 4, 5, 4, 3, 4, 6, 2, 4, 3, 4, 5, 4, 5, 4, 3], {
-          type: 'bar',
-          height: '40',
-          barWidth: 8,
-          colorMap: {
-            '7': '#a1a1a1'
-          },
-          barSpacing: 2,
-          barColor: '#26B99A'
-        });
+            $(".sparkline11").sparkline([2, 4, 3, 4, 5, 4, 5, 4, 3, 4, 6, 2, 4, 3, 4, 5, 4, 5, 4, 3], {
+                type: 'bar',
+                height: '40',
+                barWidth: 8,
+                colorMap: {
+                    '7': '#a1a1a1'
+                },
+                barSpacing: 2,
+                barColor: '#26B99A'
+            });
 
-        $(".sparkline22").sparkline([2, 4, 3, 4, 7, 5, 4, 3, 5, 6, 2, 4, 3, 4, 5, 4, 5, 4, 3, 4, 6], {
-          type: 'line',
-          height: '40',
-          width: '200',
-          lineColor: '#26B99A',
-          fillColor: '#ffffff',
-          lineWidth: 3,
-          spotColor: '#34495E',
-          minSpotColor: '#34495E'
+            $(".sparkline22").sparkline([2, 4, 3, 4, 7, 5, 4, 3, 5, 6, 2, 4, 3, 4, 5, 4, 5, 4, 3, 4, 6], {
+                type: 'line',
+                height: '40',
+                width: '200',
+                lineColor: '#26B99A',
+                fillColor: '#ffffff',
+                lineWidth: 3,
+                spotColor: '#34495E',
+                minSpotColor: '#34495E'
+            });
         });
-      });
     </script>
     <!-- /jQuery Sparklines -->
 
     <!-- Doughnut Chart -->
     <script>
-      $(document).ready(function() {
-        var canvasDoughnut,
-            options = {
-              legend: false,
-              responsive: false
-            };
+        $(document).ready(function () {
+            var canvasDoughnut,
+                options = {
+                    legend: false,
+                    responsive: false
+                };
 
-        new Chart(document.getElementById("canvas1i"), {
-          type: 'doughnut',
-          tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-          data: {
-            labels: [
-              "Symbian",
-              "Blackberry",
-              "Other",
-              "Android",
-              "IOS"
-            ],
-            datasets: [{
-              data: [15, 20, 30, 10, 30],
-              backgroundColor: [
-                "#BDC3C7",
-                "#9B59B6",
-                "#E74C3C",
-                "#26B99A",
-                "#3498DB"
-              ],
-              hoverBackgroundColor: [
-                "#CFD4D8",
-                "#B370CF",
-                "#E95E4F",
-                "#36CAAB",
-                "#49A9EA"
-              ]
+            new Chart(document.getElementById("canvas1i"), {
+                type: 'doughnut',
+                tooltipFillColor: "rgba(51, 51, 51, 0.55)",
+                data: {
+                    labels: [
+                        "Symbian",
+                        "Blackberry",
+                        "Other",
+                        "Android",
+                        "IOS"
+                    ],
+                    datasets: [{
+                        data: [15, 20, 30, 10, 30],
+                        backgroundColor: [
+                            "#BDC3C7",
+                            "#9B59B6",
+                            "#E74C3C",
+                            "#26B99A",
+                            "#3498DB"
+                        ],
+                        hoverBackgroundColor: [
+                            "#CFD4D8",
+                            "#B370CF",
+                            "#E95E4F",
+                            "#36CAAB",
+                            "#49A9EA"
+                        ]
 
-            }]
-          },
-          options: options
+                    }]
+                },
+                options: options
+            });
+
+            new Chart(document.getElementById("canvas1i2"), {
+                type: 'doughnut',
+                tooltipFillColor: "rgba(51, 51, 51, 0.55)",
+                data: {
+                    labels: [
+                        "Symbian",
+                        "Blackberry",
+                        "Other",
+                        "Android",
+                        "IOS"
+                    ],
+                    datasets: [{
+                        data: [15, 20, 30, 10, 30],
+                        backgroundColor: [
+                            "#BDC3C7",
+                            "#9B59B6",
+                            "#E74C3C",
+                            "#26B99A",
+                            "#3498DB"
+                        ],
+                        hoverBackgroundColor: [
+                            "#CFD4D8",
+                            "#B370CF",
+                            "#E95E4F",
+                            "#36CAAB",
+                            "#49A9EA"
+                        ]
+
+                    }]
+                },
+                options: options
+            });
+
+            new Chart(document.getElementById("canvas1i3"), {
+                type: 'doughnut',
+                tooltipFillColor: "rgba(51, 51, 51, 0.55)",
+                data: {
+                    labels: [
+                        "Symbian",
+                        "Blackberry",
+                        "Other",
+                        "Android",
+                        "IOS"
+                    ],
+                    datasets: [{
+                        data: [15, 20, 30, 10, 30],
+                        backgroundColor: [
+                            "#BDC3C7",
+                            "#9B59B6",
+                            "#E74C3C",
+                            "#26B99A",
+                            "#3498DB"
+                        ],
+                        hoverBackgroundColor: [
+                            "#CFD4D8",
+                            "#B370CF",
+                            "#E95E4F",
+                            "#36CAAB",
+                            "#49A9EA"
+                        ]
+
+                    }]
+                },
+                options: options
+            });
         });
-
-        new Chart(document.getElementById("canvas1i2"), {
-          type: 'doughnut',
-          tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-          data: {
-            labels: [
-              "Symbian",
-              "Blackberry",
-              "Other",
-              "Android",
-              "IOS"
-            ],
-            datasets: [{
-              data: [15, 20, 30, 10, 30],
-              backgroundColor: [
-                "#BDC3C7",
-                "#9B59B6",
-                "#E74C3C",
-                "#26B99A",
-                "#3498DB"
-              ],
-              hoverBackgroundColor: [
-                "#CFD4D8",
-                "#B370CF",
-                "#E95E4F",
-                "#36CAAB",
-                "#49A9EA"
-              ]
-
-            }]
-          },
-          options: options
-        });
-
-        new Chart(document.getElementById("canvas1i3"), {
-          type: 'doughnut',
-          tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-          data: {
-            labels: [
-              "Symbian",
-              "Blackberry",
-              "Other",
-              "Android",
-              "IOS"
-            ],
-            datasets: [{
-              data: [15, 20, 30, 10, 30],
-              backgroundColor: [
-                "#BDC3C7",
-                "#9B59B6",
-                "#E74C3C",
-                "#26B99A",
-                "#3498DB"
-              ],
-              hoverBackgroundColor: [
-                "#CFD4D8",
-                "#B370CF",
-                "#E95E4F",
-                "#36CAAB",
-                "#49A9EA"
-              ]
-
-            }]
-          },
-          options: options
-        });
-      });
     </script>
     <!-- /Doughnut Chart -->
 
     <!-- bootstrap-daterangepicker -->
     <script type="text/javascript">
-      $(document).ready(function() {
+        $(document).ready(function () {
 
-        var cb = function(start, end, label) {
-          console.log(start.toISOString(), end.toISOString(), label);
-          $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        };
+            var cb = function (start, end, label) {
+                console.log(start.toISOString(), end.toISOString(), label);
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            };
 
-        var optionSet1 = {
-          startDate: moment().subtract(29, 'days'),
-          endDate: moment(),
-          minDate: '01/01/2012',
-          maxDate: '12/31/2015',
-          dateLimit: {
-            days: 60
-          },
-          showDropdowns: true,
-          showWeekNumbers: true,
-          timePicker: false,
-          timePickerIncrement: 1,
-          timePicker12Hour: true,
-          ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-          },
-          opens: 'left',
-          buttonClasses: ['btn btn-default'],
-          applyClass: 'btn-small btn-primary',
-          cancelClass: 'btn-small',
-          format: 'MM/DD/YYYY',
-          separator: ' to ',
-          locale: {
-            applyLabel: 'Submit',
-            cancelLabel: 'Clear',
-            fromLabel: 'From',
-            toLabel: 'To',
-            customRangeLabel: 'Custom',
-            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            firstDay: 1
-          }
-        };
-        $('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
-        $('#reportrange').daterangepicker(optionSet1, cb);
-        $('#reportrange').on('show.daterangepicker', function() {
-          console.log("show event fired");
+            var optionSet1 = {
+                startDate: moment().subtract(29, 'days'),
+                endDate: moment(),
+                minDate: '01/01/2012',
+                maxDate: '12/31/2015',
+                dateLimit: {
+                    days: 60
+                },
+                showDropdowns: true,
+                showWeekNumbers: true,
+                timePicker: false,
+                timePickerIncrement: 1,
+                timePicker12Hour: true,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                opens: 'left',
+                buttonClasses: ['btn btn-default'],
+                applyClass: 'btn-small btn-primary',
+                cancelClass: 'btn-small',
+                format: 'MM/DD/YYYY',
+                separator: ' to ',
+                locale: {
+                    applyLabel: 'Submit',
+                    cancelLabel: 'Clear',
+                    fromLabel: 'From',
+                    toLabel: 'To',
+                    customRangeLabel: 'Custom',
+                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    firstDay: 1
+                }
+            };
+            $('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+            $('#reportrange').daterangepicker(optionSet1, cb);
+            $('#reportrange').on('show.daterangepicker', function () {
+                console.log("show event fired");
+            });
+            $('#reportrange').on('hide.daterangepicker', function () {
+                console.log("hide event fired");
+            });
+            $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+                console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
+            });
+            $('#reportrange').on('cancel.daterangepicker', function (ev, picker) {
+                console.log("cancel event fired");
+            });
+            $('#options1').click(function () {
+                $('#reportrange').data('daterangepicker').setOptions(optionSet1, cb);
+            });
+            $('#options2').click(function () {
+                $('#reportrange').data('daterangepicker').setOptions(optionSet2, cb);
+            });
+            $('#destroy').click(function () {
+                $('#reportrange').data('daterangepicker').remove();
+            });
         });
-        $('#reportrange').on('hide.daterangepicker', function() {
-          console.log("hide event fired");
-        });
-        $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-          console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
-        });
-        $('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
-          console.log("cancel event fired");
-        });
-        $('#options1').click(function() {
-          $('#reportrange').data('daterangepicker').setOptions(optionSet1, cb);
-        });
-        $('#options2').click(function() {
-          $('#reportrange').data('daterangepicker').setOptions(optionSet2, cb);
-        });
-        $('#destroy').click(function() {
-          $('#reportrange').data('daterangepicker').remove();
-        });
-      });
     </script>{
-{% include 'partials/highcharts.html' %}
-<script src="/static/js/index-data.js"></script>
+    {% include 'partials/highcharts.html' %}
+    <script src="/static/js/index-data.js"></script>
 {% endblock %}
