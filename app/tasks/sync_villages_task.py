@@ -75,6 +75,8 @@ class SyncVillagesTask:
                 saved_record.airtel_signal = village.get('airtel_signal')
                 saved_record.orange_signal = village.get('orange_signal')
                 saved_record.act_stock = village.get('act_stock')
+                
+                saved_record.synced = 1
             else:
                 saved_record = Village(
                     id=village.get('id'),
@@ -132,6 +134,8 @@ class SyncVillagesTask:
                     orange_signal=village.get('orange_signal'),
                     act_stock=village.get('act_stock'),
                 )
+                
+                saved_record.synced = 1
             db.session.add(saved_record)
             results.append(saved_record.to_json())
         db.session.commit()

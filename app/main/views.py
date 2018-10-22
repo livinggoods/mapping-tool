@@ -827,7 +827,7 @@ def mapping_village_data(id):
                 village.area_chief_name,
                 village.area_chief_phone,
                 village.user.name,
-                datetime.fromtimestamp(village.client_time / 1000).strftime('%Y-%m-%d %H:%M:%S'),
+                datetime.fromtimestamp(village.client_time / 1000).strftime('%Y-%m-%d %H:%M:%S') if village.client_time is not None else '',
                 village.lat,
                 village.lon,
                 village.distancetobranch,

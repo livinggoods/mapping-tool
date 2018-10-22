@@ -551,7 +551,8 @@ class Village(db.Model):
         'safaricom_signal':self.safaricom_signal,
         'airtel_signal':self.airtel_signal,
         'orange_signal':self.orange_signal,
-        'act_stock':self.act_stock
+        'act_stock':self.act_stock,
+        'dateadded': self.client_time
       }
       return json_record
 
