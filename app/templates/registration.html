@@ -17,7 +17,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="clearfix"></div>
 
             <div class="row">
@@ -76,7 +76,7 @@
                           <p>Math</p>
                           <div class="progress progress_sm">
                             <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{(exam.math / 10 ) * 100 if exam else 0}} "></div>
-                          
+
                           </div>
                         </li>
                         <li>
@@ -167,7 +167,7 @@
                                         </div>
                                       </li>
                                   {% endif %}
-                                  
+
                                   <li>
                                     <div class="img-div"><i class="fa fa-venus-mars avatar font-big"> </i></div>
                                     <div class="message_wrapper">
@@ -226,7 +226,8 @@
                                     <div class="message_wrapper">
                                       <h4 class="heading">Sub-county</h4>
                                       <blockquote class="message">{% if registration.subcounty != "" %}
-                                        {{registration.subcounty}}
+
+                                        {{ subcounty_name }}
                                       {% else %}
                                         &nbsp;
                                       {% endif %}</blockquote>
@@ -248,7 +249,7 @@
                                     <div class="message_wrapper">
                                       <h4 class="heading">Village</h4>
                                       <blockquote class="message">{% if registration.village != "" %}
-                                        {{registration.village}}
+                                        {{ village_name }}
                                       {% else %}
                                         &nbsp;
                                       {% endif %}</blockquote>
@@ -305,7 +306,7 @@
                                           <h4 class="heading">Has worked with BRAC</h4>
                                           <blockquote class="message">{% if registration.brac == 1 %}
                                             Yes<br /> As BRAC CHP?
-                                            {{ 'Yes' if registration.brac_chp == 1 else 'No' }} 
+                                            {{ 'Yes' if registration.brac_chp == 1 else 'No' }}
                                           {% else %}
                                             No
                                           {% endif %}</blockquote>
@@ -525,7 +526,7 @@
                                             <div class="message_wrapper">
                                               <h4 class="heading">Parish</h4>
                                               <blockquote class="message">{% if registration.parish != "" %}
-                                                {{registration.parish}}
+                                                {{parish_name}}
                                               {% else %}
                                                 &nbsp;
                                               {% endif %}</blockquote>
@@ -643,6 +644,3 @@
     <link href="{{ url_for('static', filename='css/scroller.bootstrap.min.css') }}" rel="stylesheet">
 
 {% endblock %}
-
-
-

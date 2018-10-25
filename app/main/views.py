@@ -37,7 +37,7 @@ currency = 'UGX '
 def index():
     if current_user.is_anonymous():
         return redirect(url_for('auth.login'))
-    
+
     page = {'title': 'Home'}
     total_registrations = Registration.query.filter_by(archived=0, country=current_user.location)
     registrations = total_registrations.count()
@@ -54,7 +54,7 @@ def index():
     trainings_count = trainings.count()
     trainings = trainings.limit(current_app.config['POSTS_PER_PAGE']).all()
 
-    
+
     return render_template('index.html', page=page, registrations=registrations, mapping=mapping, mappings=mappings,
                                recruitments=recruitments, training_count=trainings_count, currency=currency, trainings=trainings,
                                recruitment=recruitment)
@@ -75,9 +75,18 @@ def application_details(id):
         interview = Interview.query.filter_by(applicant=id).first()
         exam = Exam.query.filter_by(applicant=id).first()
         district_name = ""
+        village_name = ""
+        subcounty_name = ""
+        parish_name = ""
         if a.district:
             district_name = Location.query.filter_by(id=a.district).first().name
-        return render_template('registration.html', exam=exam, dob=dob,
+        if a.parish:
+            parish_name = Parish.query.filter_by(id=a.parish).first().name
+        if a.subcounty:
+            subcounty_name = Location.query.filter_by(id=a.subcounty).first().name
+        if a.village:
+            village_name = Village.query.filter_by(id=a.village).first().village_name
+        return render_template('registration.html', exam=exam, dob=dob,village_name=village_name,parish_name=parish_name,subcounty_name=subcounty_name,
                                page=page, interview=interview, registration=a, age=age, district_name = district_name)
 
 
@@ -304,9 +313,9 @@ def exam_analysis(training_id, training_exam_id):
         'title': 'Exam Analysis',
         'subtitle': 'Exam analysis'
     }
-    
+
     exam_results = ExamResult.query.filter_by(training_exam_id=training_exam_id)
-    
+
     return render_template('training_exam_analysis.html',
                            page=page,
                            exam_results=json.dumps([asdict(exam_result) for exam_result in exam_results]).replace("'", "\\'"),
@@ -747,6 +756,7 @@ def mapping_village_data(id):
             "Parish",
             "Village/zone/cell",
             "Village Ranking",
+            "Village UUID",
             "Index Sum",
             "CHPs to recruit",
             "Cumulative CHPs",
@@ -821,6 +831,7 @@ def mapping_village_data(id):
                 village.parish.name if village != "" else "",
                 village.village_name if village != "" else "",
                 "Ranking not found",
+                village.id,
                 village.village_index_score(),
                 village.chps_to_recruit(),
                 cumulative_chps,
@@ -870,8 +881,7 @@ def mapping_village_data(id):
                 village.nameofngodoingmhealth,
                 village.mtn_signal,
                 village.mtn_connectivity_score(),
-                village.comment,
-                village.id
+                village.comment
             ]
             csv_data.append(rowdata)
         ranks.sort(reverse=True)
@@ -1094,7 +1104,9 @@ def export_scoring_tool(id):
             'District',
             'Subcounty',
             'Parish',
-            'Village/zone/cell',
+            'No. CHP',
+            'Village Name',
+            'Village Uuid',
             'Landmark',
             'Read/Speak English',
             'Other Languages',
@@ -1156,6 +1168,14 @@ def export_scoring_tool(id):
             comment = ""
             canjoin = ""
             selected = ""
+            no_of_chp = ""
+            village_name = ""
+            if registration.village is None:
+                no_of_chp = ""
+            else:
+                village_obj = Village.query.filter_by(id = registration.village).first()
+                no_of_chp = village_obj.chps_to_recruit()
+                village_name = village_obj.village_name
 
             if interview:
                 user = str(interview.user.name)
@@ -1187,6 +1207,8 @@ def export_scoring_tool(id):
                 registration.district,
                 registration.subcounty,
                 registration.parish,
+                no_of_chp,
+                village_name,
                 registration.village,
                 registration.feature.replace(',', ':') if registration.feature else "",
                 "Y" if registration.english == 1 else "N",
@@ -1783,18 +1805,18 @@ def training_question_edit(id):
     else:
         try:
             data = request.json.get('question', None)
-            
+
             if not data:
                 return jsonify(status=False, message="Invalid request"), 400
-        
+
             question = Question.query.filter_by(id=data.get('id', None)).first_or_404()
             if data.get('question', None):
                 question.question = data.get('question')
             if data.get('allocated_marks', None):
                 question.allocated_marks = data.get('allocated_marks')
-                
+
             # db.session.merge(question)
-            
+
             if data.get('choices', None):
                 new_choices = data.get('choices')
                 new_choices_ids = [c.get('id') for c in new_choices if c.get('id') is not None]
@@ -1802,7 +1824,7 @@ def training_question_edit(id):
                 choices_to_delete = [c for c in existing_choices if c.id not in new_choices_ids]
                 for c in choices_to_delete:
                     db.session.delete(c)
-                
+
                 for choice in new_choices:
                     id = choice.get('id', None)
                     new_question_choice = QuestionChoice(
@@ -1815,7 +1837,7 @@ def training_question_edit(id):
                         date_created=choice.get('date_created'),
                         archived=choice.get('archived'))
                     db.session.merge(new_question_choice) if id is not None else db.session.add(new_question_choice)
-                    
+
             if data.get('topics', None):
                 new_topics = data.get('topics')
                 print(new_topics)
@@ -1833,13 +1855,13 @@ def training_question_edit(id):
                             session_topic_id=t
                         )
                         db.session.add(new_question_topic)
-                        
+
             db.session.commit()
-            
+
             return jsonify(status=True, message='Saved successfully'), 200
-            
+
         except Exception as e:
-            
+
             return jsonify(status=False, message='An error occurred while processing your request. Please try again'), 500
 
 
@@ -1849,7 +1871,7 @@ def training_exams():
     page = {'title': 'Exams List', 'subtitle': 'View list of all exams'}
 
     exams = ExamTraining.query.filter_by(archived=False, country=current_user.location).order_by(ExamTraining.id)
-    
+
     pagination_count = request.args.get('page', 1, type=int)
     pagination = exams.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)
     return render_template('training_exams.html',
@@ -1876,7 +1898,7 @@ def training_exam_edit(id):
     page = {'title': 'Edit Exam', 'subtitle': 'Edit Exam'}
     exam =  ExamTraining.query.filter_by(id=id).first_or_404()
     exam = exam_with_questions_to_dict(exam)
-    
+
     return render_template('training_exam_edit.html',
                            title='Edit Exam',
                            page=page,
@@ -1891,7 +1913,7 @@ def exam_training_save():
         if not request.json:
             return jsonify(status=False, message="Invalid request"), 400
         data = request.json
-        
+
         #in order to save, we will not allow deleting the exams (just in case there are trainees who have taken the exam
         training_id = request.json.get('training_id')
         exams = request.json.get('exams')
@@ -1918,23 +1940,23 @@ def exam_training_save():
                 db.session.add(training_exam)
                 updated.append(exam)
             db.session.commit()
-            
+
         return jsonify(added=added, updated=updated)
-        
+
     except Exception as e:
         print e
         return jsonify(status=False, message='Error has occurred while saving. Please try again', e=e.message), 500
 
-        
+
 @main.route('/training/exam/save', methods=['POST'])
 def training_exam_save():
     try:
-        
+
         if not request.json:
             return jsonify(status=False, message="Invalid request"), 400
-        
+
         data = request.json
-        
+
         id = data.get('id', None)
         title = data.get('title', None)
         country = data.get('country', None)
@@ -1943,10 +1965,10 @@ def training_exam_save():
         questions = data.get('questions', None)
         is_certification = data.get('is_certification', False)
         certification_type = data.get('certification_type', None)
-        
+
         if not title or not questions:
             return jsonify(status=False, message="Invalid request"), 400
-        
+
         exam = ExamTraining(
             id=id,
             title=title,
@@ -1955,10 +1977,10 @@ def training_exam_save():
             passmark=passmark,
             certification_type_id=certification_type if is_certification else None
         )
-        
+
         db.session.merge(exam) if id is not None else db.session.add(exam)
         db.session.commit()
-        
+
         existing_questions = ExamQuestion.query.filter_by(exam_id=exam.id)
         existing_questions_ids = [q.question_id for q in existing_questions]
         new_question_ids = [q.get("id", None) for q in questions if q.get("id", None)]
@@ -1966,7 +1988,7 @@ def training_exam_save():
             if q.id not in new_question_ids:
                 db.session.delete(q)
                 db.session.commit()
-                
+
         for question in questions:
             question_id = question.get("id", None)
             if id not in existing_questions_ids:
@@ -1979,21 +2001,21 @@ def training_exam_save():
                     country=exam.country,
                     archived=False
                 )
-                
+
                 db.session.add(exam_question)
             else:
                 exam_question = ExamQuestion.query.filter_by(exam_id=exam.id, question_id=question_id).first()
                 exam_question.weight = question.get('weight')
                 exam_question.allocated_marks = question.get('allocated_marks')
-                
+
         db.session.commit()
-        
+
         return jsonify(status=True, message="Saved successfully"), 200
-        
+
     except Exception as e:
         print e
         return jsonify(status=False, message='An unexpected error has occurred. Please try again'), 500
-    
+
 @main.route('/training/roles/add', methods=['GET', 'POST'])
 @main.route('/training/roles/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -2042,14 +2064,14 @@ def add_training_roles(id=None):
         title=title,
         action=action
     )
-    
+
 @main.route('/training/roles', methods=['GET', 'POST'])
 @login_required
 def training_roles():
     page = {'title': 'Training Roles', 'subtitle': 'View all roles'}
-    
+
     roles = TrainingRoles.query.filter_by(archived=0)
-    
+
     pagination_count = request.args.get('page', 1, type=int)
     pagination = roles.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)
     return render_template('listing.html',
@@ -2087,17 +2109,17 @@ def test_task_manager():
     user = current_user
     if not isinstance(user, User):
         user = None
-        
+
     task_manager = TaskManager(user=user)
     task = task_manager.launch_task('app.tasks.tasks.example_task', seconds=20)
     print(task)
     db.session.add(task)
     db.session.commit()
     db.session.close()
-    
+
     return jsonify(status="Working on this")
-    
-    
+
+
 
 def application_status(app):
     status = True
