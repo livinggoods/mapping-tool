@@ -754,7 +754,7 @@ def mapping_village_data(id):
             "County",
             "Subcounty",
             "Parish",
-            "Village/zone/cell",
+            "Village/Zone/Cell",
             "Village Ranking",
             "Village UUID",
             "Index Sum",
@@ -807,7 +807,6 @@ def mapping_village_data(id):
             "MTN connectivity",
             "MTN connectivity index",
             "Comments (summarize)",
-            "UUID"
         ]
         cumulative_chps = 0
         ranks = []
@@ -1091,7 +1090,7 @@ def export_scoring_tool(id):
 
     else:
         registrations = Registration.query.filter(Registration.recruitment == id)
-
+        print(id)
         header = [
             'Referral Name',
             'Referral Title',
@@ -1105,8 +1104,8 @@ def export_scoring_tool(id):
             'Subcounty',
             'Parish',
             'No. CHP',
+            'Village UUID',
             'Village Name',
-            'Village Uuid',
             'Landmark',
             'Read/Speak English',
             'Other Languages',
@@ -1170,13 +1169,30 @@ def export_scoring_tool(id):
             selected = ""
             no_of_chp = ""
             village_name = ""
+            parish_name = ""
+            district_name = ""
+            subcounty_name  = ""
             if registration.village is None:
-                no_of_chp = ""
+                no_of_chp = "Null"
             else:
                 village_obj = Village.query.filter_by(id = registration.village).first()
                 no_of_chp = village_obj.chps_to_recruit()
                 village_name = village_obj.village_name
-
+            if registration.parish is None:
+                parish_name = "Null"
+            else:
+                parish_obj = Parish.query.filter_by(id=registration.parish).first()
+                parish_name = parish_obj.name
+            if registration.district is None:
+                district_name = "Null"
+            else:
+                district_obj = Location.query.filter_by(id=registration.district).first()
+                district_name = district_obj.name
+            if registration.subcounty is None:
+                subcounty_name = "Null"
+            else:
+                subcounty_obj = Location.query.filter_by(id=registration.subcounty).first()
+                subcounty_name = subcounty_obj.name
             if interview:
                 user = str(interview.user.name)
                 motivation = interview.motivation
@@ -1204,12 +1220,12 @@ def export_scoring_tool(id):
                 registration.phone.replace(',', ':'),
                 registration.gender,
                 registration.age(),
-                registration.district,
-                registration.subcounty,
-                registration.parish,
+                district_name,
+                subcounty_name,
+                parish_name,
                 no_of_chp,
-                village_name,
                 registration.village,
+                village_name,
                 registration.feature.replace(',', ':') if registration.feature else "",
                 "Y" if registration.english == 1 else "N",
                 registration.languages.replace(',', ';') if registration.languages else "",
