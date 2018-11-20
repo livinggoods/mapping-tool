@@ -1211,6 +1211,7 @@ def export_scoring_tool(id):
                 selected = 'Y' if interview.selected == 1 else 'N'  # if selected of not
                 # interview= Interview.query.filter(Interview.archived != 1)
                 # Now that we have what we need, we generate the CSV rows
+                print(registration.age())
             row = [
                 registration.referral,
                 registration.referral_title,

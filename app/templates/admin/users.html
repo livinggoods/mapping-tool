@@ -156,6 +156,33 @@
     <script>
 
 
+                
+        $('.user-action').click(function(){
+            
+            var userId = $(this).attr('user');
+            var elementId = $(this);
+            action = 'block';
+            $.ajax({
+                url: "{{url_for('administration.user_action')}}",
+                type:'POST',
+                data:{user:userId},
+                dataType:'json',
+                success: function(data){
+                    if(data.status=='confirmed'){
+                        elementId.html('<i class="fa fa-times"></i> Un-confirm');
+                        $('#user-status-'+userId).html('True');
+                    }else{
+                        elementId.html('<i class="fa fa-check"></i> Confirm');
+                        $('#user-status-'+userId).html('False');
+                    }
+                },
+                error: function(xhr){
+                    console.log(xhr);
+                }
+            })// end of ajax 
+        }) // 
+
+
 
         $('.user-roles').change(function(){
                 var action = 'change_user_role'
@@ -170,7 +197,6 @@
                 });
                 user = user.split(' ').join('')
                 changeUserRole(action,role,user)
- 
             })
         /** added confirmation function */
 
