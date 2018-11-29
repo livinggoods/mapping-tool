@@ -619,6 +619,7 @@ class Registration (db.Model):
     referral_id = Column(ForeignKey(u'referrals.id'), nullable=True, index=True)
     assets_tracker_data = Column(Text)
     posted_to_assets_tracker = db.Column(db.Boolean, default=False, index=True)
+    other = db.Column(db.Text, nullable=True, server_default=text("'{}'"))
 
     owner = relationship(u'User')
     education_level = relationship(u'Education')
@@ -686,7 +687,8 @@ class Registration (db.Model):
             'financial_accounts' : self.financial_accounts,
             'recruitment_transport' : self.recruitment_transport,
             'branch_transport' : self.branch_transport,
-            'referral_id' : self.referral_id
+            'referral_id' : self.referral_id,
+            'other': self.other
             }
         if self.chew_referral is not None:
           json_record['referral_details'] = self.chew_referral.to_json()
@@ -742,7 +744,8 @@ class Registration (db.Model):
         branch_transport = json_record.get('branch_transport') if json_record.get('branch_transport') is not None or json_record.get('branch_transport') != '' else None,
         referral_id = json_record.get('chew_id') if json_record.get('chew_id') is not None or json_record.get('chew_id') != '' else None,
         synced = json_record.get('synced') if json_record.get('synced') is not None or json_record.get('synced') != '' else None,
-        archived = 0
+        archived = 0,
+          other=json_record.get('other') if json_record.get('other') else None
         )
     
 
