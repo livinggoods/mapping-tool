@@ -1420,7 +1420,7 @@ class LinkFacility(db.Model):
       'mrdt_levels': float(self.mrdt_levels) if self.mrdt_levels else None,
       'act_levels': float(self.act_levels) if self.act_levels else None,
       'country': self.country if self.country else None,
-      'facility_id': self.facility_id if self.facility_id else None,
+      'mfl_code': self.facility_id if self.facility_id else None,
       'archived': self.archived if self.archived else None,
       'other': self.other
     }
@@ -1437,7 +1437,10 @@ class LinkFacility(db.Model):
       
       if k == 'lat' or k == 'lon':
         v = float(v) if bool(v) else float(0)
-  
+        
+      if k == 'mfl_code':
+        k = 'facility_id'
+          
       setattr(link_facility, k, v)
 
     return link_facility

@@ -930,6 +930,7 @@ def export_scoring_tool(id):
             'Landmark',
             'CU (Community Unit)',
             'Link Facility',
+            'MFL Code',
             'No of Households',
             'Read/speak English',
             'Years at this Location',
@@ -961,6 +962,7 @@ def export_scoring_tool(id):
             'Comments',
             'Qualify for Training',
             'Completed By',
+            'Other'
             'Invite for Training']
         data.append(header)
         registrations = Registration.query.filter(Registration.recruitment == id)
@@ -1030,13 +1032,13 @@ def export_scoring_tool(id):
                 else:
                     qualified = 'N'
                 canjoin = 'Y' if interview.canjoin == 1 else 'N'
-                comment = interview.comment.replace(',', ';')
+                comment = interview.comment.replace(',', ';') if interview.comment else ''
                 if interview.selected == 1:
-                    selected = 'Y'
+                    selected = 'Invite'
                 elif interview.selected == 2:
                     selected = 'Waiting'
                 else:
-                    selected = 'N'
+                    selected = 'Out'
             # Now that we have what we need, we generate the CSV rows
             row = [
                 chew.name if chew is not None else registration.chew_name,
@@ -1052,6 +1054,7 @@ def export_scoring_tool(id):
                 registration.feature.replace(',', ':') if registration.feature else "",
                 community_unit.name if community_unit is not None else registration.cu_name,
                 link_facility.facility_name if link_facility is not None else registration.link_facility,
+                link_facility.facility_id if link_facility is not None else "" ,
                 str(registration.households),
                 "Y" if registration.english == 1 else "N",
                 registration.date_moved,
@@ -1084,6 +1087,7 @@ def export_scoring_tool(id):
                 str(comment),
                 str(qualified),
                 str(user),
+                str(registration.other),
                 selected,
             ]
             data.append(row)
