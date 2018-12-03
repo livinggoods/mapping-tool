@@ -619,6 +619,7 @@ class Registration (db.Model):
     referral_id = Column(ForeignKey(u'referrals.id'), nullable=True, index=True)
     assets_tracker_data = Column(Text)
     posted_to_assets_tracker = db.Column(db.Boolean, default=False, index=True)
+    other = db.Column(db.Text, nullable=True, server_default=text("'{}'"))
 
     owner = relationship(u'User')
     education_level = relationship(u'Education')
@@ -686,7 +687,8 @@ class Registration (db.Model):
             'financial_accounts' : self.financial_accounts,
             'recruitment_transport' : self.recruitment_transport,
             'branch_transport' : self.branch_transport,
-            'referral_id' : self.referral_id
+            'referral_id' : self.referral_id,
+            'other': self.other
             }
         if self.chew_referral is not None:
           json_record['referral_details'] = self.chew_referral.to_json()
@@ -742,7 +744,8 @@ class Registration (db.Model):
         branch_transport = json_record.get('branch_transport') if json_record.get('branch_transport') is not None or json_record.get('branch_transport') != '' else None,
         referral_id = json_record.get('chew_id') if json_record.get('chew_id') is not None or json_record.get('chew_id') != '' else None,
         synced = json_record.get('synced') if json_record.get('synced') is not None or json_record.get('synced') != '' else None,
-        archived = 0
+        archived = 0,
+          other=json_record.get('other') if json_record.get('other') else None
         )
     
 
@@ -1417,7 +1420,7 @@ class LinkFacility(db.Model):
       'mrdt_levels': float(self.mrdt_levels) if self.mrdt_levels else None,
       'act_levels': float(self.act_levels) if self.act_levels else None,
       'country': self.country if self.country else None,
-      'facility_id': self.facility_id if self.facility_id else None,
+      'mfl_code': self.facility_id if self.facility_id else None,
       'archived': self.archived if self.archived else None,
       'other': self.other
     }
@@ -1434,7 +1437,10 @@ class LinkFacility(db.Model):
       
       if k == 'lat' or k == 'lon':
         v = float(v) if bool(v) else float(0)
-  
+        
+      if k == 'mfl_code':
+        k = 'facility_id'
+          
       setattr(link_facility, k, v)
 
     return link_facility
