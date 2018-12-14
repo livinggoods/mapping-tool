@@ -590,7 +590,7 @@ class Registration (db.Model):
     brac = Column(Integer, server_default=text("'0'"))
     brac_chp = Column(Integer, server_default=text("'0'"))
     education = Column(ForeignKey(u'education.id'), nullable=True, index=True)
-    occupation = Column(String(128), nullable=True)
+    occupation = Column(String(1024), nullable=True)
     community_membership = Column(Integer, server_default=text("'0'"))
     added_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     comment = Column(Text)
