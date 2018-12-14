@@ -2089,6 +2089,9 @@ class TrainingVenues(db.Model):
   client_time = Column(Numeric, nullable=True)
   meta_data = Column(Text, nullable=True)
   archived = Column(Integer, server_default=text("'0'"))
+  
+  def to_json(self):
+      return {}
 
 
 class SessionAttendance(db.Model):
