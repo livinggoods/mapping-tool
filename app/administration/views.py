@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request, abort, \
     current_app, jsonify, make_response, json
 from flask_login import current_user, login_required
-from ..models import User, Location, IccmComponents, Geo, ErrorLog, Role, Mapping, Training, Recruitments
+from ..models import User, Location, IccmComponents, Geo, ErrorLog, Role, Mapping, Training, Recruitments, Registration
 from ..main.forms import IccmComponentForm
 from ..decorators import admin_required, permission_required
 from werkzeug.utils import secure_filename
@@ -464,3 +464,56 @@ def admin_action():
                 return jsonify({'status':'no action specified'})
     else:
         return jsonify({'status':'get action'})
+
+
+@administration.route("/search/chw", methods=['GET', 'POST'])
+@login_required
+def search_chw():
+    """
+    GET:  Search for CHW using either name or phone number
+    :param query_type either name or telephone number
+    :param query Phone number or name to search
+    :return:
+    
+    POST: Update CHW with mm UUID from form in frontend
+    :param uuid ID of the record to update
+    :param mm_uuid MM UUID
+    """
+    QUERY_TYPES = [
+        (1, 'Name'),
+        (2, 'Phone Number')
+    ]
+    
+    if request.method == 'GET':
+        query_type = request.args.get('query_type', '')
+        query = request.args.get('query', '')
+        search_results = []
+        page = {'title': 'Search CHW', 'subtitle': 'Search for All CHW Existing within Tremap'}
+        
+        if query != '':
+            if query_type == '1':
+                search_results = Registration.query.filter(Registration.name.like('%' + query + '%')).all()
+            elif query_type == '2':
+                search_results = Registration.query.filter(Registration.phone.like('%' + query + '%')).all()
+            
+        return render_template('admin/search_chw.html',
+                               page=page,
+                               query_type=query_type,
+                               query=query,
+                               query_types=QUERY_TYPES,
+                               search_results=search_results)
+    else:
+        query_type = request.args.get('query_type', '')
+        query = request.args.get('query', '')
+        uuid = request.form.get('uuid', None)
+        mm_uuid = request.form.get('mm_uuid', None)
+        if mm_uuid and uuid:
+            registration = Registration.query.get_or_404(uuid)
+            other = json.loads(registration.other)
+            other['mm_uuid'] = mm_uuid
+            registration.other = json.dumps(other)
+            db.session.merge(registration)
+            db.session.commit()
+            return redirect(url_for('administration.search_chw', query_type=query_type, query=query, operation='success'))
+        else:
+            return redirect(url_for('administration.search_chw', query_type=query_type, query=query, operation='fail'))

@@ -962,7 +962,7 @@ def export_scoring_tool(id):
             'Comments',
             'Qualify for Training',
             'Completed By',
-            'Other'
+            'Other',
             'Invite for Training']
         data.append(header)
         registrations = Registration.query.filter(Registration.recruitment == id)

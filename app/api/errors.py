@@ -1,5 +1,6 @@
 import traceback
 
+import psycopg2
 from flask import jsonify, request
 from flask_login import current_user
 
@@ -18,6 +19,9 @@ def log_api_error(request, e, code):
     headers = request.headers
     endpoint = request.full_path
     user = current_user.id if current_user.is_authenticated() else None
+    
+    if e is psycopg2.IntegrityError:
+        return
     
     log = ErrorLog(
         error=str(e),

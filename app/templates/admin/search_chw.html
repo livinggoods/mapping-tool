@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% import "partials/_macros.html" as macros %}
+{% block title %}Questions{% endblock %}
+
+{% block content %}
+
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>{{ page.title }}
+                        <small>{{ page.sub_title }}</small>
+                    </h2>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="row">
+                        <form method="GET">
+                            <div class="col-xs-12">
+                                <div class="row margin-bottom">
+                                    <div class="col-xs-12">
+                                        <p style="margin: 0;"><strong>Search using:</strong></p>
+                                        {% for item in query_types %}
+                                            <label class="radio-inline">
+                                                <input type="radio" name="query_type" value="{{ item.0 }}"
+                                                       {% if item.0|string == query_type|string %}checked{% endif %}/>
+                                                {{ item.1 }}
+                                            </label>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="query">Search Query</label>
+                                    <input class='form-control' type="text" name="query" value="{{ query }}"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="submit" value="Search" class="btn btn-primary float-right">
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <hr>
+                            {% if search_results | length == 0 %}
+                                <h3 class="text-muted text-center">No Results</h3>
+                            {% else %}
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Phone Number</th>
+                                        <th>Update MM UUID</th>
+                                        <th>Change Cohort</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for result in search_results %}
+                                        <tr>
+                                            <td>{{ result.name }}</td>
+                                            <td>{{ result.phone }}</td>
+                                            <td>
+                                                <form action="" method="POST" class="form-inline">
+                                                    <input type="hidden" name="uuid" value="{{ result.id }}">
+                                                    <input id="{{ result.id }}" type="text" name="mm_uuid" placeholder="Medic UUID" class="form-control">
+                                                    <input type="submit" value="Update" class="btn btn-primary btn-sm">
+
+                                                    <script type="text/javascript">
+                                                        $(document).ready(function() {
+                                                            var other = JSON.parse({{ result.other | tojson | safe }});
+                                                            var mm_uuid = other.mm_uuid || '';
+                                                            $('#{{ result.id }}').val(mm_uuid);
+                                                        });
+                                                    </script>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block javascript %}
+    <script type="text/javascript">
+
+    </script>
+{% endblock %}
