@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% import "partials/_macros.html" as macros %}
+{% block title %}Questions{% endblock %}
+
+{% block content %}
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>{{ title }}
+                    <small>{{ title }}</small>
+                </h3>
+            </div>
+
+            <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Go!</button>
+          </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>{{ page.title }}
+                        <small>{{ page.sub_title }}</small>
+                    </h2>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <form method="POST" enctype="multipart/form-data">
+
+                        <div class="row">
+                            <div class="col-xs-12">
+
+                                <div class="form-group">
+                                    <label for="branch_id">Branch</label>
+                                    <select name="branch_id" id="branch_id" class="form-control" required>
+                                        <option value="">- Select Option -</option>
+                                        {% for option in branches %}
+                                            <option value="{{ option.id }}">{{ option.branch_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="cohort_number">Cohort Number</label>
+                                    <input type="number" name="cohort_number" placeholder="Cohort Number"
+                                           class="form-control" required min="1">
+                                </div>
+                                &nbsp;
+                                <p>Select or upload a recruitment for the above cohort</p>
+                                <div class="form-group">
+                                    <label for="recruitment_type" class="radio-inline">
+                                        <input type="radio" name="recruitment_type" value="select_recruitment" required> Select
+                                        Recruitment
+                                    </label>
+
+                                    <label for="recruitment_type" class="radio-inline">
+                                        <input type="radio" name="recruitment_type" value="upload_recruitment" required> Upload
+                                        Recruitment
+                                    </label>
+
+                                </div>
+                                <hr>
+                                &nbsp;
+                                <div class="row">
+                                    <div class="col-xs-10 col-xs-offset-1" id="select_recruitment">
+                                        <div class="form-group">
+                                            <label for="recruitment_id">Select Recruitment</label>
+                                            <select name="recruitment_id" id="recruitment_id" class="form-control">
+                                                <option value="">- Select recruitment -</option>
+                                                {% for recruitment in recruitments %}
+                                                    <option value="{{ recruitment.id }}">
+                                                        {{ recruitment.name }} by
+                                                        {{ recruitment.owner.name }} on
+                                                        {{ recruitment.date_added.strftime('%d/%m/%Y') }}
+                                                        ({{ recruitment.to_json().registrations }} Recruited)
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-10 col-xs-offset-1" id="upload_recruitment">
+
+                                        <div class="form-group">
+                                            <label for="recruitment_upload">Upload recruitment (CSV Only)</label>
+                                            <input type="file" name="recruitment_upload" class="form-control" accept=".csv">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                &nbsp;
+                                <hr>
+
+                                <div class="form-group">
+                                    <input type="submit" value="Save" class="pull-right btn btn-primary">
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block additionalcss %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/select2.min.css') }}">
+{% endblock %}
+
+{% block additionaljs %}
+    <script src="{{ url_for('static', filename='js/select2.min.js') }}"></script>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            $('select').select2();
+
+            $("#select_recruitment").hide();
+            $("#upload_recruitment").hide();
+
+            $('input[name=recruitment_type]').change(function (e) {
+                var value = $('input[name=recruitment_type]:checked').val();
+                var select = $("#select_recruitment");
+                var upload = $("#upload_recruitment");
+                if (value === 'select_recruitment') {
+                    select.show();
+                    upload.hide();
+                    $('#recruitment_id').prop('required', true);
+                    $('input[name=recruitment_upload]').prop('required', false)
+                } else {
+                    select.hide();
+                    upload.show();
+                    $('#recruitment_id').prop('required', false);
+                    $('input[name=recruitment_upload]').prop('required', true)
+                }
+            });
+
+        });
+    </script>
+{% endblock %}

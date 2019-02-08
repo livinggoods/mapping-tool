@@ -72,14 +72,13 @@ class Branch(db.Model):
     __tablename__ = 'branch'
 
     id = Column(String(64), primary_key=True)
-    branch_name = Column(String(45)) # e.g. Busia
-    branch_code = Column(String(45)) # BUS
-    mapping_id = Column(ForeignKey(u'mapping.id'), nullable=True)
-    lat = Column(Float)
-    lon = Column(Float)
+    branch_name = Column(String(45))
+    lat = Column(Float, server_default=text("'0.0'"))
+    lon = Column(Float, server_default=text("'0.0'"))
     archived = Column(Integer, server_default=text("'0'"))
-
-    mapping = relationship(u'Mapping')
+    country = Column(String(64))
+    county_id = Column(String(65), nullable=True)
+    subcounty_id = Column(String(65), nullable=True)
 
 
 class Cohort(db.Model):
@@ -688,7 +687,7 @@ class Registration (db.Model):
             'recruitment_transport' : self.recruitment_transport,
             'branch_transport' : self.branch_transport,
             'referral_id' : self.referral_id,
-            'other': self.other
+            # 'other': self.other TODO findout how to add this
             }
         if self.chew_referral is not None:
           json_record['referral_details'] = self.chew_referral.to_json()
@@ -964,8 +963,10 @@ class Recruitments(db.Model):
     subcounty_id = Column(ForeignKey(u'subcounty.id'), nullable=True, index=True)
     location_id = Column(ForeignKey(u'location.id'), nullable=True, index=True)
     posted_to_assets_tracker = db.Column(db.Boolean, default=False, index=True)
+    cohort_id = db.Column(ForeignKey(u'cohort.id'), nullable=True)
     
     owner = relationship(u'User')
+    cohort = relationship(u'Cohort')
 
     def to_json(self):
         # get the number of registrations

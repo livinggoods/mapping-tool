@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% import "partials/_macros.html" as macros %}
+{% block title %}Questions{% endblock %}
+
+{% block content %}
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>{{ title }}
+                    <small>{{ title }}</small>
+                </h3>
+            </div>
+
+            <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Go!</button>
+          </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>{{ page.title }}
+                        <small>{{ page.sub_title }}</small>
+                    </h2>
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+
+                    <form method="POST">
+
+                        <div class="row">
+                            <div class="col-xs-8 col-sm-offset-2">
+
+                                <div class="form-group">
+                                    <label for="branch_name">Branch Name</label>
+                                    <input type="text" name="branch_name" placeholder="Branch Name" class="form-control"
+                                           required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="county_id">County</label>
+                                    <select name="county_id" id="county_id" class="form-control" required>
+                                        <option value="">- Select County-</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="subcounty_id">Sub County</label>
+                                    <select name="subcounty_id" id="subcounty_id" class="form-control" required>
+                                        <option value="">- Select Sub-county-</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="submit" value="Save" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block additionalcss %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/select2.min.css') }}">
+{% endblock %}
+
+{% block additionaljs %}
+    <script src="{{ url_for('static', filename='js/select2.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lodash.min.js') }}"></script>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            var countyId = $("#county_id");
+            var subcountyId = $("#subcounty_id");
+            subcountyId.select2();
+            countyId.select2({
+                placeholder: "Search for a county",
+                ajax: {
+                    url: "{{ url_for('api.get_ke_counties_json') }}",
+                    maximumSelectionLength: 0,
+                    delay: 250,
+                    processResults: function (data) {
+                        var counties = _.map(data.counties, function (item) {
+                            return {
+                                text: item.name,
+                                id: item.code
+                            };
+                        });
+
+                        return {
+                            results: counties,
+                            pagination: {more: false}
+                        };
+                    }
+                }
+            });
+
+            countyId.change(function () {
+                var value = countyId.val();
+                subcountyId.select2({
+                    placeholder: "Search for a subcounty",
+                    ajax: {
+                        url: "{{ url_for('api.get_ke_counties_json') }}",
+                        maximumSelectionLength: 0,
+                        delay: 250,
+                        processResults: function (data) {
+                            console.log('Processing results', data, value);
+                            var county = _.find(data.counties, {code: parseInt(value)});
+                            var subcounties = _.map(county.subcounties, function (item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id
+                                };
+                            });
+                            return {
+                                results: subcounties,
+                                pagination: {more: false}
+                            };
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
