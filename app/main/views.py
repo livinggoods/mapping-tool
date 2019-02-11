@@ -85,7 +85,10 @@ def application_details(id):
         if a.subcounty:
             subcounty_name = Location.query.filter_by(id=a.subcounty).first().name
         if a.village:
-            village_name = Village.query.filter_by(id=a.village).first().village_name
+            village_name = a.village
+            village = Village.query.filter_by(id=a.village).first()
+            if village:
+                village_name = village.village_name
         return render_template('registration.html', exam=exam, dob=dob,village_name=village_name,parish_name=parish_name,subcounty_name=subcounty_name,
                                page=page, interview=interview, registration=a, age=age, district_name = district_name)
 

@@ -639,20 +639,22 @@ def recruitment():
                     csv_rows = process_csv(abs_path)
                     
                     def create_recruitment(branch, cohort):
-                        name = branch.branch_name + ' Cohort ' + cohort.cohort_number
+                        name = '%s Cohort %s' % (branch.branch_name, cohort.cohort_number)
                         id = str(uuid.uuid4())
-                        recruitment = Recruitments(
-                            id=id,
-                            name=name,
-                            added_by=1,
-                            comment='',
-                            client_time=time.time(),
-                            country=branch.country,
-                            cohort_id=cohort.id,
-                            subcounty=branch.subcounty_id,
-                            county=branch.county_id
-                        )
-                        db.session.add(recruitment)
+                        recruitment = Recruitments.query.filter_by(name=name).first()
+                        if not recruitment:
+                            recruitment = Recruitments(
+                                id=id,
+                                name=name,
+                                added_by=1,
+                                comment='',
+                                client_time=time.time(),
+                                country=branch.country,
+                                cohort_id=cohort.id,
+                                subcounty=branch.subcounty_id,
+                                county=branch.county_id
+                            )
+                            db.session.add(recruitment)
                         return recruitment
                     
                     def create_cohort(args):

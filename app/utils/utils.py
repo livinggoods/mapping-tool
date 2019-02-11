@@ -41,6 +41,12 @@ def process_csv(path, title_case=True):
     reader = csv.DictReader(csvfile)
     title = reader.fieldnames
     for row in reader:
+      # Detect empty rows
+      s = {row[title[i]].title() for i in range(len(title))} if title_case else {row[title[i]] for i in range(len(title))}
+      if s == {''}:
+        # empty row
+        continue
+      
       if title_case:
         csv_rows.extend([{title[i]:row[title[i]].title() for i in range(len(title))}])
       else:
