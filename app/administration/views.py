@@ -612,6 +612,7 @@ def recruitment():
                     db.session.merge(r)
                     
             recruitment.cohort_id = cohort.id
+            recruitment.name = '%s Cohort %s' % (branch.branch_name, cohort.cohort_number)
             db.session.merge(recruitment)
             
             db.session.commit()

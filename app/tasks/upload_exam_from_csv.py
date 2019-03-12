@@ -1,7 +1,7 @@
 import uuid
 
 from app import db
-from app.models import ExamTraining, Question
+from app.models import ExamTraining, Question, QuestionChoice, ExamQuestion
 
 
 class UploadExamFromCSV():
@@ -28,7 +28,7 @@ class UploadExamFromCSV():
         'allocated_marks',
         'country'
     }
-
+    
     EXAM_QUESTION_FIELDS = {
         'exam_id',
         'question_id',
@@ -37,11 +37,14 @@ class UploadExamFromCSV():
         'country'
     }
     
-    def __init__(self):
+    def __init__(self, country):
         """
         Constructor
         """
+        assert country is not None, "Invalid country argument"
+        
         self.batch_id = self.create_uuid()
+        self.country = country
     
     def create_uuid(self):
         """
@@ -56,17 +59,21 @@ class UploadExamFromCSV():
         :param args:
         :return:
         """
-        pass
-        
+        question = Question(**args)
+        db.session.add(question)
+        db.session.commit()
+        return question
     
-    def create_question_choice(self, exam, args):
+    def create_question_choice(self, args):
         """
         Create question choice from args
         :param args:
         :return:
         """
-        assert isinstance(exam, ExamTraining), "Invalid arguments"
-        
+        choice = QuestionChoice(**args)
+        db.session.add(choice)
+        db.session.commit()
+        return choice
     
     def create_exam(self, args):
         """
@@ -80,44 +87,83 @@ class UploadExamFromCSV():
         if keys & self.EXAM_FIELDS == self.EXAM_FIELDS:
             # Valid
             exam = ExamTraining(**args)
-            db.session.add(exam) # TODO Need to commit to db to generate exam.id
+            db.session.add(exam)  # TODO Need to commit to db to generate exam.id
+            db.session.commit()
             return exam
         else:
             raise Exception('Invalid arguments. Could not create exam')
-        
     
-    def validate(self, csv_rows):
+    def validate(self, csv_rows, args):
         """
-        Validates if input is valid.
+        Validates if input is valid. Row should containing the following
+        - question
+        - Atleast two choices
+        - answer
+        - allocated_marks
         :return:
         """
         for record in csv_rows:
+            question = record.get('question', None)
+            answer = record.get('answer', None)
+            choices = [{'choice': v, 'is_answer': k == answer} for k, v in record.iteritems() if
+                       str(k).startswith('choice')]
+            allocated_marks = record.get('allocated_marks', None)
             
+            if not question or not answer or not allocated_marks:
+                raise Exception('CSV missing required columns')
             
-            record['batch_id'] = self.batch_id
-            record['country'] = self.country
-            keys = {k for k, v in record.iteritems()}
-            if keys & self.QUESTION_FIELDS == self.QUESTION_FIELDS:
-                self.create_question(csv_rows)
-            else:
-                raise Exception("CSV does not contain ")
+            if len(choices) < 2:
+                raise Exception("Atleast two choices required")
+            
+            if answer not in [k for k, v in record.iteritems() if str(k).startswith('choice')]:
+                raise Exception('Invalid answer given')
         
+        exam = self.create_exam(args)
         
+        for record in csv_rows:
+            question = record.get('question', None)
+            answer = record.get('answer', None)
+            choices = [{'choice': v, 'is_answer': k == answer} for k, v in record.iteritems() if
+                       str(k).startswith('choice')]
+            allocated_marks = record.get('allocated_marks', None)
+            question_obj = self.create_question({
+                'question': question,
+                'allocated_marks': allocated_marks,
+                'batch_id': self.batch_id,
+                'country': self.country
+            })
+            
+            for choice in choices:
+                self.create_question_choice({
+                    'question_id': question_obj.id,
+                    'question_choice': choice.get('choice'),
+                    'is_answer': choice.get('is_answer', False),
+                    'allocated_marks': allocated_marks,
+                    'country': self.country
+                })
+            
+            exam_question = ExamQuestion(
+                id=None,
+                exam_id=exam.id,
+                question_id=question_obj.id,
+                weight=csv_rows.index(record),
+                allocated_marks=question_obj.allocated_marks,
+                country=exam.country,
+                archived=False
+            )
+            
+            db.session.add(exam_question)
+            db.session.commit()
     
-    def run(self, csv_rows, country, *args, **kwargs):
+    def run(self, csv_rows, title, exam_status_id, passmark, is_certification, certification_type):
         assert isinstance(csv_rows, list), 'Invalid arguments. CSV rows must be a list'
-        assert country is not None, 'Invalid country argument'
-        
-        self.country = country
-        
-        title = kwargs.get('title', None)
-        exam_status_id = kwargs.get('exam_status_id', None)
-        passmark = kwargs.get('passmark', None)
-        is_certification = kwargs.get('is_certification', None)
-        certification_type = kwargs.get('certification_type', None)
-        
         assert title is not None, "Invalid exam title"
-        assert country is not None, "Invalid exam country"
         assert isinstance(is_certification, bool), 'Invalid is certification'
         
-        self.validate(csv_rows)
+        self.validate(csv_rows, {
+            'title': title,
+            'country': self.country,
+            'exam_status_id': exam_status_id,
+            'passmark': passmark,
+            'certification_type_id': certification_type if is_certification else None
+        })

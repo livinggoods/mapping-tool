@@ -634,6 +634,16 @@ class Registration (db.Model):
 
     def date_client(self):
         return datetime.fromtimestamp(self.client_time / 1000).strftime('%Y-%b-%d %H:%M:%S')
+    
+    def get_recruitment(self):
+        if self.recruitment:
+            try:
+                recruitment = Recruitments.query.filter_by(id=self.recruitment).first()
+                
+                return recruitment.name
+            except Exception as e:
+                pass
+        return self.recruitment
 
     def to_json(self):
         exam = Exam.query.filter_by(applicant=self.id)

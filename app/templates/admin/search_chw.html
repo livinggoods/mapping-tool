@@ -55,6 +55,7 @@
                                     <tr>
                                         <th>Name</th>
                                         <th>Phone Number</th>
+                                        <th>Recruitment</th>
                                         <th>Update MM UUID</th>
                                         <th>Change Cohort</th>
                                     </tr>
@@ -65,13 +66,19 @@
                                             <td>{{ result.name }}</td>
                                             <td>{{ result.phone }}</td>
                                             <td>
+                                                <a href="{{ url_for('main.recruitment', id=result.recruitment) }}">
+                                                    {{ result.get_recruitment() }} &raquo;
+                                                </a>
+                                            </td>
+                                            <td>
                                                 <form action="" method="POST" class="form-inline">
                                                     <input type="hidden" name="uuid" value="{{ result.id }}">
-                                                    <input id="{{ result.id }}" type="text" name="mm_uuid" placeholder="Medic UUID" class="form-control">
+                                                    <input id="{{ result.id }}" type="text" name="mm_uuid"
+                                                           placeholder="Medic UUID" class="form-control">
                                                     <input type="submit" value="Update" class="btn btn-primary btn-sm">
 
                                                     <script type="text/javascript">
-                                                        $(document).ready(function() {
+                                                        $(document).ready(function () {
                                                             var other = JSON.parse({{ result.other | tojson | safe }});
                                                             var mm_uuid = other.mm_uuid || '';
                                                             $('#{{ result.id }}').val(mm_uuid);
@@ -79,6 +86,7 @@
                                                     </script>
                                                 </form>
                                             </td>
+                                            <td></td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>

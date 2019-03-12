@@ -2,12 +2,11 @@ import csv
 import io
 import operator
 import os
-import uuid
 from datetime import date, time
 from time import gmtime, strftime
 
-from flask import json, session, abort
 from flask import (render_template, redirect, url_for, flash, jsonify)
+from flask import session
 from flask.ext import excel
 from flask_googlemaps import Map, icons
 from flask_login import current_user, login_required
@@ -15,6 +14,8 @@ from werkzeug.utils import secure_filename
 
 from app.api.views import create_question_list
 from app.tasks.task_utils import TaskManager
+from app.tasks.upload_exam_from_csv import UploadExamFromCSV
+from app.utils import process_csv
 from . import main
 from .forms import *
 from ..commons import exam_with_questions_to_dict
@@ -37,27 +38,30 @@ currency = 'UGX '
 def index():
     if current_user.is_anonymous():
         return redirect(url_for('auth.login'))
-
+    
     page = {'title': 'Home'}
     total_registrations = Registration.query.filter_by(archived=0, country=current_user.location)
     registrations = total_registrations.count()
-
-    total_mappings = Mapping.query.filter_by(archived=0, country=current_user.location).order_by(Mapping.date_added.desc())
+    
+    total_mappings = Mapping.query.filter_by(archived=0, country=current_user.location).order_by(
+        Mapping.date_added.desc())
     mapping = total_mappings.count()
     mappings = total_mappings.limit(current_app.config['POSTS_PER_PAGE']).all()
-
-    total_recruitments = Recruitments.query.filter_by(archived=0, country=current_user.location).order_by(Recruitments.date_added.desc())
+    
+    total_recruitments = Recruitments.query.filter_by(archived=0, country=current_user.location).order_by(
+        Recruitments.date_added.desc())
     recruitments = total_recruitments.count()
     recruitment = total_recruitments.limit(current_app.config['POSTS_PER_PAGE']).all()
-
-    trainings = Training.query.filter_by(archived=0, country=current_user.location).order_by(Training.date_created.desc())
+    
+    trainings = Training.query.filter_by(archived=0, country=current_user.location).order_by(
+        Training.date_created.desc())
     trainings_count = trainings.count()
     trainings = trainings.limit(current_app.config['POSTS_PER_PAGE']).all()
-
-
+    
     return render_template('index.html', page=page, registrations=registrations, mapping=mapping, mappings=mappings,
-                               recruitments=recruitments, training_count=trainings_count, currency=currency, trainings=trainings,
-                               recruitment=recruitment)
+                           recruitments=recruitments, training_count=trainings_count, currency=currency,
+                           trainings=trainings,
+                           recruitment=recruitment)
 
 
 @main.route('/registration/<string:id>', methods=['GET', 'POST'])
@@ -89,8 +93,9 @@ def application_details(id):
             village = Village.query.filter_by(id=a.village).first()
             if village:
                 village_name = village.village_name
-        return render_template('registration.html', exam=exam, dob=dob,village_name=village_name,parish_name=parish_name,subcounty_name=subcounty_name,
-                               page=page, interview=interview, registration=a, age=age, district_name = district_name)
+        return render_template('registration.html', exam=exam, dob=dob, village_name=village_name,
+                               parish_name=parish_name, subcounty_name=subcounty_name,
+                               page=page, interview=interview, registration=a, age=age, district_name=district_name)
 
 
 @main.route('/trainings', methods=['GET', 'POST'])
@@ -131,7 +136,7 @@ def new_training():
         pattern = '%Y-%m-%d'
         commenced_epoch = int(time.mktime(time.strptime(str(commenced_date), pattern)))
         completed_epoch = int(time.mktime(time.strptime(str(completed_date), pattern)))
-
+        
         new_training = Training(
             id=uuid.uuid4(),
             training_name=form.training_name.data,
@@ -182,7 +187,7 @@ def new_training_venue():
             }
         ]
     )
-
+    
     if form.validate_on_submit():
         new_training_venue = TrainingVenues(
             id=uuid.uuid4(),
@@ -284,8 +289,10 @@ def delete_training(id):
 def training(id):
     training = Training.query.filter_by(id=id).first_or_404()
     training_dict = asdict(training)
-    training_dict['exams'] = [e._asdict() for e in TrainingExam.query.filter_by(training_id=training.id, archived=False)]
-    training_dict['trainers'] = [t._asdict() for t in TrainingTrainers.query.filter_by(training_id=training.id, archived=0)]
+    training_dict['exams'] = [e._asdict() for e in
+                              TrainingExam.query.filter_by(training_id=training.id, archived=False)]
+    training_dict['trainers'] = [t._asdict() for t in
+                                 TrainingTrainers.query.filter_by(training_id=training.id, archived=0)]
     training_dict['trainees'] = [trainee.to_json() for trainee in Trainees.query.filter_by(training_id=training.id)]
     roles = [r._asdict() for r in TrainingRoles.query.filter_by(archived=0)]
     # return jsonify(training_dict)
@@ -296,8 +303,8 @@ def training(id):
     return render_template(
         'training.html',
         training=training,
-        roles = json.dumps(roles),
-        data = json.dumps(training_dict).replace("'", "\\'"),
+        roles=json.dumps(roles),
+        data=json.dumps(training_dict).replace("'", "\\'"),
         page=page
     )
 
@@ -308,20 +315,21 @@ def exam_analysis(training_id, training_exam_id):
     training = Training.query.filter_by(id=training_id).first_or_404()
     training_exam = TrainingExam.query.filter_by(id=training_exam_id).first_or_404()
     trainees = Trainees.query.filter_by(training_id=training_id)
-
+    
     exam = exam_with_questions_to_dict(training_exam.exam)
     exam.update(training_exam._asdict())
-
+    
     page = {
         'title': 'Exam Analysis',
         'subtitle': 'Exam analysis'
     }
-
+    
     exam_results = ExamResult.query.filter_by(training_exam_id=training_exam_id)
-
+    
     return render_template('training_exam_analysis.html',
                            page=page,
-                           exam_results=json.dumps([asdict(exam_result) for exam_result in exam_results]).replace("'", "\\'"),
+                           exam_results=json.dumps([asdict(exam_result) for exam_result in exam_results]).replace("'",
+                                                                                                                  "\\'"),
                            exam=json.dumps(exam).replace("'", "\\'"),
                            training=json.dumps(asdict(training)).replace("'", "\\'"),
                            trainees=json.dumps([asdict(trainee) for trainee in trainees]).replace("'", "\\'")
@@ -840,7 +848,8 @@ def mapping_village_data(id):
                 village.area_chief_name,
                 village.area_chief_phone,
                 village.user.name,
-                datetime.fromtimestamp(village.client_time / 1000).strftime('%Y-%m-%d %H:%M:%S') if village.client_time is not None else '',
+                datetime.fromtimestamp(village.client_time / 1000).strftime(
+                    '%Y-%m-%d %H:%M:%S') if village.client_time is not None else '',
                 village.lat,
                 village.lon,
                 village.distancetobranch,
@@ -893,9 +902,9 @@ def mapping_village_data(id):
             if not village_rank.has_key(rank):
                 village_rank[rank] = pos
                 pos += 1
-
+        
         csv_data.sort(key=operator.itemgetter(6), reverse=True)  # now sorted
-
+        
         i = 0
         for d in csv_data:
             csv_data[i][5] = village_rank.get(csv_data[i][6])
@@ -916,8 +925,8 @@ def export_scoring_tool(id):
     writer = csv.writer(dest)
     data = []
     recruitment = Recruitments.query.filter_by(id=id).first_or_404()
-    #print(recruitment.proceed)
-
+    # print(recruitment.proceed)
+    
     if recruitment.country == 'KE':
         header = [
             'CHEW Name',
@@ -973,7 +982,7 @@ def export_scoring_tool(id):
             # metadata for registration include:
             # Exam, Interview, Chew, Recruitment, Link Facility, subcounty, education, added, by, referral, ward
             # Get Exam
-
+            
             exam = Exam.query.filter(Exam.applicant == registration.id).first()
             interview = Interview.query.filter(Interview.applicant == registration.id).first()
             if registration.referral_id is not None and registration.referral_id != '':
@@ -985,7 +994,7 @@ def export_scoring_tool(id):
             education = Education.query.filter_by(id=registration.education).first()
             ward = Ward.query.filter_by(id=registration.ward).first()
             community_unit = CommunityUnit.query.filter_by(id=registration.cu_name).first()
-
+            
             math = 0
             english = 0
             personality = 0
@@ -1002,7 +1011,7 @@ def export_scoring_tool(id):
                 math = exam.math
                 english = exam.english
                 personality = exam.personality
-
+            
             user = ""
             motivation = 0
             community = 0
@@ -1017,7 +1026,7 @@ def export_scoring_tool(id):
             qualified = "N"
             comment = ""
             selected = ""
-
+            
             if interview:
                 user = str(interview.user.name)
                 motivation = interview.motivation
@@ -1057,12 +1066,12 @@ def export_scoring_tool(id):
                 registration.feature.replace(',', ':') if registration.feature else "",
                 community_unit.name if community_unit is not None else registration.cu_name,
                 link_facility.facility_name if link_facility is not None else registration.link_facility,
-                link_facility.facility_id if link_facility is not None else "" ,
+                link_facility.facility_id if link_facility is not None else "",
                 str(registration.households),
                 "Y" if registration.english == 1 else "N",
                 registration.date_moved,
                 registration.languages.replace(',', ';') if registration.languages else "",
-
+                
                 "Y" if registration.is_chv == 1 else "N",
                 "Y" if registration.is_gok_trained == 1 else "N",
                 registration.trainings.replace(',', ':') if registration.trainings else "",
@@ -1094,7 +1103,7 @@ def export_scoring_tool(id):
                 selected,
             ]
             data.append(row)
-
+    
     else:
         registrations = Registration.query.filter(Registration.recruitment == id)
         print(id)
@@ -1141,7 +1150,7 @@ def export_scoring_tool(id):
             'Qualify for Training',
             'Invite for Training']
         data.append(header)
-
+        
         for registration in registrations:
             print(registration.proceed)
             # Get Exam
@@ -1157,7 +1166,7 @@ def export_scoring_tool(id):
                 personality = exam.personality
                 exam_total = exam.total_score()
                 exam_passed = "Y" if exam.has_passed() and registration.brac != 1 else "N"
-
+            
             interview = Interview.query.filter(Interview.applicant == registration.id).first()
             user = ""
             motivation = 0
@@ -1178,11 +1187,11 @@ def export_scoring_tool(id):
             village_name = ""
             parish_name = ""
             district_name = ""
-            subcounty_name  = ""
+            subcounty_name = ""
             if registration.village is None:
                 no_of_chp = "Null"
             else:
-                village_obj = Village.query.filter_by(id = registration.village).first()
+                village_obj = Village.query.filter_by(id=registration.village).first()
                 no_of_chp = village_obj.chps_to_recruit()
                 village_name = village_obj.village_name
             if registration.parish is None:
@@ -1213,7 +1222,7 @@ def export_scoring_tool(id):
                 total_score = interview.total_score()
                 qualified = 'Y' if interview.has_passed and exam_passed == 'Y' else 'N'
                 canjoin = 'Y' if interview.canjoin == 1 else 'N'
-                #comment = interview.comment.replace(',', ';')
+                # comment = interview.comment.replace(',', ';')
                 canjoin = 'Y' if interview.canjoin == 1 else 'N'
                 selected = 'Y' if interview.selected == 1 else 'N'  # if selected of not
                 # interview= Interview.query.filter(Interview.archived != 1)
@@ -1261,7 +1270,7 @@ def export_scoring_tool(id):
                 str(comment),
                 str(qualified),
                 str(selected),
-                ]
+            ]
             data.append(row)
     output = excel.make_response_from_array(data, 'csv')
     output.headers["Content-Disposition"] = "attachment; filename=scoring-tool.csv"
@@ -1274,7 +1283,8 @@ def export_scoring_tool(id):
 def recruitments():
     if request.method == 'GET':
         page = {'title': 'Recruitments', 'subtitle': 'Recruitments done so far'}
-        recruitments = Recruitments.query.filter_by(archived=0, country=current_user.location).order_by(Recruitments.date_added.desc())
+        recruitments = Recruitments.query.filter_by(archived=0, country=current_user.location).order_by(
+            Recruitments.date_added.desc())
         paging_data = request.args.get('page', 1, type=int)
         pagination = recruitments.paginate(paging_data, per_page=current_app.config['PER_PAGE'], error_out=False)
         return render_template('recruitments.html',
@@ -1313,25 +1323,27 @@ def recruitment(id):
             recruitments = Recruitments(name=request.form.get('name'), added_by=current_user.id)
             db.session.add(recruitments)
             db.session.commit()
-
+            
             # also add the recruitment
             recruitment = RecruitmentUsers(user_id=current_user.id, recruitment_id=recruitments.id)
             return jsonify(status='created', id=recruitments.id)
 
-@main.route('/candidates', methods=['POST','GET'])
+
+@main.route('/candidates', methods=['POST', 'GET'])
 def selectCandidate():
-    if(request.data is None):
-        return jsonify({"status":"Error","message":"Candidate Id is Invalid"})
+    if (request.data is None):
+        return jsonify({"status": "Error", "message": "Candidate Id is Invalid"})
     else:
         candidate_obj = Registration.query.filter_by(id=request.form.get('id')).first_or_404()
-        if(candidate_obj.proceed == 0):
+        if (candidate_obj.proceed == 0):
             candidate_obj.proceed = 1
             return jsonify({"status": "ok", "message": "candidate selected"})
-        elif(candidate_obj.proceed == 1):
+        elif (candidate_obj.proceed == 1):
             candidate_obj.proceed = 0
             return jsonify({"status": "error", "message": "candidate deselected"})
         else:
-            return jsonify({"status":"error","message":"candidate proceed is set to null"})
+            return jsonify({"status": "error", "message": "candidate proceed is set to null"})
+
 
 @main.route('/country', methods=['GET', 'POST'])
 @main.route('/region', methods=['GET', 'POST'])
@@ -1403,7 +1415,8 @@ def create_mappings():
         pass
     else:
         page = {'title': 'Mappings', 'subtitle': ' Mappings'}
-        mappings = Mapping.query.filter_by(country=current_user.location, archived=0).order_by(Mapping.date_added.desc())
+        mappings = Mapping.query.filter_by(country=current_user.location, archived=0).order_by(
+            Mapping.date_added.desc())
         inputmap = Map(
             identifier="view-side",
             lat=-1.2728,
@@ -1473,7 +1486,7 @@ def branches():
             cluster_gridsize=10
         )
         page = {'title': 'Branches', 'subtitle': 'List of branches'}
-
+        
         locations = Location.query.all()
         return render_template('branches.html', branches=branches, currency=currency, clustermap=branch_maps,
                                locations=locations, page=page)
@@ -1579,7 +1592,7 @@ def user(username):
     user = User.query.outerjoin(Geo).outerjoin(UserType) \
         .with_entities(User, Geo, UserType) \
         .filter(User.username == username).first_or_404()
-
+    
     return render_template('user.html', user=user, vc_firms=[],
                            ai_firms=[], su_firms=[])
 
@@ -1757,27 +1770,27 @@ def training_questions_add():
     errors = []
     form = QuestionsCSVUploadForm()
     page = {'title': 'Add Questions', 'subtitle': 'Upload CSV to add questions'}
-
+    
     if request.method == 'GET':
-
+        
         return render_template('training_questions_add.html',
                                title='Add Questions',
                                endpoint='main.training_questions_add',
                                form=form,
                                page=page,
                                errors=errors)
-
+    
     elif request.method == 'POST':
-
+        
         allowed_types = current_app.config['ALLOWED_FILE_TYPES']
-
+        
         if 'csv_file' not in request.files:
             errors.append("Please select at least one CSV file")
-
+        
         csv_file = request.files['csv_file']
-
+        
         abs_path = None
-
+        
         if csv_file.filename == '' or csv_file.filename.split('.')[-1] not in allowed_types or not len(
                 csv_file.filename.split('.')) > 1:
             errors.append('Invalid file type')
@@ -1788,19 +1801,19 @@ def training_questions_add():
                 path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
                 abs_path = os.path.abspath(path)
                 response = create_question_list(abs_path)
-
+                
                 if response['status'] is not 'ok':
                     errors = response['errors']
             except Exception as e:
                 errors = ['Something unexpected happened. Please try again']
-
+        
         try:
             if abs_path:
                 os.remove(abs_path)
         except Exception as e:
             # TODO This is a silent error and needs to be logged
             pass
-
+        
         if len(errors) > 0:
             return render_template('training_questions_add.html',
                                    title='Add Questions',
@@ -1829,18 +1842,18 @@ def training_question_edit(id):
     else:
         try:
             data = request.json.get('question', None)
-
+            
             if not data:
                 return jsonify(status=False, message="Invalid request"), 400
-
+            
             question = Question.query.filter_by(id=data.get('id', None)).first_or_404()
             if data.get('question', None):
                 question.question = data.get('question')
             if data.get('allocated_marks', None):
                 question.allocated_marks = data.get('allocated_marks')
-
+            
             # db.session.merge(question)
-
+            
             if data.get('choices', None):
                 new_choices = data.get('choices')
                 new_choices_ids = [c.get('id') for c in new_choices if c.get('id') is not None]
@@ -1848,7 +1861,7 @@ def training_question_edit(id):
                 choices_to_delete = [c for c in existing_choices if c.id not in new_choices_ids]
                 for c in choices_to_delete:
                     db.session.delete(c)
-
+                
                 for choice in new_choices:
                     id = choice.get('id', None)
                     new_question_choice = QuestionChoice(
@@ -1861,7 +1874,7 @@ def training_question_edit(id):
                         date_created=choice.get('date_created'),
                         archived=choice.get('archived'))
                     db.session.merge(new_question_choice) if id is not None else db.session.add(new_question_choice)
-
+            
             if data.get('topics', None):
                 new_topics = data.get('topics')
                 print(new_topics)
@@ -1879,23 +1892,24 @@ def training_question_edit(id):
                             session_topic_id=t
                         )
                         db.session.add(new_question_topic)
-
+            
             db.session.commit()
-
+            
             return jsonify(status=True, message='Saved successfully'), 200
-
+        
         except Exception as e:
-
-            return jsonify(status=False, message='An error occurred while processing your request. Please try again'), 500
+            
+            return jsonify(status=False,
+                           message='An error occurred while processing your request. Please try again'), 500
 
 
 @main.route('/training/exams')
 @login_required
 def training_exams():
     page = {'title': 'Exams List', 'subtitle': 'View list of all exams'}
-
+    
     exams = ExamTraining.query.filter_by(archived=False, country=current_user.location).order_by(ExamTraining.id)
-
+    
     pagination_count = request.args.get('page', 1, type=int)
     pagination = exams.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)
     return render_template('training_exams.html',
@@ -1916,19 +1930,72 @@ def training_exam_add():
                            endpoint='main.training_exam_save')
 
 
+@main.route('/training/exam/add-from-csv', methods=['GET', 'POST'])
+@login_required
+def training_exam_add_from_csv():
+    if request.method == 'GET':
+        error = None
+        page = {'title': 'Add Exam from CSV', 'subtitle': 'Add new exam from CSV file'}
+        return render_template('training/exam_add-from-csv.html',
+                               title='Add Exam from CSV file',
+                               page=page,
+                               endpoint='main.training_exam_add_from_csv',
+                               error=error)
+    else:
+        print 'FORM', request.form
+        print 'FILES', request.files
+        files = request.files
+        form = request.form
+        country = form.get('country', None)
+        certification_type = form.get('certification_type', None)
+        passmark = form.get('passmark', None)
+        title = form.get('exam-title', None)
+        is_certification = form.get('is_certification', None)
+        abs_path = None
+        try:
+            if 'csv_file' not in files:
+                raise Exception('Invalid request')
+
+            csv_file = request.files['recruitment_upload']
+
+            filename = secure_filename(csv_file.filename)
+            csv_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            abs_path = os.path.abspath(path)
+            csv_rows = process_csv(abs_path)
+
+            UploadExamFromCSV(con)
+
+            if abs_path:
+                os.remove(abs_path)
+            
+            return jsonify(form)
+            
+        except Exception as e:
+            if abs_path:
+                os.remove(abs_path)
+            error = str(e)
+            page = {'title': 'Add Exam from CSV', 'subtitle': 'Add new exam from CSV file'}
+            return render_template('training/exam_add-from-csv.html', title='Add Exam from CSV file',
+                                    page=page,
+                                    endpoint='main.training_exam_add_from_csv',
+                                    error=error)
+
+
 @main.route('/training/exam/<int:id>')
 @login_required
 def training_exam_edit(id):
     page = {'title': 'Edit Exam', 'subtitle': 'Edit Exam'}
-    exam =  ExamTraining.query.filter_by(id=id).first_or_404()
+    exam = ExamTraining.query.filter_by(id=id).first_or_404()
     exam = exam_with_questions_to_dict(exam)
-
+    
     return render_template('training_exam_edit.html',
                            title='Edit Exam',
                            page=page,
                            endpoint='main.training_exam_save',
                            exam=json.dumps(exam).replace("'", "\\'")
                            )
+
 
 @main.route('/exam/training/save', methods=['POST'])
 @login_required
@@ -1937,14 +2004,14 @@ def exam_training_save():
         if not request.json:
             return jsonify(status=False, message="Invalid request"), 400
         data = request.json
-
-        #in order to save, we will not allow deleting the exams (just in case there are trainees who have taken the exam
+        
+        # in order to save, we will not allow deleting the exams (just in case there are trainees who have taken the exam
         training_id = request.json.get('training_id')
         exams = request.json.get('exams')
         added = []
         updated = []
         for exam in exams:
-            #check if it exists
+            # check if it exists
             training_exam = TrainingExam.query.filter_by(training_id=training_id, exam_id=exam.get('exam_id')).first()
             if not training_exam:
                 # create
@@ -1953,7 +2020,7 @@ def exam_training_save():
                     exam_id=exam.get('exam_id'),
                     passmark=exam.get('passmark'),
                     created_by=current_user.id,
-                    unlock_code=randint(1000,9999)
+                    unlock_code=randint(1000, 9999)
                 )
                 db.session.add(training)
                 added.append(exam)
@@ -1964,9 +2031,9 @@ def exam_training_save():
                 db.session.add(training_exam)
                 updated.append(exam)
             db.session.commit()
-
+        
         return jsonify(added=added, updated=updated)
-
+    
     except Exception as e:
         print e
         return jsonify(status=False, message='Error has occurred while saving. Please try again', e=e.message), 500
@@ -1975,12 +2042,12 @@ def exam_training_save():
 @main.route('/training/exam/save', methods=['POST'])
 def training_exam_save():
     try:
-
+        
         if not request.json:
             return jsonify(status=False, message="Invalid request"), 400
-
+        
         data = request.json
-
+        
         id = data.get('id', None)
         title = data.get('title', None)
         country = data.get('country', None)
@@ -1989,10 +2056,10 @@ def training_exam_save():
         questions = data.get('questions', None)
         is_certification = data.get('is_certification', False)
         certification_type = data.get('certification_type', None)
-
+        
         if not title or not questions:
             return jsonify(status=False, message="Invalid request"), 400
-
+        
         exam = ExamTraining(
             id=id,
             title=title,
@@ -2001,10 +2068,10 @@ def training_exam_save():
             passmark=passmark,
             certification_type_id=certification_type if is_certification else None
         )
-
+        
         db.session.merge(exam) if id is not None else db.session.add(exam)
         db.session.commit()
-
+        
         existing_questions = ExamQuestion.query.filter_by(exam_id=exam.id)
         existing_questions_ids = [q.question_id for q in existing_questions]
         new_question_ids = [q.get("id", None) for q in questions if q.get("id", None)]
@@ -2012,7 +2079,7 @@ def training_exam_save():
             if q.id not in new_question_ids:
                 db.session.delete(q)
                 db.session.commit()
-
+        
         for question in questions:
             question_id = question.get("id", None)
             if id not in existing_questions_ids:
@@ -2025,20 +2092,21 @@ def training_exam_save():
                     country=exam.country,
                     archived=False
                 )
-
+                
                 db.session.add(exam_question)
             else:
                 exam_question = ExamQuestion.query.filter_by(exam_id=exam.id, question_id=question_id).first()
                 exam_question.weight = question.get('weight')
                 exam_question.allocated_marks = question.get('allocated_marks')
-
+        
         db.session.commit()
-
+        
         return jsonify(status=True, message="Saved successfully"), 200
-
+    
     except Exception as e:
         print e
         return jsonify(status=False, message='An unexpected error has occurred. Please try again'), 500
+
 
 @main.route('/training/roles/add', methods=['GET', 'POST'])
 @main.route('/training/roles/edit/<int:id>', methods=['GET', 'POST'])
@@ -2046,7 +2114,7 @@ def training_exam_save():
 def add_training_roles(id=None):
     form = TrainingRoleForm()
     title = "Training Role"
-    action ="Add"
+    action = "Add"
     if form.validate_on_submit():
         geo = Geo.query.filter_by(id=form.country.data).first()
         if id:
@@ -2062,11 +2130,11 @@ def add_training_roles(id=None):
                 return redirect(request.args.get('next') or url_for('main.training_roles'))
         else:
             training_role = TrainingRoles(
-                role_name = form.role_name.data,
-                archived = 0,
-                readonly = form.readonly.data,
-                country = geo.geo_code,
-                created_by = current_user.id,
+                role_name=form.role_name.data,
+                archived=0,
+                readonly=form.readonly.data,
+                country=geo.geo_code,
+                created_by=current_user.id,
             )
             flash('Role {} has been created!'.format(form.role_name.data), 'success')
         db.session.add(training_role)
@@ -2089,13 +2157,14 @@ def add_training_roles(id=None):
         action=action
     )
 
+
 @main.route('/training/roles', methods=['GET', 'POST'])
 @login_required
 def training_roles():
     page = {'title': 'Training Roles', 'subtitle': 'View all roles'}
-
+    
     roles = TrainingRoles.query.filter_by(archived=0)
-
+    
     pagination_count = request.args.get('page', 1, type=int)
     pagination = roles.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)
     return render_template('listing.html',
@@ -2133,16 +2202,15 @@ def test_task_manager():
     user = current_user
     if not isinstance(user, User):
         user = None
-
+    
     task_manager = TaskManager(user=user)
     task = task_manager.launch_task('app.tasks.tasks.example_task', seconds=20)
     print(task)
     db.session.add(task)
     db.session.commit()
     db.session.close()
-
+    
     return jsonify(status="Working on this")
-
 
 
 def application_status(app):
