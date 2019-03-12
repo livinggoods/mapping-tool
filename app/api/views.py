@@ -911,7 +911,11 @@ def get_trainings():
       Returns Json Payload for the training data
     """
     if request.method == 'GET':
-        trainings = Training.query.filter_by(archived=0)
+        country = request.args.get('country', None)
+        if country:
+            trainings = Training.query.filter_by(archived=0, country=country)
+        else:
+            trainings = Training.query.filter_by(archived=0)
         return jsonify(trainings=[r.to_json() for r in trainings])
     else:
         return jsonify(message='not allowed'), 403

@@ -22,9 +22,12 @@ def make_shell_context():
     shell.
     """
     return dict(application=application, db=db, User=User, Geo=Geo, Role=Role, UserType=UserType)
+
+
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 manager.add_command("fake_registrations", GenerateRegistrations())
+
 
 @manager.command
 def test():
@@ -34,6 +37,7 @@ def test():
     import unittest
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
+
 
 @manager.command
 def db_update_education():
@@ -50,21 +54,20 @@ def db_rebuild():
     db.reflect()
     db.drop_all()
     db.create_all()
-
+    
     # insert locations as defined in model
     Location.insert_locations()
-
+    
     # insert roles as defined in model
     Role.insert_roles()
-
+    
     # insert geos and usertypes as defined in model
     Geo.insert_geos()
     UserType.insert_user_types()
-
+    
     # insert education data
     Education.create_education()
-
-
+    
     # insert fake admin/test users
     from random import seed
     import forgery_py
@@ -73,7 +76,7 @@ def db_rebuild():
         email='dkimaru@livinggoods.org',
         username='dkimaru',
         password='password',
-        app_name ='password'.encode('base64'),
+        app_name='password'.encode('base64'),
         confirmed=True,
         name='David Kimaru',
         location='KE',
@@ -84,7 +87,7 @@ def db_rebuild():
         email='admin@livinggoods.org',
         username='webmaster',
         password='webmaster',
-        app_name ='webmaster'.encode('base64'),
+        app_name='webmaster'.encode('base64'),
         confirmed=True,
         name='Web Master',
         location='UG',
@@ -93,15 +96,14 @@ def db_rebuild():
     )
     db.session.add_all([test_user_1, admin_user])
     db.session.commit()
-
+    
     # insert fake user data
     # User.generate_fake(60)
-
-
+    
     # print results
     inspector = db.inspect(db.engine)
     print 'The following tables were created.'
-    print '-'*17
+    print '-' * 17
     for table in inspector.get_table_names():
         print table
 
@@ -110,32 +112,32 @@ def db_rebuild():
 def deploy():
     """Run deployment tasks."""
     from flask.ext.migrate import upgrade
-
+    
     # migrate database to latest revision
     upgrade()
-
+    
     # create user roles
     Role.insert_roles()
-
+    
     # insert geos and usertypes as defined in model
     Geo.insert_geos()
     UserType.insert_user_types()
-
+    
     # insert education data
     Education.create_education()
-    
+
+
 @manager.command
 def resolve_errors():
-    
     import requests
     endpoint = '/api/v1/sync/mapping?'
     errors = iter(ErrorLog.query.filter_by(resolved=False, endpoint=endpoint).order_by(ErrorLog.id.desc()))
     
     while True:
         try:
-
+            
             error = errors.next()
-
+            
             base_url = 'https://expansion.lg-apps.com'
             url = base_url + error.endpoint
             headers = {}
@@ -144,7 +146,7 @@ def resolve_errors():
                 header = item.split(': ')
                 if len(header) == 2:
                     headers[header[0]] = header[1]
-                
+            
             method_type = error.http_method
             payload = error.payload
             
@@ -156,12 +158,13 @@ def resolve_errors():
                     print "Resolved " + error.error
                 else:
                     print "Failed to resolve " + error.error
-            
+        
         except StopIteration as e:
             break
         except Exception as e:
             print str(e)
             break
+
 
 @manager.command
 def migrate_to_uuid():
@@ -173,16 +176,30 @@ def migrate_to_uuid():
         print "Migrating {} of {}".format(str(i), total)
         record.id = str(uuid.uuid4())
         db.session.commit()
-        i = i +1
+        i = i + 1
     print "Migration complete. {} records migrated".format(total)
-        
+
 
 @manager.command
 def requeue_tasks():
     tasks = Task.query.filter_by(complete=False)
     for task in tasks:
         rq.requeue_job(task.id, connection=current_app.redis)
-    
-    
+
+
+@manager.command
+def update_recruitment_name():
+    from app.models import Recruitments
+    recruitments = Recruitments.query.filter(Recruitments.cohort_id.isnot(None))
+    for recruitment in recruitments:
+        old_name = recruitment.name
+        cohort = recruitment.cohort
+        branch = cohort.branch
+        recruitment.name = '%s Cohort %s' % (branch.branch_name, cohort.cohort_number)
+        db.session.merge(recruitment)
+        print 'RENAMING', '%s --> %s' % (old_name, recruitment.name)
+    db.session.commit()
+
+
 if __name__ == '__main__':
     manager.run()

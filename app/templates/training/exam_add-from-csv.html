@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% block title %}Questions{% endblock %}
+
+{% block content %}
+    <form action="" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="country" value="{{ current_user.location }}">
+        <div class="">
+            <div class="page-title">
+                <div class="title_left">
+                    <h3>{{ title }}
+                        <small>{{ title }}</small>
+                    </h3>
+                </div>
+
+                <div class="title_right">
+                    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for...">
+                            <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Go!</button>
+          </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+        <div class="row" id="exam-ui">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Add Exam</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <input type="submit" value="Save Exam" class="btn btn-primary">
+
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+
+                        {% if error %}
+                            <div class="row">
+                                <div class="col-xs-12 col-md-9 col-md-offset-1">
+                                    <p class="bg-danger text-center" style="padding: 10px;">{{ error }}</p>
+                                </div>
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="row">
+
+                            <div class="col-xs-12 col-md-9 col-md-offset-1">
+
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <label for="exam-title">Exam Title</label>
+                                            <input name="exam-title" id="exam-title" type="text" class="form-control"
+                                                   placeholder="Exam Title" required/>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-12 margin-bottom">
+                                        <div class="form-group">
+                                            <label for="passmark">Passmark</label>
+                                            <input name="passmark" id="passmark" type="number" class="form-control"
+                                                   placeholder="Exam Passmark" required/>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-md-4">
+                                        <div class="form-group">
+                                            <div class="checkbox">
+                                                <label for="is_certification">
+                                                    <input name="is_certification" id="is_certification"
+                                                           type="checkbox"/>
+                                                    Is This exam a Certification?
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div id="certification-type-panel" class="col-xs-12 col-md-8">
+
+                                        <div class="form-group">
+                                            <label for="certification-type">Certification Type</label>
+                                            <select name="certification_type" id="certification_type"
+                                                    class="form-control">
+                                            </select>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="csv_file">CSV File containing exam questions</label>
+                                        <input type="file" name="csv_file" class="form-control" required accept=".csv">
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="overlay" style="display: none;">
+            <div>
+                <div class="loader center-block"></div>
+                <h3 class="text-center" style="color: white;">Please wait</h3>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+
+{% block additionalcss %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.structure.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_ui/jquery-ui.theme.min.css') }}">
+
+{% endblock %}
+
+{% block additionaljs %}
+    <script src="{{ url_for('static', filename='js/select2.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lodash.min.js') }}"></script>
+{% endblock %}
+
+{% block javascript %}
+
+    <script>
+
+        var ExamApp = (function ($, _) {
+            var app = {
+                init: function () {
+                    app.initSelect();
+                    app.initCheckboxes();
+                    $('#certification-type-panel').hide();
+                },
+
+                initSelect: function () {
+                    var select = $("#certification_type");
+
+                    select.select2({
+                        ajax: {
+                            url: '{{ url_for("api.certification_type") }}',
+                            delay: 250,
+                            processResults: function (data) {
+
+                                var types = data.certification_types;
+                                types = _.map(types, function (value, index) {
+                                    return {
+                                        text: value.name,
+                                        id: value.id
+                                    }
+                                });
+
+                                return {
+                                    results: types,
+                                    pagination: {
+                                        more: false
+                                    }
+                                }
+                            }
+                        }
+                    });
+                },
+
+                initCheckboxes: function () {
+                    $('#is_certification').change(function (e) {
+                        var element = $(e.target);
+                        isChecked = element.prop('checked');
+                        if (isChecked) {
+                            $('#certification-type-panel').show();
+                        } else {
+                            $('#certification-type-panel').hide();
+                        }
+                        $('#certification_type').prop('required', isChecked);
+                    });
+                }
+            };
+
+            return app
+
+        })(jQuery, _);
+
+
+        $(document).ready(function () {
+            ExamApp.init();
+        });
+
+    </script>
+
+{% endblock %}
