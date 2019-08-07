@@ -2,7 +2,6 @@
 import os
 import uuid
 
-import rq
 from flask import current_app
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager, Shell
@@ -102,10 +101,10 @@ def db_rebuild():
     
     # print results
     inspector = db.inspect(db.engine)
-    print 'The following tables were created.'
-    print '-' * 17
+    print ('The following tables were created.')
+    print ('-' * 17)
     for table in inspector.get_table_names():
-        print table
+        print (table)
 
 
 @manager.command
@@ -155,14 +154,14 @@ def resolve_errors():
                 if 200 <= r.status_code < 300:
                     db.session.delete(error)
                     db.session.commit()
-                    print "Resolved " + error.error
+                    print ("Resolved " + error.error)
                 else:
-                    print "Failed to resolve " + error.error
+                    print ("Failed to resolve " + error.error)
         
         except StopIteration as e:
             break
         except Exception as e:
-            print str(e)
+            print (str(e))
             break
 
 
@@ -173,11 +172,11 @@ def migrate_to_uuid():
     total = str(len(records))
     i = 1
     for record in records:
-        print "Migrating {} of {}".format(str(i), total)
+        print ("Migrating {} of {}".format(str(i), total))
         record.id = str(uuid.uuid4())
         db.session.commit()
         i = i + 1
-    print "Migration complete. {} records migrated".format(total)
+    print ("Migration complete. {} records migrated".format(total))
 
 
 @manager.command
@@ -197,7 +196,7 @@ def update_recruitment_name():
         branch = cohort.branch
         recruitment.name = '%s Cohort %s' % (branch.branch_name, cohort.cohort_number)
         db.session.merge(recruitment)
-        print 'RENAMING', '%s --> %s' % (old_name, recruitment.name)
+        print ('RENAMING', '%s --> %s' % (old_name, recruitment.name))
     db.session.commit()
 
 

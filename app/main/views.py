@@ -1942,8 +1942,8 @@ def training_exam_add_from_csv():
                                endpoint='main.training_exam_add_from_csv',
                                error=error)
     else:
-        print 'FORM', request.form
-        print 'FILES', request.files
+        print('FORM', request.form)
+        print('FILES', request.files)
         files = request.files
         form = request.form
         country = form.get('country', None)
@@ -2035,7 +2035,7 @@ def exam_training_save():
         return jsonify(added=added, updated=updated)
     
     except Exception as e:
-        print e
+        print(e)
         return jsonify(status=False, message='Error has occurred while saving. Please try again', e=e.message), 500
 
 
@@ -2104,7 +2104,7 @@ def training_exam_save():
         return jsonify(status=True, message="Saved successfully"), 200
     
     except Exception as e:
-        print e
+        print (e)
         return jsonify(status=False, message='An unexpected error has occurred. Please try again'), 500
 
 
@@ -2240,3 +2240,42 @@ def interview_pass(interview):
     if interview.commitment > 1 and interview.total_score > 24 and interview.special_condition == 'No':
         status = True
     return status
+
+
+@main.route('/certifications', methods=['GET', 'POST'])
+@login_required
+def certifications():
+    cert_type = CertificationType.query.filter_by(archived=False, country=current_user.location)
+    page = {'title': 'Certification Type', 'subtitle': 'All Certification Types'}
+    count = request.args.get('page', 1, type=int)
+    pagination = cert_type.paginate(count, per_page=current_app.config['PER_PAGE'], error_out=False)
+    return render_template(
+        'CertificationType.html',
+        endpoint='main.certifications',
+        pagination=pagination,
+        page=page
+    )
+
+
+@main.route('/certification/new/', methods=['GET', 'POST'])
+@login_required
+def add_certification_type():
+    form = CertTypeForm()
+    if form.validate_on_submit():
+        new_cert_type = CertificationType(
+            name=form.name.data,
+            proportion=form.proportion.data,
+            archived=form.archived.data,
+            country=Geo.query.filter_by(id=form.country.data).first().geo_code)
+        db.session.add(new_cert_type)
+        db.session.commit()
+        flash("Successfully Added a Certification Type")
+
+         #redirect to certifications page
+        return redirect('/certifications')
+    return render_template(
+         'add_cert_type.html',
+         form=form,
+     )
+
+

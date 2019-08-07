@@ -20,11 +20,11 @@ class GenerateRegistrations(Command):
             for registration in registrations:
                 db.session.add(registration[1])
                 
-                print '%s Creating Registration %s' % (registration[0], registration[1].name)
+                print('%s Creating Registration %s' % (registration[0], registration[1].name))
             
             db.session.commit()
         except Exception as e:
-            print 'Exception %s'%str(e)
+            print('Exception %s'%str(e))
             db.session.rollback()
             
         finally:
@@ -46,7 +46,7 @@ class GenerateRegistrations(Command):
         db.session.add(recruitment)
         db.session.commit()
         
-        print 'Created recruitment %s' % recruitment.name
+        print('Created recruitment %s' % recruitment.name)
         
         return recruitment
     

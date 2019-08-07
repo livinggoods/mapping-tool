@@ -14,8 +14,6 @@ from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text, Nume
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from data import data
-from utils.utils import validate_uuid, asdict
 from . import db, login_manager
 
 
