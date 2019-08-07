@@ -163,6 +163,8 @@ def new_training():
         db.session.add(new_training)
         db.session.commit()
         return redirect('/trainings')
+
+
     return render_template(
         'form_training.html',
         training_map=training_map,
@@ -2262,14 +2264,17 @@ def certifications():
 def add_certification_type():
     form = CertTypeForm()
     if form.validate_on_submit():
+
         new_cert_type = CertificationType(
             name=form.name.data,
             proportion=form.proportion.data,
             archived=form.archived.data,
-            country=Geo.query.filter_by(id=form.country.data).first().geo_code)
+            country=Geo.query.filter_by(id=form.country.data).first().geo_code
+        )
+
         db.session.add(new_cert_type)
         db.session.commit()
-        flash("Successfully Added a Certification Type")
+        flash('Successfully Added a Certification Type', 'success')
 
          #redirect to certifications page
         return redirect('/certifications')
