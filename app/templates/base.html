@@ -40,6 +40,26 @@
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+
+            {% for category, message in messages %}
+             {% if category == 'success' %}
+                <div class="alert alert-sucess mb-3" role="alert">
+                  {{message}}
+                </div>
+            {% endif %}
+            {% if category == 'error' %}
+                <div  class="alert alert-danger mb-3" role="alert">
+                  {{message}}
+                </div>
+            {% endif %}
+
+            {% endfor %}
+
+
+          {% endif %}
+        {% endwith %}
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
@@ -61,6 +81,8 @@
 
             <br />
             {% include 'sidebar-menu.html' %}
+
+
             {% include 'footer-menu.html' %}
 
             
