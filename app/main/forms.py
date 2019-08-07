@@ -121,8 +121,8 @@ class TrainingForm(Form):
     training_venue = SelectField('Training Venue')
     training_status = SelectField('Training Status', coerce=int)
     comment = TextAreaField('Comment')
-    date_commenced = DateField('Date Commenced', format='%d/%m/%Y')
-    date_completed = DateField('Date Completed', format='%d/%m/%Y')
+    date_commenced = DateField('Date Commenced', format='%d/%m/%Y', description="day/month/year")
+    date_completed = DateField('Date Completed', format='%d/%m/%Y', description="day/month/year")
     submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):
