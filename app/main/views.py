@@ -2251,6 +2251,7 @@ def certifications():
     page = {'title': 'Certification Type', 'subtitle': 'All Certification Types'}
     count = request.args.get('page', 1, type=int)
     pagination = cert_type.paginate(count, per_page=current_app.config['PER_PAGE'], error_out=False)
+
     return render_template(
         'CertificationType.html',
         endpoint='main.certifications',
@@ -2276,11 +2277,54 @@ def add_certification_type():
         db.session.commit()
         flash('Successfully Added a Certification Type', 'success')
 
-         #redirect to certifications page
+         # redirect to certifications page
         return redirect('/certifications')
     return render_template(
          'add_cert_type.html',
          form=form,
      )
+
+
+@main.route('/certifications/<int:cert_id>/edit_certification', methods=['GET', 'POST'])
+@login_required
+def edit_certification_type(cert_id):
+    cert_type = CertificationType.query.filter_by(id=cert_id).first_or_404()
+    form = CertTypeForm()
+    if form.validate_on_submit():
+        cert_type.name = form.name.data
+        cert_type.proportion = form.proportion.data
+        cert_type.country = Geo.query.filter_by(id=form.country.data).first().geo_code
+        cert_type.archived = False
+        db.session.add(cert_type)
+        db.session.commit()
+        flash("Successfully edited the Certification Type", 'success')
+        return redirect(url_for('main.certifications'))
+    form.name.data = cert_type.name
+    form.country.data = Geo.query.filter_by(geo_code=cert_type.country).first().id
+
+    return render_template(
+        'edit_cert_type.html',
+        form=form,
+        cert_type=cert_type
+    )
+
+
+@main.route('/certifications/<int:cert_id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_cert_type(cert_id):
+    cert_type = CertificationType.query.filter_by(id=cert_id).first_or_404()
+    page = {
+        'title': 'Delete Certification Type'
+    }
+
+    form = DeleteCertificationType()
+    if form.validate_on_submit():
+        db.session.delete(cert_type)
+        db.session.commit()
+        flash('Certification Type Deleted!', 'success')
+        return redirect(url_for('main.certifications'))
+    return render_template('delete_cert_type.html', form=form, cert_type=cert_type, page=page)
+
+
 
 

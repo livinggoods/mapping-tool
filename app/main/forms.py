@@ -285,7 +285,7 @@ class CertTypeForm(Form):
     """
     name = StringField('Name', validators=[InputRequired()])
     proportion= FloatField('Proportion', validators=[InputRequired()], default=0)
-    archived = BooleanField('archived', validators=[DataRequired()], default=False)
+    archived = BooleanField('archived', default=False)
     country = SelectField('Country', validators=[DataRequired()], coerce=int)
 
     submit = SubmitField('Submit')
@@ -294,3 +294,7 @@ class CertTypeForm(Form):
         super(CertTypeForm, self).__init__(*args, **kwargs)
         self.country.choices = [(geo.id, geo.geo_name)
                                 for geo in Geo.query.order_by(Geo.geo_name).all()]
+
+
+class DeleteCertificationType(Form):
+    submit = SubmitField('Delete')

@@ -25,7 +25,6 @@
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="x_panel">
       <div class="x_title">
-        <h2>Certifiction Types <small>List of All certifications.</small></h2>
         <ul class="nav navbar-right panel_toolbox">
           <li class="btn-group closed" style="display: inline-block;">
             <a class="btn btn-primary btn-xs " href="/certification/new"><i class="fa fa-file-text fa-fw"></i> New Certification Type </a>
@@ -47,9 +46,6 @@
         <div class="clearfix"></div>
       </div>
       <div class="x_content">
-        <p class="text-muted font-13 m-b-30">
-          A list of All Certification Types
-        </p>
         <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
           <thead>
             <tr>
@@ -75,7 +71,7 @@
 
                 {% if current_user.role_id == 2 %}
               <td>
-                <a class="btn btn-primary btn-xs" href="/certifications/{{cert.id}}/edit"><i class="fa fa-edit"></i>
+                <a class="btn btn-primary btn-xs" href="/certifications/{{cert.id}}/edit_certification"><i class="fa fa-edit"></i>
                   Edit
                 </a>
                 <a class="btn btn-danger btn-xs" href="/certifications/{{cert.id}}/delete"><i class="fa fa-trash"></i>

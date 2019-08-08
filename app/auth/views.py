@@ -45,7 +45,10 @@ def login():
             # unauthorized access to a protected URL, Flask-Login saves the
             # original URL in the next query string argument
             return redirect(request.args.get('next') or url_for('main.index'))
+        '''
         flash('Invalid username or password.', 'error')
+        return render_template('login.html', form=form, page=page)
+        '''
     register_form = RegistrationForm()
     geos = [(c.id, c.geo_name) for c in Geo.query.all()]
     register_form.location.choices = geos
