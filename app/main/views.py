@@ -1913,7 +1913,7 @@ def training_exams():
     exams = ExamTraining.query.filter_by(archived=False, country=current_user.location).order_by(ExamTraining.id)
     
     pagination_count = request.args.get('page', 1, type=int)
-    pagination = exams.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)
+    pagination = exams.paginate(pagination_count, per_page=1, error_out=False)
     return render_template('training_exams.html',
                            title='Exams',
                            page=page,
@@ -2244,6 +2244,7 @@ def interview_pass(interview):
     return status
 
 
+# show Certification Type
 @main.route('/certifications', methods=['GET', 'POST'])
 @login_required
 def certifications():
@@ -2259,7 +2260,7 @@ def certifications():
         page=page
     )
 
-
+# add a Certification Type
 @main.route('/certification/new/', methods=['GET', 'POST'])
 @login_required
 def add_certification_type():
@@ -2284,7 +2285,7 @@ def add_certification_type():
          form=form,
      )
 
-
+# edit/update a Certification Type
 @main.route('/certifications/<int:cert_id>/edit_certification', methods=['GET', 'POST'])
 @login_required
 def edit_certification_type(cert_id):
@@ -2309,6 +2310,7 @@ def edit_certification_type(cert_id):
     )
 
 
+# delete a Certification Type
 @main.route('/certifications/<int:cert_id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_cert_type(cert_id):

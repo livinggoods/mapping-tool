@@ -13,7 +13,9 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, Signatur
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text, Numeric, text, Float, inspect
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
+from data import data
 
+from utils.utils import validate_uuid, asdict
 from . import db, login_manager
 
 
@@ -2448,6 +2450,7 @@ class ExamTraining(db.Model):
     __tablename__ = 'exam_trainings'
 
     id = Column(Integer, primary_key=True)
+
     title = Column(String(45))
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)

@@ -1053,6 +1053,7 @@ def get_exams():
         elif new_exam is not None:
             db.session.add(new_exam)
         db.session.commit()
+
         return jsonify(status='ok')
 
 
@@ -1161,7 +1162,7 @@ def question_types():
 def certification_type():
     if request.method == 'GET':
         return jsonify(
-            certification_types=[c_type.to_json() for c_type in CertificationType.query.filter_by(archived=False)])
+            certification_types=[c_type.to_json() for c_type in CertificationType.query.filter_by(archived=True)])
     
     else:
         data = request.json
@@ -1179,7 +1180,7 @@ def training_exams(training_id=None):
         if training_id is None:
             return jsonify(error="training id is required"), 400
         exams = []
-        training_exams = TrainingExam.query.filter_by(training_id=training_id)
+        training_exams = TrainingExam.query.filter_by(training_id=training_id, archived=False)
         for training_exam in training_exams:
             if training_exam.exam.is_certification():
                 continue
