@@ -297,6 +297,8 @@ def training(id):
                                  TrainingTrainers.query.filter_by(training_id=training.id, archived=0)]
     training_dict['trainees'] = [trainee.to_json() for trainee in Trainees.query.filter_by(training_id=training.id)]
     roles = [r._asdict() for r in TrainingRoles.query.filter_by(archived=0)]
+
+
     # return jsonify(training_dict)
     page = {'title': training.training_name,
             'subtitle': '{training} training details' \
@@ -2295,7 +2297,7 @@ def edit_certification_type(cert_id):
         cert_type.name = form.name.data
         cert_type.proportion = form.proportion.data
         cert_type.country = Geo.query.filter_by(id=form.country.data).first().geo_code
-        cert_type.archived = False
+        cert_type.archived = form.archived.data
         db.session.add(cert_type)
         db.session.commit()
         flash("Successfully edited the Certification Type", 'success')

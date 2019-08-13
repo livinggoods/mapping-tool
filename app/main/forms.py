@@ -298,3 +298,4 @@ class CertTypeForm(Form):
 
 class DeleteCertificationType(Form):
     submit = SubmitField('Delete')
+
