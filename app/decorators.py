@@ -36,7 +36,7 @@ def api_login_required(f):
         def decorated_function(*args, **kwargs):
             if current_user.is_authenticated():
                 return f(*args, **kwargs)
-            if request.path.split('/')[2] == 'v1': # for legacy compartibility with v1 api
+            if request.path.split('/')[2] == 'v1':  # for legacy compatibility with v1 api
                 return f(*args, **kwargs)
             token_details = request.headers.get('Authorization', '').split(' ')
             if len(token_details) > 1:

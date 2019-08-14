@@ -54,7 +54,7 @@ def create_app(config_name):
     app.task_queue = rq.Queue('expansion-tasks', connection=app.redis, default_timeout=5000)
     
     ## Add admin
-    from admins import TrainingStatusAdmin
+    from .admins import TrainingStatusAdmin
     
     admin.add_view(TrainingStatusAdmin(db.session))
     

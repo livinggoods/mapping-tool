@@ -163,6 +163,8 @@ def new_training():
         db.session.add(new_training)
         db.session.commit()
         return redirect('/trainings')
+
+
     return render_template(
         'form_training.html',
         training_map=training_map,
@@ -290,11 +292,13 @@ def training(id):
     training = Training.query.filter_by(id=id).first_or_404()
     training_dict = asdict(training)
     training_dict['exams'] = [e._asdict() for e in
-                              TrainingExam.query.filter_by(training_id=training.id, archived=False)]
+                              TrainingExam.query.filter_by(training_id=training.id).order_by(TrainingExam.id)]
     training_dict['trainers'] = [t._asdict() for t in
                                  TrainingTrainers.query.filter_by(training_id=training.id, archived=0)]
     training_dict['trainees'] = [trainee.to_json() for trainee in Trainees.query.filter_by(training_id=training.id)]
     roles = [r._asdict() for r in TrainingRoles.query.filter_by(archived=0)]
+
+
     # return jsonify(training_dict)
     page = {'title': training.training_name,
             'subtitle': '{training} training details' \
@@ -335,6 +339,16 @@ def exam_analysis(training_id, training_exam_id):
                            trainees=json.dumps([asdict(trainee) for trainee in trainees]).replace("'", "\\'")
                            )
 
+@main.route('/training/exam/<int:training_exam_id>/archive', methods=['POST', 'GET'])
+@login_required
+def archive_training_exam(training_exam_id):
+    training_exam = TrainingExam.query.filter_by(id=training_exam_id).first_or_404()
+    training_exam.archived = not training_exam.archived
+    db.session.merge(training_exam)
+    db.session.commit()
+    return jsonify({"status": True, "message": "saved successfully"});
+    
+    
 
 @main.route('/training/<string:training_id>/sessions')
 @login_required
@@ -1911,7 +1925,7 @@ def training_exams():
     exams = ExamTraining.query.filter_by(archived=False, country=current_user.location).order_by(ExamTraining.id)
     
     pagination_count = request.args.get('page', 1, type=int)
-    pagination = exams.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)
+    pagination = exams.paginate(pagination_count, per_page=1, error_out=False)
     return render_template('training_exams.html',
                            title='Exams',
                            page=page,
@@ -1942,8 +1956,8 @@ def training_exam_add_from_csv():
                                endpoint='main.training_exam_add_from_csv',
                                error=error)
     else:
-        print 'FORM', request.form
-        print 'FILES', request.files
+        print('FORM', request.form)
+        print('FILES', request.files)
         files = request.files
         form = request.form
         country = form.get('country', None)
@@ -2035,7 +2049,7 @@ def exam_training_save():
         return jsonify(added=added, updated=updated)
     
     except Exception as e:
-        print e
+        print(e)
         return jsonify(status=False, message='Error has occurred while saving. Please try again', e=e.message), 500
 
 
@@ -2104,7 +2118,7 @@ def training_exam_save():
         return jsonify(status=True, message="Saved successfully"), 200
     
     except Exception as e:
-        print e
+        print (e)
         return jsonify(status=False, message='An unexpected error has occurred. Please try again'), 500
 
 
@@ -2240,3 +2254,91 @@ def interview_pass(interview):
     if interview.commitment > 1 and interview.total_score > 24 and interview.special_condition == 'No':
         status = True
     return status
+
+
+# show Certification Type
+@main.route('/certifications', methods=['GET', 'POST'])
+@login_required
+def certifications():
+    cert_type = CertificationType.query.filter_by(archived=False, country=current_user.location)
+    page = {'title': 'Certification Type', 'subtitle': 'All Certification Types'}
+    count = request.args.get('page', 1, type=int)
+    pagination = cert_type.paginate(count, per_page=current_app.config['PER_PAGE'], error_out=False)
+
+    return render_template(
+        'CertificationType.html',
+        endpoint='main.certifications',
+        pagination=pagination,
+        page=page
+    )
+
+# add a Certification Type
+@main.route('/certification/new/', methods=['GET', 'POST'])
+@login_required
+def add_certification_type():
+    form = CertTypeForm()
+    if form.validate_on_submit():
+
+        new_cert_type = CertificationType(
+            name=form.name.data,
+            proportion=form.proportion.data,
+            archived=form.archived.data,
+            country=Geo.query.filter_by(id=form.country.data).first().geo_code
+        )
+
+        db.session.add(new_cert_type)
+        db.session.commit()
+        flash('Successfully Added a Certification Type', 'success')
+
+         # redirect to certifications page
+        return redirect('/certifications')
+    return render_template(
+         'add_cert_type.html',
+         form=form,
+     )
+
+# edit/update a Certification Type
+@main.route('/certifications/<int:cert_id>/edit_certification', methods=['GET', 'POST'])
+@login_required
+def edit_certification_type(cert_id):
+    cert_type = CertificationType.query.filter_by(id=cert_id).first_or_404()
+    form = CertTypeForm()
+    if form.validate_on_submit():
+        cert_type.name = form.name.data
+        cert_type.proportion = form.proportion.data
+        cert_type.country = Geo.query.filter_by(id=form.country.data).first().geo_code
+        cert_type.archived = form.archived.data
+        db.session.add(cert_type)
+        db.session.commit()
+        flash("Successfully edited the Certification Type", 'success')
+        return redirect(url_for('main.certifications'))
+    form.name.data = cert_type.name
+    form.country.data = Geo.query.filter_by(geo_code=cert_type.country).first().id
+
+    return render_template(
+        'edit_cert_type.html',
+        form=form,
+        cert_type=cert_type
+    )
+
+
+# delete a Certification Type
+@main.route('/certifications/<int:cert_id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_cert_type(cert_id):
+    cert_type = CertificationType.query.filter_by(id=cert_id).first_or_404()
+    page = {
+        'title': 'Delete Certification Type'
+    }
+
+    form = DeleteCertificationType()
+    if form.validate_on_submit():
+        db.session.delete(cert_type)
+        db.session.commit()
+        flash('Certification Type Deleted!', 'success')
+        return redirect(url_for('main.certifications'))
+    return render_template('delete_cert_type.html', form=form, cert_type=cert_type, page=page)
+
+
+
+

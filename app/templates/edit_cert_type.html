@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="page-header">
+    <h1>Edit the <b>{{cert_type.name}}</b> Certification Type</h1>
+</div>
+<div class="" id="">
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}

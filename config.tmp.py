@@ -34,11 +34,11 @@ class DevelopmentConfigPsql(Config):
         .format(
             dialect='postgresql',
             driver='psycopg2',
-            user=os.environ['RDS_USERNAME'],
-            password=os.environ['RDS_PASSWORD'],
-            host=os.environ['RDS_HOSTNAME'],
-            port=os.environ['RDS_PORT'],
-            dbname=os.environ['RDS_DB_NAME']
+            user=os.environ['USERNAME'],
+            password=os.environ['PASSWORD'],
+            host=os.environ['HOSTNAME'],
+            port=os.environ['DB_PORT'],
+            dbname=os.environ['DB_NAME']
         )
 
 

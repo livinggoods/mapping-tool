@@ -121,8 +121,8 @@ class TrainingForm(Form):
     training_venue = SelectField('Training Venue')
     training_status = SelectField('Training Status', coerce=int)
     comment = TextAreaField('Comment')
-    date_commenced = DateField('Date Commenced', format='%d/%m/%Y')
-    date_completed = DateField('Date Completed', format='%d/%m/%Y')
+    date_commenced = DateField('Date Commenced', format='%d/%m/%Y', description="day/month/year")
+    date_completed = DateField('Date Completed', format='%d/%m/%Y', description="day/month/year")
     submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):
@@ -265,6 +265,7 @@ class QuestionsCSVUploadForm(Form):
                          )
     submit = SubmitField('Submit')
 
+
 class TrainingRoleForm(Form):
     id = HiddenField("ID")
     role_name = StringField("Role Name", validators=[DataRequired(), Length(3, 19)])
@@ -276,3 +277,25 @@ class TrainingRoleForm(Form):
         super(TrainingRoleForm, self).__init__(*args, **kwargs)
         self.country.choices = [(geo.id, geo.geo_name)
                                 for geo in Geo.query.order_by(Geo.geo_name).all()]
+
+
+class CertTypeForm(Form):
+    """
+    These are the fields that should be filled by the user about the new certification type
+    """
+    name = StringField('Name', validators=[InputRequired()])
+    proportion= FloatField('Proportion', validators=[InputRequired()], default=0)
+    archived = BooleanField('archived', default=False)
+    country = SelectField('Country', validators=[DataRequired()], coerce=int)
+
+    submit = SubmitField('Submit')
+
+    def __init__(self, *args, **kwargs):
+        super(CertTypeForm, self).__init__(*args, **kwargs)
+        self.country.choices = [(geo.id, geo.geo_name)
+                                for geo in Geo.query.order_by(Geo.geo_name).all()]
+
+
+class DeleteCertificationType(Form):
+    submit = SubmitField('Delete')
+
