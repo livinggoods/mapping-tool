@@ -68,7 +68,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr rv-each-trainer="data.trainers">
+                    <tr rv-each-traine="data.trainers">
                       <td><span rv-text="trainer.trainer.name"></span></td>
                       <td>
                         <select class='trainer-role' rv-value="trainer.training_role_id" rv-on-change="controller.onRoleChanged">
@@ -151,8 +151,8 @@
                                       </a>
                                   </li>
                                   <li>
-                                      <input type="checkbox" name="exam.title" value="exam.archived">
-                                      <label for="exam.exam_id">Archive</label>
+                                      <input type="checkbox"  rv-value="exam.archived" rv-checked="exam.archived">
+                                      <label>Archive</label>
                                   </li>
                               </ul>
                           </li>

@@ -2450,7 +2450,6 @@ class ExamTraining(db.Model):
     __tablename__ = 'exam_trainings'
 
     id = Column(Integer, primary_key=True)
-
     title = Column(String(45))
     created_by = Column(ForeignKey(u'users.id'), nullable=True, index=True)
     date_created = Column(db.DateTime(), default=datetime.utcnow, nullable=False)
