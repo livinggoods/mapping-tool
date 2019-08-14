@@ -292,7 +292,7 @@ def training(id):
     training = Training.query.filter_by(id=id).first_or_404()
     training_dict = asdict(training)
     training_dict['exams'] = [e._asdict() for e in
-                              TrainingExam.query.filter_by(training_id=training.id, archived=False)]
+                              TrainingExam.query.filter_by(training_id=training.id).order_by(TrainingExam.id)]
     training_dict['trainers'] = [t._asdict() for t in
                                  TrainingTrainers.query.filter_by(training_id=training.id, archived=0)]
     training_dict['trainees'] = [trainee.to_json() for trainee in Trainees.query.filter_by(training_id=training.id)]
@@ -339,6 +339,16 @@ def exam_analysis(training_id, training_exam_id):
                            trainees=json.dumps([asdict(trainee) for trainee in trainees]).replace("'", "\\'")
                            )
 
+@main.route('/training/exam/<int:training_exam_id>/archive', methods=['POST', 'GET'])
+@login_required
+def archive_training_exam(training_exam_id):
+    training_exam = TrainingExam.query.filter_by(id=training_exam_id).first_or_404()
+    training_exam.archived = not training_exam.archived
+    db.session.merge(training_exam)
+    db.session.commit()
+    return jsonify({"status": True, "message": "saved successfully"});
+    
+    
 
 @main.route('/training/<string:training_id>/sessions')
 @login_required

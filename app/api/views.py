@@ -1198,7 +1198,7 @@ def training_certifications(training_id=None):
     if training_id is None:
         return jsonify(error="training id is required"), 400
     exams = []
-    training_exams = TrainingExam.query.filter_by(training_id=training_id)
+    training_exams = TrainingExam.query.filter_by(training_id=training_id, archived=False)
     for training_exam in training_exams:
         if not training_exam.exam.is_certification():
             continue
