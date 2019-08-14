@@ -188,7 +188,7 @@ def requeue_tasks():
 
 @manager.command
 def update_recruitment_name():
-    from app.models import Recruitments
+    from app.models import Recruitments, Training
     recruitments = Recruitments.query.filter(Recruitments.cohort_id.isnot(None))
     for recruitment in recruitments:
         old_name = recruitment.name
@@ -196,7 +196,15 @@ def update_recruitment_name():
         branch = cohort.branch
         recruitment.name = '%s Cohort %s' % (branch.branch_name, cohort.cohort_number)
         db.session.merge(recruitment)
-        print ('RENAMING', '%s --> %s' % (old_name, recruitment.name))
+        print 'RENAMING RECRUITMENT', '%s --> %s' % (old_name, recruitment.name)
+        
+        # Rename training
+        training = Training.query.filter_by(recruitment_id=recruitment.id).first()
+        if training:
+            old_name = training.training_name
+            training.training_name = '%s Cohort %s' % (branch.branch_name, cohort.cohort_number)
+            db.session.merge(training)
+            print 'RENAMING Training', '%s --> %s' % (old_name, training.training_name)
     db.session.commit()
 
 

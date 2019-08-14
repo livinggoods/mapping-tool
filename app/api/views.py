@@ -978,9 +978,10 @@ def sync_trainees(training_id=None):
     """
     if request.method == 'GET':
         if training_id:
-            records = Trainees.query.filter_by(training_id=training_id).all()
+            records = Trainees.query.join(Registration).filter(Trainees.training_id == training_id)\
+                .filter(Registration.proceed == 1).all()
         else:
-            records = Trainees.query.all()
+            records = Trainees.query.join(Registration).filter(Registration.proceed == 1).all()
         return jsonify({'trainees': [record.to_json() for record in records]})
     else:
         status = []
