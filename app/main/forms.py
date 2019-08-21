@@ -7,6 +7,7 @@ from ..models import (Role, User, Geo, UserType, Ward, County, Location, SubCoun
                       Recruitments, TrainingStatus, TrainingSessionType, SessionTopic, Trainees, Registration,
                       Mapping)
 from ..utils.utils import RequiredIf
+from wtforms.fields.html5 import DateField
 
 
 class EditProfileForm(Form):
@@ -121,8 +122,8 @@ class TrainingForm(Form):
     training_venue = SelectField('Training Venue')
     training_status = SelectField('Training Status', coerce=int)
     comment = TextAreaField('Comment')
-    date_commenced = DateField('Date Commenced', format='%d/%m/%Y', description="day/month/year")
-    date_completed = DateField('Date Completed', format='%d/%m/%Y', description="day/month/year")
+    date_commenced = DateField('Date Commencedd', format='%Y-%m-%d')
+    date_completed = DateField('Date Completed', format='%Y-%m-%d')
     submit = SubmitField('Submit')
 
     def __init__(self, *args, **kwargs):
@@ -133,9 +134,11 @@ class TrainingForm(Form):
         self.county.choices = [(county.id, county.name.title())
                                for county in County.query.order_by(County.name).all()]
         self.location.choices = [(location.id, location.name.title())
-                                 for location in Location.query.order_by(Location.name).all()]
+                                 for location in
+                                 Location.query.filter_by(country=current_user.location).order_by(Location.name).all()]
         self.subcounty.choices = [(subcounty.id, subcounty.name.title())
-                                  for subcounty in SubCounty.query.order_by(SubCounty.name).all()]
+                                  for subcounty in SubCounty.query.filter_by(country=current_user.location).order_by(
+                SubCounty.name).all()]
         self.ward.choices = [(ward.id, ward.name.title())
                              for ward in Ward.query.order_by(Ward.name).all()]
         self.recruitment.choices = [(recruitment.id, recruitment.name)
