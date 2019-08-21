@@ -9,6 +9,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from redis import Redis
 
+from flask_bcrypt import Bcrypt
 from config import config
 from flask_googlemaps import GoogleMaps, Map
 
@@ -21,6 +22,7 @@ bootstrap = Bootstrap()
 mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
+bcrypt = Bcrypt()  # Bcrypt hashing
 admin = Admin()
 
 login_manager = LoginManager()
@@ -45,6 +47,7 @@ def create_app(config_name):
     mail.init_app(app)
     moment.init_app(app)
     db.init_app(app)
+    bcrypt.init_app(app)
     admin = Admin(app, name='Admin', template_mode='bootstrap3')
     GoogleMaps(app)
     login_manager.init_app(app)

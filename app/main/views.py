@@ -140,7 +140,7 @@ def new_training():
         new_training = Training(
             id=uuid.uuid4(),
             training_name=form.training_name.data,
-            country=Geo.query.filter_by(id=form.country.data).first().geo_code,
+            # country=Geo.query.filter_by(id=form.country.data).first().geo_code,
             county_id=form.county.data,
             location_id=form.location.data,
             subcounty_id=form.subcounty.data,
