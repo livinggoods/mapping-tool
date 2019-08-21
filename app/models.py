@@ -1991,7 +1991,7 @@ class Training(db.Model):
 
   id = db.Column(db.String(64), primary_key=True, nullable=False)
   training_name = db.Column(db.String(64), nullable=False)
-  country = Column(String(64))
+  country = Column(String(64), nullable=True)
   county_id = Column(ForeignKey(u'ke_county.id'), nullable=True, index=True)
   location_id = Column(ForeignKey(u'location.id'), nullable=True, index=True)
   subcounty_id = Column(ForeignKey(u'subcounty.id'), nullable=True, index=True)
