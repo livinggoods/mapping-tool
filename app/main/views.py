@@ -1349,14 +1349,11 @@ def selectCandidate():
         return jsonify({"status": "Error", "message": "Candidate Id is Invalid"})
     else:
         candidate_obj = Registration.query.filter_by(id=request.form.get('id')).first_or_404()
-        if (candidate_obj.proceed == 0):
-            candidate_obj.proceed = 1
-            return jsonify({"status": "ok", "message": "candidate selected"})
-        elif (candidate_obj.proceed == 1):
-            candidate_obj.proceed = 0
-            return jsonify({"status": "error", "message": "candidate deselected"})
-        else:
-            return jsonify({"status": "error", "message": "candidate proceed is set to null"})
+        proceed = candidate_obj.proceed
+        candidate_obj.proceed = 0 if proceed == 1 else 1
+        db.session.merge(candidate_obj)
+        db.session.commit()
+        return jsonify({"status": "ok", "message": "Successfully saved"})
 
 
 @main.route('/country', methods=['GET', 'POST'])
