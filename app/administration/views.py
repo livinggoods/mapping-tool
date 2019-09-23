@@ -3,7 +3,7 @@ import time
 import traceback
 import uuid
 
-from flask import render_template, redirect, url_for, request, current_app, jsonify, make_response, json, abort
+from flask import render_template, redirect, url_for, request, current_app, jsonify, make_response, json, abort, flash, session
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
@@ -606,7 +606,7 @@ def recruitment():
                 db.session.commit()
 
             recruitment = Recruitments.query.get(recruitment_id)
-                
+            
             c_recruitments = Recruitments.query.filter_by(cohort_id=cohort.id).all()
             for r in c_recruitments:
                 if r.id != recruitment.id:
@@ -618,6 +618,8 @@ def recruitment():
             db.session.merge(recruitment)
             
             db.session.commit()
+            session.pop('_flashes', None)
+            flash("Successful", 'success')
             return redirect(url_for('administration.recruitment', operation='success'))
         elif recruitment_type == 'upload_recruitment':
             # Upload and save the CSV file somewhere
@@ -649,7 +651,7 @@ def recruitment():
                             recruitment = Recruitments(
                                 id=id,
                                 name=name,
-                                added_by=1,
+                                added_by=current_user.id,
                                 comment='',
                                 client_time=time.time(),
                                 country=branch.country,
@@ -681,12 +683,15 @@ def recruitment():
                     except Exception as e:
                         # TODO This is a silent error and needs to be logged
                         pass
-                    
+                    session.pop('_flashes', None)
+                    flash("Successfully uploaded", 'success')
                     return redirect(url_for('administration.recruitment', operation='success'))
                     
                 except Exception as e:
                     print e
                     print traceback.format_exc()
+                    session.pop('_flashes', None)
+                    flash(str(e), 'error')
                     return redirect(url_for('administration.recruitment', operation='fail', error=str(e)))
         else:
             return abort(403)
