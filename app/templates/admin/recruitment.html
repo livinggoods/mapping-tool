@@ -84,7 +84,7 @@
                                                         {{ recruitment.name }} by
                                                         {{ recruitment.owner.name }} on
                                                         {{ recruitment.date_added.strftime('%d/%m/%Y') }}
-                                                        ({{ recruitment.to_json().registrations }} Recruited)
+                                                        ({{ recruitment.registration_count }} Recruited)
                                                     </option>
                                                 {% endfor %}
                                             </select>

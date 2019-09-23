@@ -78,7 +78,7 @@
                           <td>{{recruitment.country}}</td>
                           <td>{{recruitment.date_added}}</td>
                           <td>{{recruitment.status|title}}</td>
-                          <td>{{recruitment.to_json().data.count}}</td>
+                          <td>{{recruitment.registration_count}}</td>
                           <td>
                             <div class="btn-group closed">
                                   <a class="btn btn-primary btn-xs " href="#"><i class="fa {{'fa-file-text' if recruitment.status=='draft' else 'fa-thumbs-up' }} fa-fw"></i> {{recruitment.status|title}}</a>

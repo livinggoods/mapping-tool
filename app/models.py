@@ -1055,6 +1055,11 @@ class Recruitments(db.Model):
     def country_name(self):
         geo = Geo.query.filter_by(geo_code=self.country).first()
         return geo.geo_name
+    
+    @property
+    def registration_count(self):
+        return Registration.query.filter_by(archived=0, recruitment=self.id).count()
+    
 
 class Mapping(db.Model):
     __tablename__='mapping'
