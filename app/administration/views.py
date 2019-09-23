@@ -541,20 +541,22 @@ def search_chw():
 def add_new_branch():
     if request.method == 'GET':
         page = {'title': 'Add new branch', 'subtitle': 'Add new branch'}
-        locations = Location.query.filter_by(country=current_user.location)
+        districts = Location.query.filter_by(admin_name='District')
         return render_template('admin/add_branch.html',
                                page=page,
-                               locations=locations)
+                               districts=districts)
     else:
         branch_name = request.form.get('branch_name', None)
         county_id = request.form.get('county_id', None)
         subcounty_id = request.form.get('subcounty_id', None)
+        district_id = request.form.get('district_id', None)
         
         branch = Branch(id=str(uuid.uuid4()),
                         branch_name=branch_name,
                         county_id=county_id,
                         subcounty_id=subcounty_id,
-                        country=current_user.location)
+                        country=current_user.location,
+                        district_id=district_id )
         db.session.add(branch)
         db.session.commit()
         return redirect(url_for('administration.view_all_branches'))
