@@ -79,7 +79,28 @@ class Branch(db.Model):
     country = Column(String(64))
     county_id = Column(String(65), nullable=True)
     subcounty_id = Column(String(65), nullable=True)
-
+    district_id = Column(String(65), nullable=True)
+    
+    @property
+    def district_name(self):
+        location = None
+        if self.district_id:
+            location = Location.query.filter_by(id=self.district_id).first()
+        return location.name if location else ''
+    
+    @property
+    def coutry_name(self):
+        county = None
+        if self.county_id:
+            county = County.query.filter_by(id=self.county_id).first()
+        return county.name if county else ''
+    
+    @property
+    def subcounty_name(self):
+        subcounty = None
+        if self.subcounty_id:
+            subcounty = SubCounty.query.filter_by(id=self.subcounty_id).first()
+        return subcounty.name if subcounty else ''
 
 class Cohort(db.Model):
     __tablename__ = 'cohort'
