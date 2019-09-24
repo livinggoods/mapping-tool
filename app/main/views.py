@@ -1162,11 +1162,11 @@ def export_scoring_tool(id):
             'DO NOT ASK OUTLOUD: Any conditions to prevent joining?',
             'Comments',
             'Qualify for Training',
-            'Invite for Training']
+            'Invite for Training',
+            'Other']
         data.append(header)
         
         for registration in registrations:
-            print(registration.proceed)
             # Get Exam
             exam = Exam.query.filter(Exam.applicant == registration.id).first()
             math = 0
@@ -1206,8 +1206,11 @@ def export_scoring_tool(id):
                 no_of_chp = "Null"
             else:
                 village_obj = Village.query.filter_by(id=registration.village).first()
-                no_of_chp = village_obj.chps_to_recruit()
-                village_name = village_obj.village_name
+                if village_obj:
+                    no_of_chp = village_obj.chps_to_recruit()
+                    village_name = village_obj.village_name
+                else:
+                    no_of_chp = "Null"
             if registration.parish is None:
                 parish_name = "Null"
             else:
@@ -1284,6 +1287,7 @@ def export_scoring_tool(id):
                 str(comment),
                 str(qualified),
                 str(selected),
+                registration.other
             ]
             data.append(row)
     output = excel.make_response_from_array(data, 'csv')

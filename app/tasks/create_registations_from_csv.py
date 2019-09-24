@@ -1,9 +1,10 @@
+import re
 import time
 import uuid
-import re
+from datetime import datetime
 
 from flask import json
-from datetime import datetime
+from flask_login import current_user
 
 from app import db
 from app.models import Registration, Education, Recruitments
@@ -20,7 +21,7 @@ class CreateRegistationsFromCsv():
         'phone',
         'gender',
         'education',
-        'dob', # YYYY-mm-dd format
+        'dob',  # YYYY-mm-dd format
         'feature',
         'proceed',
         'village'
@@ -51,7 +52,7 @@ class CreateRegistationsFromCsv():
         if education:
             return education.id
         else:
-            return 1  # Default
+            return Education.query.filter_by(country=current_user.location, hierachy=1).first().id
     
     def clean_csv_rows(self, row):
         """
@@ -61,27 +62,27 @@ class CreateRegistationsFromCsv():
         """
         cleaned_args = {}
         for k, v in row.iteritems():
-            if str(k).strip() == 'education': # Special case
+            if str(k).strip() == 'education':  # Special case
                 cleaned_args[k] = v
                 continue
-                
+            
             if str(k).strip() == 'dob':
                 cleaned_args[k] = self.process_dob(v)
                 continue
-                
+            
             if str(k).strip() == 'proceed':
                 cleaned_args[k] = self.process_proceed(v)
                 continue
-                
+            
             if str(k).strip() == 'feature':
                 cleaned_args[k] = v
                 continue
-                
+            
             if k and v:
                 k = re.sub(r'[\']', '', str(k)).strip()
                 cleaned_args[k] = re.sub(r'[\']', '', str(v)).strip()
         return cleaned_args
-        
+    
     def process_proceed(self, csv_value):
         """
         Check proceed value in CSV
@@ -92,7 +93,7 @@ class CreateRegistationsFromCsv():
             return 1
         else:
             return 0
-        
+    
     def process_dob(self, csv_value):
         """
         Return a timestamp from given date
@@ -132,7 +133,8 @@ class CreateRegistationsFromCsv():
                 self.create_registation(self.get_params(record))
                 index += 1
             else:
-                raise Exception('Record at line %s missing: %s' % (index + 1, set(self.COLUMNS) - set(keys) & set(self.COLUMNS)))
+                raise Exception(
+                    'Record at line %s missing: %s' % (index + 1, set(self.COLUMNS) - set(keys) & set(self.COLUMNS)))
     
     def create_registation(self, args):
         """
@@ -143,7 +145,7 @@ class CreateRegistationsFromCsv():
         args['recruitment'] = self.recruitment.id
         args['id'] = self.generate_uuid()
         args['country'] = self.recruitment.country
-        args['added_by'] = 1
+        args['added_by'] = current_user.id
         args['client_time'] = time.time()
         
         registration = Registration.query.filter_by(name=args['name'], phone=args['phone']).first()
