@@ -13,6 +13,7 @@ from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 
 from app.api.views import create_question_list
+from app.tasks.export_exam_results import ExportExamResults
 from app.tasks.task_utils import TaskManager
 from app.tasks.upload_exam_from_csv import UploadExamFromCSV
 from app.utils import process_csv
@@ -336,8 +337,19 @@ def exam_analysis(training_id, training_exam_id):
                                                                                                                   "\\'"),
                            exam=json.dumps(exam).replace("'", "\\'"),
                            training=json.dumps(asdict(training)).replace("'", "\\'"),
-                           trainees=json.dumps([asdict(trainee) for trainee in trainees]).replace("'", "\\'")
+                           trainees=json.dumps([asdict(trainee) for trainee in trainees]).replace("'", "\\'"),
+                           training_id=training.id,
+                           training_exam_id=training_exam.id
                            )
+
+
+@main.route('/training/<string:training_id>/<int:training_exam_id>/export', methods=['GET'])
+@login_required
+def export_exam_results(training_id, training_exam_id):
+    training = Training.query.filter_by(id=training_id).first_or_404()
+    training_exam = TrainingExam.query.filter_by(id=training_exam_id).first_or_404()
+    return ExportExamResults(training, training_exam).run()
+
 
 @main.route('/training/exam/<int:training_exam_id>/archive', methods=['POST', 'GET'])
 @login_required
@@ -346,7 +358,7 @@ def archive_training_exam(training_exam_id):
     training_exam.archived = not training_exam.archived
     db.session.merge(training_exam)
     db.session.commit()
-    return jsonify({"status": True, "message": "saved successfully"});
+    return jsonify({"status": True, "message": "saved successfully"})
     
     
 
@@ -1957,8 +1969,6 @@ def training_exam_add_from_csv():
                                endpoint='main.training_exam_add_from_csv',
                                error=error)
     else:
-        print('FORM', request.form)
-        print('FILES', request.files)
         files = request.files
         form = request.form
         country = form.get('country', None)
