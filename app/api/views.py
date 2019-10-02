@@ -1299,7 +1299,7 @@ def process_exam_csv(path):
         for meta in meta_data:
             question[meta] = question.get(meta)
         choices = []
-        for key in question.keys():
+        for key in sorted(question.keys()):  # get key from a sorted dictionary
             if key not in meta_data and key.startswith('choice') and question.get(key).strip() != "":
                 choices.append({'choice': question.get(key), 'is_answer': True if key == answer else False})
                 question.pop(key)
