@@ -1781,6 +1781,7 @@ def followed_by(username):
 def training_questions():
     page = {"title": 'Questions', 'subtitle': 'View, Add and edit questions'}
     questions = Question.query.filter_by(archived=False).order_by(Question.id)
+    # question_type = type(questions) # a dictionary object
     pagination_count = request.args.get('page', 1, type=int)
     pagination = questions.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)
     return render_template('training_questions.html',
@@ -1789,6 +1790,15 @@ def training_questions():
                            questions=questions,
                            pagination=pagination,
                            page=page)
+
+
+@main.route('/training/questions_search')
+@login_required
+def search_training_questions():
+    questions = Question.query.whoosh_search(request.args.get('question')).all()
+    return render_template('search/results.html',
+                           questions=questions,
+                           )
 
 
 @main.route('/training/questions/add', methods=['GET', 'POST'])
@@ -1945,6 +1955,19 @@ def training_exams():
                            exams=[exam.to_json() for exam in exams],
                            endpoint='main.training_exams',
                            pagination=pagination)
+
+
+@main.route('/training/exams_search')
+@login_required
+def training_exams_search():
+    page = {'title': 'Exams List', 'subtitle': 'View list of all exams'}
+    exams = ExamTraining.query.whoosh_search(request.args.get('exam')).all()
+    return render_template('training_exams.html',
+                           title='Exams',
+                           page=page,
+                           exams=[exam.to_json() for exam in exams],
+                           endpoint='main.training_exams',
+                           )
 
 
 @main.route('/training/exam/add')

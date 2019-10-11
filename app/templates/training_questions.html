@@ -12,14 +12,16 @@
             </div>
 
             <div class="title_right">
+                <form class="form-inline" method="GET" action="questions_search">
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for...">
+                        <input type="text" class="form-control" placeholder="Search for..." name="question" id="question">
                         <span class="input-group-btn">
-            <button class="btn btn-default" type="button">Go!</button>
+            <button type="submit" class="btn btn-primary"  >Go!</button>
           </span>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
 
@@ -46,7 +48,7 @@
             <div class="x_panel">
                 <div class="x_title">
                     <h2>Question
-                        <small>List of all question</small>
+                        <small> {{ question_type }} </small>
                     </h2>
 
                     <ul class="nav navbar-right panel_toolbox">
@@ -120,7 +122,6 @@
                     <div class="pagination">
                         {{ macros.pagination_widget(pagination, endpoint) }}
                     </div>
-
                 </div>
             </div>
         </div>

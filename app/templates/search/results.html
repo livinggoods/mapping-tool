@@ -2,13 +2,64 @@
 
 {% block title %}Insights - Search Results{% endblock %}
 
-{% block wrapper %}
+{% block content %}
 
     <!-- page header -->
     <div class="page-header">
-        <h1>Search Results</h1>
+        <h2>Search Results</h2>
     </div>
     <!-- end page header -->
+
+{% if questions %}
+    <!-- vc search results -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h1>Question Search Results</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Allocated Marks</th>
+                            <th>Date created</th>
+                            <th>Created By</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for question in questions %}
+
+                            <tr>
+                                <td>{{ question.question }}</td>
+                                <td>{{ question.allocated_marks }}</td>
+                                <td>{{ question.date_created.strftime('%d-%b-%Y, %I:%M%p') }}</td>
+                                <td>{{ question.created_by }}</td>
+                                <td>
+                                    <a href="{{ url_for('main.training_question_edit', id=question.id) }}" class="btn btn-primary btn-xs">
+                                        <i class="fa fa-file"></i>
+                                        View
+                                    </a>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- end question search results -->
+    {% endif %}
 
     {% if vc_firms %}
     <!-- vc search results -->
@@ -266,4 +317,4 @@
     <!-- end startup search results -->
     {% endif %}
 
-{% endblock wrapper %}
+{% endblock content %}

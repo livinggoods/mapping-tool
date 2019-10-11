@@ -17,8 +17,8 @@ from data import data
 
 from utils.utils import validate_uuid, asdict
 from . import db, login_manager
-
-
+import app
+import flask_whooshalchemy as wa
 ##############################
 
 class GpsData(db.Model):
@@ -2474,6 +2474,7 @@ class CertificationType(db.Model):
 
 class ExamTraining(db.Model):
     __tablename__ = 'exam_trainings'
+    __searchable__ = ['title']
 
     id = Column(Integer, primary_key=True)
     title = Column(String(45))
@@ -2498,6 +2499,8 @@ class ExamTraining(db.Model):
     def is_certification(self):
       return bool(self.certification_type_id)
     
+
+wa.whoosh_index(app, ExamTraining)
 
 class ExamQuestion(db.Model):
     __tablename__ = 'exam_questions'
@@ -2581,6 +2584,7 @@ class ExamStatus(db.Model):
 
 class Question(db.Model):
     __tablename__ = 'questions'
+    __searchable__ = ['question']  # column to be searched
 
     id = Column(Integer, primary_key=True)
     question = Column(Text, nullable=False)
@@ -2607,6 +2611,8 @@ class Question(db.Model):
         result['topics'] = [t.session_topic.to_json() for t in QuestionTopic.query.filter_by(question_id=self.id, archived=False)]
         return result
 
+
+wa.whoosh_index(app, Question)
 
 class QuestionChoice(db.Model):
     __tablename__ = 'question_choices'

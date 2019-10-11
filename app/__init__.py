@@ -37,6 +37,7 @@ def create_app(config_name):
     app = Flask(__name__)
 
     # import configuration settings into Flask application instance
+    app.config['WHOOSH_BASE'] = '/tmp/whoosh'
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
