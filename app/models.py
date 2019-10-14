@@ -18,7 +18,10 @@ from data import data
 from utils.utils import validate_uuid, asdict
 from . import db, login_manager
 import app
-import flask_whooshalchemy as wa
+from app import whooshee
+# import flask_whooshalchemy as wa
+from flask_whooshee import Whooshee,  AbstractWhoosheer
+
 ##############################
 
 class GpsData(db.Model):
@@ -2011,7 +2014,8 @@ def get_country_name(code):
     else:
         return "Uganda"
     
-    
+
+@whooshee.register_model('training_name')
 class Training(db.Model):
   __tablename__ = 'training'
 
@@ -2459,6 +2463,7 @@ class Trainees(db.Model):
     )
 
 
+@whooshee.register_model('name')
 class CertificationType(db.Model):
     __tablename__ = 'certification_types'
   
@@ -2472,9 +2477,9 @@ class CertificationType(db.Model):
         return asdict(self)
 
 
+@whooshee.register_model('title')
 class ExamTraining(db.Model):
     __tablename__ = 'exam_trainings'
-    __searchable__ = ['title']
 
     id = Column(Integer, primary_key=True)
     title = Column(String(45))
@@ -2498,9 +2503,7 @@ class ExamTraining(db.Model):
     
     def is_certification(self):
       return bool(self.certification_type_id)
-    
 
-wa.whoosh_index(app, ExamTraining)
 
 class ExamQuestion(db.Model):
     __tablename__ = 'exam_questions'
@@ -2580,11 +2583,11 @@ class ExamStatus(db.Model):
     
     def as_json(self):
       return self._asdict()
-    
 
+
+@whooshee.register_model('question')
 class Question(db.Model):
     __tablename__ = 'questions'
-    __searchable__ = ['question']  # column to be searched
 
     id = Column(Integer, primary_key=True)
     question = Column(Text, nullable=False)
@@ -2611,8 +2614,6 @@ class Question(db.Model):
         result['topics'] = [t.session_topic.to_json() for t in QuestionTopic.query.filter_by(question_id=self.id, archived=False)]
         return result
 
-
-wa.whoosh_index(app, Question)
 
 class QuestionChoice(db.Model):
     __tablename__ = 'question_choices'

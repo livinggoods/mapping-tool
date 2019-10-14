@@ -114,6 +114,15 @@ def trainings():
     )
 
 
+@main.route('/training/trainings_search')
+@login_required
+def search_training():
+    trainings = Training.query.whooshee_search(request.args.get('training')).all()
+    return render_template('search/results.html',
+                           trainings=trainings,
+                           )
+
+
 @main.route('/trainings/new', methods=['GET', 'POST'])
 @login_required
 def new_training():
@@ -1781,7 +1790,6 @@ def followed_by(username):
 def training_questions():
     page = {"title": 'Questions', 'subtitle': 'View, Add and edit questions'}
     questions = Question.query.filter_by(archived=False).order_by(Question.id)
-    # question_type = type(questions) # a dictionary object
     pagination_count = request.args.get('page', 1, type=int)
     pagination = questions.paginate(pagination_count, per_page=current_app.config['PER_PAGE'], error_out=False)
     return render_template('training_questions.html',
@@ -1795,8 +1803,13 @@ def training_questions():
 @main.route('/training/questions_search')
 @login_required
 def search_training_questions():
-    questions = Question.query.whoosh_search(request.args.get('question')).all()
-    return render_template('search/results.html',
+    questions = Question.query.whooshee_search(request.args.get('question'))
+
+    if not questions:
+        flash('No results found!')
+        return redirect('/training_questions.html')
+    else:
+        return render_template('search/results.html',
                            questions=questions,
                            )
 
@@ -1960,13 +1973,9 @@ def training_exams():
 @main.route('/training/exams_search')
 @login_required
 def training_exams_search():
-    page = {'title': 'Exams List', 'subtitle': 'View list of all exams'}
-    exams = ExamTraining.query.whoosh_search(request.args.get('exam')).all()
-    return render_template('training_exams.html',
-                           title='Exams',
-                           page=page,
-                           exams=[exam.to_json() for exam in exams],
-                           endpoint='main.training_exams',
+    exams = ExamTraining.query.whooshee_search(request.args.get('exam')).all()
+    return render_template('search/results.html',
+                           exams=exams
                            )
 
 
@@ -2305,6 +2314,15 @@ def certifications():
         pagination=pagination,
         page=page
     )
+
+
+@main.route('/training/certification_search')
+@login_required
+def search_certifications():
+    certification_type = CertificationType.query.whooshee_search(request.args.get('cert'))
+    return render_template('search/results.html',
+                           certification_type=certification_type,
+                           )
 
 # add a Certification Type
 @main.route('/certification/new/', methods=['GET', 'POST'])

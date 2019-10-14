@@ -8,6 +8,7 @@ from ..models import (Role, User, Geo, UserType, Ward, County, Location, SubCoun
                       Mapping)
 from ..utils.utils import RequiredIf
 from wtforms.fields.html5 import DateField
+from flask_login import current_user
 
 
 class EditProfileForm(Form):
@@ -122,7 +123,7 @@ class TrainingForm(Form):
     training_venue = SelectField('Training Venue')
     training_status = SelectField('Training Status', coerce=int)
     comment = TextAreaField('Comment')
-    date_commenced = DateField('Date Commencedd', format='%Y-%m-%d')
+    date_commenced = DateField('Date Commenced', format='%Y-%m-%d')
     date_completed = DateField('Date Completed', format='%Y-%m-%d')
     submit = SubmitField('Submit')
 
