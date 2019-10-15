@@ -1800,16 +1800,16 @@ def training_questions():
                            page=page)
 
 
-@main.route('/training/questions_search')
+@main.route('/training/questions_search', methods=['GET'])
 @login_required
 def search_training_questions():
     questions = Question.query.whooshee_search(request.args.get('question'))
 
-    if not questions:
-        flash('No results found!')
-        return redirect('/training_questions.html')
-    else:
-        return render_template('search/results.html',
+    if len(list(questions)) == 0:
+        flash('Sorry, No results found!', 'error')
+        return redirect(url_for('main.training_questions'))
+
+    return render_template('search/results.html',
                            questions=questions,
                            )
 
