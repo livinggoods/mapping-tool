@@ -2,63 +2,158 @@
 
 {% block title %}Insights - Search Results{% endblock %}
 
-{% block wrapper %}
+{% block content %}
 
     <!-- page header -->
     <div class="page-header">
-        <h1>Search Results</h1>
+        <h2> Search Results </h2>
     </div>
     <!-- end page header -->
 
-    {% if vc_firms %}
-    <!-- vc search results -->
+{% if questions %}
+    <!--  search results -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-university fa-lg"></i> Venture Captial Firms
+                    <i class="fa fa-question fa-lg"></i> Questions
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Allocated Marks</th>
+                            <th>Date created</th>
+                            <th>Created By</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for question in questions %}
+
+                            <tr>
+                                <td>{{ question.question }}</td>
+                                <td>{{ question.allocated_marks }}</td>
+                                <td>{{ question.date_created.strftime('%d-%b-%Y, %I:%M%p') }}</td>
+                                <td>{{ question.created_by }}</td>
+                                <td>
+                                    <a href="{{ url_for('main.training_question_edit', id=question.id) }}" class="btn btn-primary btn-xs">
+                                        <i class="fa fa-file"></i>
+                                        View
+                                    </a>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- end question search results -->
+    {% endif %}
+
+    {% if certification_type %}
+    <!-- certification_type search results -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-certificate fa-lg"></i> Certification Types
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Country</th>
+                                <th>Archived</th>
+                                <th>Proportion</th>
+
+                                {% if current_user.role_id == 2 %}
+                                <th>Action</th>
+                                {% endif %}
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for cert in certification_type %}
+                            <tr>
+                                <td>{{cert.name}}</td>
+                                <td>{{cert.country}}</td>
+                                <td>{{cert.archived}}</td>
+                                <td>{{cert.proportion}}</td>
+
+                            {% if current_user.role_id == 2 %}
+                                <td>
+                                    <a class="btn btn-primary btn-xs" href="/certifications/{{cert.id}}/edit_certification"><i class="fa fa-edit"></i>
+                                            Edit
+                                    </a>
+                                    <a class="btn btn-danger btn-xs" href="/certifications/{{cert.id}}/delete"><i class="fa fa-trash"></i>
+                                            Delete
+                                    </a>
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- end certification_type search results -->
+    {% endif %}
+
+    {% if exams %}
+    <!--  exams results -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-graduation-cap fa-lg"></i> Exams
                 </div>
                 <div class="panel-body">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Tier</th>
-                                    <th>Owner</th>
-                                    <th>City</th>
-                                    <th>State</th>
+                                    <th>Title</th>
                                     <th>Country</th>
+                                    <th>Status</th>
+                                    <th>Date created</th>
+                                    <th>Created By</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            {% for firm in vc_firms %}
+                            {% for exam  in exams %}
                             <tr>
+                                <td>{{ exam.title }}</td>
+                                <td>{{ exam.country }}</td>
+                                {% if exam.exam_status %}
+                                    <td>{{ exam.exam_status.title }}</td>
+                                {% else %}
+                                    <td>{{ exam.exam_status }}</td>
+                                {% endif %}
+                                <td>{{ exam.date_created }}</td>
+                                <td>{{ exam.created_by }}</td>
                                 <td>
-                                    <a href="{{ url_for('main.firm', id=firm.Firm.id) }}">
-                                        {{ firm.Firm.name }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ firm.FirmType.firm_type }}
-                                </td>
-                                <td>
-                                    {{ firm.FirmTier.firm_tier }}
-                                </td>
-                                <td>
-                                    <a href="{{ url_for('main.user', username = firm.Firm.owner.username) }}">
-                                        {{ firm.Firm.owner.username }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ firm.Firm.city }}
-                                </td>
-                                <td>
-                                    {{ firm.Firm.state }}
-                                </td>
-                                <td>
-                                    {{ firm.Firm.country }}
+                                    <a href="{{ url_for('main.training_exam_edit', id=exam.id) }}" class="btn btn-primary btn-xs"><i class="fa fa-list"></i> View</a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -73,16 +168,17 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <!-- end vc search results -->
+    <!-- end exam search results -->
     {% endif %}
 
-    {% if ai_firms %}
-    <!-- ai search results -->
+
+    {% if trainings %}
+    <!--  trainings results -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-rocket fa-lg"></i> Acclerators and Incubators
+                    <i class="fa fa-graduation-cap fa-lg"></i> Trainings
                 </div>
                 <div class="panel-body">
                     <div class="table-responsive">
@@ -90,43 +186,29 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Tier</th>
-                                    <th>Owner</th>
-                                    <th>City</th>
-                                    <th>State</th>
                                     <th>Country</th>
+                                    <th>Date Added</th>
+                                    <th>Date Commenced</th>
+                                    <th>Date Completed</th>
+                                    <th>More Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            {% for firm in ai_firms %}
+                            {% for training in trainings %}
                             <tr>
+                                <td><a href="/training/{{training.id}}">
+                                  {{training.training_name}}
+                                </a></td>
+                                <td>{{training.country}}</td>
+                                <td>{{training.date_created}}</td>
+                                <td>{{training.commences()}}</td>
+                                <td>{{training.commences()}}</td>
                                 <td>
-                                    <a href="{{ url_for('main.firm', id=firm.Firm.id) }}">
-                                        {{ firm.Firm.name }}
+                                    <a class="btn btn-primary btn-xs" href="/training/{{training.id}}/edit"><i class="fa fa-edit"></i>
+                                        Edit
                                     </a>
                                 </td>
-                                <td>
-                                    {{ firm.FirmType.firm_type }}
-                                </td>
-                                <td>
-                                    {{ firm.FirmTier.firm_tier }}
-                                </td>
-                                <td>
-                                    <a href="{{ url_for('main.user', username = firm.Firm.owner.username) }}">
-                                        {{ firm.Firm.owner.username }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ firm.Firm.city }}
-                                </td>
-                                <td>
-                                    {{ firm.Firm.state }}
-                                </td>
-                                <td>
-                                    {{ firm.Firm.country }}
-                                </td>
-                            </tr>
+                             </tr>
                             {% endfor %}
                             </tbody>
                         </table>
@@ -139,131 +221,6 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <!-- end ai search results -->
+    <!-- end exams search results -->
     {% endif %}
-
-    {% if su_firms %}
-    <!-- su search results -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-building-o fa-lg"></i> Startup Organizations
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>Tier</th>
-                                    <th>Owner</th>
-                                    <th>City</th>
-                                    <th>State</th>
-                                    <th>Country</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for firm in su_firms %}
-                            <tr>
-                                <td>
-                                    <a href="{{ url_for('main.firm', id=firm.Firm.id) }}">
-                                        {{ firm.Firm.name }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ firm.FirmType.firm_type }}
-                                </td>
-                                <td>
-                                    {{ firm.FirmTier.firm_tier }}
-                                </td>
-                                <td>
-                                    <a href="{{ url_for('main.user', username = firm.Firm.owner.username) }}">
-                                        {{ firm.Firm.owner.username }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ firm.Firm.city }}
-                                </td>
-                                <td>
-                                    {{ firm.Firm.state }}
-                                </td>
-                                <td>
-                                    {{ firm.Firm.country }}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.table-responsive -->
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel -->
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <!-- end su search results -->
-    {% endif %}
-
-    {% if companies %}
-    <!-- startup search results -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-lightbulb-o fa-lg"></i> Startup Companies
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Owner</th>
-                                    <th>City</th>
-                                    <th>State</th>
-                                    <th>Country</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for company in companies %}
-                            <tr>
-                                <td>
-                                    <a href="{{ url_for('main.company', id=company.id) }}">
-                                        {{ company.name }}
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="{{ url_for('main.user', username = company.owner.username) }}">
-                                        {{ company.owner.username }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ company.city }}
-                                </td>
-                                <td>
-                                    {{ company.state }}
-                                </td>
-                                <td>
-                                    {{ company.country }}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.table-responsive -->
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel -->
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <!-- end startup search results -->
-    {% endif %}
-
-{% endblock wrapper %}
+{% endblock content %}

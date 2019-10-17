@@ -17,7 +17,10 @@ from data import data
 
 from utils.utils import validate_uuid, asdict
 from . import db, login_manager
-
+import app
+from app import whooshee
+# import flask_whooshalchemy as wa
+from flask_whooshee import Whooshee,  AbstractWhoosheer
 
 ##############################
 
@@ -2011,7 +2014,8 @@ def get_country_name(code):
     else:
         return "Uganda"
     
-    
+
+@whooshee.register_model('training_name')
 class Training(db.Model):
   __tablename__ = 'training'
 
@@ -2459,6 +2463,7 @@ class Trainees(db.Model):
     )
 
 
+@whooshee.register_model('name')
 class CertificationType(db.Model):
     __tablename__ = 'certification_types'
   
@@ -2472,6 +2477,7 @@ class CertificationType(db.Model):
         return asdict(self)
 
 
+@whooshee.register_model('title')
 class ExamTraining(db.Model):
     __tablename__ = 'exam_trainings'
 
@@ -2497,7 +2503,7 @@ class ExamTraining(db.Model):
     
     def is_certification(self):
       return bool(self.certification_type_id)
-    
+
 
 class ExamQuestion(db.Model):
     __tablename__ = 'exam_questions'
@@ -2577,8 +2583,9 @@ class ExamStatus(db.Model):
     
     def as_json(self):
       return self._asdict()
-    
 
+
+@whooshee.register_model('question')
 class Question(db.Model):
     __tablename__ = 'questions'
 

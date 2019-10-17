@@ -114,6 +114,15 @@ def trainings():
     )
 
 
+@main.route('/training/trainings_search')
+@login_required
+def search_training():
+    trainings = Training.query.whooshee_search(request.args.get('training')).all()
+    return render_template('search/results.html',
+                           trainings=trainings,
+                           )
+
+
 @main.route('/trainings/new', methods=['GET', 'POST'])
 @login_required
 def new_training():
@@ -1791,6 +1800,20 @@ def training_questions():
                            page=page)
 
 
+@main.route('/training/questions_search', methods=['GET'])
+@login_required
+def search_training_questions():
+    questions = Question.query.whooshee_search(request.args.get('question'))
+
+    if len(list(questions)) == 0:
+        flash('Sorry, No results found!', 'error')
+        return redirect(url_for('main.training_questions'))
+
+    return render_template('search/results.html',
+                           questions=questions,
+                           )
+
+
 @main.route('/training/questions/add', methods=['GET', 'POST'])
 @login_required
 def training_questions_add():
@@ -1945,6 +1968,15 @@ def training_exams():
                            exams=[exam.to_json() for exam in exams],
                            endpoint='main.training_exams',
                            pagination=pagination)
+
+
+@main.route('/training/exams_search')
+@login_required
+def training_exams_search():
+    exams = ExamTraining.query.whooshee_search(request.args.get('exam')).all()
+    return render_template('search/results.html',
+                           exams=exams
+                           )
 
 
 @main.route('/training/exam/add')
@@ -2282,6 +2314,15 @@ def certifications():
         pagination=pagination,
         page=page
     )
+
+
+@main.route('/training/certification_search')
+@login_required
+def search_certifications():
+    certification_type = CertificationType.query.whooshee_search(request.args.get('cert'))
+    return render_template('search/results.html',
+                           certification_type=certification_type,
+                           )
 
 # add a Certification Type
 @main.route('/certification/new/', methods=['GET', 'POST'])

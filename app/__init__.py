@@ -9,9 +9,10 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from redis import Redis
 
+
 from config import config
 from flask_googlemaps import GoogleMaps, Map
-
+from flask_whooshee import Whooshee
 
 
 # initialize flask extensions
@@ -22,6 +23,7 @@ mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
 admin = Admin()
+whooshee = Whooshee()
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'  # use strong session protection
@@ -37,6 +39,7 @@ def create_app(config_name):
     app = Flask(__name__)
 
     # import configuration settings into Flask application instance
+    # app.config['WHOOSH_BASE'] = '/tmp/whoosh'
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
@@ -45,9 +48,11 @@ def create_app(config_name):
     mail.init_app(app)
     moment.init_app(app)
     db.init_app(app)
+    whooshee.init_app(app)
     admin = Admin(app, name='Admin', template_mode='bootstrap3')
     GoogleMaps(app)
     login_manager.init_app(app)
+
     
     # Tasks Management
     app.redis = Redis.from_url(app.config['REDIS_URL'])
