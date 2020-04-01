@@ -75,24 +75,38 @@
                             <div class="row">
 
                                 <div class="col-xs-12 col-md-4">
-                                    <small class="text-info"><i class="fa fa-info"></i> is Certification</small>
+                                    <small class="text-info"><i class="fa fa-info"></i> Type </small>
                                     <div class="checkbox">
                                         <label for="is_certification">
                                             <input name="is_certification" id="is_certification" type="checkbox"
                                                    rv-checked="data.is_certification"/>
                                             is Certification
                                         </label>
+                                        <label for="is_video">
+                                            <input name="is_video" id="is_video" type="checkbox"
+                                                   rv-checked="data.is_video"/>
+                                            is Video
+                                        </label>
                                     </div>
                                 </div>
+                            </div>
 
+                            <div class="row margin-bottom">
                                 <div class="col-xs-12 col-md-8" rv-show="data.is_certification">
-
                                     <small class="text-info"><i class="fa fa-info"></i> Certification Type</small>
                                     <select name="certification_type" id="certification_type" class="form-control">
                                     </select>
 
                                 </div>
+                            </div>
 
+                        <!-- Added the text box for video url-->
+                            <div class="row margin-bottom">
+                                <div class="col-xs-12 col-md-8" rv-show="data.is_video">
+                                    <small class="text-info"><i class="fa fa-info"></i> Video Url</small>
+                                    <input name="video_url" id="video_url" class="form-control" placeholder="Video Url"/>
+
+                                </div>
                             </div>
 
                             <div class="row">
@@ -352,7 +366,8 @@
                 archived: false,
                 country: null,
                 questions: [],
-                is_certification: false
+                is_certification: false,
+                is_video: false
             };
 
             var examMeta = {
@@ -459,6 +474,7 @@
                         },
                         save: function (e, model) {
                             var certificationType = $("#certification_type").val();
+                            var videoUrl = $("#video_url").val();
 
                             var params = $.extend(true, {
                                 certification_type: certificationType
