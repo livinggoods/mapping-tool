@@ -2490,6 +2490,7 @@ class ExamTraining(db.Model):
     certification_type_id = Column(ForeignKey(u'certification_types.id'), nullable=True, index=True)
     archived = Column(db.Boolean, default=False)
     country = Column(String(20), server_default=text("'UG'"), nullable=False)
+    video_url = Column(String(1024), nullable=True)
     
     exam_status = relationship(u'ExamStatus')
     certification_type = relationship(u'CertificationType')
