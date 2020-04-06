@@ -474,10 +474,11 @@
                         },
                         save: function (e, model) {
                             var certificationType = $("#certification_type").val();
-                            var videoUrl = $("#video_url").val();
+                            var videoUrl = exam.is_video ? $("#video_url").val() : '';
 
                             var params = $.extend(true, {
-                                certification_type: certificationType
+                                certification_type: certificationType,
+                                video_url: videoUrl
                             }, exam);
 
                             params.questions = _.map(params.questions, function (q, i) {
@@ -495,6 +496,11 @@
 
                             if (!params.country) {
                                 window.alert("Please select the country");
+                                return;
+                            }
+
+                            if (exam.is_video && videoUrl === '') {
+                                window.alert("Please input a video URL");
                                 return;
                             }
 
