@@ -32,7 +32,7 @@ Jinja2==2.7.3
 jmespath==0.7.1
 Mako==1.0.7
 MarkupSafe==1.0
-numpy==1.16.5
+numpy==1.22.0
 pandas==0.24.2
 pathspec==0.3.3
 psycopg2==2.7.5
