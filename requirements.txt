@@ -30,7 +30,7 @@ inflect==0.2.5
 itsdangerous==0.24
 Jinja2==2.7.3
 jmespath==0.7.1
-Mako==1.0.7
+Mako==1.2.2
 MarkupSafe==1.0
 numpy==1.16.5
 pandas==0.24.2
